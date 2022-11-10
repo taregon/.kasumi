@@ -3,4 +3,10 @@ config:
   create: true
   dotpath: dotfiles
 dotfiles:
+  f_kasumi-cava.conf:
+    src: config/cava/kasumi-cava.conf
+    dst: ~/.config/cava/kasumi-cava.conf
 profiles:
+  kasumi:
+    dotfiles:
+    - f_kasumi-cava.conf
