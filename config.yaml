@@ -9,8 +9,14 @@ dotfiles:
   f_kasumi-kitty.conf:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
+  f_kasumi-zsh_alias.conf:
+    src: config/zsh/kasumi-zsh_alias.conf
+    dst: ~/.config/zsh/kasumi-zsh_alias.conf
 profiles:
   kasumi:
     dotfiles:
     - f_kasumi-cava.conf
     - f_kasumi-kitty.conf
+  kasumi_extras:
+    dotfiles:
+    - f_kasumi-zsh_alias.conf
