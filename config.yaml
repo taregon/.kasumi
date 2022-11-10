@@ -6,12 +6,15 @@ dotfiles:
   f_kasumi-cava.conf:
     src: config/cava/kasumi-cava.conf
     dst: ~/.config/cava/kasumi-cava.conf
+    link: absolute
   f_kasumi-kitty.conf:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
+    link: absolute
   f_kasumi-zsh_alias.conf:
     src: config/zsh/kasumi-zsh_alias.conf
     dst: ~/.config/zsh/kasumi-zsh_alias.conf
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
