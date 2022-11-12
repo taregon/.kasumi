@@ -19,6 +19,10 @@ dotfiles:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
+  f_init.vim:
+    src: config/nvim/init.vim
+    dst: ~/.config/nvim/init.vim
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -28,3 +32,4 @@ profiles:
   kasumi_extras:
     dotfiles:
     - f_kasumi-zsh_alias.conf
+    - f_init.vim
