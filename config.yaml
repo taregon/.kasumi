@@ -15,16 +15,16 @@ dotfiles:
     src: config/zsh/kasumi-zsh_alias.conf
     dst: ~/.config/zsh/kasumi-zsh_alias.conf
     link: absolute
-  f_tmux.conf:
-    src: config/tmux/tmux.conf
-    dst: ~/.config/tmux/tmux.conf
+  f_kasumi-tmux.conf:
+    src: config/tmux/kasumi-tmux.conf
+    dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
 profiles:
   kasumi:
     dotfiles:
     - f_kasumi-cava.conf
     - f_kasumi-kitty.conf
-    - f_tmux.conf
+    - f_kasumi-tmux.conf
   kasumi_extras:
     dotfiles:
     - f_kasumi-zsh_alias.conf
