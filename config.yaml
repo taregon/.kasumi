@@ -23,6 +23,10 @@ dotfiles:
     src: config/nvim/init.vim
     dst: ~/.config/nvim/init.vim
     link: absolute
+  f_kasumi-zsh_funtions.conf:
+    src: config/zsh/kasumi-zsh_funtions.conf
+    dst: ~/.config/zsh/kasumi-zsh_funtions.conf
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -33,3 +37,4 @@ profiles:
     dotfiles:
     - f_kasumi-zsh_alias.conf
     - f_init.vim
+    - f_kasumi-zsh_funtions.conf

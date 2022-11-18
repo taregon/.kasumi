@@ -23,7 +23,8 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}    " Buscador con ventana flotante. [:Clamp]
 " Modulos para codigos de programacion ------------------
-  Plug 'w0rp/ale'                                               " Verifica la sintaxis en tiempo real
+" Plug 'w0rp/ale'                                               Verifica la sintaxis en tiempo real
+  Plug 'dense-analysis/ale'
   Plug 'neoclide/coc.nvim', {'branch': 'release'} 
   Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}        " Python highlights - pip3 install pynvim --upgrade 
 call plug#end()
@@ -31,11 +32,19 @@ call plug#end()
 " =======================================================
 " APARIENCIA
 " =======================================================
+syntax on                   " habilita el syntax 'highlighting'
 set termguicolors           " Activa true-colors en la terminal
-colorscheme OceanicNext     " Activa tema
-  let g:oceanic_next_terminal_bold = 1
-  let g:oceanic_next_terminal_italic = 1
-  hi EndOfBuffer guibg=NONE ctermbg=NONE
+let g:oceanic_next_terminal_bold = 1
+let g:oceanic_next_terminal_italic = 0
+colorscheme OceanicNext     " Activa el tema tras establecer los parametros previos, sino, no se activan
+
+" Habilita la transparencia -----------------------------
+" https://tinyurl.com/293mnur4
+"   hi Normal guibg=NONE ctermbg=NONE
+"   hi LineNr guibg=NONE ctermbg=NONE
+"   hi SignColumn guibg=NONE ctermbg=NONE
+"   hi EndOfBuffer guibg=NONE ctermbg=NONE
+
 set noshowmode              " Hide the insert status in vim
 
 " Para agregar los delimitarores al princpio y final
@@ -114,7 +123,6 @@ set shiftwidth=2    " spaces for autoindenting
 set softtabstop=2   " remove a full pseudo-TAB when i press <BS>
 
 " TEXTO -------------------------------------------------
-syntax enable
 set mouse=ivh               " disable mouse support in normal mode
 set scrolloff=8             " number of screen lines   to keep above and below          the cursor
 set sidescrolloff=6         " number of screen columns to keep to the left and right of the cursor
@@ -132,10 +140,10 @@ set foldmethod=manual       " It folds a range of text, hiding it from display w
 
 " INDENTLINE --------------------------------------------
 let g:indentLine_char = '┊'
-let g:indentLine_defaultGroup = 'SpecialKey'
-let g:indentLine_bufNameExclude = [ 'term:.*' ]
-set list lcs=tab:\|\                  " NO resalta los TABs. Es una mejora cosmetica.
-map <F3>    :IndentLinesToggle<CR>    " vim NORMAL, oculta las lineas
+let g:indentLine_defaultGroup = 'Constant'      " con 'SpecialKey' las lineas son grices
+let g:indentLine_bufNameExclude = [ 'term:.*' ] " oculta las lineas al mostrar el arte ascii
+set list lcs=tab:\|\                            " NO resalta los TABs. Es una mejora cosmetica.
+map <F3>    :IndentLinesToggle<CR>              " en vim NORMAL, oculta las lineas
 
 " ATAJOS ------------------------------------------------
 nmap <C-F>f    <Plug>CtrlSFPrompt                  
@@ -143,3 +151,21 @@ nmap <C-F>n    <Plug>CtrlSFCwordPath
 nmap <C-F>p    <Plug>CtrlSFPwordPath
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard'] "Hide files in .gitignore
 let g:ctrlp_show_hidden = 1                                                         "Show dotfiles
+
+" ALE ---------------------------------------------------
+let g:ale_sign_error = '☠ ' 
+let g:ale_sign_warning = '⚠ '
+
+let g:ale_fix_on_save = 1
+"let g:ale_sign_error = '>>'
+"let g:ale_sign_warning = '--'
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+let g:ale_python_flake8_options = '--max-line-length 88 --ignore=F403,F405 --extend-ignore=E203'
+let g:ale_linters = {'python': ['flake8']}
+
+
+
+
