@@ -14,19 +14,19 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'kyazdani42/nvim-web-devicons'                           " Iconos
   Plug 'glepnir/dashboard-nvim'                                 " Dashboard
   Plug 'mhartington/oceanic-next'                               " ColorScheme
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}   " Language parser
+  Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Language parser
   Plug 'norcalli/nvim-colorizer.lua'                            " Colorea los codigos RGB/HEX
   Plug 'Yggdroot/indentLine'                                    " Lineas de sangria
   Plug 'nvim-tree/nvim-tree.lua'                                " Explorador de archivos
   Plug 'dyng/ctrlsf.vim'                                        " Atajo de busqueda
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-  Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}    " Buscador con ventana flotante. [:Clamp]
+  Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }  " Buscador con ventana flotante. [:Clamp]
 " Modulos para codigos de programacion ------------------
 " Plug 'w0rp/ale'                                               Verifica la sintaxis en tiempo real
   Plug 'dense-analysis/ale'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'} 
-  Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}        " Python highlights - pip3 install pynvim --upgrade 
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }               " Detalla informacion de las funciones
+  Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }        " Python highlights - pip3 install pynvim --upgrade 
 call plug#end()
 
 " =======================================================
@@ -153,8 +153,8 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 let g:ctrlp_show_hidden = 1                                                         "Show dotfiles
 
 " ALE ---------------------------------------------------
-let g:ale_sign_error = '☠ ' 
-let g:ale_sign_warning = '⚠ '
+let g:ale_sign_error = '❌' 
+let g:ale_sign_warning = '⚠️'
 
 let g:ale_fix_on_save = 1
 "let g:ale_sign_error = '>>'
@@ -164,8 +164,8 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 let g:ale_python_flake8_options = '--max-line-length 88 --ignore=F403,F405 --extend-ignore=E203'
-let g:ale_linters = {'python': ['flake8']}
-
+" let g:ale_linters = {'python': ['flake8'],}      " https://vi.stackexchange.com/a/18587
+" let g:ale_linters = {'python': ['pycodestyle'],} " https://pypi.org/project/pycodestyle/
 
 
 
