@@ -25,7 +25,8 @@ call plug#begin('~/.local/share/nvim/plugged')
 " Modulos para codigos de programacion ------------------
 " Plug 'w0rp/ale'                                               Verifica la sintaxis en tiempo real
   Plug 'dense-analysis/ale'
-  Plug 'neoclide/coc.nvim', { 'branch': 'release' }               " Detalla informacion de las funciones
+" Detalla informacion de las funciones
+  Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-pyright'} 
   Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }        " Python highlights - pip3 install pynvim --upgrade 
 call plug#end()
 
@@ -159,11 +160,11 @@ let g:ale_sign_warning = '⚠️'
 let g:ale_fix_on_save = 1
 "let g:ale_sign_error = '>>'
 "let g:ale_sign_warning = '--'
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_error_str = 'ERROR'
+let g:ale_echo_msg_warning_str = 'WARN'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
-let g:ale_python_flake8_options = '--max-line-length 88 --ignore=F403,F405 --extend-ignore=E203'
+let g:ale_python_flake8_options = '--max-line-length 110 --ignore=F403,F405 --extend-ignore=E203'
 " let g:ale_linters = {'python': ['flake8'],}      " https://vi.stackexchange.com/a/18587
 " let g:ale_linters = {'python': ['pycodestyle'],} " https://pypi.org/project/pycodestyle/
 
