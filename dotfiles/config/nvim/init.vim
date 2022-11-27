@@ -5,13 +5,13 @@
 "
 " RUTA: ~/.config/nvim/init.vim
 " Revisar dependencias: nvim +checkhealth
-
 " =======================================================
 " DIRECTORIO DE PLUGINS
 " =======================================================
 call plug#begin('~/.local/share/nvim/plugged')
-  Plug 'nvim-lualine/lualine.nvim'                              " Barra de estado
-  Plug 'kyazdani42/nvim-web-devicons'                           " Iconos
+  Plug 'nvim-lualine/lualine.nvim'                              " Barra de estado 
+  Plug 'ryanoasis/vim-devicons'                                 " Iconos
+  Plug 'nvim-tree/nvim-web-devicons'                            " Iconos con color
   Plug 'glepnir/dashboard-nvim'                                 " Dashboard
   Plug 'mhartington/oceanic-next'                               " ColorScheme
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Language parser
@@ -22,22 +22,21 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }  " Buscador con ventana flotante. [:Clamp]
-" Modulos para codigos de programacion ------------------
-" Plug 'w0rp/ale'                                               Verifica la sintaxis en tiempo real
-  Plug 'dense-analysis/ale'
+  Plug 'dense-analysis/ale'                                     " syntax checking and semantic errors
 " Detalla informacion de las funciones
-  Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-pyright'} 
-  Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }        " Python highlights - pip3 install pynvim --upgrade 
+  Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': ':CocInstall coc-pyright'} 
+  Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }      " Python highlights
+  Plug 'preservim/nerdtree'
 call plug#end()
 
 " =======================================================
 " APARIENCIA
 " =======================================================
-syntax on                   " habilita el syntax 'highlighting'
+syntax on                   " Habilita syntax highlighting'
 set termguicolors           " Activa true-colors en la terminal
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 0
-colorscheme OceanicNext     " Activa el tema tras establecer los parametros previos, sino, no se activan
+colorscheme OceanicNext     " Activa el tema. No cambies la ubicacion de esta linea.
 
 " Habilita la transparencia -----------------------------
 " https://tinyurl.com/293mnur4
@@ -45,12 +44,12 @@ colorscheme OceanicNext     " Activa el tema tras establecer los parametros prev
 "   hi LineNr guibg=NONE ctermbg=NONE
 "   hi SignColumn guibg=NONE ctermbg=NONE
 "   hi EndOfBuffer guibg=NONE ctermbg=NONE
-
-set noshowmode              " Hide the insert status in vim
-
+"
+" =======================================================
+" DASHBOARD
+" =======================================================
 " Para agregar los delimitarores al princpio y final
 " https://xflea.github.io/nv-dashboard-header-maker/
-
 let g:dashboard_custom_header = [
     \' ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⡿⠁⠀⠀⠀⠀⠘⣿⡇⢀⡤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ',
     \' ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠛⠛⠱⢗⣶⣶⣤⣈⠀⣰⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ',
@@ -103,7 +102,6 @@ lua << EOF
   }
   require('colorizer').setup {'*'}
   require('nvim-tree').setup {} 
-
 EOF
 
 " =======================================================
@@ -112,6 +110,7 @@ EOF
 " RENDIMIENTO -------------------------------------------
 set lazyredraw              " Don’t update screen during macro and script execution
 set ttyfast                 " Acelera el scroll
+set noshowmode              " Hide the insert status in vim
 
 " HYBRID LINE NUMBERS -----------------------------------
 set number relativenumber   " Show line number on the current line and relative numbers on all other lines
@@ -150,23 +149,24 @@ map <F3>    :IndentLinesToggle<CR>              " en vim NORMAL, oculta las line
 nmap <C-F>f    <Plug>CtrlSFPrompt                  
 nmap <C-F>n    <Plug>CtrlSFCwordPath
 nmap <C-F>p    <Plug>CtrlSFPwordPath
+
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard'] "Hide files in .gitignore
 let g:ctrlp_show_hidden = 1                                                         "Show dotfiles
+
+nnoremap <leader>n  :NERDTreeFocus<CR>
+nnoremap <C-n>      :NERDTree<CR>
+nnoremap <C-t>      :NERDTreeToggle<CR>
+nnoremap <C-f>      :NERDTreeFind<CR>
 
 " ALE ---------------------------------------------------
 let g:ale_sign_error = '❌' 
 let g:ale_sign_warning = '⚠️'
-
 let g:ale_fix_on_save = 1
-"let g:ale_sign_error = '>>'
-"let g:ale_sign_warning = '--'
 let g:ale_echo_msg_error_str = 'ERROR'
 let g:ale_echo_msg_warning_str = 'WARN'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-
 let g:ale_python_flake8_options = '--max-line-length 110 --ignore=F403,F405 --extend-ignore=E203'
 " let g:ale_linters = {'python': ['flake8'],}      " https://vi.stackexchange.com/a/18587
 " let g:ale_linters = {'python': ['pycodestyle'],} " https://pypi.org/project/pycodestyle/
 
-
-
+" autocmd VimEnter * NERDTree | wincmd p
