@@ -165,8 +165,10 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 " ATAJOS ------------------------------------------------
 " :setlocal nonumber norelativenumber
 " nmap <space> <leader>
+map <F2>            :set nowrap!<CR>
 map <F3>            :IndentLinesToggle<CR>              " en vim NORMAL, oculta las lineas
 map <F4>            :set nu! rnu!<CR>
+
 nmap <C-F>f         <Plug>CtrlSFPrompt                  
 nmap <C-F>n         <Plug>CtrlSFCwordPath
 nmap <C-F>p         <Plug>CtrlSFPwordPath
