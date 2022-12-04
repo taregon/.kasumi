@@ -1,4 +1,4 @@
-" La primera ves hay que instalar el getor de plugins *vim-plug*
+" La primera voes hay que instalar el getor de plugins *vim-plug*
 " 
 " Instalación de Plugins - https://stsewd.dev/es/posts/neovim-plugins/
 " Top 50 Options https://www.shortcutfoo.com/blog/top-50-vim-configuration-options/
@@ -18,7 +18,6 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'norcalli/nvim-colorizer.lua'                            " Colorea los codigos RGB/HEX
   Plug 'Yggdroot/indentLine'                                    " Lineas de sangria
   Plug 'nvim-tree/nvim-tree.lua'                                " Explorador de archivos
-  Plug 'dyng/ctrlsf.vim'                                        " Atajo de busqueda
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
 "  Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }  " Buscador con ventana flotante. [:Clamp]
@@ -27,7 +26,7 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': ':CocInstall coc-pyright'} 
   Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }      " Python highlights
   Plug 'preservim/nerdtree'
-  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+"  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'               origina el error E5248
 call plug#end()
 
 " =======================================================
@@ -161,18 +160,17 @@ let g:ctrlp_show_hidden = 1                                                     
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeQuitOnOpen=1      " Automatically close NERDTree when you open a file
 
 " ATAJOS ------------------------------------------------
-" :setlocal nonumber norelativenumber
-" nmap <space> <leader>
-map <F2>            :set nowrap!<CR>
-map <F3>            :IndentLinesToggle<CR>              " en vim NORMAL, oculta las lineas
-map <F4>            :set nu! rnu!<CR>
-
-nmap <C-F>f         <Plug>CtrlSFPrompt                  
-nmap <C-F>n         <Plug>CtrlSFCwordPath
-nmap <C-F>p         <Plug>CtrlSFPwordPath
-nnoremap <C-f>      :NERDTreeFind<CR>
-nnoremap <C-n>      :NERDTree<CR>
-nnoremap <C-t>      :NERDTreeToggle<CR>
-nnoremap <leader>n  :NERDTreeFocus<CR>
+" https://stackoverflow.com/a/3776182
+" https://getpocket.com/read/3758828321
+" https://vrapper.sourceforge.net/documentation/?topic=configuration
+" https://tuckerchapman.com/2018/06/16/how-to-use-the-vim-leader-key/
+" -------------------------------------------------------
+let mapleader = "."                               " Change Your Leader Key in Vim
+nnoremap <F2>       :set nowrap!<CR>
+nnoremap <F3>       :IndentLinesToggle<CR>        " en vim NORMAL, oculta las lineas
+nnoremap <F4>       :set nu! rnu!<CR>
+nnoremap <leader>f  :NERDTreeFind<CR>             " Find the current file in the tree.
+nnoremap <leader>t  :NERDTreeToggle<CR>
