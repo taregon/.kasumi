@@ -1,4 +1,4 @@
-" La primera voes hay que instalar el getor de plugins *vim-plug*
+" La primera ves hay que instalar el getor de plugins *vim-plug*
 " 
 " Instalación de Plugins - https://stsewd.dev/es/posts/neovim-plugins/
 " Top 50 Options https://www.shortcutfoo.com/blog/top-50-vim-configuration-options/
@@ -26,7 +26,6 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': ':CocInstall coc-pyright'} 
   Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }      " Python highlights
   Plug 'preservim/nerdtree'
-"  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'               origina el error E5248
 call plug#end()
 
 " =======================================================
