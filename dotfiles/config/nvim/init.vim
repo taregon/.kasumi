@@ -11,21 +11,20 @@
 call plug#begin('~/.local/share/nvim/plugged')
   Plug 'nvim-lualine/lualine.nvim'                              " Barra de estado 
   Plug 'ryanoasis/vim-devicons'                                 " Iconos
-"  Plug 'nvim-tree/nvim-web-devicons'                            " Iconos con color
   Plug 'glepnir/dashboard-nvim'                                 " Dashboard
   Plug 'mhartington/oceanic-next'                               " ColorScheme
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Language parser
   Plug 'norcalli/nvim-colorizer.lua'                            " Colorea los codigos RGB/HEX
   Plug 'Yggdroot/indentLine'                                    " Lineas de sangria
-  Plug 'nvim-tree/nvim-tree.lua'                                " Explorador de archivos
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
+  Plug 'preservim/nerdtree'                                      " Explorador de archivos
 "  Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }  " Buscador con ventana flotante. [:Clamp]
   Plug 'dense-analysis/ale'                                     " syntax checking and semantic errors
 " Detalla informacion de las funciones
   Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': ':CocInstall coc-pyright'} 
   Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }      " Python highlights
-  Plug 'preservim/nerdtree'
+  Plug 'Vimjas/vim-python-pep8-indent'
 call plug#end()
 
 " =======================================================
@@ -100,7 +99,6 @@ lua << EOF
     },
   }
   require('colorizer').setup {'*'}
-  require('nvim-tree').setup {} 
 EOF
 
 " =======================================================
@@ -155,10 +153,6 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 let g:ctrlp_show_hidden = 1                                                         "Show dotfiles
 
 " NERDTree ----------------------------------------------
-" autocmd VimEnter * NERDTree | wincmd p
-let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
 let g:NERDTreeQuitOnOpen=1      " Automatically close NERDTree when you open a file
 
 " ATAJOS ------------------------------------------------
@@ -167,7 +161,7 @@ let g:NERDTreeQuitOnOpen=1      " Automatically close NERDTree when you open a f
 " https://vrapper.sourceforge.net/documentation/?topic=configuration
 " https://tuckerchapman.com/2018/06/16/how-to-use-the-vim-leader-key/
 " -------------------------------------------------------
-let mapleader = "."                               " Change Your Leader Key in Vim
+let mapleader = "."                               " Change Your <leader> Key in Vim
 nnoremap <F2>       :set nowrap!<CR>
 nnoremap <F3>       :IndentLinesToggle<CR>        " en vim NORMAL, oculta las lineas
 nnoremap <F4>       :set nu! rnu!<CR>
