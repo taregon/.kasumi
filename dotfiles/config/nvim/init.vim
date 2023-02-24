@@ -162,9 +162,10 @@ let g:NERDTreeQuitOnOpen=1      " Automatically close NERDTree when you open a f
 " https://tuckerchapman.com/2018/06/16/how-to-use-the-vim-leader-key/
 " -------------------------------------------------------
 let mapleader = ";"                               " Change Your <leader> Key in Vim
-nnoremap <F2>         :set nowrap!<CR>
-nnoremap <F3>         :IndentLinesToggle<CR>        " en vim NORMAL, oculta las lineas
-nnoremap <F4>         :set nu! rnu!<CRnnoremap <leader>ee   :Semshi error<CR>
+nnoremap <F2>         :set nowrap!<CR>              " Los parrafos no tiene salto de linea
+nnoremap <F3>         :IndentLinesToggle<CR>        " Oculta las lineas / sangrias
+nnoremap <F4>         :set nu! rnu!<CR>             " Oculta los numeros de lineas
+nnoremap <leader>ee   :Semshi error<CR>
 nnoremap <leader>sc   :Semshi goto class next<CR>
 nnoremap <leader>SC   :Semshi goto class prev<CR>
 nnoremap <leader>SE   :Semshi error<CR>

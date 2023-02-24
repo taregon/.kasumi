@@ -17,28 +17,29 @@ dotfiles:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
     link: absolute
-  f_kasumi-zsh_alias.conf:
-    src: config/zsh/kasumi-zsh_alias.conf
-    dst: ~/.config/zsh/kasumi-zsh_alias.conf
-    link: absolute
   f_kasumi-tmux.conf:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
-  f_init.vim:
+  f_kasumi-ex-neovim:
     src: config/nvim/init.vim
     dst: ~/.config/nvim/init.vim
     link: absolute
     actions:
     - install_vimplug_1
-    - install_vimplug_2
-  f_kasumi-zsh_funtions.conf:
+    - install_vimplug_2  
+  f_kasumi-ex-starttree:
+    src: config/StartTree/config.yaml
+    dst: ~/.config/StartTree/config.yaml
+    link: absolute
+   f_kasumi-ex-zsh_alias:
+    src: config/zsh/kasumi-zsh_alias.conf
+    dst: ~/.config/zsh/kasumi-zsh_alias.conf
+    link: absolute 
+  f_kasumi-ex-zsh_funtions:
     src: config/zsh/kasumi-zsh_funtions.conf
     dst: ~/.config/zsh/kasumi-zsh_funtions.conf
     link: absolute
-  f_config.yaml:
-    src: config/StartTree/config.yaml
-    dst: ~/.config/StartTree/config.yaml
 profiles:
   kasumi:
     dotfiles:
@@ -47,7 +48,7 @@ profiles:
     - f_kasumi-tmux.conf
   kasumi_extras:
     dotfiles:
-    - f_kasumi-zsh_alias.conf
-    - f_init.vim
-    - f_kasumi-zsh_funtions.conf
-    - f_config.yaml
+    - f_kasumi-ex-neovim
+    - f_kasumi-ex-starttree
+    - f_kasumi-ex-zsh_alias
+    - f_kasumi-ex-zsh_funtions
