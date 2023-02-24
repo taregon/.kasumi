@@ -1,0 +1,109 @@
+# config: ~/.config/StartTree/config.yaml
+#
+# Repo: https://github.com/Paul-Houser/StartTree
+# Pagina de inicio..: ~/.cache/StartTree/index.html
+# Ruta Firefox: file:///home/USUARIO/.cache/StartTree/index.html
+# 
+# Tras un cambio, hay que ejecutar: starttree.py
+
+font_size: 20
+theme: intrigue
+tree_1:
+  Nuke Code:
+    hitomi: "https://hitomi.la/index-spanish.html"
+    nhentai: "https://nhentai.net/"
+    plot-twistnf: "https://porno.plot-twistnf-scans.com/"
+    kawaii-tenshi: "https://kawaii-tenshi.com/"
+    pregnant-hd: "https://pregnant-hd.net/"
+  Texto:
+    figlet-ascii: "https://www.askapache.com/online-tools/figlet-ascii/"
+    generadordenombres: "https://generadordenombres.online/instagram/"
+    wordunscrambler: "https://www.wordunscrambler.net"
+    fontgenerator: "https://www.fontgenerator.org/popular"
+    dino-ipsum: "https://dinoipsum.com/"
+    bacon-ipsum: "https://baconipsum.com/json-api/"
+  Color:
+    color-wheel: "https://www.canva.com/colors/color-wheel/"
+    colorhexa: "https://www.colorhexa.com/"
+    color-picker: "https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html"
+    coolors: "https://coolors.co/"
+    gradient-generator: "https://learnui.design/tools/gradient-generator.html"
+    random-colors: "https://www.crispedge.com/random-colors" 
+    colour-contrast: "https://colourcontrast.cc/"
+    la _flor: "https://htmlcolors.com/shades-and-tints"
+
+tree_2:
+  Unicode:
+    emoji-charts: "https://www.unicode.org/emoji/charts/full-emoji-list.html"
+    emoji-table: "https://unicode-table.com/es/emoji/"
+    rozen-maiden-ascii: "https://4-ch.net/ascii/kareha.pl/1143036729"
+    punycode: "https://www.punycoder.com/"
+  Otros:
+    example-hashes: "https://hashcat.net/wiki/doku.php?id=example_hashes"
+    mathmap: "https://mathmap.quantamagazine.org/"
+    aprende-vim: "https://victorhck.gitbook.io/aprende-vim/"
+
+tree_3:
+  Tech:
+    postimages: "https://postimages.org/"
+    psucalculator: "https://outervision.com/power-supply-calculator"
+    wicar: "https://www.wicar.org/test-malware.html"
+    commandlinefu: "https://www.commandlinefu.com/commands/browse"
+    image-to-braille: "https://505e06b2.github.io/Image-to-Braille/"
+    braille-ascii: "https://lachlanarthur.github.io/Braille-ASCII-Art/"
+    unicode-converter: "https://www.branah.com/unicode-converter"
+    utf-8 encoder/decoder: "https://mothereff.in/utf-8"
+    iso-debian: "https://www.debian.org/CD/http-ftp/"
+    quiteaplaylist: "https://quiteaplaylist.com/"
+    speedometer: "https://browserbench.org/Speedometer2.0/"
+    commandlinefu: "https://www.commandlinefu.com/"
+    youtube-metadata: "https://mattw.io/youtube-metadata/"
+    cyberchef: "https://gchq.github.io/CyberChef/"
+  IA:
+    waifu2x: "http://waifu2x.udp.jp/"
+    craiyon: "https://www.craiyon.com/"
+    stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
+    deepnude: "https://app.deepnude.cc/upload"
+    ai-photo-enhancer: "https://app.remini.ai/"
+    lalal.ai: "https://www.lalal.ai/"
+    deepl-translator: "https://www.deepl.com/translator"
+    stability.ai: "https://stability.ai/"
+    moises.ai: "https://moises.ai/es/features/vocal-remover/"
+    vocalremover: "https://vocalremover.org/"
+
+tree_4:
+  Album:
+    hikarinoakari: "https://hikarinoakari.com/"
+    okamimiost: "https://okamimiost.com/"
+    sukidesuost: "https://sukidesuost.info/"
+    classical-music: "https://classical-music-download.com/"
+    j-pop: "https://jpop.xyz/"
+    realovemusic: "https://www.patreon.com/realovemusic"
+    mixxx-controllers: "https://manual.mixxx.org/2.3/en/hardware/manuals.html#controllers"
+    micro-audiotest: "https://www.audiotestkitchen.com/"
+    djtechtools: "https://djtechtools.com/"
+    Guide To Studio Scratches: "https://studioscratches.com/guide-to-studio-scratches/"
+    Scratch Techniques: "https://schoolofscratch.com/"
+    Audio Test Tones: "https://www.audiocheck.net/testtones_index.php"
+  Ocio:
+    al_gamewith: "https://gamewith.jp/azurlane/"
+    al_pasokau: "https://pasokau.com/category/allcharacter"
+    al_augment-guide: "https://tinyurl.com/3yz7zm8z"
+    favorgk: "https://www.favorgk.com/search?q=Marin+Kitagawa&options%5Bprefix%5D=last"
+  Fansub:
+    hakoniwa: "https://hakoniwasubs.wordpress.com/"
+    fukou-da: "https://fukou-da.net/"
+    beatz-anime: "https://www.beatz-anime.com/"
+
+tree_5:
+  Bitcoin:
+    mvrv: "https://www.lookintobitcoin.com/charts/mvrv-zscore/"
+    pi_multiple: "https://bitcoinition.com/charts/pimultiple/"
+    pump-map: "https://cignals.io/pumpmap"
+    pi_cycle: "https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/"
+    halving_countdown: "https://www.bitcoinblockhalf.com/?ref=cryptophercolumbus"
+    whalestats: "https://www.whalestats.com/analysis-of-the-top-100-eth-wallets/holding"
+    coinalyze: "https://coinalyze.net/futures-data/global-charts/uniswap/"
+    cryptorank: "https://cryptorank.io/price/uniswap/exchanges"
+    defillama: "https://defillama.com/languages"
+
