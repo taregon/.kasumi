@@ -9,15 +9,15 @@ config:
   create: true
   dotpath: dotfiles
 dotfiles:
-  f_kasumi-cava.conf:
+  f_kasumi-cava:
     src: config/cava/kasumi-cava.conf
     dst: ~/.config/cava/kasumi-cava.conf
     link: absolute
-  f_kasumi-kitty.conf:
+  f_kasumi-kitty:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
     link: absolute
-  f_kasumi-tmux.conf:
+  f_kasumi-tmux:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
@@ -43,9 +43,9 @@ dotfiles:
 profiles:
   kasumi:
     dotfiles:
-    - f_kasumi-cava.conf
-    - f_kasumi-kitty.conf
-    - f_kasumi-tmux.conf
+    - f_kasumi-cava
+    - f_kasumi-kitty
+    - f_kasumi-tmux
   kasumi_extras:
     dotfiles:
     - f_kasumi-ex-neovim
