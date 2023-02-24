@@ -161,9 +161,21 @@ let g:NERDTreeQuitOnOpen=1      " Automatically close NERDTree when you open a f
 " https://vrapper.sourceforge.net/documentation/?topic=configuration
 " https://tuckerchapman.com/2018/06/16/how-to-use-the-vim-leader-key/
 " -------------------------------------------------------
-let mapleader = "."                               " Change Your <leader> Key in Vim
-nnoremap <F2>       :set nowrap!<CR>
-nnoremap <F3>       :IndentLinesToggle<CR>        " en vim NORMAL, oculta las lineas
-nnoremap <F4>       :set nu! rnu!<CR>
-nnoremap <leader>f  :NERDTreeFind<CR>             " Find the current file in the tree.
-nnoremap <leader>t  :NERDTreeToggle<CR>
+let mapleader = ";"                               " Change Your <leader> Key in Vim
+nnoremap <F2>         :set nowrap!<CR>
+nnoremap <F3>         :IndentLinesToggle<CR>        " en vim NORMAL, oculta las lineas
+nnoremap <F4>         :set nu! rnu!<CRnnoremap <leader>ee   :Semshi error<CR>
+nnoremap <leader>sc   :Semshi goto class next<CR>
+nnoremap <leader>SC   :Semshi goto class prev<CR>
+nnoremap <leader>SE   :Semshi error<CR>
+nnoremap <leader>se   :Semshi goto error<CR>
+nnoremap <leader>sf   :Semshi goto function next<CR>
+nnoremap <leader>SF   :Semshi goto function prev<CR>
+nnoremap <leader>sn   :Semshi goto name next<CR>
+nnoremap <leader>sp   :Semshi goto name prev<CR>
+nnoremap <leader>sp   :Semshi goto parameterUnused first<CR>
+nnoremap <leader>sr   :Semshi rename<CR>
+nnoremap <leader>st   :Semshi toggle<CR>
+nnoremap <leader>su   :Semshi goto unresolved first<CR>
+nnoremap RT           :NERDTreeFind<CR>             " Find the current file in the tree.
+nnoremap rt           :NERDTreeToggle<CR>
