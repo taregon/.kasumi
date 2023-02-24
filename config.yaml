@@ -32,7 +32,7 @@ dotfiles:
     src: config/StartTree/config.yaml
     dst: ~/.config/StartTree/config.yaml
     link: absolute
-   f_kasumi-ex-zsh_alias:
+  f_kasumi-ex-zsh_alias:
     src: config/zsh/kasumi-zsh_alias.conf
     dst: ~/.config/zsh/kasumi-zsh_alias.conf
     link: absolute 
