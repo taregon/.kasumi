@@ -68,10 +68,11 @@ tree_3:
     youtube-metadata: "https://mattw.io/youtube-metadata/"
   IA:
     ai-photo-enhancer: "https://app.remini.ai/"
-    craiyon: "https://www.craiyon.com/"
     civitai: "https://civitai.com/"
+    craiyon: "https://www.craiyon.com/"
     deepl-translator: "https://www.deepl.com/translator"
     deepnude: "https://app.deepnude.cc/upload"
+    dezgo: "https://dezgo.com/"
     lalal.ai: "https://www.lalal.ai/"
     moises.ai: "https://moises.ai/es/features/vocal-remover/"
     stability.ai: "https://stability.ai/"
@@ -82,6 +83,7 @@ tree_3:
     Character bones: "https://toyxyz.gumroad.com/l/ciojz"
     ComfyUI: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"  
     controlnet: "https://github.com/lllyasviel/ControlNet" 
+    GPU-Buyer's-Guide: "https://rentry.org/stablediffgpubuy#hentai-for-cheapskates"
     hdgrecipes: "https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook"
 
 tree_4:
