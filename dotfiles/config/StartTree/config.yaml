@@ -10,11 +10,14 @@ font_size: 20
 theme: intrigue
 tree_1:
   Nuke Code:
-    hitomi: "https://hitomi.la/index-spanish.html"
+    e-hentai: "https://e-hentai.org/tag/language:spanish"
+    hitomi.la: "https://hitomi.la/index-spanish.html"
+    kawaii-tenshi: "https://kawaii-tenshi.com/"
     nhentai: "https://nhentai.net/"
     plot-twistnf: "https://porno.plot-twistnf-scans.com/"
-    kawaii-tenshi: "https://kawaii-tenshi.com/"
     pregnant-hd: "https://pregnant-hd.net/"
+    tmohentai: "https://tmohentaiv.com/filter/hentai"
+    veohentai: "https://veohentai.com/"
   Texto:
     figlet-ascii: "https://www.askapache.com/online-tools/figlet-ascii/"
     generadordenombres: "https://generadordenombres.online/instagram/"
@@ -38,21 +41,24 @@ tree_2:
     emoji-table: "https://unicode-table.com/es/emoji/"
     rozen-maiden-ascii: "https://4-ch.net/ascii/kareha.pl/1143036729"
     punycode: "https://www.punycoder.com/"
-  Otros:
+  Otros Utiles:
     example-hashes: "https://hashcat.net/wiki/doku.php?id=example_hashes"
     mathmap: "https://mathmap.quantamagazine.org/"
+    the-true-size-of: "https://www.thetruesize.com/"
     aprende-vim: "https://victorhck.gitbook.io/aprende-vim/"
 
 tree_3:
   Tech:
+    aime: "https://www.aime.info/blog/deep-learning-gpu-benchmarks-2022/"
+    bottleneck-calculator: "https://pc-builds.com/es/bottleneck-calculator/"
     braille-ascii: "https://lachlanarthur.github.io/Braille-ASCII-Art/"
     commandlinefu: "https://www.commandlinefu.com/"
     commandlinefu: "https://www.commandlinefu.com/commands/browse"
     cyberchef: "https://gchq.github.io/CyberChef/"
+    gpu-database: "https://www.techpowerup.com/gpu-specs/"
     image-to-braille: "https://505e06b2.github.io/Image-to-Braille/"
     iso-debian: "https://www.debian.org/CD/http-ftp/"
     postimages: "https://postimages.org/"
-    bottleneck-calculator: "https://pc-builds.com/es/bottleneck-calculator/"
     psucalculator: "https://outervision.com/power-supply-calculator"
     quiteaplaylist: "https://quiteaplaylist.com/"
     speedometer: "https://browserbench.org/Speedometer2.0/"
@@ -72,6 +78,9 @@ tree_3:
     stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
     vocalremover: "https://vocalremover.org/"
     waifu2x: "http://waifu2x.udp.jp/"
+  StableDiffusion:
+    hdgrecipes: "https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook"
+    controlnet: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"  
 
 tree_4:
   Album:
