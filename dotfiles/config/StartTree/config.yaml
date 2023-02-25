@@ -23,14 +23,14 @@ tree_1:
     dino-ipsum: "https://dinoipsum.com/"
     bacon-ipsum: "https://baconipsum.com/json-api/"
   Color:
+    color-picker: "https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html"
     color-wheel: "https://www.canva.com/colors/color-wheel/"
     colorhexa: "https://www.colorhexa.com/"
-    color-picker: "https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html"
+    colour-contrast: "https://colourcontrast.cc/"
     coolors: "https://coolors.co/"
     gradient-generator: "https://learnui.design/tools/gradient-generator.html"
+    la-flor: "https://htmlcolors.com/shades-and-tints"
     random-colors: "https://www.crispedge.com/random-colors" 
-    colour-contrast: "https://colourcontrast.cc/"
-    la _flor: "https://htmlcolors.com/shades-and-tints"
 
 tree_2:
   Unicode:
@@ -45,31 +45,31 @@ tree_2:
 
 tree_3:
   Tech:
+    braille-ascii: "https://lachlanarthur.github.io/Braille-ASCII-Art/"
+    commandlinefu: "https://www.commandlinefu.com/"
+    commandlinefu: "https://www.commandlinefu.com/commands/browse"
+    cyberchef: "https://gchq.github.io/CyberChef/"
+    image-to-braille: "https://505e06b2.github.io/Image-to-Braille/"
+    iso-debian: "https://www.debian.org/CD/http-ftp/"
     postimages: "https://postimages.org/"
     psucalculator: "https://outervision.com/power-supply-calculator"
-    wicar: "https://www.wicar.org/test-malware.html"
-    commandlinefu: "https://www.commandlinefu.com/commands/browse"
-    image-to-braille: "https://505e06b2.github.io/Image-to-Braille/"
-    braille-ascii: "https://lachlanarthur.github.io/Braille-ASCII-Art/"
-    unicode-converter: "https://www.branah.com/unicode-converter"
-    utf-8 encoder/decoder: "https://mothereff.in/utf-8"
-    iso-debian: "https://www.debian.org/CD/http-ftp/"
     quiteaplaylist: "https://quiteaplaylist.com/"
     speedometer: "https://browserbench.org/Speedometer2.0/"
-    commandlinefu: "https://www.commandlinefu.com/"
+    unicode-converter: "https://www.branah.com/unicode-converter"
+    utf-8 encoder/decoder: "https://mothereff.in/utf-8"
+    wicar: "https://www.wicar.org/test-malware.html"
     youtube-metadata: "https://mattw.io/youtube-metadata/"
-    cyberchef: "https://gchq.github.io/CyberChef/"
   IA:
-    waifu2x: "http://waifu2x.udp.jp/"
-    craiyon: "https://www.craiyon.com/"
-    stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
-    deepnude: "https://app.deepnude.cc/upload"
     ai-photo-enhancer: "https://app.remini.ai/"
-    lalal.ai: "https://www.lalal.ai/"
+    craiyon: "https://www.craiyon.com/"
     deepl-translator: "https://www.deepl.com/translator"
-    stability.ai: "https://stability.ai/"
+    deepnude: "https://app.deepnude.cc/upload"
+    lalal.ai: "https://www.lalal.ai/"
     moises.ai: "https://moises.ai/es/features/vocal-remover/"
+    stability.ai: "https://stability.ai/"
+    stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
     vocalremover: "https://vocalremover.org/"
+    waifu2x: "http://waifu2x.udp.jp/"
 
 tree_4:
   Album:
@@ -97,13 +97,13 @@ tree_4:
 
 tree_5:
   Bitcoin:
-    mvrv: "https://www.lookintobitcoin.com/charts/mvrv-zscore/"
-    pi_multiple: "https://bitcoinition.com/charts/pimultiple/"
-    pump-map: "https://cignals.io/pumpmap"
-    pi_cycle: "https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/"
-    halving_countdown: "https://www.bitcoinblockhalf.com/?ref=cryptophercolumbus"
-    whalestats: "https://www.whalestats.com/analysis-of-the-top-100-eth-wallets/holding"
     coinalyze: "https://coinalyze.net/futures-data/global-charts/uniswap/"
     cryptorank: "https://cryptorank.io/price/uniswap/exchanges"
     defillama: "https://defillama.com/languages"
+    halving_countdown: "https://www.bitcoinblockhalf.com/?ref=cryptophercolumbus"
+    mvrv: "https://www.lookintobitcoin.com/charts/mvrv-zscore/"
+    pi_cycle: "https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/"
+    pi_multiple: "https://bitcoinition.com/charts/pimultiple/"
+    pump_map: "https://cignals.io/pumpmap"
+    whalestats: "https://www.whalestats.com/analysis-of-the-top-100-eth-wallets/holding"
 
