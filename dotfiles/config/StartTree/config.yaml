@@ -52,6 +52,7 @@ tree_3:
     image-to-braille: "https://505e06b2.github.io/Image-to-Braille/"
     iso-debian: "https://www.debian.org/CD/http-ftp/"
     postimages: "https://postimages.org/"
+    bottleneck-calculator: "https://pc-builds.com/es/bottleneck-calculator/"
     psucalculator: "https://outervision.com/power-supply-calculator"
     quiteaplaylist: "https://quiteaplaylist.com/"
     speedometer: "https://browserbench.org/Speedometer2.0/"
@@ -62,6 +63,7 @@ tree_3:
   IA:
     ai-photo-enhancer: "https://app.remini.ai/"
     craiyon: "https://www.craiyon.com/"
+    civitai: "https://civitai.com/"
     deepl-translator: "https://www.deepl.com/translator"
     deepnude: "https://app.deepnude.cc/upload"
     lalal.ai: "https://www.lalal.ai/"
