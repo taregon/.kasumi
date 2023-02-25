@@ -79,8 +79,10 @@ tree_3:
     vocalremover: "https://vocalremover.org/"
     waifu2x: "http://waifu2x.udp.jp/"
   StableDiffusion:
+    Character bones: "https://toyxyz.gumroad.com/l/ciojz"
+    ComfyUI: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"  
+    controlnet: "https://github.com/lllyasviel/ControlNet" 
     hdgrecipes: "https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook"
-    controlnet: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"  
 
 tree_4:
   Album:
