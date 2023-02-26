@@ -82,6 +82,7 @@ tree_3:
     stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
     vocalremover: "https://vocalremover.org/"
     waifu2x: "http://waifu2x.udp.jp/"
+tree_4:
   StableDiffusion:
     Anime AI Prompts: "https://aituts.com/anime-artists-ai-prompts/"
     Character bones: "https://toyxyz.gumroad.com/l/ciojz"
@@ -99,9 +100,7 @@ tree_3:
     Posemaker: "https://avatarposemaker.deezein.com/"
     Ultimate RunPod Tutorial: "https://youtu.be/QN1vdGhjcRc"
     Posable-riggify: "https://3dcinetv.gumroad.com/l/osezw"
-    
-
-tree_4:
+tree_5:
   Album:
     hikarinoakari: "https://hikarinoakari.com/"
     okamimiost: "https://okamimiost.com/"
@@ -125,7 +124,7 @@ tree_4:
     fukou-da: "https://fukou-da.net/"
     beatz-anime: "https://www.beatz-anime.com/"
 
-tree_5:
+tree_6:
   Bitcoin:
     coinalyze: "https://coinalyze.net/futures-data/global-charts/uniswap/"
     cryptorank: "https://cryptorank.io/price/uniswap/exchanges"
