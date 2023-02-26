@@ -13,6 +13,7 @@ tree_1:
     e-hentai: "https://e-hentai.org/tag/language:spanish"
     hitomi.la: "https://hitomi.la/index-spanish.html"
     kawaii-tenshi: "https://kawaii-tenshi.com/"
+    latinohentai: "https://latinohentai.com/genero/jav-sub-esp/"
     nhentai: "https://nhentai.net/"
     plot-twistnf: "https://porno.plot-twistnf-scans.com/"
     pregnant-hd: "https://pregnant-hd.net/"
@@ -75,16 +76,28 @@ tree_3:
     dezgo: "https://dezgo.com/"
     lalal.ai: "https://www.lalal.ai/"
     moises.ai: "https://moises.ai/es/features/vocal-remover/"
+    pfpmaker: "https://pfpmaker.com/"
+    prompthero: "https://prompthero.com/waifu-diffusion-prompts" 
     stability.ai: "https://stability.ai/"
     stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
     vocalremover: "https://vocalremover.org/"
     waifu2x: "http://waifu2x.udp.jp/"
   StableDiffusion:
+    Anime AI Prompts: "https://aituts.com/anime-artists-ai-prompts/"
     Character bones: "https://toyxyz.gumroad.com/l/ciojz"
     ComfyUI: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"  
     controlnet: "https://github.com/lllyasviel/ControlNet" 
-    GPU-Buyer's-Guide: "https://rentry.org/stablediffgpubuy#hentai-for-cheapskates"
-    hdgrecipes: "https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook"
+    dreambooth: "https://stable-diffusion-art.com/dreambooth/"
+    GPU Buyer's Guide: "https://rentry.org/stablediffgpubuy#hentai-for-cheapskates"
+    install Anything V3: "https://aituts.com/anything-anime-stable-diffusion/"
+    Local Installation: "https://www.reddit.com/r/stablediffusion/wiki/local/"
+    Models Cookbook: "https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook"
+    Multi-ControlNet: "https://twitter.com/toyxyz3/status/1629620938894643200"
+    NovelAI Prompt Guide: "https://aituts.com/novelai-anime-prompt-techniques/"
+    pix2pix-zero: "https://pix2pixzero.github.io/"
+    Pose-helper: "https://civitai.com/models/11573/zpose-fighting-styles-1-pose-helper"
+    Ultimate RunPod Tutorial: "https://youtu.be/QN1vdGhjcRc"
+    
 
 tree_4:
   Album:
