@@ -14,6 +14,10 @@ dotfiles:
     dst: ~/.config/cava/kasumi-cava.conf
     link: absolute
   f_kasumi-kitty:
+    src: config/kitty/kitty.conf
+    dst: ~/.config/kitty/kitty.conf
+    link: absolute
+  f_kasumi-kitty-theme:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
     link: absolute
@@ -27,7 +31,7 @@ dotfiles:
     link: absolute
     actions:
     - install_vimplug_1
-    - install_vimplug_2  
+    - install_vimplug_2
   f_kasumi-ex-starttree:
     src: config/StartTree/config.yaml
     dst: ~/.config/StartTree/config.yaml
@@ -35,7 +39,7 @@ dotfiles:
   f_kasumi-ex-zsh_alias:
     src: config/zsh/kasumi-zsh_alias.conf
     dst: ~/.config/zsh/kasumi-zsh_alias.conf
-    link: absolute 
+    link: absolute
   f_kasumi-ex-zsh_funtions:
     src: config/zsh/kasumi-zsh_funtions.conf
     dst: ~/.config/zsh/kasumi-zsh_funtions.conf
@@ -45,6 +49,7 @@ profiles:
     dotfiles:
     - f_kasumi-cava
     - f_kasumi-kitty
+    - f_kasumi-kitty-theme
     - f_kasumi-tmux
   kasumi_extras:
     dotfiles:
