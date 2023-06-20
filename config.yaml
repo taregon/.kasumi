@@ -44,6 +44,10 @@ dotfiles:
     src: config/zsh/kasumi-zsh_funtions.conf
     dst: ~/.config/zsh/kasumi-zsh_funtions.conf
     link: absolute
+  f_kasumi-redshift.conf:
+    src: config/redshift/redshift.conf
+    dst: ~/.config/redshift/redshift.conf
+    link: absolute   
 profiles:
   kasumi:
     dotfiles:
@@ -51,6 +55,7 @@ profiles:
     - f_kasumi-kitty
     - f_kasumi-kitty-theme
     - f_kasumi-tmux
+    - f_kasumi-redshift.conf
   kasumi_extras:
     dotfiles:
     - f_kasumi-ex-neovim
