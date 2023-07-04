@@ -65,10 +65,11 @@ tree_3:
     psucalculator: "https://outervision.com/power-supply-calculator"
     quiteaplaylist: "https://quiteaplaylist.com/"
     speedometer: "https://browserbench.org/Speedometer2.0/"
+    translate-images: "https://translate.yandex.com/es/ocr"
     unicode-converter: "https://www.branah.com/unicode-converter"
     utf-8 encoder/decoder: "https://mothereff.in/utf-8"
     wicar: "https://www.wicar.org/test-malware.html"
-    youtube-metadata: "https://mattw.io/youtube-metadata/"
+    youtube-metadata: "https://mattw.io/youtube-metadata/"    
   IA:
     ai-photo-enhancer: "https://app.remini.ai/"
     civitai: "https://civitai.com/"
@@ -84,6 +85,7 @@ tree_3:
     stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
     vocalremover: "https://vocalremover.org/"
     waifu2x: "http://waifu2x.udp.jp/"
+
 tree_4:
   StableDiffusion:
     Anime AI Prompts: "https://aituts.com/anime-artists-ai-prompts/"
@@ -103,6 +105,7 @@ tree_4:
     Posemaker: "https://avatarposemaker.deezein.com/"
     Ultimate RunPod Tutorial: "https://youtu.be/QN1vdGhjcRc"
     Posable-riggify: "https://3dcinetv.gumroad.com/l/osezw"
+
 tree_5:
   Album:
     hikarinoakari: "https://hikarinoakari.com/"
@@ -138,4 +141,3 @@ tree_6:
     pi_multiple: "https://bitcoinition.com/charts/pimultiple/"
     pump_map: "https://cignals.io/pumpmap"
     whalestats: "https://www.whalestats.com/analysis-of-the-top-100-eth-wallets/holding"
-
