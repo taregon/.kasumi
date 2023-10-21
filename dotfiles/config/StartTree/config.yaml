@@ -27,6 +27,7 @@ tree_1:
     twitter-fonts: "https://glyphy.io/font-generator/twitter-fonts"
     dino-ipsum: "https://dinoipsum.com/"
     bacon-ipsum: "https://baconipsum.com/json-api/"
+    SYMBL: "https://symbl.cc/es/"
     🔥MagLit (shortener): "https://maglit.me/"
   Color:
     color-picker: "https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html"
@@ -54,6 +55,7 @@ tree_2:
     shortcuts for soundcloud: "https://usethekeyboard.com/soundcloud/"
     artbreeder: "https://www.artbreeder.com/create/mixer"
     imgcreator: "https://imgcreator.zmo.ai/ai-generator"
+    iconfinder: "https://www.iconfinder.com/"
 
 tree_3:
   Tech:
