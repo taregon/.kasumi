@@ -73,6 +73,7 @@ tree_3:
     suite-tools: "https://browserleaks.com/ip"
     postimages: "https://postimages.org/"
     psucalculator: "https://outervision.com/power-supply-calculator"
+    cron-expression-descriptor: "https://bradymholt.github.io/cron-expression-descriptor/"
     quiteaplaylist: "https://quiteaplaylist.com/"
     cron-parser: "https://elmah.io/tools/cron-parser/"
     speedometer: "https://browserbench.org/Speedometer2.0/"
