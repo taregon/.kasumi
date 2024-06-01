@@ -2,6 +2,7 @@
 "
 " Instalación de Plugins - https://stsewd.dev/es/posts/neovim-plugins/
 " Top 50 Options https://www.shortcutfoo.com/blog/top-50-vim-configuration-options/
+" Colores Catppuccin https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
 "
 " RUTA: ~/.config/nvim/init.vim
 " Revisar dependencias: nvim +checkhealth
@@ -9,16 +10,17 @@
 " DIRECTORIO DE PLUGINS
 " =======================================================
 call plug#begin('~/.local/share/nvim/plugged')
-  Plug 'glepnir/dashboard-nvim'                                 " Dashboard
-  Plug 'junegunn/vim-easy-align'  " Alinear texto
-  Plug 'mhartington/oceanic-next'                               " ColorScheme
-  Plug 'norcalli/nvim-colorizer.lua'                            " Colorea los codigos RGB/HEX
-  Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }      " Python highlights
-  Plug 'nvim-lualine/lualine.nvim'                              " Barra de estado
-  Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Language parser
-  Plug 'preservim/nerdtree'                                      " Explorador de archivos
-  Plug 'ryanoasis/vim-devicons'                                 " Iconos
-  Plug 'Yggdroot/indentLine'                                    " Lineas de sangria
+  Plug 'catppuccin/nvim', { 'as': 'catppuccin' }                " - ColorScheme
+  Plug 'fcancelinha/northern.nvim'                              " - ColorScheme
+  Plug 'echasnovski/mini.nvim'                                  " - Pack de modulos
+  Plug 'glepnir/dashboard-nvim'                                 " - Dashboard
+  Plug 'junegunn/vim-easy-align'                                " - Alinear texto
+  Plug 'norcalli/nvim-colorizer.lua'                            " - Colorea los codigos RGB/HEX
+  Plug 'nvim-lualine/lualine.nvim'                              " - Barra de estado
+  Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " - Language parser
+  Plug 'preservim/nerdtree'                                     " - Explorador de archivos
+  Plug 'ryanoasis/vim-devicons'                                 " - Iconos
+  Plug 'Yggdroot/indentLine'                                    " - Lineas de sangria
 call plug#end()
 
 " =======================================================
@@ -26,17 +28,7 @@ call plug#end()
 " =======================================================
 syntax on                   " Habilita syntax highlighting'
 set termguicolors           " Activa true-colors en la terminal
-let g:oceanic_next_terminal_bold = 1
-let g:oceanic_next_terminal_italic = 0
-colorscheme OceanicNext     " Activa el tema. No cambies la ubicacion de esta linea.
 
-" Habilita la transparencia -----------------------------
-" https://tinyurl.com/293mnur4
-"   hi Normal guibg=NONE ctermbg=NONE
-"   hi LineNr guibg=NONE ctermbg=NONE
-"   hi SignColumn guibg=NONE ctermbg=NONE
-"   hi EndOfBuffer guibg=NONE ctermbg=NONE
-"
 " =======================================================
 " DASHBOARD
 " =======================================================
@@ -81,7 +73,42 @@ lua << EOF
     options = {
       component_separators = "",
       section_separators = { left = '', right = '' },
-      theme = 'onedark',
+    },
+  }
+  require('catppuccin').setup {
+    no_italic = true,
+    dim_inactive = {
+      enabled = true,
+      shade = "dark",
+      percentage = 0.9,
+    },
+    flavour = "macchiato",
+    color_overrides = {
+      macchiato = {
+        flamingo  = "#AC89C9", -- De preferencia igual a 'text'
+        red       = "#e23667", -- ALERTA
+        maroon    = "#9B4834",
+        pink      = "#EA9A97", -- Tono Rosado | Funcion
+        mauve     = "#ea6a8e", -- Barra (visual) | Comando
+        peach     = "#eabc7b", -- Barra (comando) | Sangria y valores
+        yellow    = "#ffc574",
+        green     = "#afd590", -- Barra (Normar) | ALERTA
+        teal      = "#B9BB25",
+        sky       = "#af6a8a", -- < = > >>
+        sapphire  = "#99c792",
+        blue      = "#5cbcd6", -- Barra lados
+        lavender  = "#8dbba3",
+        text      = "#bac2d0", -- Barra texto
+        overlay2  = "#8793ab", -- , [] ()
+        overlay1  = "#858585",
+        overlay0  = "#4c5567", -- Comentarios
+        surface2  = "#4d4d4d",
+        surface1  = "#343C4B", -- Numero de linea
+        surface0  = "#2E3440", -- Barra medio lado
+        base      = "#1E222A", -- A. Fondo
+        mantle    = "#1A1D23", -- B. Barra centro
+        crust     = "#1A1D23", -- C. Divisor de paneles
+      },
     },
   }
   require('nvim-treesitter.configs').setup {
@@ -92,8 +119,19 @@ lua << EOF
       use_languagetree = true,
     },
   }
-  require('colorizer').setup {'*'}
+  require('colorizer').setup () -- Habilita los colores HEX
+  require('mini.pairs').setup () -- Automaticamente completa el par de {[("'`
+  require('mini.align').setup {
+    mappings = {
+      start = '<F7>', -- Atajo solo en VISUAL
+    },
+  }
 EOF
+" =======================================================
+" EL TEMA DEBE CARGAR DESPUES DE LOS AJUSTES DE LUA
+" =======================================================
+" colorscheme rose-pine-moon
+colorscheme catppuccin-macchiato
 
 " =======================================================
 " OPCIONES GENERALES
@@ -131,17 +169,6 @@ let g:indentLine_char = '┊'
 let g:indentLine_defaultGroup = 'Constant'      " con 'SpecialKey' las lineas son grices
 set list lcs=tab:\|\                            " NO resalta los TABs. Es una mejora cosmetica.
 
-" ALE ---------------------------------------------------
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
-let g:ale_fix_on_save = 1
-let g:ale_echo_msg_error_str = 'ERROR'
-let g:ale_echo_msg_warning_str = 'WARN'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_flake8_options = '--max-line-length 110 --ignore=F403,F405 --extend-ignore=E203'
-" let g:ale_linters = {'python': ['flake8'],}      " https://vi.stackexchange.com/a/18587
-" let g:ale_linters = {'python': ['pycodestyle'],} " https://pypi.org/project/pycodestyle/
-
 " EXTRAS ------------------------------------------------
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard'] "Hide files in .gitignore
 let g:ctrlp_show_hidden = 1                                                         "Show dotfiles
@@ -155,22 +182,10 @@ let g:NERDTreeQuitOnOpen=1      " Automatically close NERDTree when you open a f
 " https://vrapper.sourceforge.net/documentation/?topic=configuration
 " https://tuckerchapman.com/2018/06/16/how-to-use-the-vim-leader-key/
 " -------------------------------------------------------
-let mapleader = ";"                               " Change Your <leader> Key in Vim
-nnoremap <F2>         :set nowrap!<CR>              " Los parrafos no tiene salto de linea
-nnoremap <F3>         :IndentLinesToggle<CR>        " Oculta las lineas / sangrias
-nnoremap <F4>         :set nu! rnu!<CR>             " Oculta los numeros de lineas
-nnoremap <leader>ee   :Semshi error<CR>
-nnoremap <leader>sc   :Semshi goto class next<CR>
-nnoremap <leader>SC   :Semshi goto class prev<CR>
-nnoremap <leader>SE   :Semshi error<CR>
-nnoremap <leader>se   :Semshi goto error<CR>
-nnoremap <leader>sf   :Semshi goto function next<CR>
-nnoremap <leader>SF   :Semshi goto function prev<CR>
-nnoremap <leader>sn   :Semshi goto name next<CR>
-nnoremap <leader>sp   :Semshi goto name prev<CR>
-nnoremap <leader>sp   :Semshi goto parameterUnused first<CR>
-nnoremap <leader>sr   :Semshi rename<CR>
-nnoremap <leader>st   :Semshi toggle<CR>
-nnoremap <leader>su   :Semshi goto unresolved first<CR>
-nnoremap RT           :NERDTreeFind<CR>             " Find the current file in the tree.
-nnoremap rt           :NERDTreeToggle<CR>
+let mapleader = "`"                    " Change Your <leader> Key in Vim
+nnoremap <F2> :set nowrap!<CR>        " Los parrafos no tiene salto de linea
+nnoremap <F3> :IndentLinesToggle<CR>  " Oculta las lineas / sangrias
+nnoremap <F4> :set nu! rnu!<CR>       " Oculta los numeros de lineas
+nnoremap <F5> :NERDTreeToggle<CR>     " Panel de archivos
+nnoremap tf   :NERDTreeFind<CR>       " Find the current file in the tree.
+
