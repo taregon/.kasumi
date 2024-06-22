@@ -3,7 +3,7 @@
 # Repo: https://github.com/Paul-Houser/StartTree
 # Pagina de inicio..: ~/.cache/StartTree/index.html
 # Ruta Firefox: file:///home/USUARIO/.cache/StartTree/index.html
-# 
+#
 # Tras un cambio, hay que ejecutar: starttree.py
 
 font_size: 20
@@ -31,15 +31,21 @@ tree_1:
     🔥MagLit (shortener): "https://maglit.me/"
   Color:
     color-picker: "https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html"
+    shade-generator: "https://www.shadegenerator.com/"
     color-wheel: "https://www.canva.com/colors/color-wheel/"
     colorhexa: "https://www.colorhexa.com/"
+    tints-shades: "https://noeldelgado.github.io/shadowlord/#000000"
     colour-contrast: "https://colourcontrast.cc/"
+    colourco.de: "https://www.toptal.com/designers/colourcode/monochrome-color-builder"
     coolors: "https://coolors.co/"
+    web-color-tool: "https://color.joelb.dev/"
     gradient-generator: "https://learnui.design/tools/gradient-generator.html"
     la-flor: "https://htmlcolors.com/shades-and-tints"
-    random-colors: "https://www.crispedge.com/random-colors" 
+    random-colors: "https://www.crispedge.com/random-colors"
     shadowlord: "https://noeldelgado.github.io/shadowlord/"
     shadegenerator: "https://www.shadegenerator.com/BD1366-FADAD7"
+    Color palette generator (IA): "https://huemint.com/"
+    hotpot.ai: "https://hotpot.ai/color-generator"
 
 tree_2:
   Unicode:
@@ -56,6 +62,8 @@ tree_2:
     artbreeder: "https://www.artbreeder.com/create/mixer"
     imgcreator: "https://imgcreator.zmo.ai/ai-generator"
     iconfinder: "https://www.iconfinder.com/"
+    neovim plugins: "https://dotfyle.com/"
+    vimcolorschemes: "https://vimcolorschemes.com/i/trending"
 
 tree_3:
   Tech:
@@ -81,7 +89,7 @@ tree_3:
     unicode-converter: "https://www.branah.com/unicode-converter"
     utf-8 encoder/decoder: "https://mothereff.in/utf-8"
     wicar: "https://www.wicar.org/test-malware.html"
-    youtube-metadata: "https://mattw.io/youtube-metadata/"    
+    youtube-metadata: "https://mattw.io/youtube-metadata/"
   IA:
     ai-photo-enhancer: "https://app.remini.ai/"
     aime-blog: "https://www.aime.info/blog/en/"
@@ -93,7 +101,7 @@ tree_3:
     lalal.ai: "https://www.lalal.ai/"
     moises.ai: "https://moises.ai/es/features/vocal-remover/"
     pfpmaker: "https://pfpmaker.com/"
-    prompthero: "https://prompthero.com/waifu-diffusion-prompts" 
+    prompthero: "https://prompthero.com/waifu-diffusion-prompts"
     stability.ai: "https://stability.ai/"
     stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
     vocalremover: "https://vocalremover.org/"
@@ -103,8 +111,8 @@ tree_4:
   StableDiffusion:
     Anime AI Prompts: "https://aituts.com/anime-artists-ai-prompts/"
     Character bones: "https://toyxyz.gumroad.com/l/ciojz"
-    ComfyUI: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"  
-    controlnet: "https://github.com/lllyasviel/ControlNet" 
+    ComfyUI: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"
+    controlnet: "https://github.com/lllyasviel/ControlNet"
     dreambooth: "https://stable-diffusion-art.com/dreambooth/"
     GPU Buyer's Guide: "https://rentry.org/stablediffgpubuy#hentai-for-cheapskates"
     install Anything V3: "https://aituts.com/anything-anime-stable-diffusion/"
