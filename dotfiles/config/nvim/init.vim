@@ -35,6 +35,8 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'nvim-lua/plenary.nvim'                                   " - Depende: cokeline
   Plug 'tpope/vim-fugitive'
   Plug 'numToStr/Comment.nvim'                                   " - Comenta por lineas o en bloque (/* */)
+  Plug 'MunifTanjim/nui.nvim'     " Dependencia para searchbox
+  Plug 'VonHeikemen/searchbox.nvim'
 call plug#end()
 
 " =======================================================
@@ -288,7 +290,7 @@ lua << EOF
   local map = vim.api.nvim_set_keymap
   local NS = { noremap = true, silent = true }
   map('n', '.f', 'gcA', NS)
-
+  vim.keymap.set('n', '<F2>', ':SearchBoxIncSearch<CR>')
 
 EOF
 " =======================================================
@@ -384,7 +386,7 @@ let g:gitgutter_set_sign_backgrounds = 1  " Para que integre el fondo con los ic
 " let mapleader = "\<Space>"                    " Change Your <leader> Key in Vimi
 
 let mapleader = ","
-nnoremap <F2> :set nowrap!<CR>         " Los parrafos no tiene salto de linea
+nnoremap <F6> :set nowrap!<CR>         " Los parrafos no tiene salto de linea
 " nnoremap <F3> :IndentLinesToggle<CR>   " Oculta las lineas / sangrias
 nnoremap <F4> :set nu! rnu!<CR>        " Oculta los numeros de lineas
 nnoremap <F5> :NERDTreeToggle<CR>      " Panel de archivos
@@ -397,6 +399,7 @@ nmap hhu <Plug>(GitGutterUndoHunk)
 
 " nnoremap - :new<CR>
 " nnoremap \| :vnew<CR>
+
 
 nnoremap <C-->     :vsplit<CR>
 nnoremap <C-=>     :split<CR>
