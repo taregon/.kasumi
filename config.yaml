@@ -1,3 +1,4 @@
+---
 actions:
   pre:
     install_vimplug_1: test -e ~/.local/share/nvim/site/autoload/plug.vim || (mkdir
@@ -21,6 +22,10 @@ dotfiles:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
     link: absolute
+  f_kasumi-redshift.conf:
+    src: config/redshift/redshift.conf
+    dst: ~/.config/redshift/redshift.conf
+    link: absolute
   f_kasumi-tmux:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
@@ -29,13 +34,6 @@ dotfiles:
     src: zshrc
     dst: ~/.zshrc
     link: absolute
-  f_kasumi-ex-neovim:
-    src: config/nvim/init.vim
-    dst: ~/.config/nvim/init.vim
-    link: absolute
-    actions:
-    - install_vimplug_1
-    - install_vimplug_2
   f_kasumi-ex-starttree:
     src: config/StartTree/config.yaml
     dst: ~/.config/StartTree/config.yaml
@@ -48,22 +46,25 @@ dotfiles:
     src: config/zsh/kasumi-zsh_funtions.conf
     dst: ~/.config/zsh/kasumi-zsh_funtions.conf
     link: absolute
-  f_kasumi-redshift.conf:
-    src: config/redshift/redshift.conf
-    dst: ~/.config/redshift/redshift.conf
+  d_kasumi-ex-neovim:
+    src: config/nvim/lua/kasumi
+    dst: ~/.config/nvim/lua/kasumi
     link: absolute
+    actions:
+      - install_vimplug_1
+      - install_vimplug_2
 profiles:
   kasumi:
     dotfiles:
-    - f_kasumi-cava
-    - f_kasumi-kitty
-    - f_kasumi-kitty-theme
-    - f_kasumi-tmux
-    - f_kasumi-redshift.conf
-    - f_kasumi-zsh
+      - f_kasumi-cava
+      - f_kasumi-kitty
+      - f_kasumi-kitty-theme
+      - f_kasumi-tmux
+      - f_kasumi-redshift.conf
+      - f_kasumi-zsh
   kasumi_extras:
     dotfiles:
-    - f_kasumi-ex-neovim
-    - f_kasumi-ex-starttree
-    - f_kasumi-ex-zsh_alias
-    - f_kasumi-ex-zsh_funtions
+      - d_kasumi-ex-neovim
+      - f_kasumi-ex-starttree
+      - f_kasumi-ex-zsh_alias
+      - f_kasumi-ex-zsh_funtions

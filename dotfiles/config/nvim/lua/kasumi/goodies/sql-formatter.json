@@ -1,0 +1,11 @@
+{
+  "//": "Configuración para formateo SQL en PostgreSQL",
+  "//": "Este archivo es llamado por conform-nvim",
+  "//": "https://github.com/sql-formatter-org/sql-formatter",
+  "language": "postgresql",
+  "keywordCase": "upper",
+  "dataTypeCase": "lower",
+  "functionCase": "upper",
+  "identifierCase": "lower",
+  "tabWidth": 4
+}
