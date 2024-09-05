@@ -1,3 +1,4 @@
+---
 # config: ~/.config/StartTree/config.yaml
 #
 # Repo: https://github.com/Paul-Houser/StartTree
@@ -5,175 +6,168 @@
 # Ruta Firefox: file:///home/USUARIO/.cache/StartTree/index.html
 #
 # Tras un cambio, hay que ejecutar: starttree.py
-
 font_size: 20
 theme: intrigue
 tree_1:
   Nuke Code:
-    e-hentai: "https://e-hentai.org/tag/language:spanish"
-    hitomi.la: "https://hitomi.la/index-spanish.html"
-    kawaii-tenshi: "https://kawaii-tenshi.com/"
-    latinohentai: "https://latinohentai.com/genero/jav-sub-esp/"
-    nhentai: "https://nhentai.net/"
-    plot-twistnf: "https://porno.plot-twistnf-scans.com/"
-    pregnant-hd: "https://pregnant-hd.net/"
-    tmohentai: "https://tmohentaiv.com/filter/hentai"
-    veohentai: "https://veohentai.com/"
+    e-hentai: https://e-hentai.org/tag/language:spanish
+    hitomi.la: https://hitomi.la/index-spanish.html
+    kawaii-tenshi: https://kawaii-tenshi.com/
+    latinohentai: https://latinohentai.com/genero/jav-sub-esp/
+    nhentai: https://nhentai.net/
+    plot-twistnf: https://porno.plot-twistnf-scans.com/
+    pregnant-hd: https://pregnant-hd.net/
+    tmohentai: https://tmohentaiv.com/filter/hentai
+    veohentai: https://veohentai.com/
   Texto:
-    figlet-ascii: "https://www.askapache.com/online-tools/figlet-ascii/"
-    generadordenombres: "https://generadordenombres.online/instagram/"
-    wordunscrambler: "https://www.wordunscrambler.net"
-    fontgenerator: "https://www.fontgenerator.org/popular"
-    twitter-fonts: "https://glyphy.io/font-generator/twitter-fonts"
-    dino-ipsum: "https://dinoipsum.com/"
-    bacon-ipsum: "https://baconipsum.com/json-api/"
-    SYMBL: "https://symbl.cc/es/"
-    🔥MagLit (shortener): "https://maglit.me/"
-
+    figlet-ascii: https://www.askapache.com/online-tools/figlet-ascii/
+    generadordenombres: https://generadordenombres.online/instagram/
+    wordunscrambler: https://www.wordunscrambler.net
+    fontgenerator: https://www.fontgenerator.org/popular
+    twitter-fonts: https://glyphy.io/font-generator/twitter-fonts
+    dino-ipsum: https://dinoipsum.com/
+    bacon-ipsum: https://baconipsum.com/json-api/
+    SYMBL: https://symbl.cc/es/
+    🔥MagLit (shortener): https://maglit.me/
 tree_2:
   Unicode:
-    emoji-charts: "https://www.unicode.org/emoji/charts/full-emoji-list.html"
-    emoji-table: "https://unicode-table.com/es/emoji/"
-    rozen-maiden-ascii: "https://4-ch.net/ascii/kareha.pl/1143036729"
-    punycode: "https://www.punycoder.com/"
+    emoji-charts: https://www.unicode.org/emoji/charts/full-emoji-list.html
+    emoji-table: https://unicode-table.com/es/emoji/
+    rozen-maiden-ascii: https://4-ch.net/ascii/kareha.pl/1143036729
+    punycode: https://www.punycoder.com/
   Otros Utiles:
-    example-hashes: "https://hashcat.net/wiki/doku.php?id=example_hashes"
-    mathmap: "https://mathmap.quantamagazine.org/"
-    the-true-size-of: "https://www.thetruesize.com/"
-    aprende-vim: "https://victorhck.gitbook.io/aprende-vim/"
-    shortcuts for soundcloud: "https://usethekeyboard.com/soundcloud/"
-    artbreeder: "https://www.artbreeder.com/create/mixer"
-    imgcreator: "https://imgcreator.zmo.ai/ai-generator"
-    iconfinder: "https://www.iconfinder.com/"
-    sunpath3d: "https://drajmarsh.bitbucket.io/sunpath3d.html"
-    neovim plugins: "https://dotfyle.com/"
-    vimcolorschemes: "https://vimcolorschemes.com/i/trending"
-
+    example-hashes: https://hashcat.net/wiki/doku.php?id=example_hashes
+    mathmap: https://mathmap.quantamagazine.org/
+    the-true-size-of: https://www.thetruesize.com/
+    aprende-vim 1: https://victorhck.gitbook.io/aprende-vim/
+    aprende-vim 2: https://vimaroo.vercel.app/
+    shortcuts for soundcloud: https://usethekeyboard.com/soundcloud/
+    artbreeder: https://www.artbreeder.com/create/mixer
+    imgcreator: https://imgcreator.zmo.ai/ai-generator
+    iconfinder: https://www.iconfinder.com/
+    sunpath3d: https://drajmarsh.bitbucket.io/sunpath3d.html
+    neovim plugins: https://dotfyle.com/
+    vimcolorschemes: https://vimcolorschemes.com/i/trending
 tree_3:
   Tech:
-    aime: "https://www.aime.info/blog/deep-learning-gpu-benchmarks-2022/"
-    bottleneck-calculator: "https://pc-builds.com/es/bottleneck-calculator/"
-    braille-ascii: "https://lachlanarthur.github.io/Braille-ASCII-Art/"
-    commandlinefu: "https://www.commandlinefu.com/"
-    commandlinefu: "https://www.commandlinefu.com/commands/browse"
-    cyberchef: "https://gchq.github.io/CyberChef/"
-    gpu-database: "https://www.techpowerup.com/gpu-specs/"
-    image-to-braille: "https://505e06b2.github.io/Image-to-Braille/"
-    keyboard/mouse test: "https://skill-test.net/"
-    latitude.to: "https://latitude.to/"
-    iso-debian: "https://www.debian.org/CD/http-ftp/"
-    suite-tools: "https://browserleaks.com/ip"
-    postimages: "https://postimages.org/"
-    psucalculator: "https://outervision.com/power-supply-calculator"
-    cron-expression-descriptor: "https://bradymholt.github.io/cron-expression-descriptor/"
-    quiteaplaylist: "https://quiteaplaylist.com/"
-    cron-parser: "https://elmah.io/tools/cron-parser/"
-    speedometer: "https://browserbench.org/Speedometer2.0/"
-    translate-images: "https://translate.yandex.com/es/ocr"
-    unicode-converter: "https://www.branah.com/unicode-converter"
-    utf-8 encoder/decoder: "https://mothereff.in/utf-8"
-    wicar: "https://www.wicar.org/test-malware.html"
-    youtube-metadata: "https://mattw.io/youtube-metadata/"
+    aime: https://www.aime.info/blog/deep-learning-gpu-benchmarks-2022/
+    bottleneck-calculator: https://pc-builds.com/es/bottleneck-calculator/
+    braille-ascii: https://lachlanarthur.github.io/Braille-ASCII-Art/
+    commandlinefu: https://www.commandlinefu.com/
+    cyberchef: https://gchq.github.io/CyberChef/
+    gpu-database: https://www.techpowerup.com/gpu-specs/
+    image-to-braille: https://505e06b2.github.io/Image-to-Braille/
+    keyboard/mouse test: https://skill-test.net/
+    latitude.to: https://latitude.to/
+    iso-debian: https://www.debian.org/CD/http-ftp/
+    suite-tools: https://browserleaks.com/ip
+    postimages: https://postimages.org/
+    psucalculator: https://outervision.com/power-supply-calculator
+    cron-descriptor: https://bradymholt.github.io/cron-expression-descriptor/
+    quiteaplaylist: https://quiteaplaylist.com/
+    cron-parser: https://elmah.io/tools/cron-parser/
+    speedometer: https://browserbench.org/Speedometer2.0/
+    translate-images: https://translate.yandex.com/es/ocr
+    unicode-converter: https://www.branah.com/unicode-converter
+    utf-8 encoder/decoder: https://mothereff.in/utf-8
+    wicar: https://www.wicar.org/test-malware.html
+    youtube-metadata: https://mattw.io/youtube-metadata/
   IA:
-    ai-photo-enhancer: "https://app.remini.ai/"
-    aime-blog: "https://www.aime.info/blog/en/"
-    civitai: "https://civitai.com/"
-    craiyon: "https://www.craiyon.com/"
-    deepl-translator: "https://www.deepl.com/translator"
-    deepnude: "https://app.deepnude.cc/upload"
-    dezgo: "https://dezgo.com/"
-    lalal.ai: "https://www.lalal.ai/"
-    moises.ai: "https://moises.ai/es/features/vocal-remover/"
-    pfpmaker: "https://pfpmaker.com/"
-    prompthero: "https://prompthero.com/waifu-diffusion-prompts"
-    stability.ai: "https://stability.ai/"
-    stable-diffusion: "https://huggingface.co/spaces/stabilityai/stable-diffusion"
-    vocalremover: "https://vocalremover.org/"
-    waifu2x: "http://waifu2x.udp.jp/"
-
+    ai-photo-enhancer: https://app.remini.ai/
+    aime-blog: https://www.aime.info/blog/en/
+    civitai: https://civitai.com/
+    craiyon: https://www.craiyon.com/
+    deepl-translator: https://www.deepl.com/translator
+    deepnude: https://app.deepnude.cc/upload
+    dezgo: https://dezgo.com/
+    lalal.ai: https://www.lalal.ai/
+    moises.ai: https://moises.ai/es/features/vocal-remover/
+    pfpmaker: https://pfpmaker.com/
+    prompthero: https://prompthero.com/waifu-diffusion-prompts
+    stability.ai: https://stability.ai/
+    stable-diffusion: https://huggingface.co/spaces/stabilityai/stable-diffusion
+    vocalremover: https://vocalremover.org/
+    waifu2x: http://waifu2x.udp.jp/
 tree_4:
   StableDiffusion:
-    Anime AI Prompts: "https://aituts.com/anime-artists-ai-prompts/"
-    Character bones: "https://toyxyz.gumroad.com/l/ciojz"
-    ComfyUI: "https://comfyanonymous.github.io/ComfyUI_examples/controlnet/"
-    controlnet: "https://github.com/lllyasviel/ControlNet"
-    dreambooth: "https://stable-diffusion-art.com/dreambooth/"
-    GPU Buyer's Guide: "https://rentry.org/stablediffgpubuy#hentai-for-cheapskates"
-    install Anything V3: "https://aituts.com/anything-anime-stable-diffusion/"
-    Local Installation: "https://www.reddit.com/r/stablediffusion/wiki/local/"
-    install Dreambooth: "https://medium.com/mlearning-ai/how-to-run-dreambooth-locally-a-step-by-step-gyu-88c028ab01a4"
-    Models Cookbook: "https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook"
-    Multi-ControlNet: "https://twitter.com/toyxyz3/status/1629620938894643200"
-    NovelAI Prompt Guide: "https://aituts.com/novelai-anime-prompt-techniques/"
-    pix2pix-zero: "https://pix2pixzero.github.io/"
-    Pose-helper: "https://civitai.com/models/11573/zpose-fighting-styles-1-pose-helper"
-    Posemaker: "https://avatarposemaker.deezein.com/"
-    Ultimate RunPod Tutorial: "https://youtu.be/QN1vdGhjcRc"
-    Posable-riggify: "https://3dcinetv.gumroad.com/l/osezw"
-
+    Anime AI Prompts: https://aituts.com/anime-artists-ai-prompts/
+    Character bones: https://toyxyz.gumroad.com/l/ciojz
+    ComfyUI: https://comfyanonymous.github.io/ComfyUI_examples/controlnet/
+    controlnet: https://github.com/lllyasviel/ControlNet
+    dreambooth: https://stable-diffusion-art.com/dreambooth/
+    GPU Buyer's Guide: https://rentry.org/stablediffgpubuy#hentai-for-cheapskates
+    install Anything V3: https://aituts.com/anything-anime-stable-diffusion/
+    Local Installation: https://www.reddit.com/r/stablediffusion/wiki/local/
+    install Dreambooth: https://medium.com/mlearning-ai/how-to-run-dreambooth-locally-a-step-by-step-gyu-88c028ab01a4
+    Models Cookbook: https://rentry.org/hdgrecipes#hdg-stable-diffusion-models-cookbook
+    Multi-ControlNet: https://twitter.com/toyxyz3/status/1629620938894643200
+    NovelAI Prompt Guide: https://aituts.com/novelai-anime-prompt-techniques/
+    pix2pix-zero: https://pix2pixzero.github.io/
+    Pose-helper: https://civitai.com/models/11573/zpose-fighting-styles-1-pose-helper
+    Posemaker: https://avatarposemaker.deezein.com/
+    Ultimate RunPod Tutorial: https://youtu.be/QN1vdGhjcRc
+    Posable-riggify: https://3dcinetv.gumroad.com/l/osezw
 tree_5:
   Album:
-    hikarinoakari: "https://hikarinoakari.com/"
-    okamimiost: "https://okamimiost.com/"
-    sukidesuost: "https://sukidesuost.info/"
-    classical-music: "https://classical-music-download.com/"
-    j-pop: "https://jpop.xyz/"
-    realovemusic: "https://www.patreon.com/realovemusic"
-    mixxx-controllers: "https://manual.mixxx.org/2.3/en/hardware/manuals.html#controllers"
-    micro-audiotest: "https://www.audiotestkitchen.com/"
-    djtechtools: "https://djtechtools.com/"
-    Guide To Studio Scratches: "https://studioscratches.com/guide-to-studio-scratches/"
-    Scratch Techniques: "https://schoolofscratch.com/"
-    Audio Test Tones: "https://www.audiocheck.net/testtones_index.php"
+    hikarinoakari: https://hikarinoakari.com/
+    okamimiost: https://okamimiost.com/
+    sukidesuost: https://sukidesuost.info/
+    classical-music: https://classical-music-download.com/
+    j-pop: https://jpop.xyz/
+    realovemusic: https://www.patreon.com/realovemusic
+    mixxx-controllers: https://manual.mixxx.org/2.3/en/hardware/manuals.html#controllers
+    micro-audiotest: https://www.audiotestkitchen.com/
+    djtechtools: https://djtechtools.com/
+    Guide To Studio Scratches: https://studioscratches.com/guide-to-studio-scratches/
+    Scratch Techniques: https://schoolofscratch.com/
+    Audio Test Tones: https://www.audiocheck.net/testtones_index.php
   Ocio:
-    al_gamewith: "https://gamewith.jp/azurlane/"
-    al_pasokau: "https://pasokau.com/category/allcharacter"
-    al_augment-guide: "https://tinyurl.com/3yz7zm8z"
-    favorgk: "https://www.favorgk.com/search?q=Marin+Kitagawa&options%5Bprefix%5D=last"
+    al_gamewith: https://gamewith.jp/azurlane/
+    al_pasokau: https://pasokau.com/category/allcharacter
+    al_augment-guide: https://tinyurl.com/3yz7zm8z
+    favorgk: https://www.favorgk.com/search?q=Marin+Kitagawa&options%5Bprefix%5D=last
   Fansub:
-    hakoniwa: "https://hakoniwasubs.wordpress.com/"
-    fukou-da: "https://fukou-da.net/"
-    beatz-anime: "https://www.beatz-anime.com/"
-
+    hakoniwa: https://hakoniwasubs.wordpress.com/
+    fukou-da: https://fukou-da.net/
+    beatz-anime: https://www.beatz-anime.com/
 tree_6:
   Bitcoin:
-    coinalyze: "https://coinalyze.net/futures-data/global-charts/uniswap/"
-    cryptorank: "https://cryptorank.io/price/uniswap/exchanges"
-    defillama: "https://defillama.com/languages"
-    halving_countdown: "https://www.bitcoinblockhalf.com/?ref=cryptophercolumbus"
-    mvrv: "https://www.lookintobitcoin.com/charts/mvrv-zscore/"
-    pi_cycle: "https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/"
-    pi_multiple: "https://bitcoinition.com/charts/pimultiple/"
-    pump_map: "https://cignals.io/pumpmap"
-    whalestats: "https://www.whalestats.com/analysis-of-the-top-100-eth-wallets/holding"
-
+    coinalyze: https://coinalyze.net/futures-data/global-charts/uniswap/
+    cryptorank: https://cryptorank.io/price/uniswap/exchanges
+    defillama: https://defillama.com/languages
+    halving_countdown: https://www.bitcoinblockhalf.com/?ref=cryptophercolumbus
+    mvrv: https://www.lookintobitcoin.com/charts/mvrv-zscore/
+    pi_cycle: https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/
+    pi_multiple: https://bitcoinition.com/charts/pimultiple/
+    pump_map: https://cignals.io/pumpmap
+    whalestats: https://www.whalestats.com/analysis-of-the-top-100-eth-wallets/holding
 tree_7:
   ColorWheel:
-    color-wheel: "https://www.canva.com/colors/color-wheel/"
+    color-wheel: https://www.canva.com/colors/color-wheel/
   Picker:
-    color-picker: "https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html"
-    colorhexa: "https://www.colorhexa.com/"
+    color-picker: https://a.atmos.washington.edu/~ovens/javascript/colorpicker.html
+    colorhexa: https://www.colorhexa.com/
   Generator:
-    Color palette generator (IA): "https://huemint.com/"
+    Color palette generator (IA): https://huemint.com/
   Tools:
-    colour-contrast: "https://colourcontrast.cc/"
-    colourco.de: "https://www.toptal.com/designers/colourcode/monochrome-color-builder"
-    coolors: "https://coolors.co/"
-    gradient-generator: "https://learnui.design/tools/gradient-generator.html"
-    hotpot.ai: "https://hotpot.ai/color-generator"
-    la-flor: "https://htmlcolors.com/shades-and-tints"
-    random-colors: "https://www.crispedge.com/random-colors"
-    shadegenerator: "https://www.shadegenerator.com/BD1366-FADAD7"
-    shadowlord: "https://noeldelgado.github.io/shadowlord/"
-    tints-shades: "https://noeldelgado.github.io/shadowlord/#000000"
-    web-color-tool: "https://color.joelb.dev/"
-    randoma11y: "https://randoma11y.com/"
-    shapefactory-pigment: "https://pigment.shapefactory.co/?d=0&a=E1D05C&b=F4F1CA"
-    shapefactory-duotome: "https://duotone.shapefactory.co/?f=26b7a0&t=3d3f4c"
-    hue.tools: "https://hue.tools/?format=hex"
-    color-scales: "https://components.ai/color-scale/5PAxBy4dabxhohtd2w1B"
-    webgradients: "https://webgradients.com/"
+    colour-contrast: https://colourcontrast.cc/
+    colourco.de: https://www.toptal.com/designers/colourcode/monochrome-color-builder
+    coolors: https://coolors.co/
+    gradient-generator: https://learnui.design/tools/gradient-generator.html
+    hotpot.ai: https://hotpot.ai/color-generator
+    la-flor: https://htmlcolors.com/shades-and-tints
+    random-colors: https://www.crispedge.com/random-colors
+    shadegenerator: https://www.shadegenerator.com/BD1366-FADAD7
+    shadowlord: https://noeldelgado.github.io/shadowlord/
+    tints-shades: https://noeldelgado.github.io/shadowlord/#000000
+    web-color-tool: https://color.joelb.dev/
+    randoma11y: https://randoma11y.com/
+    shapefactory-pigment: https://pigment.shapefactory.co/?d=0&a=E1D05C&b=F4F1CA
+    shapefactory-duotome: https://duotone.shapefactory.co/?f=26b7a0&t=3d3f4c
+    hue.tools: https://hue.tools/?format=hex
+    color-scales: https://components.ai/color-scale/5PAxBy4dabxhohtd2w1B
+    webgradients: https://webgradients.com/
   ColorNames:
-    colorxs: "https://www.colorxs.com/"
-    encycolorpedia: "https://encycolorpedia.com/"
-    colorswall: "https://colorswall.com/es"
+    colorxs: https://www.colorxs.com/
+    encycolorpedia: https://encycolorpedia.com/
+    colorswall: https://colorswall.com/es
