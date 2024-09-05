@@ -46,9 +46,13 @@ dotfiles:
     src: config/zsh/kasumi-zsh_funtions.conf
     dst: ~/.config/zsh/kasumi-zsh_funtions.conf
     link: absolute
+  f_kasumi-ex-neovim:
+    src: config/nvim/init.lua
+    dst: ~/.config/nvim/init.lua
+    link: absolute
   d_kasumi-ex-neovim:
-    src: config/nvim/lua/kasumi
-    dst: ~/.config/nvim/lua/kasumi
+    src: config/nvim/lua
+    dst: ~/.config/nvim/lua
     link: absolute
     actions:
       - install_vimplug_1
@@ -65,6 +69,7 @@ profiles:
   kasumi_extras:
     dotfiles:
       - d_kasumi-ex-neovim
+      - f_kasumi-ex-neovim
       - f_kasumi-ex-starttree
       - f_kasumi-ex-zsh_alias
       - f_kasumi-ex-zsh_funtions
