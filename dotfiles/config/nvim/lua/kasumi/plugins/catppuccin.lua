@@ -1,46 +1,44 @@
+-- Importa el módulo de utilidades de colores desde el tema Catppuccin.
 local u = require("catppuccin.utils.colors")
 
 require("catppuccin").setup({
-	--    dim_inactive = {
-	--      enabled = true,
-	--      shade = "dark",
-	--      percentage = 0.9,
-	--    },
 	flavour = "macchiato",
 	background = { dark = "macchiato" },
 	color_overrides = {
 		macchiato = {
       -- stylua: ignore start
-			rosewater = "#7c9da0", -- Links #86b9c7 #7d9aa2
-			flamingo  = "#b8bedd", -- "{" en lua #bf407b #AC89C9 #AD8FE5 #84719b #c8c0a9
-			red       = "#ff6d74", -- ALERTA #e23667 #FF4235 #aa3151 #E54874
-			pink      = "#ffa697", -- Tono Rosado | #fa9e9e $ \n { ┊
-			mauve     = "#ffb6c1", -- Barra (visual) | Comando (set, remap) #ea6a8e #E6527C #ed6a92 #ff9dbf
-			peach     = "#ffb94e", -- Barra (comando) | Valores #F0C483 #ffd1ac
-			yellow    = "#ffe78c", -- ALERTA Warning
-			green     = "#cceca4", -- Barra (Normal) | ALERTA | STRINGS
+			rosewater = "#7c9da0", -- Links
+			flamingo  = "#b8bedd", -- "{" en lua
+			red       = "#fb6d71", -- ALERTA
+			pink      = "#ffd4c8", -- Tono Rosado | #fa9e9e $ \n { ┊
+			mauve     = "#ffb6c1", -- Barra (visual) | Comando (set, remap), loading [===].
+			peach     = "#ffba51", -- Barra (comando) | Valores
+			yellow    = "#F8E08E", -- ALERTA Warning
+			green     = "#AFEEAE", -- Barra (insert) | ALERTA | STRINGS
 			teal      = "#608f8b", -- (plug)
-			sky       = "#f364a2", -- < = > >> is not #fff35a #ffe11f #eb88a4
-			maroon    = "#de70a1", -- Parámetros de script #d89287 #d27990 #97a5c3 #a6acc7
-			sapphire  = "#9EEFC0", -- EOF - Esta bonito
-			blue      = "#a4dded", -- Barra lados #4AC4E5 #75D2EB #27d3d4
-			lavender  = "#c59dd8", -- Texto en los conf | Nro linea actual #B9CFD4 #a8abbe #B087CC #b785b5
-			text      = "#ced1d8", -- Texto de la Barra y texto #f5e8e8 #d8d3cf #e5e2e4 #e4dcd8"#d8d8d7
-			subtext1  = "#addfad", -- TEXTO / STRING
-			overlay2  = "#86aba5", -- . , [] () : { y Letras menu desplegable #9b9fc8
-			-- overlay1  = "#c4c0d0", -- ahora Texto?
-			overlay0  = "#858c9b", -- Comentarios #5a636f #7c81a2 #7a8188 #6a8188 #67787e
-			surface1  = "#505662", -- Numero de linea, resaltado linea horizontal, tabs #4e555a
-			surface0  = "#43484f", -- Barra: master, fondo pestaña, tab, ┊
-			base      = "#2f333b", -- A. Fondo #1F2127 #2d2d45 #23272d  #21232a #272930 #22262c #282C34 #24282f #24272e
-			mantle    = "#3b4048", -- B. Barra centro, neotree, wichkey, & letras
-			crust     = "#2c3036", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
+			sky       = "#f789cd", -- < = > >> is not
+			maroon    = "#fb89a3", -- Parámetros de script
+			sapphire  = "#aeffd2", -- EOF - Esta bonito
+			blue      = "#a7e0f0", -- Barra lados
+			lavender  = "#e0a4f2", -- Texto en los conf | Nro linea actual
+			text      = "#dadde4", -- Texto de la Barra y texto
+			subtext1  = "#b4d8a9", -- TEXTO / STRING
+			overlay2  = "#86a29f", -- . , [] () : { y Letras menu desplegable
+			overlay0  = "#6c7682", -- Comentarios
+			surface1  = "#4c5057", -- Numero de linea, resaltado linea horizontal, fin de linea
+			surface0  = "#3e434c", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
+			base      = "#292d32", -- A. Fondo
+			mantle    = "#32373f", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos
+			crust     = "#595c62", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
 			-- stylua: ignore end
 		},
 	},
 	integrations = { -- Extiende los colores a los plug soportados
 		gitgutter = true,
+		fidget = true,
+		diffview = true,
 		neotree = true,
+		which_key = false, -- Considero que mejor desactivado
 		navic = {
 			enabled = true,
 			-- custom_bg = require("catppuccin.palettes").get_palette("macchiato").surface1, -- "lualine" will set background to mantle
@@ -53,7 +51,7 @@ require("catppuccin").setup({
 	styles = { -- Sino sabes que cambia, coloca: standout
     -- stylua: ignore start
 		booleans     = { "underdotted" },
-		comments     = {}, -- NONE
+		comments     = {}, -- Aquí desactivas globalmente el italic de los comentarios
 		conditionals = { "italic" },
 		functions    = { "italic" },
 		keywords     = { "italic" },
@@ -68,11 +66,33 @@ require("catppuccin").setup({
 	},
 	custom_highlights = function(colors)
 		return {
+			DiffDelete = {
+				fg = u.darken(colors.red, 0.6, colors.base),
+				bg = u.darken(colors.red, 0.1, colors.base),
+			},
+			DiffAdd = {
+				fg = u.darken(colors.green, 0.9, colors.base),
+				bg = u.darken(colors.green, 0.1, colors.base),
+			},
+			DiffChange = {
+				fg = u.darken(colors.yellow, 0.4, colors.base), -- Texto inactivo
+				bg = u.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffText
+			},
+			DiffText = {
+				fg = u.darken(colors.yellow, 0.85, colors.base), -- Texto modificado
+				bg = u.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffChange
+			},
+			MsgArea = {
+				fg = u.darken(colors.text, 0.8, colors.base), -- Area de comandos
+				-- bg = u.darken(colors.yellow, 0.8, colors.base),
+			},
+
+			-- https://github.com/catppuccin/nvim/discussions/448#discussioncomment-5560230
 			CursorLine = {
 				bg = u.vary_color(
 					{ macchiato = u.lighten(colors.base, 0.70, colors.surface1) },
 					u.darken(colors.base, 0.70, colors.surface1)
-				), -- https://github.com/catppuccin/nvim/discussions/448#discussioncomment-5560230
+				),
 			},
 			NonText = { fg = colors.surface1 }, -- Carácter de fin de linea
 			String = { fg = colors.subtext1 },
@@ -83,4 +103,5 @@ require("catppuccin").setup({
 	end,
 })
 -- EL TEMA SE CARGA DESDE AQUI:	https://github.com/catppuccin/nvim?tab=readme-ov-file#configuration
+--
 vim.cmd.colorscheme("catppuccin")
