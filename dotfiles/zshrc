@@ -5,120 +5,15 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# --- if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-# ---  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# --- fi
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-# plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # ------------------------------------------------------
 # OPCIONALES
 # autoload -U compinit                           # https://mrigank11.github.io/2018/03/zsh-auto-completion/
 # ------------------------------------------------------
-  local ZSH_CONF=~/.config/zsh                   # Define the place I store all my zsh config stuff
+  local ZSH_CONF=~/.config/zsh                   # Define la ruta donde esta la configuración
   source $ZSH_CONF/kasumi-zsh_alias.conf         # Ruta de ALIAS personalizados
   source $ZSH_CONF/kasumi-zsh_funtions.conf      # Ruta de FUNCIONES personalizadas
 # ------------------------------------------------------
@@ -130,15 +25,16 @@ source $ZSH/oh-my-zsh.sh
 #
 # INITIAL ZPLUG SETUP ----------------------------------
   source ~/.zplug/init.zsh
-  alias -g zplug="LC_MESSAGES=en_US.UTF-8 zplug"         # https://github.com/zplug/zplug/issues/419#issuecomment-436260461
+  alias -g zplug="LC_MESSAGES=en_US.UTF-8 zplug"          # https://github.com/zplug/zplug/issues/419#issuecomment-436260461
+
 # ZPLUG PLUGINS LIST ----------------------------------
   zplug "junegunn/fzf", from:github, as:command, rename-to:fzf, hook-build:"./install --all"
   zplug "junegunn/fzf", from:github, as:plugin, use:"shell/*.zsh", defer:2
   zplug "romkatv/powerlevel10k", as:theme, depth:1
-  zplug "zsh-users/zsh-autosuggestions"                  # It suggests commands as you type based on history and completions.
-  zplug "zsh-users/zsh-completions"                      # Additional completion definitions for Zsh
-  zplug "zsh-users/zsh-syntax-highlighting", defer:2     # Fish shell like syntax highlighting for Zsh
-  zplug "agkozak/zsh-z"                                   #Jump quickly to directories that you have visited frequently in the pass
+  zplug "zsh-users/zsh-autosuggestions"                   # It suggests commands as you type based on history and completions.
+  zplug "zsh-users/zsh-completions"                       # Additional completion definitions for Zsh
+  zplug "zsh-users/zsh-syntax-highlighting", defer:2      # Fish shell like syntax highlighting for Zsh
+  zplug "agkozak/zsh-z"                                   # Jump quickly to directories that you have visited frequently in the pass
 #  zplug "plugins/git", from:oh-my-zsh                    # Provides many aliases and a functions for git
 #  zplug 'wfxr/forgit'
 #
@@ -156,26 +52,27 @@ source $ZSH/oh-my-zsh.sh
 # HISTORY COMMAND CONFIGURATION
 # https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
 # https://zsh.sourceforge.io/Doc/Release/Options.html#History
-  PROMPT_EOL_MARK="🐙"                # Hide EOL sign ('%')
-  setopt APPEND_HISTORY               # Allow multiple terminal sessions to all append to one zsh command history
-  setopt BANG_HIST                    # Treat the '!' character specially during expansion.
-  setopt COMPLETE_ALIASES             # Turn on completion for aliases as well
-  setopt EXTENDED_HISTORY             # Record timestamp of command in HISTFILE. ":start:elapsed;command" format.
-  setopt HIST_ALLOW_CLOBBER           # Add '|' to output redirections in the history. Allows history references to clobber files even when CLOBBER is unset.
-  setopt HIST_BEEP                    # Beep when accessing nonexistent history.
-  setopt HIST_EXPIRE_DUPS_FIRST       # Remove repeate commands when limit of $HISTSIZE is reached
-  setopt HIST_FIND_NO_DUPS            # Do not find duplicate command when searching
-  setopt HIST_IGNORE_ALL_DUPS         # Delete old recorded entry if new entry is a duplicate.
-  setopt HIST_IGNORE_DUPS             # Ignore duplicated commands history list
-  setopt HIST_IGNORE_SPACE            # Ignore commands that start with space
-  setopt HIST_NO_STORE                # Don't store history (fc -l) command
-  setopt HIST_REDUCE_BLANKS           # Remove extra blanks from each command line being added to history
-  setopt HIST_SAVE_NO_DUPS            # Ignores duplicates when writing history file
-  setopt HIST_VERIFY                  # Show before executing history commands
-  setopt INC_APPEND_HISTORY           # Write to the history file immediately, not when the shell exits.
-  setopt NO_HIST_NO_FUNCTIONS         # Don't remove function defs from history
-  setopt RM_STAR_WAIT                 # Wait 10 seconds until executing rm with a star (*)
-  setopt SHARE_HISTORY                # Share history between all sessions.
+  PROMPT_EOL_MARK="🐙"                # Define el símbolo que se mostrará al final de la línea de comandos en el prompt.
+  setopt APPEND_HISTORY               # Permite que múltiples sesiones de terminal agreguen comandos al historial en lugar de sobrescribirlo.
+  setopt BANG_HIST                    # Permite tratar el carácter '!' de manera especial durante la expansión de comandos.
+  setopt COMPLETE_ALIASES             # Activa la auto completado para alias.
+  setopt EXTENDED_HISTORY             # Registra la marca de tiempo de cada comando en el archivo de historial en el formato ":inicio:transcurrido;comando".
+  setopt HIST_ALLOW_CLOBBER           # Permite que las referencias al historial sobrescriban archivos, incluso cuando CLOBBER está desactivado.
+  setopt HIST_BEEP                    # Emite un pitido cuando se accede a un historial inexistente.
+  setopt HIST_EXPIRE_DUPS_FIRST       # Elimina comandos duplicados cuando se alcanza el límite de $HISTSIZE.
+  setopt HIST_FIND_NO_DUPS            # Evita encontrar comandos duplicados durante la búsqueda en el historial.
+  setopt HIST_IGNORE_ALL_DUPS         # Elimina una entrada anterior en el historial si la nueva es un duplicado.
+  setopt HIST_IGNORE_DUPS             # Ignora comandos duplicados en la lista del historial.
+  setopt HIST_IGNORE_SPACE            # Ignora comandos que comienzan con un espacio.
+  setopt HIST_NO_STORE                # No almacena el comando `fc -l` en el historial.
+  setopt HIST_REDUCE_BLANKS           # Elimina espacios adicionales de cada línea de comando antes de agregarla al historial.
+  setopt HIST_SAVE_NO_DUPS            # Ignora duplicados al guardar el historial en el archivo.
+  setopt HIST_VERIFY                  # Muestra el comando antes de ejecutarlo si se selecciona del historial.
+  setopt INC_APPEND_HISTORY           # Escribe en el archivo de historial de inmediato, no solo cuando la shell termina.
+  setopt NO_HIST_NO_FUNCTIONS         # No elimina definiciones de funciones del historial.
+  setopt RM_STAR_WAIT                 # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
+  setopt SHARE_HISTORY                # Comparte el historial entre todas las sesiones de terminal.
+
 # ------------------------------------------------------
 # A BETTER ZSH HISTORY
 # https://tinyurl.com/ynarukx9
@@ -242,7 +139,6 @@ source $ZSH/oh-my-zsh.sh
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=06"
-
 
 #     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
