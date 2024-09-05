@@ -7,8 +7,11 @@
 -- los errores y advertencias producidos por los linters,
 -- pero no incluye los linters en sí mismos.
 -- https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
-
+-- Los linters que puedes utilizar son los que dispone :Mason
+-- Si ocupas uno, recuerda agregar su instalación en: mason-tool-installer
+--
 require("lint").linters_by_ft = {
+	json = { "jsonlint" },
 	lua = { "luacheck" }, -- Debes tener instalado: luarocks
 	markdown = { "markdownlint" },
 	python = { "pylint" },
@@ -17,34 +20,21 @@ require("lint").linters_by_ft = {
 	yaml = { "yamllint" },
 }
 
--- Configuración de `luacheck` para reconocer variables globales en Neovim
--- require("lint").linters.luacheck = {
--- 	cmd = "luacheck",
--- 	stdin = true,
--- 	args = { -- Evita que salten mensajes de warning.
--- 		"--globals",
--- 		"vim",
--- 		"lvim",
--- 		"reload",
--- 		"plain",
--- 	},
--- 	stream = "stderr",
--- 	ignore_exitcode = true,
--- 	parser = require("lint.parser").from_errorformat("%tarning: %f:%l:%c: %m, %f:%l:%c: %m", {
--- 		source = "luacheck",
--- 	}),
--- }
+-- Suprime los warnings al agregar el valor como global
+local luacheck = require("lint").linters.luacheck
+luacheck.args = {
+	"--globals",
+	"vim",
+}
 
--- https://docs.sqlfluff.com/en/stable/cli.html#cmdoption-sqlfluff-lint-t
+-- https://docs.sqlfluff.com/en/stable/reference/cli.html
 -- https://docs.sqlfluff.com/en/stable/rules.html#rule-aliasing.table
 --
-config = function()
-	local sqlfluff = require("lint").linters.sqlfluff
-	sqlfluff.args = {
-		"-–dialect",
-		"postgres",
-		"--exclude-rules",
-		"LT01",
-		"--",
-	}
-end
+local sqlfluff = require("lint").linters.sqlfluff
+sqlfluff.args = {
+	-- "lint",
+	-- "--format=json",
+	-- "-–dialect=postgres",
+	-- "--exclude-rules=LT01",
+	-- "-",
+}
