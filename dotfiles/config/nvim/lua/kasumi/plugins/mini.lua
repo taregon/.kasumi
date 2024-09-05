@@ -1,9 +1,12 @@
-require("mini.icons").setup()
-
 require("mini.animate").setup() -- El efecto cuando haces scroll
 
 -- DIVIDE LOS ARGUMENTOS SI ESTÁN EN UNA SOLA LÍNEA, DE LO CONTRARIO LOS UNE
-require("mini.splitjoin").setup()
+-- Atajo por defecto: gS
+require("mini.splitjoin").setup({
+	mappings = {
+		toggle = "<F4>",
+	},
+})
 
 -- MANIPULA DELIMITADORES DE TEXTO: PARÉNTESIS, CORCHETES Y COMILLAS.
 require("mini.surround").setup({
@@ -54,5 +57,7 @@ require("mini.pairs").setup()
 -- https://tinyurl.com/4zp3rts9
 require("mini.align").setup({
 	-- Atajo solo en VISUAL
-	mappings = { start = "<F7>" },
+	mappings = {
+		start = "<F12>",
+	},
 })
