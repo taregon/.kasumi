@@ -8,7 +8,7 @@ require("lspconfig").clangd.setup({
 
 -- Llama a un plug para que indique los cambios en la barra de lualine
 local function gitgutter_diff()
-	local added, modified, removed = unpack(vim.fn["GitGutterGetHunkSummary"]())
+	local added, modified, removed = table.unpack(vim.fn["GitGutterGetHunkSummary"]())
 	return {
 		added = added,
 		modified = modified,
@@ -25,9 +25,11 @@ require("lualine").setup({
 	disabled_filetypes = {
 		statusline = {
 			"neo-tree",
+			"undotree",
 		},
 		winbar = {
 			"neo-tree",
+			"undotree",
 		},
 	},
 	winbar = {
@@ -42,7 +44,6 @@ require("lualine").setup({
 		-- },
 		lualine_c = { "navic" },
 	},
-	extensions = { "fugitive", "quickfix" },
 	sections = {
 		lualine_b = {
 			"branch",
@@ -69,5 +70,10 @@ require("lualine").setup({
 				},
 			},
 		},
+	},
+	extensions = {
+		"fugitive",
+		"neo-tree",
+		"quickfix",
 	},
 })
