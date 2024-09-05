@@ -7,6 +7,8 @@
 -- https://github.com/stevearc/conform.nvim/blob/master/doc/conform.txt
 -- Formatters
 -- https://github.com/stevearc/conform.nvim#formatters
+-- Ver informe de errores
+-- :ConformInfo
 
 require("conform").setup({
 	formatters = {
@@ -16,13 +18,13 @@ require("conform").setup({
 		yamlfix = {
 			env = { YAMLFIX_SEQUENCE_STYLE = "block_style" }, -- Por defecto viene con: low-style list: [item, item]
 		},
-		shfmt = {
-			args = { "-i", "4", "-ci", "-bn", "-sr" }, -- https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd
+		shfmt = { -- https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd
+			args = { "-i", "4", "-ci", "-bn", "-sr" },
 		},
 	},
-	-- stylua: ignore
 	formatters_by_ft = {
-		["*"]    = { "trim_whitespace", "trim_newlines", "squeeze_blanks" },
+        -- stylua: ignore start
+		["*"]    = { "squeeze_blanks", "trim_newlines", "trim_whitespace" },
 		graphql  = { "prettierd" },
 		json     = { "deno_fmt" },
 		lua      = { "stylua" },
@@ -31,8 +33,10 @@ require("conform").setup({
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
 		yaml     = { "yamlfix" },
+		-- stylua: ignore end
 	},
 	format_on_save = {
-		timeout_ms = 1500,
+		timeout_ms = 3000,
+		-- lsp_format = "fallback",
 	},
 })
