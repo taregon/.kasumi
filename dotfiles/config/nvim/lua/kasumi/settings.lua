@@ -1,6 +1,5 @@
 local opt = vim.opt
 local cmd = vim.cmd
-local g = vim.g
 
 -- COLOR SCHEME
 -- La linea que carga el tema esta  hasta el final del mismo archivo
@@ -9,9 +8,7 @@ local g = vim.g
 -- Habilita el resaltado de sintaxis
 cmd("syntax on")
 
-vim.ui.select = require("dropbar.utils.menu").select
 -- Establece los idiomas del corrector ortográfico a inglés y español (incluyendo español latinoamericano)
-
 opt.spelllang = { "en_us", "es" }
 
 -- Activa la corrección ortográfica
@@ -26,6 +23,7 @@ opt.cursorline = true -- Resalta la línea actual
 opt.foldmethod = "manual" -- Método manual de plegado
 opt.lazyredraw = true -- No actualizar la pantalla durante la ejecución de macros y scripts
 opt.number = true -- Mostrar el número de línea actual (absoluto)
+opt.pumblend = 8 -- Transparencia del Pop-up
 opt.relativenumber = true -- Mostrar las líneas relativas a la actual
 opt.showmode = false -- Ocultar el aviso que indica en qué modo estás
 opt.spelllang = { "en", "es" } -- Corregir palabras usando diccionarios en inglés y español
@@ -69,7 +67,17 @@ opt.listchars = {
 	trail = "",
 	extends = "⟩",
 	precedes = "⟨",
-	nbsp = "󱀝",
+	nbsp = "✖",
+}
+
+-- CARACTERES DE RELLENO
+--
+opt.fillchars = {
+	-- fold = " ", -- remove folding chars
+	-- foldsep = "│",
+	eob = " ", -- Suprime el carácter "~" EndOfBuffer
+	vert = "▕", --Carácter vertical (vsplit)
+	diff = "",
 }
 
 -- Ignora los temas que trae por defecto
@@ -102,10 +110,15 @@ opt.wildignore = {
 
 -- PRUEBAS
 --
-opt.completeopt = "menu,menuone,noselect"
+-- opt.completeopt = "menu,menuone,noselect"
+opt.completeopt = {
+	"menuone",
+	"noselect",
+	"noinsert",
+	"preview",
+}
 opt.clipboard = { "unnamed", "unnamedplus" }
-opt.pumblend = 8 -- transparencia del Pop-up
 
--- Configuración de CtrlP
-g.ctrlp_user_command = { ".git", "cd %s && git ls-files -co --exclude-standard" } -- Ocultar archivos en .gitignore
-g.ctrlp_show_hidden = 1 -- Mostrar archivos ocultos (dot files)
+-- -- Configuración de CtrlP
+-- g.ctrlp_user_command = { ".git", "cd %s && git ls-files -co --exclude-standard" } -- Ocultar archivos en .gitignore
+-- g.ctrlp_show_hidden = 1 -- Mostrar archivos ocultos (dot files)
