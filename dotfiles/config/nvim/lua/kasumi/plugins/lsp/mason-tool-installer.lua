@@ -1,3 +1,4 @@
+-- NOTA: solo instala LINTERS & FORMATTER
 -- Si encuentras fallas, puedes ejecutar :checkhealth mason, también :MasonLog
 -- Puede que necesites instalar 'npm'
 -- https://github.com/williamboman/mason.nvim/blob/main/doc/mason.txt#L50
@@ -7,6 +8,7 @@ require("mason-tool-installer").setup({
 		"black", -- python formatter
 		"deno", -- markdown, javascript, typescript, json formatter
 		"isort", -- python formatter
+		"jsonlint", -- json linter
 		"luacheck", -- lua linter
 		"markdownlint", -- Markdown
 		"prettierd", -- GraphQL
@@ -18,7 +20,6 @@ require("mason-tool-installer").setup({
 		"stylua", -- lua formatter
 		"yamlfix", -- YAML formatter that keeps comments.
 		"yamllint", -- YAML linter
-		-- "cspell", -- Check code for common misspellings.
 	},
 	auto_update = true,
 })
