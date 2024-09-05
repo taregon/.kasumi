@@ -1,16 +1,12 @@
 -- Configura y gestiona servidores de lenguaje (LSPs) en Neovim
+-- Previamente deben estar instalados por medio de mason-lspconfig.lua
 local lspconfig = require("lspconfig")
 
-lspconfig.dockerls.setup({})
-lspconfig.jsonls.setup({})
 lspconfig.bashls.setup({})
--- lspconfig.bashls.setup({
--- 	settings = {
--- 		bashIde = {
--- 			globPattern = "*@(.sh|.inc|.bash|.command)", -- Definir patrones de archivos
--- 		},
--- 	},
--- })
+lspconfig.dockerls.setup({})
+lspconfig.graphql.setup({})
+lspconfig.jsonls.setup({})
+lspconfig.pyright.setup({})
 
 -- Configuración para YAML (YAML Language Server)
 lspconfig.yamlls.setup({
@@ -31,8 +27,7 @@ lspconfig.lua_ls.setup({
 				globals = { "vim" }, -- Reconocer 'vim' como global
 			},
 			workspace = {
-				-- library = vim.api.nvim_get_runtime_file("", true), -- Soporte para Neovim runtime
-				library = vim.api.nvim_get_runtime_file("", true),
+				library = vim.api.nvim_get_runtime_file("", true), -- Soporte para Neovim runtime
 				checkThirdParty = false, -- Opcional: Desactivar chequeo de terceros
 			},
 			telemetry = {
