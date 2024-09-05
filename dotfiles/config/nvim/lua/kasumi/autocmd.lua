@@ -28,7 +28,7 @@ augroup("NvimLint", function(group)
 	})
 end)
 
--- Ruecuerda la ultima posición del cursor
+-- Recuerda la ultima posición del cursor
 local function last_position()
 	local last_line = vim.fn.line("'\"")
 	if last_line > 1 and last_line <= vim.fn.line("$") then
