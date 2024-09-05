@@ -1,1 +1,2 @@
-require("colorizer").setup() -- Habilita los colores HEX
+-- Habilita los colores HEX
+require("colorizer").setup()
