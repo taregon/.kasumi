@@ -1,3 +1,7 @@
+-- ===================================================
+-- Ajustes de NAVIC
+-- ===================================================
+--
 local navic = require("nvim-navic")
 
 require("lspconfig").clangd.setup({
@@ -16,11 +20,14 @@ local function gitgutter_diff()
 	}
 end
 
+-- ===================================================
+-- LUALINE
+-- ===================================================
+--
 require("lualine").setup({
 	options = {
 		component_separators = { left = "›", right = "" },
 		section_separators = { left = "", right = "" },
-		-- theme = "catppuccin-macchiato",
 	},
 	disabled_filetypes = {
 		statusline = {

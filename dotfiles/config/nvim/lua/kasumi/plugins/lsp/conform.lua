@@ -23,7 +23,7 @@ require("conform").setup({
 		},
 	},
 	formatters_by_ft = {
-        -- stylua: ignore start
+		-- stylua: ignore start
 		["*"]    = { "squeeze_blanks", "trim_newlines", "trim_whitespace" },
 		graphql  = { "prettierd" },
 		json     = { "deno_fmt" },

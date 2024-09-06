@@ -74,7 +74,12 @@ opt.listchars = {
 --
 opt.fillchars = {
 	-- fold = " ", -- remove folding chars
+	-- fold = "⠀",
 	-- foldsep = "│",
+	-- msgsep = "‾",
+	-- foldopen = "▾",
+	-- foldsep = "│",
+	-- foldclose = "▸",
 	eob = " ", -- Suprime el carácter "~" EndOfBuffer
 	vert = "▕", --Carácter vertical (vsplit)
 	diff = "",
