@@ -27,9 +27,19 @@ map("n", "<leader>/", ":nohl<cr>")
 map("n", "-", ":new<cr>")
 map("n", "|", ":vnew<cr>")
 
+-- Cambiar entre buffers
+map("n", "<Tab>", "<cmd>bnext<cr>")
+map("n", "<S-Tab>", "<cmd>bprev<cr>")
+
+-- Cambiar entre ventanas
+map("n", "<C-h>", "<C-w>h") -- Izquierda
+map("n", "<C-j>", "<C-w>j") -- Abajo
+map("n", "<C-k>", "<C-w>k") -- Arriba
+map("n", "<C-l>", "<C-w>l") -- Derecha
+
 -- quick fix
-map("n", "<space>q", ":copen<cr>")
-map("n", "<space>Q", ":cclose<cr>")
+map("n", "<leader>q", ":copen<cr>")
+map("n", "<leader>Q", ":cclose<cr>")
 
 -- Copia el texto seleccionado al porta papeles del sistema en modo visual
 map("v", "<leader>y", '"+y')
