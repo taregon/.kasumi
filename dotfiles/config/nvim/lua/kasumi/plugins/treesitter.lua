@@ -1,3 +1,4 @@
+---@diagnostic disable:missing-fields
 -- Habilita el coloreado de texto para los siguientes lenguajes
 require("nvim-treesitter.configs").setup({
 	ensure_installed = {
