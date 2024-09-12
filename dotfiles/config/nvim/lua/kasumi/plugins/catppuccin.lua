@@ -8,7 +8,7 @@ require("catppuccin").setup({
 		macchiato = {
       -- stylua: ignore start
 			rosewater = "#7c9da0", -- Links
-			flamingo  = "#b8bedd", -- "{" en lua
+			flamingo  = "#b8bedd", -- "{" en lua, texto en wich_key
 			red       = "#fb6d71", -- ALERTA
 			pink      = "#ffd4c8", -- Tono Rosado | #fa9e9e $ \n { ┊
 			mauve     = "#ffb6c1", -- Barra (visual) | Comando (set, remap), loading [===].
@@ -21,15 +21,16 @@ require("catppuccin").setup({
 			sapphire  = "#aeffd2", -- EOF - Esta bonito
 			blue      = "#a7e0f0", -- Barra lados
 			lavender  = "#e0a4f2", -- Texto en los conf | Nro linea actual
-			text      = "#dadde4", -- Texto de la Barra y texto
+			text      = "#c1c8cd", -- Texto de la Barra y texto
+            subtext0  = "#e3e0e4", -- variables en python
 			subtext1  = "#b4d8a9", -- TEXTO / STRING
-			overlay2  = "#86a29f", -- . , [] () : { y Letras menu desplegable
-			overlay0  = "#6c7682", -- Comentarios
+			overlay2  = "#718C99", -- . , [] () : { y Letras menu desplegable
+			overlay0  = "#6b7a86", -- Comentarios
 			surface1  = "#4c5057", -- Numero de linea, resaltado linea horizontal, fin de linea
-			surface0  = "#3e434c", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
-			base      = "#292d32", -- A. Fondo
-			mantle    = "#32373f", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos
-			crust     = "#595c62", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
+			surface0  = "#404950", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
+			base      = "#2c3237", -- A. Fondo
+			mantle    = "#353c42", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos
+			crust     = "#57636c", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
 			-- stylua: ignore end
 		},
 	},
@@ -61,11 +62,15 @@ require("catppuccin").setup({
 		strings      = {}, -- NONE
 		-- types        = { "altfont" },
 		types        = { "bold" },
-		variables    = { "altfont" },
+		variables    = { "italic" },
 		-- stylua: ignore end
 	},
 	custom_highlights = function(colors)
 		return {
+			--  Con esto separo el color de lualine de las variables de python
+			["@variable"] = {
+				fg = colors.subtext0,
+			},
 			DiffDelete = {
 				fg = u.darken(colors.red, 0.6, colors.base),
 				bg = u.darken(colors.red, 0.1, colors.base),
@@ -84,15 +89,20 @@ require("catppuccin").setup({
 			},
 			MsgArea = {
 				fg = u.darken(colors.text, 0.8, colors.base), -- Area de comandos
-				-- bg = u.darken(colors.yellow, 0.8, colors.base),
+			},
+			Pmenu = {
+				-- fg = colors.overlay2,
+				bg = colors.mantle,
+			}, -- Cambia el fondo del menú
+			Folded = {
+				fg = u.darken(colors.subtext0, 0.8, colors.base), -- Líneas plegadas
+				bg = u.darken(colors.subtext0, 0.1, colors.base), -- Igual a DiffChange
+				style = { "bold" },
 			},
 
 			-- https://github.com/catppuccin/nvim/discussions/448#discussioncomment-5560230
 			CursorLine = {
-				bg = u.vary_color(
-					{ macchiato = u.lighten(colors.base, 0.70, colors.surface1) },
-					u.darken(colors.base, 0.70, colors.surface1)
-				),
+				bg = u.darken(colors.crust, 0.30, colors.base),
 			},
 			NonText = { fg = colors.surface1 }, -- Carácter de fin de linea
 			String = { fg = colors.subtext1 },
