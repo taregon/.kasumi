@@ -7,6 +7,7 @@ require("mason-tool-installer").setup({
 	ensure_installed = {
 		"black", -- python formatter
 		"deno", -- markdown, javascript, typescript, json formatter
+		"fixjson", -- json5
 		"isort", -- python formatter
 		"jsonlint", -- json linter
 		"luacheck", -- lua linter
@@ -18,6 +19,7 @@ require("mason-tool-installer").setup({
 		"sql-formatter",
 		"sqlfluff", -- The SQL Linter for Humans
 		"stylua", -- lua formatter
+		"taplo", -- TOML
 		"yamlfix", -- YAML formatter that keeps comments.
 		"yamllint", -- YAML linter
 	},
