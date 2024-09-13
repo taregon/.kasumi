@@ -8,29 +8,29 @@ require("catppuccin").setup({
 		macchiato = {
       -- stylua: ignore start
 			rosewater = "#7c9da0", -- Links
-			flamingo  = "#b8bedd", -- "{" en lua, texto en wich_key
-			red       = "#fb6d71", -- ALERTA
+			flamingo  = "#dde1ed", -- "{" en lua, texto en wich_key
+			red       = "#f86c86", -- ALERTA
 			pink      = "#ffd4c8", -- Tono Rosado | #fa9e9e $ \n { ┊
 			mauve     = "#ffb6c1", -- Barra (visual) | Comando (set, remap), loading [===].
-			peach     = "#ffba51", -- Barra (comando) | Valores
+			peach     = "#FFBD5A", -- Barra (comando) | Valores
 			yellow    = "#F8E08E", -- ALERTA Warning
 			green     = "#AFEEAE", -- Barra (insert) | ALERTA | STRINGS
 			teal      = "#608f8b", -- (plug)
 			sky       = "#f789cd", -- < = > >> is not
 			maroon    = "#fb89a3", -- Parámetros de script
 			sapphire  = "#aeffd2", -- EOF - Esta bonito
-			blue      = "#a7e0f0", -- Barra lados
-			lavender  = "#e0a4f2", -- Texto en los conf | Nro linea actual
-			text      = "#c1c8cd", -- Texto de la Barra y texto
-            subtext0  = "#e3e0e4", -- variables en python
+			blue      = "#a9ecff", -- Barra lados
+			lavender  = "#E2A9F3", -- Texto en los conf | Nro linea actual
+			text      = "#c5cdd0", -- Texto de la Barra y texto
+            subtext0  = "#f7fbfb", -- variables en python
 			subtext1  = "#b4d8a9", -- TEXTO / STRING
 			overlay2  = "#718C99", -- . , [] () : { y Letras menu desplegable
-			overlay0  = "#6b7a86", -- Comentarios
-			surface1  = "#4c5057", -- Numero de linea, resaltado linea horizontal, fin de linea
-			surface0  = "#404950", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
-			base      = "#2c3237", -- A. Fondo
-			mantle    = "#353c42", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos
-			crust     = "#57636c", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
+			overlay0  = "#73838c", -- Comentarios
+			surface1  = "#4c585e", -- Numero de linea, resaltado linea horizontal, fin de linea
+			surface0  = "#414b50", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
+			base      = "#2e373c", -- A. Fondo
+			mantle    = "#384349", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos
+			crust     = "#546269", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
 			-- stylua: ignore end
 		},
 	},
@@ -99,16 +99,18 @@ require("catppuccin").setup({
 				bg = u.darken(colors.subtext0, 0.1, colors.base), -- Igual a DiffChange
 				style = { "bold" },
 			},
-
 			-- https://github.com/catppuccin/nvim/discussions/448#discussioncomment-5560230
 			CursorLine = {
-				bg = u.darken(colors.crust, 0.30, colors.base),
+				bg = u.darken(colors.crust, 0.35, colors.base), -- Igual a CursorLineNr
 			},
-			NonText = { fg = colors.surface1 }, -- Carácter de fin de linea
-			String = { fg = colors.subtext1 },
-			CursorLineNr = { fg = colors.peach, bg = colors.surface0 }, -- Numero de linea
+			CursorLineNr = {
+				bg = u.darken(colors.crust, 0.50, colors.base), -- Igual a CursorLine
+				fg = colors.subtext0,
+			},
 			-- LineNr = { bg = colors.surface0 },
 			-- SignColumn = { bg = colors.surface0 },
+			NonText = { fg = colors.surface1 }, -- Carácter de fin de linea
+			String = { fg = colors.subtext1 },
 		}
 	end,
 })
