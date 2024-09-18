@@ -12,13 +12,8 @@ tree_1:
   Nuke Code:
     e-hentai: https://e-hentai.org/tag/language:spanish
     hitomi.la: https://hitomi.la/index-spanish.html
-    kawaii-tenshi: https://kawaii-tenshi.com/
-    latinohentai: https://latinohentai.com/genero/jav-sub-esp/
+    latinohentai: https://latinohentai.com/genre/audio-latino/
     nhentai: https://nhentai.net/
-    plot-twistnf: https://porno.plot-twistnf-scans.com/
-    pregnant-hd: https://pregnant-hd.net/
-    tmohentai: https://tmohentaiv.com/filter/hentai
-    veohentai: https://veohentai.com/
   Texto:
     figlet-ascii: https://www.askapache.com/online-tools/figlet-ascii/
     generadordenombres: https://generadordenombres.online/instagram/
@@ -150,10 +145,11 @@ tree_7:
   Generator:
     Color palette generator (IA): https://huemint.com/
   Tools:
-    colour-contrast: https://colourcontrast.cc/
+    color-contrast-1: https://colourcontrast.cc/
+    color-contrast-2: https://colorshark.io/
     colourco.de: https://www.toptal.com/designers/colourcode/monochrome-color-builder
     coolors: https://coolors.co/
-    gradient-generator: https://learnui.design/tools/gradient-generator.html
+    gradient-generator-1: https://learnui.design/tools/gradient-generator.html
     hotpot.ai: https://hotpot.ai/color-generator
     la-flor: https://htmlcolors.com/shades-and-tints
     random-colors: https://www.crispedge.com/random-colors
@@ -167,7 +163,11 @@ tree_7:
     hue.tools: https://hue.tools/?format=hex
     color-scales: https://components.ai/color-scale/5PAxBy4dabxhohtd2w1B
     webgradients: https://webgradients.com/
+    aa-generator: https://www.learnui.design/tools/accessible-color-generator.html
+    tint-tone-shade: https://gradients.app/en/shades/
+    gradient-generator-2: https://colordesigner.io/gradient-generator
   ColorNames:
     colorxs: https://www.colorxs.com/
     encycolorpedia: https://encycolorpedia.com/
+    colorpedia: https://veli.ee/colorpedia/?c=F8F8FF
     colorswall: https://colorswall.com/es
