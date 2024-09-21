@@ -30,6 +30,7 @@ require("conform").setup({
 		["*"]    = {"trim_whitespace", "trim_newlines", "squeeze_blanks",}, -- El orden si importa
 		-- conf     = { "awk " },
 		graphql  = { "prettierd" },
+        html     = { "prettierd" },
 		json     = { "deno_fmt" },
 		json5    = { "fixjson" },
 		lua      = { "stylua" },
