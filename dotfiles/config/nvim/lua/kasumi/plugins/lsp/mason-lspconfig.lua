@@ -8,6 +8,7 @@ require("mason-lspconfig").setup({
 		"bashls",
 		"dockerls",
 		"graphql",
+		"html",
 		"jsonls",
 		"lua_ls",
 		"pyright",
