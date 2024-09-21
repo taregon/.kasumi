@@ -5,6 +5,7 @@ local lspconfig = require("lspconfig")
 lspconfig.bashls.setup({})
 lspconfig.dockerls.setup({})
 lspconfig.graphql.setup({})
+lspconfig.html.setup({})
 lspconfig.jsonls.setup({})
 lspconfig.pyright.setup({})
 
