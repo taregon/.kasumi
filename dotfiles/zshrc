@@ -1,14 +1,21 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Enable Powerlevel10k instant prompt -------------------
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Oh-My-Zsh Installation Check --------------------------
+export ZSH="$HOME/.oh-my-zsh"                  # No muevas esta linea o no se carga bien
+
+if [ ! -d "$ZSH" ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 # ------------------------------------------------------
-export ZSH="$HOME/.oh-my-zsh"
-export LC_ALL="en_US.UTF-8"
-source $ZSH/oh-my-zsh.sh
+  local ZSH_CONF=~/.config/zsh                   # Define la ruta donde esta la configuración
+  source $ZSH/oh-my-zsh.sh
+  source $ZSH_CONF/kasumi-zsh_alias.conf         # Ruta de ALIAS personalizados
+  source $ZSH_CONF/kasumi-zsh_funtions.conf      # Ruta de FUNCIONES personalizadas
+# ------------------------------------------------------
+  export LC_ALL="en_US.UTF-8" # Configura idioma en_US y codificación UTF-8
 # ------------------------------------------------------
   export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
 # ------------------------------------------------------
@@ -19,108 +26,87 @@ source $ZSH/oh-my-zsh.sh
 #
 
   # export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --preview 'cat {}' --border --margin=1 --padding=1"
-  # export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --info=inline --color=bg+:#3B4252,bg:#2E3440,spinner:#81A1C1,hl:#616E88,fg:#D8DEE9,header:#616E88,info:#81A1C1,pointer:#81A1C1,marker:#81A1C1,fg+:#D8DEE9,prompt:#81A1C1,hl+:#81A1C1"
   # export FZF_DEFAULT_OPTS='--height=40% --preview="cat {}" --preview-window=right:60%:wrap'
+  # --preview '([[ -f {} ]] && (bat --style=numbers --color=always --line-range :500 {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
   # Generador de TEMAS para fzf
   # https://vitormv.github.io/fzf-themes/
-# export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-#   --color=fg:#C0C8CF,fg+:#e3e0e4,bg:#2a2e33,bg+:#3e434c
-#   --color=hl:#b4d8a9,hl+:#aeffd2,info:#afaf87,marker:#AFEEAE
-#   --color=prompt:#fb6d71,spinner:#e0a4f2,pointer:#e0a4f2,header:#87afaf
-#   --color=border:#383c43,label:#aeaeae,query:#d9d9d9
-#   --border="rounded" --border-label="" --preview-window="border-rounded" --prompt="> "
-#   --marker=">" --pointer="◆" --separator="─" --scrollbar="│"'
-  # export FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
+  export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+    --color=fg:#818f98,fg+:#c8d0d6,bg:-1,bg+:#333c42
+    --color=hl:#a88e6b,hl+:#fbc06e,info:#94b8bc,marker:#ff62e0
+    --color=prompt:#AFEEAE,spinner:#ea676d,pointer:#fbc06e,header:#87afaf
+    --color=border:#5e6a72,label:#5e6a72,query:#d8dee2
+    --border="sharp" --border-label="( 󱐋 )" --preview-window="sharp" --prompt="󰘧 "
+    --info=right --marker="›" --pointer="▒" --separator="─" --scrollbar="▐"'
 
-  export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+  # export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
   export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
-
-export LESS_TERMCAP_mb=$'\e[1;34m'     # begin bold
-export LESS_TERMCAP_md=$'\e[1;32m'     # begin blink (verde)
-export LESS_TERMCAP_so=$'\e[1;33m'    # begin reverse video (amarillo)
-export LESS_TERMCAP_us=$'\e[3;35m'    # begin underline (magenta)
-export LESS_TERMCAP_me=$'\e[0m'        # reset bold/blink
-export LESS_TERMCAP_se=$'\e[0m'        # reset reverse video
-export LESS_TERMCAP_ue=$'\e[0m'        # reset underline
-export MANPAGER='less -s -M +Gg'
 
   export EDITOR="nvim"
   export VISUAL="nvim"
+  export TERM="xterm-256color"  # Soporte de colores para terminales modernas
 # ------------------------------------------------------
 # Solo afecta al comando 'bat'
   # export BAT_STYLE=plain
   export BAT_STYLE="full"
-  export BAT_THEME="OneHalfDark"
-  # export BAT_PAGER="less -RFX"
-  # export BAT_PAGER="less -FSRM -i"
-  #export BAT_PAGER="less -RF"
+  export BAT_THEME="base16"    # Esta bueno, usa los colores de kitty.
 # ------------------------------------------------------
 # COLOREAR LESS
 # Primero tienes que instalar: 'source-highlight'
 # export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
-  export LESSOPEN="| src-hilite-lesspipe.sh %s"                 # Coloco únicamente el nombre, sino sirve, prueba con la ruta
-  export LESS='-RFX'
+  export LESSOPEN="| src-hilite-lesspipe.sh %s"      # Coloco únicamente el nombre, sino sirve, prueba con la ruta
+  export LESS='-MRFI'                                # Estas opciones funcionan en man (en realidad la aplica globalmente)
 # ------------------------------------------------------
 # COLOREAR MAN
-# Primero tienes que instalar: 'bat-extras' y 'groff'
-  # export MANPAGER="bat -l man"
-  # export MANPAGER="less -R --use-color -Dd+r -Du+b"
-  # export MANPAGER="less -R --use-color -Dd+r -Du+b"
-  # export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-  # export MANPAGER="sh -c 'col -bx | bat -l man -p'"         # BAT can be used as a colorizing pager for MAN
-  # export MANPAGER='sh -c "col -bx | bat --language man --style grid"'
-  export GREP_COLORS="mt=1;33"                              # Resalta en negrita y amarillo las búsquedas con greo
-  export MANROFFOPT='-c'
-  export LS_COLORS="ex=30;42"           # Los ejecutables tiene fondo verde
   # export LS_COLORS="*.zip=36:*.rar=36:*.tar=36:*.gz=36:*.tar.gz=36:*.7z=36:$LS_COLORS":
+  export GREP_COLORS="mt=1;33"                       # Resalta en negrita y amarillo las búsquedas con greo
+  export MANROFFOPT='-c'                             # Sin esto, no hay colores en man
+  export LS_COLORS="ex=30;42"                        # Los ejecutables tiene fondo verde
+  export LESS_TERMCAP_mb=$'\e[1;34m'                 # begin bold
+  export LESS_TERMCAP_md=$'\e[1;32m'                 # begin blink (verde)
+  export LESS_TERMCAP_so=$'\e[1;33m'                 # begin reverse video (amarillo)
+  export LESS_TERMCAP_us=$'\e[3;35m'                 # begin underline (magenta)
+  export LESS_TERMCAP_me=$'\e[0m'                    # reset bold/blink
+  export LESS_TERMCAP_se=$'\e[0m'                    # reset reverse video
+  export LESS_TERMCAP_ue=$'\e[0m'                    # reset underline
+  export MANPAGER='less -s -M +Gg -R --use-color'    # Pregúntale a GPT, ya lo tuné
 
 # ------------------------------------------------------
-setopt clobber                            # Permite que las redirecciones de salida sobrescriban archivos existentes sin confirmación.
-zstyle ':completion:*' rehash true        # Actualiza automáticamente la lista de comandos disponibles para auto completado.
-zstyle ':completion:*' special-dirs true  # Muestra directorios especiales ('.' y '..') durante el auto completado de rutas.
+  # setopt clobber                             # Permite que las redirecciones de salida sobrescriban archivos existentes sin confirmación.
+  zstyle ':completion:*' rehash true         # Actualiza la lista de comandos para así sugerir su auto completado.
+  zstyle ':completion:*' verbose yes
+  zstyle ':completion:*' menu select
+
+  # zstyle ':completion:*:matches' group 'yes'
+  # zstyle ':completion:*' special-dirs true   # Muestra directorios especiales ('.' y '..') durante el auto completado de rutas.
+
 # ------------------------------------------------------
 # OPCIONALES
 # autoload -U compinit                           # https://mrigank11.github.io/2018/03/zsh-auto-completion/
 # ------------------------------------------------------
-#               __
-#  .-----.-----|  .--.--.-----.
-#  |-- __|  _  |  |  |  |  _  |
-#  |_____|   __|__|_____|___  |
-#        |__|           |_____|
+#         __       __ __
+#  .-----|__.-----|__|  |_
+#  |-- __|  |     |  |   _|
+#  |_____|__|__|__|__|____|
 #
-# INITIAL ZPLUG SETUP ----------------------------------
-  local ZSH_CONF=~/.config/zsh                   # Define la ruta donde esta la configuración
-  local ZPLUG_HOME=~/.zplug/                     # Para validar si la ruta existe, mas adelante
-  source $ZSH_CONF/kasumi-zsh_alias.conf         # Ruta de ALIAS personalizados
-  source $ZSH_CONF/kasumi-zsh_funtions.conf      # Ruta de FUNCIONES personalizadas
-# ------------------------------------------------------
-    if [[ ! -f $ZPLUG_HOME/init.zsh ]]; then
-        git clone https://github.com/zplug/zplug $ZPLUG_HOME
-        source $ZPLUG_HOME/init.zsh && zplug update
-    else
-        source $ZPLUG_HOME/init.zsh
-    fi
-# ZPLUG PLUGINS LIST ----------------------------------
-  zplug "zplug/zplug", hook-build:'zplug --self-manage'   # Se llama así mismo como plug para actualizarse
-  zplug "junegunn/fzf", from:github, as:command, rename-to:fzf, hook-build:"./install --all"
-  zplug "junegunn/fzf", from:github, as:plugin, use:"shell/*.zsh", defer:2
-  zplug "romkatv/powerlevel10k", as:theme, depth:1
-  zplug "zsh-users/zsh-autosuggestions"                   # It suggests commands as you type based on history and completions.
-  zplug "zsh-users/zsh-completions"                       # Additional completion definitions for Zsh
-  zplug "zsh-users/zsh-syntax-highlighting", defer:2      # Fish shell like syntax highlighting for Zsh
-  zplug "zsh-users/zsh-history-substring-search", defer:3
-  zplug "agkozak/zsh-z"                                   # Jump quickly to directories that you have visited frequently in the pass
-  zplug "zdharma-continuum/fast-syntax-highlighting"
-#  zplug "plugins/git", from:oh-my-zsh                    # Provides many aliases and a functions for git
-#  zplug 'wfxr/forgit'
-#
-#  zplug "Aloxaf/fzf-tab"
-#  zplug "b4b4r07/enhancd", use:init.sh
-# ------------------------------------------------------
-  if ! zplug check; then
-      zplug install
-  fi
-  zplug load # --verbose
+# INITIAL ZINIT SETUP ----------------------------------
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# ZINIT PLUGINS-----------------------------------------
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-syntax-highlighting
+# zinit light wfxr/forgit
+# zinit light agkozak/zsh-z
+# zinit pack"default+keys" for fzf
+
+# SNIPPETS ---------------------------------------------#
+# zinit snippet OMZ::plugins/git/git.plugin.zsh
 # ------------------------------------------------------
 #   __    __       __
 #  |  |--|__.-----|  |_.-----.----.--.--.
@@ -173,34 +159,21 @@ zstyle ':completion:*' special-dirs true  # Muestra directorios especiales ('.' 
 # How to change zsh-autosuggestions color
 #   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#747A74'
 # ------------------------------------------------------
-# Explicacion de esta seccion
-# https://tinyurl.com/5zkxzwj7
-#  export FZF_DEFAULT_OPTS="
-#    --info=inline
-#    --multi
-#    --preview '([[ -f {} ]] && (bat --color=always --italic-text=always {} || cat {})) || ([[ -d {} ]] && ( exa -T || tree -C {} )) || echo {} 2> /dev/null | head -200'
-#    --prompt='∼ ' --pointer='▶' --marker='✓'
-#    --bind '?:toggle-preview'
-#    --bind 'ctrl-a:select-all'
-#    --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'
-#    --bind 'ctrl-e:execute(echo {+} | xargs -o nvim)'
-#    --bind 'ctrl-v:execute(code {+})'
-#  "
-# ------------------------------------------------------
-# Autocompleta como fish
-# autoload -U +X compinit && compinit
-#  autoload -U compinit; compinit
-#  autoload -U +X bashcompinit && bashcompinit
-#  eval "$(stack --bash-completion-script stack)"
-# ------------------------------------------------------
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-#     [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-# ------------------------------------------------------
-# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=06"
-
-#     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Zoxide recuerda los directorios más frecuentados
+# Es como cd, pero utilizando el comando z
+# Debes tener previamente instalado: pacman -S zoxide
+eval "$(zoxide init zsh)"
+
+# fzf es un buscador interactivo:
+# Debes tener previamente instalado: pacman -S fzf
+source <(fzf --zsh)
+
+# Cargar el sistema de auto completado
+autoload -Uz compinit
+compinit
+#
+# autoload -Uz compinstall
+# compinstall
