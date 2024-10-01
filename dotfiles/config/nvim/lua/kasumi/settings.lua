@@ -23,7 +23,7 @@ opt.cursorline = true -- Resalta la línea actual
 opt.foldmethod = "manual" -- Método manual de plegado
 opt.lazyredraw = true -- No actualizar la pantalla durante la ejecución de macros y scripts
 opt.number = true -- Mostrar el número de línea actual (absoluto)
-opt.pumblend = 8 -- Transparencia del Pop-up
+opt.pumblend = 6 -- Transparencia del Pop-up
 opt.relativenumber = true -- Mostrar las líneas relativas a la actual
 opt.showmode = false -- Ocultar el aviso que indica en qué modo estás
 opt.spelllang = { "en", "es" } -- Corregir palabras usando diccionarios en inglés y español
@@ -44,9 +44,13 @@ opt.tabstop = 4 -- Define el ancho visual de las tabulaciones. Un <TAB> en BAT u
 
 -- TEXTO
 --
+opt.conceallevel = 2 -- Oculta marcas de formato en markdown
 opt.mouse = "ivh" -- Desactivar soporte del ratón en el modo normal
+opt.pumheight = 10 -- Establece la altura máxima del menú de completado.
 opt.scrolloff = 20 -- Mantener ciertas líneas visibles antes de llegar al final o comienzo
 opt.sidescrolloff = 10 -- Margen de espacio a la izquierda o derecha
+opt.virtualedit = "block" -- Permitir el movimiento del cursor cuando no hay texto en V-BLOCK
+opt.winminwidth = 10 -- Ancho mínimo de una ventana
 opt.wrap = false -- Desactivar el ajuste de línea
 
 -- BÚSQUEDAS
@@ -64,7 +68,7 @@ opt.showbreak = "↪"
 opt.listchars = {
 	tab = "🠖  ",
 	eol = "↲",
-	trail = "",
+	trail = "▓",
 	extends = "⟩",
 	precedes = "⟨",
 	nbsp = "✖",
@@ -74,15 +78,15 @@ opt.listchars = {
 --
 opt.fillchars = {
 	-- fold = " ", -- remove folding chars
-	-- fold = "⠀",
-	-- foldsep = "│",
-	-- msgsep = "‾",
+	-- foldclose = "▸",
 	-- foldopen = "▾",
 	-- foldsep = "│",
-	-- foldclose = "▸",
+	-- msgsep = "‾",
 	eob = " ", -- Suprime el carácter "~" EndOfBuffer
 	vert = "▕", --Carácter vertical (vsplit)
 	diff = "",
+	foldopen = "",
+	foldclose = "",
 }
 
 -- Ignora los temas que trae por defecto
