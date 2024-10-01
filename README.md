@@ -1,5 +1,7 @@
-# .kasumi
-Respaldo para mi entorno de trabajo. No hay mejor lugar como el \home🐦‍
+# (WIP) Kasumi's dotfiles
 
+Respaldo para mi entorno de trabajo.
 
-![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAMACAIAAADdbUgZAAAACXBIWXMAAAsSAAALEgHS3X78AAD//0lEQVR42ry9+bOtV3kmtp51zh0kXY0IYwsMtmNCe8BDu)
+No hay mejor lugar como el **\home**🐦‍
+
+[![curiosos](https://visitcount.itsvg.in/api?id=taregon&label=Curiosos&color=9&icon=6&pretty=false)](https://visitcount.itsvg.in)
