@@ -22,13 +22,13 @@ require("conform").setup({
 			args = { "-i", "4", "-ci", "-bn", "-sr" },
 		},
 		awk = {
-			args = { vim.fn.expand("-f ~/.config/nvim/lua/kasumi/goodies/format.awk") },
+			args = { "-f", vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/format.awk") },
 		},
 	},
 	formatters_by_ft = {
 		-- stylua: ignore start
 		["*"]    = {"trim_whitespace", "trim_newlines", "squeeze_blanks",}, -- El orden si importa
-		-- conf     = { "awk " },
+		conf     = { "awk" },
 		graphql  = { "prettierd" },
         html     = { "prettierd" },
 		json     = { "deno_fmt" },
