@@ -11,6 +11,7 @@ vim.call("plug#begin")
 Plug("catppuccin/nvim")
 Plug("crispybaccoon/aurora")
 Plug("lunarvim/horizon.nvim")
+Plug("chriskempson/base16-vim")
 
 -- PLUGINS
 Plug("airblade/vim-gitgutter") -- Resalta lineas con cambios git
@@ -48,12 +49,16 @@ Plug("hrsh7th/cmp-buffer")
 Plug("hrsh7th/cmp-nvim-lsp")
 Plug("hrsh7th/cmp-path")
 Plug("hrsh7th/nvim-cmp")
--- Plug("L3MON4D3/LuaSnip") -- Motor de snippets
+Plug("L3MON4D3/LuaSnip") -- Motor de snippets (sin require)
+Plug("junegunn/fzf.vim")
+Plug("junegunn/fzf", { ["do"] = vim.fn["fzf#install()"] })
 
 -- Probando
 Plug("supermaven-inc/supermaven-nvim")
 Plug("mbbill/undotree")
 Plug("sindrets/diffview.nvim") -- sin require
+Plug("onsails/lspkind-nvim") -- Iconos para LSP
+Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
 -- Plug("ibhagwan/fzf-lua") -- sin require
 -- Plug("chrisgrieser/nvim-early-retirement") -- Cierra automáticamente buffer en desuso
 
