@@ -1,0 +1,27 @@
+[core]
+    attributesFile = ~/.config/git/gitattributes
+    pager = delta
+
+[user]
+	name = taregon
+    email = taregon@proton.me
+
+[credential]
+    helper = cache
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    features = "kasumi"
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[include]
+    path = ~/.config/git/delta_theme.gitconfig
