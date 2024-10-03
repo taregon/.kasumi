@@ -25,7 +25,7 @@ cmp.setup({
 	-- },
 	-- Usa LuaSnip como motor de snippets
 	snippet = {
-		expand = function(a)
+		expand = function(args)
 			luasnip.lsp_expand(args.body)
 		end,
 	},
