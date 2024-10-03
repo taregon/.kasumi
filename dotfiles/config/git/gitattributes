@@ -1,0 +1,51 @@
+# Para mas atributos
+# https://richienb.github.io/gitattributes-generator/
+
+# Para revisar todos los archivos en el repositorio y aplicar
+# las reglas de normalización de finales de línea definidas
+# `git add --renormalize`
+# `git push`
+
+#  Auto detect text files and perform LF normalization
+  *              text=auto
+
+#  Documentos
+  *.md           text     diff=markdown
+  *.txt          text
+  *.csv          text
+  *.json         text
+  *.toml         text
+  *.yaml         text
+  *.yml          text
+
+#  Código fuente
+  *.py           text     diff=python
+  *.js           text
+  *.css          text     diff=css
+  *.html         text     diff=html
+  *.lua          text
+
+#  Scripts de Linux
+  *.sh           text     eol=lf
+  *.bash         text     eol=lf
+
+#  Scripts de Windows
+  *.bat          text     eol=crlf
+  *.ps1          text     eol=crlf
+
+#  Archivos binarios
+  *.svg          binary
+  *.png          binary
+  *.jpg          binary
+  *.gif          binary
+  *.zip          binary
+  *.tar          binary
+  *.gz           binary
+  *.svg          binary
+
+#  Docker
+  Dockerfile     text     eol=lf
+
+#  Excluir        archivos de   la    exportación
+  .gitattributes export-ignore
+  .gitignore     export-ignore

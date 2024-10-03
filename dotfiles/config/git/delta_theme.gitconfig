@@ -1,0 +1,37 @@
+# Más temas en https://github.com/dandavison/delta/blob/main/themes.gitconfig
+
+  [delta "kasumi"]
+  dark                          = true
+  commit-decoration-style       = dim yellow ul
+  commit-style                  = raw
+  file-decoration-style         = none
+  file-style                    = omit
+  hunk-header-decoration-style  = dim yellow box ul
+  hunk-header-file-style        = yellow
+  hunk-header-line-number-style = dim yellow
+  hunk-header-style             = file line-number syntax
+
+# whitespace-error-style = 22 reverse
+
+  line-numbers                  = true
+  line-numbers-zero-style       = 240
+
+  line-numbers-minus-style      = 210
+  line-numbers-plus-style       = 192
+
+  line-numbers-left-format      = "{nm:>3}┊"
+  line-numbers-left-style       = red
+
+  line-numbers-right-format     = "{np:>3}┊"
+  line-numbers-right-style      = green
+
+  minus-emph-style              = bold black 210
+  plus-emph-style               = bold black 22
+
+  minus-non-emph-style          = dim red
+  plus-non-emph-style           = dim green
+
+  minus-style                   = bold red
+  plus-style                    = bold green
+
+  syntax-theme                  = base16
