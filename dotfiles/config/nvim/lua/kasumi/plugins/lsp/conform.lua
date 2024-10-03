@@ -16,7 +16,11 @@ require("conform").setup({
 			args = { "--config", vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/sql-formatter.json") },
 		},
 		yamlfix = {
-			env = { YAMLFIX_SEQUENCE_STYLE = "block_style" }, -- Por defecto viene con: low-style list: [item, item]
+			env = {
+				YAMLFIX_SEQUENCE_STYLE = "block_style",
+				YAMLFIX_WHITELINES = "1",
+				YAMLFIX_LINE_LENGTH = "120",
+			}, -- Por defecto viene con: low-style list: [item, item]
 		},
 		shfmt = { -- https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd
 			args = { "-i", "4", "-ci", "-bn", "-sr" },
