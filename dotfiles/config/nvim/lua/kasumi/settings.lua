@@ -77,7 +77,7 @@ opt.listchars = {
 -- CARACTERES DE RELLENO
 --
 opt.fillchars = {
-	-- fold = " ", -- remove folding chars
+	fold = "🮥",
 	-- foldclose = "▸",
 	-- foldopen = "▾",
 	-- foldsep = "│",
@@ -128,6 +128,15 @@ opt.completeopt = {
 }
 opt.clipboard = { "unnamed", "unnamedplus" }
 
--- -- Configuración de CtrlP
--- g.ctrlp_user_command = { ".git", "cd %s && git ls-files -co --exclude-standard" } -- Ocultar archivos en .gitignore
--- g.ctrlp_show_hidden = 1 -- Mostrar archivos ocultos (dot files)
+-- AJUSTES PATA EL PLEGADO DE TEXTO
+opt.foldenable = false -- Deshabilita el plegado de forma predeterminada
+
+-- Definir la función personalizada para el texto del fold
+function CustomFoldText()
+	local fold_size = 1 + vim.v.foldend - vim.v.foldstart
+	local fold_size_str = " " .. fold_size .. " lines "
+	local fold_level_str = string.rep("🮤🮤🮤  ", vim.v.foldlevel)
+	return fold_level_str .. fold_size_str
+end
+
+opt.foldtext = "v:lua.CustomFoldText()"
