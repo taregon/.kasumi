@@ -1,0 +1,17 @@
+---
+gui:
+  showIcons: true
+  expandFocusedSidePanel: false
+  showFileTree: true
+  theme:
+    activeBorderColor:
+      - green
+      - bold
+    inactiveBorderColor:
+      - '#6a7780'
+    border:
+      - single
+git:
+  paging:
+    colorArg: always
+    pager: delta --paging=never
