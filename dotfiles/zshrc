@@ -32,6 +32,9 @@ fi
   # --preview '([[ -f {} ]] && (bat --style=numbers --color=always --line-range :500 {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
   # Generador de TEMAS para fzf
   # https://vitormv.github.io/fzf-themes/
+
+  export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
+
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
     --color=fg:#818f98,fg+:#c8d0d6,bg:-1,bg+:#333c42
     --color=hl:#a88e6b,hl+:#fbc06e,info:#94b8bc,marker:#ff62e0
