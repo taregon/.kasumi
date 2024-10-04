@@ -7,7 +7,7 @@ require("catppuccin").setup({
 	color_overrides = {
 		macchiato = {
       -- stylua: ignore start
-			rosewater = "#7c9da0", -- Links
+			rosewater = "#83a4a7", -- Links
 			flamingo  = "#dde1ed", -- "{" en lua, texto en wich_key
 			red       = "#f86c86", -- ALERTA
 			pink      = "#ffd4c8", -- Tono Rosado | #fa9e9e $ \n { ┊
@@ -15,7 +15,7 @@ require("catppuccin").setup({
 			peach     = "#FFBD5A", -- Barra (comando) | Valores
 			yellow    = "#F8E08E", -- ALERTA Warning
 			green     = "#AFEEAE", -- Barra (insert) | ALERTA | STRINGS
-			teal      = "#608f8b", -- (plug)
+			teal      = "#77a7a3", -- (plug)
 			sky       = "#f789cd", -- < = > >> is not
 			maroon    = "#fb89a3", -- Parámetros de script
 			sapphire  = "#aeffd2", -- EOF - Esta bonito
@@ -24,13 +24,14 @@ require("catppuccin").setup({
 			text      = "#c5cdd0", -- Texto de la Barra y texto
             subtext0  = "#f7fbfb", -- variables en python
 			subtext1  = "#b4d8a9", -- TEXTO / STRING
-			overlay2  = "#718C99", -- . , [] () : { y Letras menu desplegable
-			overlay0  = "#73838c", -- Comentarios
-			surface1  = "#4c585e", -- Numero de linea, resaltado linea horizontal, fin de linea
+			overlay2  = "#738691", -- . , [] () : { y Letras menu desplegable
+            overlay1  = "#9eb7c6", -- Fondo de los 'folds'
+			overlay0  = "#5e707a", -- Comentarios
+			surface1  = "#46545b", -- Numero de linea, resaltado linea horizontal, fin de linea
 			surface0  = "#414b50", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
 			base      = "#2e373c", -- A. Fondo
-			mantle    = "#384349", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos
-			crust     = "#546269", -- C. Divisor de paneles, fondo pestañas, fondo menu desplegable
+			mantle    = "#374147", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
+			crust     = "#546269", -- C. Divisor de paneles, fondo pestañas,
 			-- stylua: ignore end
 		},
 	},
@@ -92,11 +93,11 @@ require("catppuccin").setup({
 			},
 			Pmenu = {
 				-- fg = colors.overlay2,
-				bg = colors.mantle,
-			}, -- Cambia el fondo del menú
+				bg = colors.mantle, -- Cambia el fondo del menú
+			},
 			Folded = {
-				fg = u.darken(colors.subtext0, 0.8, colors.base), -- Líneas plegadas
-				bg = u.darken(colors.subtext0, 0.1, colors.base), -- Igual a DiffChange
+				fg = u.darken(colors.overlay1, 0.7, colors.base), -- Líneas plegadas
+				bg = u.darken(colors.overlay0, 0.1, colors.base), -- Lineas plegadas
 				style = { "bold" },
 			},
 			-- https://github.com/catppuccin/nvim/discussions/448#discussioncomment-5560230
