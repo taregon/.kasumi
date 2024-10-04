@@ -1,9 +1,8 @@
 ---
 actions:
   pre:
-    install_vimplug_1: test -e ~/.local/share/nvim/site/autoload/plug.vim || (mkdir
-      -p ~/.local/share/nvim/site/autoload; curl -fLo ~/.local/share/nvim/site/autoload/plug.vim
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim)
+    install_vimplug_1: test -e ~/.local/share/nvim/site/autoload/plug.vim || (mkdir -p ~/.local/share/nvim/site/autoload;
+      curl -fLo ~/.local/share/nvim/site/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim)
     install_vimplug_2: nvim +PlugInstall +qall
 config:
   backup: true
@@ -22,7 +21,7 @@ dotfiles:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
     link: absolute
-  f_kasumi-redshift.conf:
+  f_kasumi-redshift:
     src: config/redshift/redshift.conf
     dst: ~/.config/redshift/redshift.conf
     link: absolute
@@ -57,14 +56,34 @@ dotfiles:
     actions:
       - install_vimplug_1
       - install_vimplug_2
+  d_kasumi-git:
+    src: config/git
+    dst: ~/.config/git
+    link: absolute
+  f_kasumi-gitconfig:
+    src: gitconfig
+    dst: ~/.gitconfig
+    link: absolute
+  d_kasumi-ranger:
+    src: config/ranger
+    dst: ~/.config/ranger
+    link: absolute
+  f_kasumi-lazygit:
+    src: config/lazygit/config.yml
+    dst: ~/.config/lazygit/config.yml
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
+      - d_kasumi-git
+      - d_kasumi-ranger
       - f_kasumi-cava
+      - f_kasumi-gitconfig
       - f_kasumi-kitty
       - f_kasumi-kitty-theme
+      - f_kasumi-lazygit
+      - f_kasumi-redshift
       - f_kasumi-tmux
-      - f_kasumi-redshift.conf
       - f_kasumi-zsh
   kasumi_extras:
     dotfiles:
