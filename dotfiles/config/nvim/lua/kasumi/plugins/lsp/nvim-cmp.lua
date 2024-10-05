@@ -2,27 +2,27 @@
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 local lspkind = require("lspkind")
+
 -- Cargar los colores de Catppuccin
 local colors = require("catppuccin.palettes").get_palette()
 vim.api.nvim_set_hl(0, "CmpComFloatBorder", { fg = colors.green }) -- Usa el color azul de Catppuccin
 
---    __             ____     _
---   / /  __ _____ _/ __/__  (_)__
---  / /__/ // / _ `/\ \/ _ \/ / _ \
--- /____/\_,_/\_,_/___/_//_/_/ .__/
---                          /_/
-require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/kasumi/goodies/" })
-
---             _
---   ___ _  __(_)_ _  __________ _  ___
---  / _ \ |/ / /  ' \/___/ __/  ' \/ _ \
--- /_//_/___/_/_/_/_/    \__/_/_/_/ .__/
---                               /_/
---
+-- Carga los snippets.
+-- Nota: admite varias rutas.
+require("luasnip.loaders.from_lua").load({
+	paths = {
+		"~/.config/nvim/lua/kasumi/goodies/snippets/",
+	},
+})
+--          _
+--  ___ _ _|_|_____ ___ ___ _____ ___
+-- |   | | | |     |___|  _|     | . |
+-- |_|_|\_/|_|_|_|_|   |___|_|_|_|  _|
+--                               |_|
 cmp.setup({
-	-- completion = {
-	-- 	completeopt = "menu,menuone,preview,noselect",
-	-- },
+	completion = {
+		completeopt = "menu,menuone,preview,noselect",
+	},
 	-- Usa LuaSnip como motor de snippets
 	snippet = {
 		expand = function(args)
@@ -50,13 +50,15 @@ cmp.setup({
 			end
 		end, { "i", "s" }),
 	}),
+
 	-- Orígenes del auto completado
 	sources = cmp.config.sources({
-		{ name = "buffer" }, -- Texto del buffer actual
+		{ name = "buffer" }, -- Textos del buffer actual
+		{ name = "luasnip" }, -- snippets
 		{ name = "nvim_lsp" }, -- LSP
 		{ name = "path" }, -- rutas del sistema
-		{ name = "luasnip" }, -- snippets
 	}),
+
 	-- Iconos para LSP
 	formatting = {
 		format = lspkind.cmp_format({
@@ -66,11 +68,11 @@ cmp.setup({
 			ellipsis_char = "...",
 		}),
 	},
+
 	-- Agregando bordes al menu de auto completado
 	window = {
 		completion = cmp.config.window.bordered({
 			border = "single",
-			-- winhighlight = "FloatBorder:CmpComFloatBorder,",
 		}),
 		documentation = cmp.config.window.bordered({
 			border = "single",
