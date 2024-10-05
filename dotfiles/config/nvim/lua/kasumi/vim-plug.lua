@@ -59,6 +59,7 @@ Plug("mbbill/undotree")
 Plug("sindrets/diffview.nvim") -- sin require
 Plug("onsails/lspkind-nvim") -- Iconos para LSP
 Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
+Plug("saadparwaiz1/cmp_luasnip") -- Para que los snip salgan en las sugerencias de cmp (no requiere ajustes)
 -- Plug("ibhagwan/fzf-lua") -- sin require
 -- Plug("chrisgrieser/nvim-early-retirement") -- Cierra automáticamente buffer en desuso
 
