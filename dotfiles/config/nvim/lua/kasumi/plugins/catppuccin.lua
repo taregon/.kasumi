@@ -7,27 +7,27 @@ require("catppuccin").setup({
 	color_overrides = {
 		macchiato = {
       -- stylua: ignore start
-			rosewater = "#83a4a7", -- Links
-			flamingo  = "#dde1ed", -- "{" en lua, texto en wich_key
+			rosewater = "#8c9aa2", -- Links
+			flamingo  = "#9ab9bd", -- "{" en lua, texto en wich_key
 			red       = "#f86c86", -- ALERTA
-			pink      = "#ffd4c8", -- Tono Rosado | #fa9e9e $ \n { ┊
-			mauve     = "#ffb6c1", -- Barra (visual) | Comando (set, remap), loading [===].
-			peach     = "#FFBD5A", -- Barra (comando) | Valores
+			pink      = "#dfb8ad", -- Tono Rosado | #fa9e9e $ \n { ┊
+			mauve     = "#eea8b2", -- Barra (visual) | Comando (set, remap), loading [===].
+			peach     = "#fbc067", -- Barra (comando) | Valores
 			yellow    = "#F8E08E", -- ALERTA Warning
 			green     = "#AFEEAE", -- Barra (insert) | ALERTA | STRINGS
 			teal      = "#77a7a3", -- (plug)
-			sky       = "#f789cd", -- < = > >> is not
+			sky       = "#d496e8", -- < = > >> is not
 			maroon    = "#fb89a3", -- Parámetros de script
 			sapphire  = "#aeffd2", -- EOF - Esta bonito
-			blue      = "#a9ecff", -- Barra lados
-			lavender  = "#E2A9F3", -- Texto en los conf | Nro linea actual
-			text      = "#c5cdd0", -- Texto de la Barra y texto
-            subtext0  = "#f7fbfb", -- variables en python
-			subtext1  = "#b4d8a9", -- TEXTO / STRING
-			overlay2  = "#738691", -- . , [] () : { y Letras menu desplegable
+			blue      = "#d3ecf0", -- Barra lados, setup
+			lavender  = "#e9baf6", -- Texto en los conf | Nro linea actual
+			text      = "#c0cdd3", -- Texto de la Barra y texto
+            subtext0  = "#ffe9ed", -- variables en python
+			subtext1  = "#dff2ad", -- TEXTO / STRING
+			overlay2  = "#bddee2", -- . , [] () : { y Letras menu desplegable
             overlay1  = "#9eb7c6", -- Fondo de los 'folds'
-			overlay0  = "#5e707a", -- Comentarios
-			surface1  = "#46545b", -- Numero de linea, resaltado linea horizontal, fin de linea
+			overlay0  = "#5b6c76", -- Comentarios
+			surface1  = "#46545b", -- Numero de linea, resaltado linea horizontal, EOL (end-of-line)
 			surface0  = "#414b50", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
 			base      = "#2e373c", -- A. Fondo
 			mantle    = "#374147", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
