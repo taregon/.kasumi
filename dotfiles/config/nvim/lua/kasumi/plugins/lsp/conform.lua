@@ -31,11 +31,11 @@ require("conform").setup({
 	},
 	formatters_by_ft = {
 		-- stylua: ignore start
-		["*"]    = {"trim_whitespace", "trim_newlines", "squeeze_blanks",}, -- El orden si importa
+		["*"]    = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
 		conf     = { "awk" },
-        css      = { "prettierd" },
+		css      = { "prettierd" },
 		graphql  = { "prettierd" },
-        html     = { "prettierd" },
+		html     = { "prettierd" },
 		json     = { "deno_fmt" },
 		json5    = { "fixjson" },
 		lua      = { "stylua" },
