@@ -33,6 +33,7 @@ require("conform").setup({
 		-- stylua: ignore start
 		["*"]    = {"trim_whitespace", "trim_newlines", "squeeze_blanks",}, -- El orden si importa
 		conf     = { "awk" },
+        css      = { "prettierd" },
 		graphql  = { "prettierd" },
         html     = { "prettierd" },
 		json     = { "deno_fmt" },
