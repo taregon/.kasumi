@@ -15,11 +15,14 @@ require("bufferline").setup({
 				close_button_selected = {
 					bg = macchiato.surface0,
 				}, -- Oculta el botón de cerrar
+				error_selected = {
+					bg = macchiato.surface0,
+				},
 				fill = {
 					bg = macchiato.base,
 				},
 				modified_selected = {
-					-- fg = macchiato.yellow,
+					fg = macchiato.yellow,
 					bg = macchiato.surface0,
 				},
 				separator = {
@@ -42,6 +45,7 @@ require("bufferline").setup({
 
 	options = {
 		separator_style = "slope",
+		diagnostics = "nvim_lsp",
 		modified_icon = "󰗐",
 		show_close_icon = false,
 		show_buffer_close_icons = false,
