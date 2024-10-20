@@ -22,7 +22,7 @@ require("bufferline").setup({
 					bg = macchiato.base,
 				},
 				modified_selected = {
-					fg = macchiato.yellow,
+					-- fg = macchiato.yellow,
 					bg = macchiato.surface0,
 				},
 				separator = {
