@@ -77,16 +77,14 @@ opt.listchars = {
 -- CARACTERES DE RELLENO
 --
 opt.fillchars = {
-	fold = "🮥",
-	-- foldclose = "▸",
-	-- foldopen = "▾",
 	-- foldsep = "│",
 	-- msgsep = "‾",
-	eob = " ", -- Suprime el carácter "~" EndOfBuffer
-	vert = "▕", --Carácter vertical (vsplit)
 	diff = "",
-	foldopen = "",
+	eob = " ", -- Suprime el carácter "~" EndOfBuffer
+	fold = "🮥", -- Queda bonito por que sirve de relleno en la barra del diff
 	foldclose = "",
+	foldopen = "",
+	vert = "▕", --Carácter vertical (vsplit)
 }
 
 -- Ignora los temas que trae por defecto
