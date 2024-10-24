@@ -129,6 +129,11 @@ opt.clipboard = { "unnamed", "unnamedplus" }
 -- AJUSTES PATA EL PLEGADO DE TEXTO
 opt.foldenable = false -- Deshabilita el plegado de forma predeterminada
 
+--   ___       __    __
+-- .'  _.-----|  .--|  |
+-- |   _|  _  |  |  _  |
+-- |__| |_____|__|_____|
+--
 -- Definir la función personalizada para el texto del fold
 function CustomFoldText()
 	local fold_size = 1 + vim.v.foldend - vim.v.foldstart
