@@ -126,5 +126,6 @@ require("lualine").setup({
 		"fugitive",
 		"neo-tree",
 		"quickfix",
+		"fzf",
 	},
 })
