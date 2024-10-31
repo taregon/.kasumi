@@ -1,20 +1,43 @@
 ---
+# El manual por si necesitas mas ajustes
+# https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
+  border: single
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 3
   nerdFontsVersion: '3'
-  showIcons: true
-  expandFocusedSidePanel: false
   showFileTree: true
+  showIcons: true
   sidePanelWidth: 0.25
   theme:
     activeBorderColor:
       - green
       - bold
     inactiveBorderColor:
-      - white
-  # optionsTextColor:
-  # - red
-  border: single
+      - '#73848c'
+    selectedLineBgColor:
+      - '#5c775f'
 git:
   paging:
     colorArg: always
     pager: delta --paging=never
+
+customCommands:
+  # https://github.com/jesseduffield/lazygit/wiki/Custom-Commands-Compendium#blame-via-tig
+  # Estos atajos corresponden a los comandos de tig
+  # para hacer git blame
+  - key: b
+    command: tig blame -- {{.SelectedFile.Name}}
+    context: files
+    description: blame file at tree
+    subprocess: true
+  - key: b
+    command: tig blame {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}
+    context: commitFiles
+    description: blame file at revision
+    subprocess: true
+  - key: B
+    command: tig blame -- {{.SelectedCommitFile.Name}}
+    context: commitFiles
+    description: blame file at tree
+    subprocess: true
