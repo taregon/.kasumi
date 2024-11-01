@@ -27,7 +27,7 @@ Plug("vague2k/vague.nvim")
 Plug("LudoPinelli/comment-box.nvim") -- Agrega atajos para comentar con boxes
 Plug("airblade/vim-gitgutter") -- Resalta lineas con cambios git
 Plug("akinsho/bufferline.nvim") -- Muestra los buffer en pestañas
-Plug("echasnovski/mini.nvim") -- Pack de módulos
+Plug("echasnovski/mini.nvim") -- Pack de módulos. Tengo varios en uso
 Plug("folke/which-key.nvim") -- Muestra atajos al comenzar a escribir
 Plug("iamcco/markdown-preview.nvim", { ["do"] = "cd app && npx --yes yarn install" }) -- Vista previa de markdown
 Plug("lukas-reineke/indent-blankline.nvim") -- Lineas de identacion
@@ -42,10 +42,11 @@ Plug("petertriho/nvim-scrollbar") -- Barra de scroll
 
 -- PLUGINS que no requieren "require" obligatoriamente
 -- ────────────────────────────────────────────────────────────
+Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
+-- Plug("DaikyXendo/nvim-material-icon") -- Alternativa a nvim-web-devicons
 Plug("MunifTanjim/nui.nvim") -- Depende: neo-tree
 Plug("mechatroner/rainbow_csv") -- Colora archivos CSV
 Plug("mhinz/vim-startify") -- Dashboard
-Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
 Plug("tpope/vim-fugitive") -- Habilita comandos de git
 
 -- PLUGINS relacionados con LSP
@@ -60,9 +61,9 @@ Plug("stevearc/conform.nvim") -- Configura los formatter. Da formato al guardar
 Plug("williamboman/mason-lspconfig.nvim") -- Conecta mason con lspconfig, para instalar los servidores LSP
 Plug("williamboman/mason.nvim") -- Instalador de linter, formatter, LSP server
 
--- ╒═════════════════════════════════════════════════════════╕
--- │                     AUTO COMPLETADO                     │
--- ╘═════════════════════════════════════════════════════════╛
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                      AUTO COMPLETADO                      │
+-- ╘═══════════════════════════════════════════════════════════╛
 Plug("L3MON4D3/LuaSnip") -- Motor de snippets (sin require)
 Plug("hrsh7th/cmp-buffer")
 Plug("hrsh7th/cmp-nvim-lsp")
