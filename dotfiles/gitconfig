@@ -33,7 +33,6 @@
 
 [include]
     path = ~/.config/git/delta_kasumi.gitconfig
-    path = ~/baka_test/themes.gitconfig
 ;        __ __            __ __
 ; .-----|__|  |_   .---.-|  |__.---.-.-----.
 ; |  _  |  |   _|  |  _  |  |  |  _  |__ --|
