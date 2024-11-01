@@ -7,16 +7,17 @@ require("ibl").setup({
 	},
 	exclude = {
 		filetypes = {
-			"neo-tree",
 			"checkhealth",
+			"comment-box",
 			"dashboard",
 			"git",
 			"help",
 			"man",
 			"markdown",
+			"neo-tree",
+			"startify",
 			"terminal",
 			"text",
-			"startify",
 		},
 		buftypes = {
 			"terminal",
