@@ -1,7 +1,3 @@
-[core]
-    attributesFile = ~/.config/git/gitattributes
-    pager = delta
-
 [user]
 	name = taregon
     email = taregon@proton.me
@@ -9,13 +5,25 @@
 [credential]
     helper = cache
 
+[core]
+    attributesFile = ~/.config/git/gitattributes
+    pager = delta
+;     __       __ __
+; .--|  .-----|  |  |_.---.-.
+; |  _  |  -__|  |   _|  _  |
+; |_____|_____|__|____|___._
+;
+; Las siguientes lineas cambiar el visor por defecto
+; que viene con el diff de git. Para mas info:
+; https://github.com/dandavison/delta?tab=readme-ov-file#get-started
+
 [interactive]
     diffFilter = delta --color-only
 
 [delta]
-    navigate = true
-    side-by-side = true
+    ; side-by-side = true
     features = "kasumi"
+    navigate = true
 
 [merge]
     conflictstyle = diff3
@@ -24,4 +32,26 @@
     colorMoved = default
 
 [include]
-    path = ~/.config/git/delta_theme.gitconfig
+    path = ~/.config/git/delta_kasumi.gitconfig
+    path = ~/baka_test/themes.gitconfig
+;        __ __            __ __
+; .-----|__|  |_   .---.-|  |__.---.-.-----.
+; |  _  |  |   _|  |  _  |  |  |  _  |__ --|
+; |___  |__|____|  |___._|__|__|___._|_____|
+; |_____|
+;
+; Los comandos aquí son globales, también son de prueba
+; por lo que pueden cambiar a futuro
+
+[alias]
+    back = reset --soft HEAD~1
+    logg = log --graph --decorate --branches --remotes
+    logs = log --stat --decorate
+    recent = !git branch --sort=-committerdate | fzf +s | xargs -r git checkout
+    st = status -sb
+
+    find = "!f() { \
+        git log --decorate --date=short --grep=\"$1\" --oneline | \
+        fzf --ansi --no-sort --reverse --preview 'git show --color=always {1}' --preview-window=right:60% | \
+        cut -d ' ' -f1 | xargs -r git show; \
+    }; f"
