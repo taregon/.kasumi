@@ -1,37 +1,44 @@
+--  ██████╗ █████╗ ████████╗██████╗ ██████╗ ██╗   ██╗ ██████╗ ██████╗██╗███╗   ██╗
+-- ██╔════╝██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗██║   ██║██╔════╝██╔════╝██║████╗  ██║
+-- ██║     ███████║   ██║   ██████╔╝██████╔╝██║   ██║██║     ██║     ██║██╔██╗ ██║
+-- ██║     ██╔══██║   ██║   ██╔═══╝ ██╔═══╝ ██║   ██║██║     ██║     ██║██║╚██╗██║
+-- ╚██████╗██║  ██║   ██║   ██║     ██║     ╚██████╔╝╚██████╗╚██████╗██║██║ ╚████║
+--  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝      ╚═════╝  ╚═════╝ ╚═════╝╚═╝╚═╝  ╚═══╝
+
 -- Importa el módulo de utilidades de colores desde el tema Catppuccin.
 local u = require("catppuccin.utils.colors")
 
 require("catppuccin").setup({
 	flavour = "macchiato",
-	background = { dark = "macchiato" },
+	-- background = { dark = "macchiato" },
 	color_overrides = {
 		macchiato = {
-      -- stylua: ignore start
-			rosewater = "#8c9aa2", -- Links
-			flamingo  = "#9ab9bd", -- "{" en lua, texto en wich_key
-			red       = "#f86c86", -- ALERTA
-			pink      = "#dfb8ad", -- Tono Rosado | #fa9e9e $ \n { ┊
-			mauve     = "#eea8b2", -- Barra (visual) | Comando (set, remap), loading [===].
-			peach     = "#fbc067", -- Barra (comando) | Valores
-			yellow    = "#F8E08E", -- ALERTA Warning
-			green     = "#AFEEAE", -- Barra (insert) | ALERTA | STRINGS
-			teal      = "#77a7a3", -- (plug)
-			sky       = "#d496e8", -- < = > >> is not
-			maroon    = "#fb89a3", -- Parámetros de script
-			sapphire  = "#aeffd2", -- EOF - Esta bonito
-			blue      = "#d3ecf0", -- Barra lados, setup
-			lavender  = "#e9baf6", -- Texto en los conf | Nro linea actual
+			-- stylua: ignore start
+			rosewater = "#6f808a", -- Links
+			flamingo  = "#9DB2B2", -- "{" en lua, texto en wich_key
+			red       = "#f86e88", -- ALERTA #f17b8b #f86c86
+			pink      = "#8d9fc9", -- Tono Rosado | #fa9e9e $ \n { ┊
+			mauve     = "#ff9dcd", -- Barra (visual) | Comando (set, remap), loading [=== ].
+			peach     = "#ffcf94", -- Barra (comando) | Valores
+			yellow    = "#f8e084", -- ALERTA Warning
+			green     = "#addd92", -- Barra (insert) | ALERTA | STRINGS
+			teal      = "#89DCEB", -- (plug)
+			sky       = "#f8a984", -- < =  > >> is not or
+			maroon    = "#b3a7e5", -- Opciones en scripts
+			sapphire  = "#bef7df", -- 'EOF' - Esta bonito
+			blue      = "#a7d6fa", -- Barra lados, setup
+			lavender  = "#eabdf6", -- Texto en los conf | Nro linea actual
 			text      = "#c0cdd3", -- Texto de la Barra y texto
-            subtext0  = "#ffe9ed", -- variables en python
-			subtext1  = "#dff2ad", -- TEXTO / STRING
-			overlay2  = "#bddee2", -- . , [] () : { y Letras menu desplegable
-            overlay1  = "#9eb7c6", -- Fondo de los 'folds'
-			overlay0  = "#5b6c76", -- Comentarios
-			surface1  = "#46545b", -- Numero de linea, resaltado linea horizontal, EOL (end-of-line)
+			subtext0  = "#f2f4fb", -- variables en python
+			subtext1  = "#cbe79f", -- TEXTO / STRING
+			overlay2  = "#8598b2", -- . , [] () : { y Letras menu desplegable
+			overlay1  = "#9eb7c6", -- Fondo de los 'folds'
+			overlay0  = "#5d6c74", -- Comentarios
+			surface1  = "#4a585f", -- Numero de linea, resaltado linea horizontal, (end-of-line)
 			surface0  = "#414b50", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
-			base      = "#2e373c", -- A. Fondo
-			mantle    = "#374147", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
-			crust     = "#546269", -- C. Divisor de paneles, fondo pestañas,
+			base      = "#2e383d", -- A. Fondo
+			mantle    = "#354146", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
+			crust     = "#49575e", -- C. Divisor de paneles, fondo pestañas,
 			-- stylua: ignore end
 		},
 	},
@@ -66,6 +73,10 @@ require("catppuccin").setup({
 		variables    = { "italic" },
 		-- stylua: ignore end
 	},
+
+	-- ╒═══════════════════════════════════════════════════════════╕
+	-- │                Mas Colores Personalizados                 │
+	-- ╘═══════════════════════════════════════════════════════════╛
 	custom_highlights = function(colors)
 		return {
 			--  Con esto separo el color de lualine de las variables de python
@@ -108,13 +119,21 @@ require("catppuccin").setup({
 				bg = u.darken(colors.crust, 0.50, colors.base), -- Igual a CursorLine
 				fg = colors.subtext0,
 			},
-			-- LineNr = { bg = colors.surface0 },
-			-- SignColumn = { bg = colors.surface0 },
-			NonText = { fg = colors.surface1 }, -- Carácter de fin de linea
-			String = { fg = colors.subtext1 },
+			NonText = {
+				fg = colors.surface1,
+			}, -- Carácter de fin de linea
+			String = {
+				fg = colors.subtext1,
+			},
+			Comment = {
+				fg = colors.overlay0,
+			},
 		}
 	end,
 })
--- EL TEMA SE CARGA DESDE AQUI:	https://github.com/catppuccin/nvim?tab=readme-ov-file#configuration
---
+
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                EL TEMA SE CARGA DESDE AQUÍ                │
+-- ╘═══════════════════════════════════════════════════════════╛
+-- https://github.com/catppuccin/nvim?tab=readme-ov-file#configuration
 vim.cmd.colorscheme("catppuccin")
