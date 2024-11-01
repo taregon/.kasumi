@@ -1,6 +1,13 @@
 require("telescope").setup({
 	defaults = {
-		scroll_strategy = "limit",
+		-- scroll_strategy = "limit",
+		-- layout_config = {
+		-- 	vertical = {
+		-- 		width = 0.5,
+		-- 	},
+		-- },
+		sorting_strategy = "ascending",
+		-- layout_strategy = "center",
 		file_ignore_patterns = {
 			"%.bak",
 			"%.gif",
@@ -14,21 +21,27 @@ require("telescope").setup({
 		winblend = 20,
 		-- path_display = { "smart" },
 		-- prompt_prefix = "",
+		borderchars = {
+			preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+			results = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+			-- preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+			prompt = { "═", "║", "═", "║", "╔", "╗", "╝", "╚" },
+		},
 	},
 	pickers = {
 		find_files = {
 			hidden = true,
 		},
 	},
-	-- extensions = {
-	-- 	fzf = {
-	-- 		fuzzy = true, -- false will only do exact matching
-	-- 		override_generic_sorter = true, -- override the generic sorter
-	-- 		override_file_sorter = true, -- override the file sorter
-	-- 		case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-	-- 	},
-	-- },
+	extensions = {
+		fzf = {
+			fuzzy = true,
+			case_mode = "ignore_case",
+		},
+	},
 })
 
--- require("telescope").load_extension("live_grep_args")
+-- Desde aquí se cargan extensiones
+-- Ejemplos de uso para fzf:
+-- https://github.com/nvim-telescope/telescope-fzf-native.nvim?tab=readme-ov-file#telescope-fzf-nativenvim
 require("telescope").load_extension("fzf")
