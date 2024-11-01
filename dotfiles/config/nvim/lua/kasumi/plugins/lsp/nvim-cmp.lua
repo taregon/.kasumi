@@ -21,14 +21,20 @@ require("luasnip.loaders.from_lua").load({
 --                               |_|
 cmp.setup({
 	completion = {
+		-- 'menu'     : Muestra un menú de opciones de auto completado.
+		-- 'menuone'  : Siempre muestra el menú, incluso si solo hay una opción disponible.
+		-- 'preview'  : Muestra una ventana de vista previa
+		-- 'noselect' : No selecciona automáticamente el primer elemento del menú
 		completeopt = "menu,menuone,preview,noselect",
 	},
+
 	-- Usa LuaSnip como motor de snippets
 	snippet = {
 		expand = function(args)
 			luasnip.lsp_expand(args.body)
 		end,
 	},
+
 	mapping = cmp.mapping.preset.insert({
 		["<CR>"] = cmp.mapping.confirm({ select = true }), -- Acepta la selección con Enter
 		["<tab>"] = cmp.mapping(function(original)
@@ -57,6 +63,7 @@ cmp.setup({
 		{ name = "luasnip" }, -- snippets
 		{ name = "nvim_lsp" }, -- LSP
 		{ name = "path" }, -- rutas del sistema
+		{ name = "supermaven" },
 	}),
 
 	-- Iconos para LSP
@@ -65,7 +72,10 @@ cmp.setup({
 			fields = { "abbr", "kind", "menu" }, -- Agrupa los iconos en el menú
 			mode = "symbol_text",
 			maxwidth = 50,
-			ellipsis_char = "...",
+			ellipsis_char = "󱗘 ",
+			symbol_map = {
+				Supermaven = "",
+			},
 		}),
 	},
 
