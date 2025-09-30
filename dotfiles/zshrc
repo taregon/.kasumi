@@ -18,6 +18,7 @@ fi
   source $ZSH_CONF/kasumi-zsh_funtions.conf      # Ruta de FUNCIONES personalizadas
 # ------------------------------------------------------
 #  export LC_ALL="en_US.UTF-8" # Configura idioma en_US y codificación UTF-8 - RECIEN, me dio error en ARCH
+  export RANGER_LOAD_DEFAULT_RC=FALSE            # Carga mi rc.conf y no el dehault en ranger
 # ------------------------------------------------------
   export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
 # ------------------------------------------------------

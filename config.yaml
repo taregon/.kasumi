@@ -64,10 +64,6 @@ dotfiles:
     src: gitconfig
     dst: ~/.gitconfig
     link: absolute
-  d_kasumi-ranger:
-    src: config/ranger
-    dst: ~/.config/ranger
-    link: absolute
   f_kasumi-lazygit:
     src: config/lazygit/config.yml
     dst: ~/.config/lazygit/config.yml
@@ -81,11 +77,13 @@ dotfiles:
   d_wofi:
     src: config/wofi
     dst: ~/.config/wofi
+  f_rc.conf:
+    src: config/ranger/rc.conf
+    dst: ~/.config/ranger/rc.conf
 profiles:
   kasumi:
     dotfiles:
     - d_kasumi-git
-    - d_kasumi-ranger
     - f_kasumi-cava
     - f_kasumi-gitconfig
     - f_kasumi-kitty
@@ -94,6 +92,7 @@ profiles:
     - f_kasumi-redshift
     - f_kasumi-tmux
     - f_kasumi-zsh
+    - f_rc.conf
   kasumi_extras:
     dotfiles:
     - d_kasumi-ex-neovim
