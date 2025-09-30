@@ -17,7 +17,7 @@ fi
   source $ZSH_CONF/kasumi-zsh_alias.conf         # Ruta de ALIAS personalizados
   source $ZSH_CONF/kasumi-zsh_funtions.conf      # Ruta de FUNCIONES personalizadas
 # ------------------------------------------------------
-  export LC_ALL="en_US.UTF-8" # Configura idioma en_US y codificación UTF-8
+#  export LC_ALL="en_US.UTF-8" # Configura idioma en_US y codificación UTF-8 - RECIEN, me dio error en ARCH
 # ------------------------------------------------------
   export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
 # ------------------------------------------------------
@@ -190,3 +190,4 @@ compinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+

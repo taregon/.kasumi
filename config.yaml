@@ -1,8 +1,8 @@
----
 actions:
   pre:
-    install_vimplug_1: test -e ~/.local/share/nvim/site/autoload/plug.vim || (mkdir -p ~/.local/share/nvim/site/autoload;
-      curl -fLo ~/.local/share/nvim/site/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim)
+    install_vimplug_1: test -e ~/.local/share/nvim/site/autoload/plug.vim || (mkdir
+      -p ~/.local/share/nvim/site/autoload; curl -fLo ~/.local/share/nvim/site/autoload/plug.vim
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim)
     install_vimplug_2: nvim +PlugInstall +qall
 config:
   backup: true
@@ -54,8 +54,8 @@ dotfiles:
     dst: ~/.config/nvim/lua
     link: absolute
     actions:
-      - install_vimplug_1
-      - install_vimplug_2
+    - install_vimplug_1
+    - install_vimplug_2
   d_kasumi-git:
     src: config/git
     dst: ~/.config/git
@@ -72,23 +72,37 @@ dotfiles:
     src: config/lazygit/config.yml
     dst: ~/.config/lazygit/config.yml
     link: absolute
+  d_sway:
+    src: config/sway
+    dst: ~/.config/sway
+  d_swaylock:
+    src: config/swaylock
+    dst: ~/.config/swaylock
+  d_wofi:
+    src: config/wofi
+    dst: ~/.config/wofi
 profiles:
   kasumi:
     dotfiles:
-      - d_kasumi-git
-      - d_kasumi-ranger
-      - f_kasumi-cava
-      - f_kasumi-gitconfig
-      - f_kasumi-kitty
-      - f_kasumi-kitty-theme
-      - f_kasumi-lazygit
-      - f_kasumi-redshift
-      - f_kasumi-tmux
-      - f_kasumi-zsh
+    - d_kasumi-git
+    - d_kasumi-ranger
+    - f_kasumi-cava
+    - f_kasumi-gitconfig
+    - f_kasumi-kitty
+    - f_kasumi-kitty-theme
+    - f_kasumi-lazygit
+    - f_kasumi-redshift
+    - f_kasumi-tmux
+    - f_kasumi-zsh
   kasumi_extras:
     dotfiles:
-      - d_kasumi-ex-neovim
-      - f_kasumi-ex-neovim
-      - f_kasumi-ex-starttree
-      - f_kasumi-ex-zsh_alias
-      - f_kasumi-ex-zsh_funtions
+    - d_kasumi-ex-neovim
+    - f_kasumi-ex-neovim
+    - f_kasumi-ex-starttree
+    - f_kasumi-ex-zsh_alias
+    - f_kasumi-ex-zsh_funtions
+  kasumi_wayland:
+    dotfiles:
+    - d_sway
+    - d_swaylock
+    - d_wofi
