@@ -9,97 +9,101 @@ config:
   create: true
   dotpath: dotfiles
 dotfiles:
-  f_kasumi-cava:
+  f_cava:
     src: config/cava/kasumi-cava.conf
     dst: ~/.config/cava/kasumi-cava.conf
     link: absolute
-  f_kasumi-kitty:
+  f_kitty:
     src: config/kitty/kitty.conf
     dst: ~/.config/kitty/kitty.conf
     link: absolute
-  f_kasumi-kitty-theme:
+  f_kitty_theme:
     src: config/kitty/kasumi-kitty.conf
     dst: ~/.config/kitty/kasumi-kitty.conf
     link: absolute
-  f_kasumi-redshift:
+  f_redshift:
     src: config/redshift/redshift.conf
     dst: ~/.config/redshift/redshift.conf
     link: absolute
-  f_kasumi-tmux:
+  f_tmux:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
-  f_kasumi-zsh:
+  f_zsh:
     src: zshrc
     dst: ~/.zshrc
     link: absolute
-  f_kasumi-ex-starttree:
+  f_starttree:
     src: config/StartTree/config.yaml
     dst: ~/.config/StartTree/config.yaml
     link: absolute
-  f_kasumi-ex-zsh_alias:
+  f_zsh_alias:
     src: config/zsh/kasumi-zsh_alias.conf
     dst: ~/.config/zsh/kasumi-zsh_alias.conf
     link: absolute
-  f_kasumi-ex-zsh_funtions:
+  f_zsh_funtions:
     src: config/zsh/kasumi-zsh_funtions.conf
     dst: ~/.config/zsh/kasumi-zsh_funtions.conf
     link: absolute
-  f_kasumi-ex-neovim:
+  f_neovim:
     src: config/nvim/init.lua
     dst: ~/.config/nvim/init.lua
     link: absolute
-  d_kasumi-ex-neovim:
+  d_neovim:
     src: config/nvim/lua
     dst: ~/.config/nvim/lua
     link: absolute
     actions:
     - install_vimplug_1
     - install_vimplug_2
-  d_kasumi-git:
+  d_git:
     src: config/git
     dst: ~/.config/git
     link: absolute
-  f_kasumi-gitconfig:
+  f_gitconfig:
     src: gitconfig
     dst: ~/.gitconfig
     link: absolute
-  f_kasumi-lazygit:
+  f_lazygit:
     src: config/lazygit/config.yml
     dst: ~/.config/lazygit/config.yml
     link: absolute
   d_sway:
     src: config/sway
     dst: ~/.config/sway
+    link: absolute
   d_swaylock:
     src: config/swaylock
     dst: ~/.config/swaylock
+    absolute
   d_wofi:
     src: config/wofi
     dst: ~/.config/wofi
+    absolute
   f_rc.conf:
     src: config/ranger/rc.conf
     dst: ~/.config/ranger/rc.conf
+    absolute
 profiles:
   kasumi:
     dotfiles:
-    - d_kasumi-git
-    - f_kasumi-cava
-    - f_kasumi-gitconfig
-    - f_kasumi-kitty
-    - f_kasumi-kitty-theme
-    - f_kasumi-lazygit
-    - f_kasumi-redshift
-    - f_kasumi-tmux
-    - f_kasumi-zsh
+    - d_git
+    - f_cava
+    - f_gitconfig
+    - f_kitty
+    - f_kitty_theme
+    - f_lazygit
+    - f_redshift
+    - f_tmux
+    - f_zsh
     - f_rc.conf
   kasumi_extras:
     dotfiles:
-    - d_kasumi-ex-neovim
-    - f_kasumi-ex-neovim
-    - f_kasumi-ex-starttree
-    - f_kasumi-ex-zsh_alias
-    - f_kasumi-ex-zsh_funtions
+    - d_neovim
+    - f_neovim
+    - f_starttree
+    - f_zsh_alias
+    - f_zsh_funtions
   kasumi_wayland:
     dotfiles:
     - d_sway
