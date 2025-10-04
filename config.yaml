@@ -1,9 +1,10 @@
 actions:
   pre:
-    install_vimplug_1: test -e ~/.local/share/nvim/site/autoload/plug.vim || (mkdir
-      -p ~/.local/share/nvim/site/autoload; curl -fLo ~/.local/share/nvim/site/autoload/plug.vim
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim)
-    install_vimplug_2: nvim +PlugInstall +qall
+    nvim-plug-install: '[ ! -e "$HOME/.local/share/nvim/site/autoload/plug.vim" ]
+      && mkdir -p "$HOME/.local/share/nvim/site/autoload" && curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim"
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  post:
+    nvim-update: nvim --headless +PlugInstall +qall
 config:
   backup: true
   create: true
@@ -54,8 +55,8 @@ dotfiles:
     dst: ~/.config/nvim/lua
     link: absolute
     actions:
-    - install_vimplug_1
-    - install_vimplug_2
+    - nvim-plug-install
+    - nvim-update
   d_git:
     src: config/git
     dst: ~/.config/git
@@ -75,15 +76,19 @@ dotfiles:
   d_swaylock:
     src: config/swaylock
     dst: ~/.config/swaylock
-    absolute
+    link: absolute
   d_wofi:
     src: config/wofi
     dst: ~/.config/wofi
-    absolute
+    link: absolute
   f_rc.conf:
     src: config/ranger/rc.conf
     dst: ~/.config/ranger/rc.conf
-    absolute
+    link: absolute
+  d_waybar:
+    src: config/waybar
+    dst: ~/.config/waybar
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -109,3 +114,4 @@ profiles:
     - d_sway
     - d_swaylock
     - d_wofi
+    - d_waybar
