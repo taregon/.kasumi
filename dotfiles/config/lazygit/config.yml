@@ -1,4 +1,3 @@
----
 # El manual por si necesitas mas ajustes
 # https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
@@ -21,7 +20,6 @@ git:
   paging:
     colorArg: always
     pager: delta --paging=never
-
 customCommands:
   # https://github.com/jesseduffield/lazygit/wiki/Custom-Commands-Compendium#blame-via-tig
   # Estos atajos corresponden a los comandos de tig
@@ -30,14 +28,14 @@ customCommands:
     command: tig blame -- {{.SelectedFile.Name}}
     context: files
     description: blame file at tree
-    subprocess: true
+    output: terminal
   - key: b
     command: tig blame {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}
     context: commitFiles
     description: blame file at revision
-    subprocess: true
+    output: terminal
   - key: B
     command: tig blame -- {{.SelectedCommitFile.Name}}
     context: commitFiles
     description: blame file at tree
-    subprocess: true
+    output: terminal
