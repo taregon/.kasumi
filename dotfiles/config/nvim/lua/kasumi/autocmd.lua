@@ -1,56 +1,69 @@
+--  █████╗ ██╗   ██╗████████╗ ██████╗  ██████╗███╗   ███╗██████╗
+-- ██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔════╝████╗ ████║██╔══██╗
+-- ███████║██║   ██║   ██║   ██║   ██║██║     ██╔████╔██║██║  ██║
+-- ██╔══██║██║   ██║   ██║   ██║   ██║██║     ██║╚██╔╝██║██║  ██║
+-- ██║  ██║╚██████╔╝   ██║   ╚██████╔╝╚██████╗██║ ╚═╝ ██║██████╔╝
+-- ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝  ╚═════╝╚═╝     ╚═╝╚═════╝
+
 -- Simplifica la llamada al método de creación de auto comandos
 local aucmd = vim.api.nvim_create_autocmd
 
 -- Función para crear y configurar grupos de auto comandos
--- name: nombre del grupo de autocomandos
--- fn: función que define los autocomandos dentro del grupo
+-- @param name string nombre del grupo de autocomandos
+-- @param fn function función que define los autocomandos dentro del grupo
 local function augroup(name, fn)
 	local group = vim.api.nvim_create_augroup(name, { clear = true })
 	fn(group)
 end
-
--- Activa el coloreado para archivos INI
+-- ────────────────────────────────────────────────────────────
+-- Configuración de archivos INI
 augroup("Ini_Files", function(group)
+	-- Activa el coloreado para archivos INI y de configuración
 	aucmd("BufReadPost", {
 		group = group,
-		pattern = "*.conf",
+		pattern = { "*.conf", "*.ini" },
 		command = "set syntax=dosini",
 	})
 end)
-
+-- ────────────────────────────────────────────────────────────
 -- Ejecuta linters automáticamente
 augroup("NvimLint", function(group)
-	aucmd({ "BufEnter", "BufWritePost", "InsertLeave", "TextChanged" }, {
+	-- Eventos optimizados para el linter
+	aucmd({ "BufEnter", "BufWritePost", "TextChanged" }, {
 		group = group,
 		callback = function()
 			require("lint").try_lint()
 		end,
 	})
 end)
-
--- Recuerda la ultima posición del cursor
-local function last_position()
+-- ────────────────────────────────────────────────────────────
+-- Recuerda la última posición del cursor
+local function restore_cursor_position()
 	local last_line = vim.fn.line("'\"")
 	if last_line > 1 and last_line <= vim.fn.line("$") then
 		vim.cmd('normal! g`"')
 	end
 end
 
+-- Configuración de restauración de cursor
 augroup("RestoreCursor", function(group)
 	aucmd("BufReadPost", {
 		group = group,
 		pattern = "*",
-		callback = last_position,
+		callback = restore_cursor_position,
 	})
 end)
-
--- Colorea los CSV
+-- ────────────────────────────────────────────────────────────
+-- Configuración de archivos CSV y DAT
 augroup("CsvFileTypes", function(group)
+	-- Manejo de archivos CSV
 	aucmd({ "BufNewFile", "BufRead" }, {
 		group = group,
 		pattern = "*.csv",
 		command = "set filetype=rfc_csv",
 	})
+
+	-- Manejo de archivos DAT
 	aucmd({ "BufNewFile", "BufRead" }, {
 		group = group,
 		pattern = "*.dat",
