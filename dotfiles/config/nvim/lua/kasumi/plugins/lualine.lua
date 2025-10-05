@@ -1,27 +1,6 @@
--- ===================================================
--- Ajustes de NAVIC
--- ===================================================
-local navic = require("nvim-navic")
-
-require("lspconfig").clangd.setup({
-	on_attach = function(client, bufnr)
-		navic.attach(client, bufnr)
-	end,
-})
-
--- Llama a un plug para que indique los cambios en la barra de lualine
-local function gitgutter_diff()
-	local added, modified, removed = table.unpack(vim.fn["GitGutterGetHunkSummary"]())
-	return {
-		added = added,
-		modified = modified,
-		removed = removed,
-	}
-end
-
--- ===================================================
--- CATPPUCCIN
--- ===================================================
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                        CATPPUCCIN                         │
+-- ╘═══════════════════════════════════════════════════════════╛
 local catppuccin = require("catppuccin.palettes").get_palette()
 local u = require("catppuccin.utils.colors")
 
@@ -39,9 +18,9 @@ local function get_mode_color()
 	return { fg = mode_color[vim.fn.mode()], gui = "bold" }
 end
 
--- ===================================================
--- LUALINE
--- ===================================================
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                          LUALINE                          │
+-- ╘═══════════════════════════════════════════════════════════╛
 require("lualine").setup({
 	options = {
 		-- theme = "catppuccin",
@@ -60,15 +39,6 @@ require("lualine").setup({
 		},
 	},
 	winbar = {
-		-- lualine_a = {
-		-- 	{
-		-- 		"buffers",
-		-- 		mode = 4,
-		-- 		icons_enabled = true,
-		-- 		show_filename_only = true,
-		-- 		hide_filename_extensions = false,
-		-- 	},
-		-- },
 		lualine_c = { "navic" },
 	},
 	sections = {
@@ -81,7 +51,6 @@ require("lualine").setup({
 					modified = "󱐯 ",
 					removed = "󱐰 ",
 				},
-				source = gitgutter_diff,
 			},
 			"diagnostics",
 		},
@@ -91,7 +60,7 @@ require("lualine").setup({
 				path = 4, -- Carpeta principal y nombre
 				shorting_target = 24,
 				symbols = {
-					modified = "",
+					modified = "",
 					readonly = "󰍁",
 					newfile = "󰽃",
 				},
@@ -101,7 +70,7 @@ require("lualine").setup({
 			{
 				"fileformat",
 				symbols = {
-					unix = "󰌽",
+					unix = "󰻀",
 					dos = "󰍲",
 					mac = "",
 				},
