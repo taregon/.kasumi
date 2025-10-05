@@ -23,9 +23,9 @@ require("kasumi/plugins/which-key")
 require("kasumi/plugins/fidget")
 require("kasumi/plugins/neo-tree")
 require("kasumi/plugins/bufferline")
-require("kasumi/plugins/nvim-web-devicons")
-require("kasumi/plugins/telescope")
-require("kasumi/plugins/dressing")
+-- require("kasumi/plugins/nvim-web-devicons") -- Esta de mas por que no tengo ajustes
+-- require("kasumi/plugins/telescope") -- Ta potente el asunto
+-- require("kasumi/plugins/dressing") -- Lo archivaron
 require("kasumi/plugins/comment-box")
 
 -- ╒═══════════════════════════════════════════════════════════╕
@@ -39,7 +39,7 @@ require("kasumi/plugins/lsp/mason-tool-installer")
 require("kasumi/plugins/lsp/nvim-cmp")
 require("kasumi/plugins/lsp/nvim-lint")
 require("kasumi/plugins/lsp/nvim-lspconfig")
-require("kasumi/plugins/lsp/nvim-supermaven")
+-- require("kasumi/plugins/lsp/nvim-supermaven") -- se me acabo el demo
 
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                          WIN BAR                          │
