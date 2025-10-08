@@ -43,6 +43,7 @@ fi
     --color=border:#5e6a72,label:#5e6a72,query:#d8dee2
     --border="sharp" --border-label="( 󱐋 )" --preview-window="sharp" --prompt="󰘧 "
     --info=right --marker="›" --pointer="▒" --separator="─" --scrollbar="▐"'
+--color=fg:#455e60,fg+:#c8d0d6,bg:-1,bg+:#333c42
 
   # export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
   export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
