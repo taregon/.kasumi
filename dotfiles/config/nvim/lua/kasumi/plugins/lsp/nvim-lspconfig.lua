@@ -1,46 +1,72 @@
--- Configura y gestiona servidores de lenguaje (LSPs) en Neovim
--- Previamente deben estar instalados por medio de mason-lspconfig.lua
-local lspconfig = require("lspconfig")
+-- ┌──────────────────────────────────────┐
+-- │░█░░░█▀▀░█▀█░░░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀│
+-- │░█░░░▀▀█░█▀▀░░░█░░░█░█░█░█░█▀▀░░█░░█░█│
+-- │░▀▀▀░▀▀▀░▀░░░░░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀│
+-- └──────────────────────────────────────┘
+
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-lspconfig.bashls.setup({
+-- ─[ BASH ]─────────────────────────────────────────────────
+vim.lsp.config["bashls"] = {
+	filetypes = { "sh" },
 	capabilities = lsp_capabilities,
-})
+}
+vim.lsp.enable("bashls")
 
-lspconfig.dockerls.setup({
+-- ─[ Docker ]───────────────────────────────────────────────
+vim.lsp.config["dockerls"] = {
+	filetypes = { "dockerfile" },
 	capabilities = lsp_capabilities,
-})
+}
+vim.lsp.enable("dockerls")
 
-lspconfig.graphql.setup({
+-- ─[ GraphQL ]──────────────────────────────────────────────
+vim.lsp.config["graphql"] = {
+	filetypes = { "graphql" },
 	capabilities = lsp_capabilities,
-})
+}
+vim.lsp.enable("graphql")
 
-lspconfig.html.setup({
+-- ─[ HTML ]─────────────────────────────────────────────────
+vim.lsp.config["html"] = {
+	filetypes = { "html" },
 	capabilities = lsp_capabilities,
-})
+}
+vim.lsp.enable("html")
 
-lspconfig.jsonls.setup({
+-- ─[ JSON ]─────────────────────────────────────────────────
+vim.lsp.config["jsonls"] = {
+	filetypes = { "json" },
 	capabilities = lsp_capabilities,
-})
+}
+vim.lsp.enable("jsonls")
 
-lspconfig.pyright.setup({
+-- Python
+vim.lsp.config["pyright"] = {
+	filetypes = { "python" },
 	capabilities = lsp_capabilities,
-})
+}
+vim.lsp.enable("pyright")
 
--- Configuración para YAML (YAML Language Server)
-lspconfig.yamlls.setup({
+-- YAML
+vim.lsp.config["yamlls"] = {
+	filetypes = { "yaml" },
 	capabilities = lsp_capabilities,
 	settings = {
 		yaml = {
 			schemas = {
-				kubernetes = "*.yaml", -- Esquema para archivos Kubernetes YAML
+				kubernetes = "*.yaml",
 			},
 		},
 	},
-})
+}
+vim.lsp.enable("yamlls")
 
--- Configuración para Lua (sumneko_lua)
-lspconfig.lua_ls.setup({
+-- Lua
+vim.lsp.config["lua_ls"] = {
+	cmd = { "lua-language-server" },
+	filetypes = { "lua" },
+	root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
 	capabilities = lsp_capabilities,
 	settings = {
 		Lua = {
@@ -48,15 +74,16 @@ lspconfig.lua_ls.setup({
 				version = "LuaJIT",
 			},
 			diagnostics = {
-				globals = { "vim" }, -- Reconocer 'vim' como global
+				globals = { "vim" },
 			},
 			workspace = {
-				library = vim.api.nvim_get_runtime_file("", true), -- Soporte para Neovim runtime
-				checkThirdParty = false, -- Opcional: Desactivar chequeo de terceros
+				library = vim.api.nvim_get_runtime_file("", true),
+				checkThirdParty = false,
 			},
 			telemetry = {
-				enable = false, -- Desactivar telemetría
+				enable = false,
 			},
 		},
 	},
-})
+}
+vim.lsp.enable("lua_ls")

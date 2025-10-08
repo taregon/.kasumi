@@ -10,7 +10,7 @@
 
 require("mason-tool-installer").setup({
 	ensure_installed = {
-		"beautysh", -- para zsh
+		"beautysh", -- zsh formatter
 		"black", -- python formatter
 		"deno", -- markdown, javascript, typescript, json formatter
 		"fixjson", -- json5
@@ -29,5 +29,6 @@ require("mason-tool-installer").setup({
 		"yamlfix", -- YAML formatter that keeps comments.
 		"yamllint", -- YAML linter
 	},
+	run_on_start = true,
 	auto_update = true,
 })
