@@ -21,7 +21,6 @@ opt.relativenumber = true -- Mostrar las líneas relativas a la actual
 opt.showmode = false -- Ocultar el aviso que indica en qué modo estás
 opt.spell = true -- Activa la corrección ortográfica
 opt.spelllang = { "en", "es" } -- Corregir palabras usando diccionarios en inglés y español
-opt.spelllang = { "en_us", "es" } -- Establece los idiomas del corrector ortográfico
 opt.splitbelow = true -- Controla la posición de la nueva ventana (abajo)
 opt.splitright = true -- Controla la posición de la nueva ventana (a la derecha)
 opt.ttyfast = true -- Acelera el scroll
