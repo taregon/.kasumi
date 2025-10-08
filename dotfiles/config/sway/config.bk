@@ -1,0 +1,260 @@
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                 Configuraciones Adicionales                 │
+ # ╘═════════════════════════════════════════════════════════════╛
+include /etc/sway/config-vars.d/*
+include /etc/sway/config.d/*
+
+exec --no-startup-id nm-applet
+exec mpDris2
+exec mpd
+exec wl-paste --type images --watch cliphist store
+exec wl-paste --type text --watch cliphist store
+exec ~/.config/sway/scripts/bg_random_auto
+exec ~/.config/sway/scripts/sleep
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                          VARIABLES                          │
+ # ╘═════════════════════════════════════════════════════════════╛
+set $mod Mod4
+
+set $left h
+set $down j
+set $up k
+set $right l
+
+set $launcher wofi -show drun
+set $term kitty
+set $music ~/.config/sway/scripts/rofi_music
+set $colorpicker hyprpicker --autocopy
+set $browser firefox
+set $filemanager thunar
+
+set $opacity 0.92
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                      ATAJOS DE TECLADO                      │
+ # ╘═════════════════════════════════════════════════════════════╛
+
+#bindsym XF86AudioLowerVolume exec ~/.config/sway/scripts/volume --dec
+#bindsym XF86AudioMute exec ~/.config/sway/scripts/volume --toggle
+#bindsym XF86AudioNext exec playerctl next
+#bindsym XF86AudioPlay exec playerctl play-pause
+#bindsym XF86AudioPrev exec playerctl previous
+#bindsym XF86AudioRaiseVolume exec ~/.config/sway/scripts/volume --inc
+#bindsym XF86AudioStop exec playerctl stop
+bindsym $mod+Alt+e exec ~/.config/sway/scripts/rofi_powermenu
+bindsym $mod+Alt+r reload
+bindsym $mod+Print exec ~/.config/sway/scripts/rofi_screenrecord
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+q kill
+bindsym $mod+c exec $browser
+bindsym $mod+grave exec ~/.config/sway/scripts/keybind
+bindsym $mod+m exec $music
+bindsym $mod+p exec $colorpicker
+bindsym $mod+r mode "resize"
+bindsym $mod+t exec $filemanager
+bindsym Control+space exec $launcher
+bindsym Print exec ~/.config/sway/scripts/rofi_screenshot
+bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
+bindsym XF86MonBrightnessUp exec ~/.config/sway/scripts/backlight --inc
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                     Apariencia y Bordes                     │
+ # ╘═════════════════════════════════════════════════════════════╛
+default_border pixel 2
+default_floating_border pixel 2
+gaps inner 6
+gaps outer 4
+# Puedes jugar con valores temporales
+# swaymsg gaps outer current set 8
+# swaymsg gaps inner all set 8
+smart_gaps off
+smart_borders off
+font pango:JetbrainsMono Nerd Font 10
+# Esta es nueva y no se que hace
+# -------------------------------------
+# Configuración de salidas (monitores)
+# -------------------------------------
+# swaybg_command -
+
+# -------------------------------------
+# Configuración de inactividad y servicios
+# -------------------------------------
+# exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+# exec hash dbus-update-activation-environment 2>/dev/null && \
+#     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
+    # Lock screen
+    # bindsym $mod+l exec hyprlock
+# exec /usr/bin/lxpolkit
+# exec mako
+# exec nm-applet --indicator
+# nm-applet
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                     Reglas de ventanas                      │
+ # ╘═════════════════════════════════════════════════════════════╛
+# Para encontrar nombres de los procesos, ejecuta:
+# swaymsg -t get_tree | grep app_id
+# swaymsg -t get_tree | jq -c '.nodes[].nodes[].nodes[] | {id, app_id, name}'
+# swaymsg -t get_tree | jq '.. | objects | select(.name? != null and .id? != null) | {name, app_id, id, focused, urgent}'
+# swaymsg "[con_id=30] urgent enable"
+# for_window [app_id=".*"                                ] opacity $opacity
+# for_window [app_id="^.*"                               ] border pixel 2
+# for_window [app_id="^.*"                               ] border radius 30
+for_window [app_id="dropdown"] floating enable
+for_window [app_id="engrampa"                          ] floating enable
+for_window [app_id="google-chrome"                     ] inhibit_idle fullscreen
+for_window [app_id="google-chrome"                     ] move container to workspace number 2, focus
+for_window [app_id="nm-connection-editor"              ] floating enable
+for_window [app_id="org.telegram.desktop"              ] move container to workspace number 6, focus
+for_window [app_id="pavucontrol"                       ] floating enable
+for_window [app_id="polkit-ukui-authentication-agent-1"] floating enable
+for_window [app_id="ristretto"                         ] floating enable
+for_window [app_id="shotcut"                           ] move container to workspace number 5, focus
+for_window [app_id="thunar"                            ] move container to workspace number 3, focus, opacity $opacity
+for_window [app_id="xdg-desktop-portal-gtk"            ] floating enable
+for_window [app_id="yad"                               ] floating enable
+for_window [class="GParted"                            ] floating enable
+for_window [class="vlc"] floating enable
+# for_window [class="^.*"                                ] border pixel 2
+# for_window [class="^.*"                                ] border radius 30
+# for_window [app_id=".*"] border pixel 61
+for_window [shell="x_wayland"                          ] title_format "%class - %title"
+for_window [shell="xdg_shell"                          ] title_format "%title (%app_id)"
+for_window [title="(?:Open|Save) (?:File|Folder|As)"   ] floating enable; resize set 800 600
+for_window [title="Choose Files"                       ] floating enable
+for_window [title="Confirm to replace files"           ] floating enable
+for_window [title="File Operation Progress"            ] floating enable
+for_window [title="Renombrar"                 ] floating enable, sticky enable
+for_window [window_role="About"                        ] floating enable
+for_window [window_role="Organizer"                    ] floating enable
+for_window [window_role="Preferences"                  ] floating enable
+for_window [window_role="bubble"                       ] floating enable
+for_window [window_role="page-info"                    ] floating enable
+for_window [window_role="pop-up"                       ] floating enable
+for_window [window_role="task_dialog"                  ] floating enable
+for_window [window_role="toolbox"                      ] floating enable
+for_window [window_role="webconsole"                   ] floating enable
+for_window [window_type="dialog"                       ] floating enable
+for_window [window_type="menu"                         ] floating enable
+# FLOATING WINDOWS - force pop-up and dialogs to float
+for_window [instance="openDialog"] floating enable
+for_window [instance="findDialog"] floating enable
+for_window [instance="saveDialog"] floating enable
+# for_window [class="firefox_firefox"] border normal
+# for_window [class="firefox" window_role="pop-up"] floating enable
+# for_window [class="Firefox" window_type="popup"] floating enable
+# for_window [title="(?i)bitwarden"] splitv, move container to workspace current, resize set width 20 ppt
+for_window [title="(?i)bitwarden"] splitv, move container to workspace current, exec "sleep 0.05 && swaymsg resize set width 20 ppt"
+
+# for_window [title="(?i)bitwarden"] for_window [title="(?i)bitwarden"] # for_window [class="Firefox" window_type="popup"] floating enable
+
+# for_window [app_id="firefox" title="Bitwarden"] floating enable, opacity $opacity
+
+# for_window [app_id="firefox" title="Mozilla Firefox"] move container to workspace number 2, focus, opacity 1
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                       Temas de color                        │
+ # ╘═════════════════════════════════════════════════════════════╛
+# client.background       $base
+# client.focused_inactive $bg_line $bg $text $bg $color_on
+
+set $bg_focus      #2f656b
+set $bg_idle       #2E383E
+set $bg_urgent     #61554e
+
+set $border_focus  #5dbdc9
+set $border_idle   #455e60
+set $border_urgent #ffb077
+
+set $text_focus    #a9dce2
+set $text_idle     #617e81
+set $text_urgent   #ffc79e
+
+set $accent_focus  #5dbdc9
+set $accent_idle   #4e6668
+set $accent_urgent #ffb077
+
+client.focused   $border_focus  $bg_focus  $text_focus  $bg_focus  $accent_focus
+client.unfocused $border_idle   $bg_idle   $text_idle   $bg_idle   $accent_idle
+client.urgent    $border_urgent $bg_urgent $text_urgent $bg_urgent $accent_urgent
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                     Gestión de Ventanas                     │
+ # ╘═════════════════════════════════════════════════════════════╛
+bindsym $mod+$left        focus      left
+bindsym $mod+$down        focus      down
+bindsym $mod+$up          focus      up
+bindsym $mod+$right       focus      right
+bindsym $mod+Shift+$left  move       left
+bindsym $mod+Shift+$down  move       down
+bindsym $mod+Shift+$up    move       up
+bindsym $mod+Shift+$right move       right
+
+bindsym $mod+Shift+minus  move       scratchpad
+bindsym $mod+Shift+space  floating   toggle
+bindsym $mod+a            focus      parent
+bindsym $mod+b            splith
+bindsym $mod+e            layout     toggle split
+bindsym $mod+f            fullscreen
+bindsym $mod+minus        scratchpad show
+bindsym $mod+s            layout     stacking
+bindsym $mod+space        focus      mode_toggle
+bindsym $mod+v            splitv
+bindsym $mod+w            layout     tabbed
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                     Espacios de Trabajo                     │
+ # ╘═════════════════════════════════════════════════════════════╛
+bindsym $mod+0 workspace number 10
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+
+bindsym $mod+Shift+0 move container to workspace number 10
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │               Re-dimensionamiento de Ventanas               │
+ # ╘═════════════════════════════════════════════════════════════╛
+mode "resize" {
+    bindsym $left  resize shrink width  60px
+    bindsym $down  resize grow   height 60px
+    bindsym $up    resize shrink height 60px
+    bindsym $right resize grow   width  60px
+    bindsym Left   resize shrink width  10px
+    bindsym Down   resize grow   height 10px
+    bindsym Up     resize shrink height 10px
+    bindsym Right  resize grow   width  10px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                       Barra de estado                       │
+ # ╘═════════════════════════════════════════════════════════════╛
+bar {
+    swaybar_command waybar
+}
+
+ # ╒═════════════════════════════════════════════════════════════╕
+ # │                   Distribución de Teclado                   │
+ # ╘═════════════════════════════════════════════════════════════╛
+input type:keyboard {
+    xkb_layout  latam,us
+    xkb_options grp:alt_shift_toggle
+}
