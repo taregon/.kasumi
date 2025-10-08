@@ -1,3 +1,8 @@
+-- ┌────────────┐
+-- │░█░░░█▀▀░█▀█│
+-- │░█░░░▀▀█░█▀▀│
+-- │░▀▀▀░▀▀▀░▀░░│
+-- └────────────┘
 -- Conecta "mason.nvim" con "nvim-lspconfig" para facilitar
 -- la INSTALACIÓN de servidores de lenguaje (LSP)
 -- Los ajustes los realizas en "nvim-lspconfig"

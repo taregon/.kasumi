@@ -40,6 +40,7 @@ require("conform").setup({
 		json5    = { "fixjson" },
 		lua      = { "stylua" },
 		markdown = { "deno_fmt" },
+        zsh      = { "beautysh" }, --
 		python   = { "isort", "black" },
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md

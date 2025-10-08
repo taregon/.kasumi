@@ -1,3 +1,8 @@
+-- ┌────────────────────────────────────────────────────────────────────┐
+-- │░█░░░▀█▀░█▀█░▀█▀░█▀▀░█▀▄░░░▄▀░░░░█▀▀░█▀█░█▀▄░█▄█░█▀█░▀█▀░▀█▀░█▀▀░█▀▄│
+-- │░█░░░░█░░█░█░░█░░█▀▀░█▀▄░░░▄█▀░░░█▀▀░█░█░█▀▄░█░█░█▀█░░█░░░█░░█▀▀░█▀▄│
+-- │░▀▀▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀░░░░▀▀░░░▀░░░▀▀▀░▀░▀░▀░▀░▀░▀░░▀░░░▀░░▀▀▀░▀░▀│
+-- └────────────────────────────────────────────────────────────────────┘
 -- NOTA: solo instala LINTERS & FORMATTER
 -- Si encuentras fallas, puedes ejecutar :checkhealth mason, también :MasonLog
 -- Puede que necesites instalar 'npm'
@@ -5,6 +10,7 @@
 
 require("mason-tool-installer").setup({
 	ensure_installed = {
+		"beautysh", -- para zsh
 		"black", -- python formatter
 		"deno", -- markdown, javascript, typescript, json formatter
 		"fixjson", -- json5
