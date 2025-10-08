@@ -4,7 +4,8 @@
 -- └───────────────────────────────────────────┘
 --
 require("comment-box").setup({
-	doc_width = 80, -- Width of the document. It is used to center the boxes and lines.
-	box_width = 62, -- Width of the fixed size boxes (must be <= doc_width).
-	line_width = 60,
+	doc_width = 80, -- Se usa para centrar las cajas y las líneas generadas.
+	box_width = 62, -- Debe ser menor o igual a `doc_width` para que encaje correctamente
+	line_width = 60, -- Longitud de las líneas horizontales. Se recomienda mantener coherencia con `box_width`.
+	outer_blank_lines_above = true, -- Deja líneas en blanco antes de..., para mejorar la separación visual.
 })
