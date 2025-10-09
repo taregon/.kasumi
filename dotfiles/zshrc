@@ -22,7 +22,7 @@ fi
 local ZSH_CONF=~/.config/zsh                   # Define la ruta donde esta la configuración
 source $ZSH/oh-my-zsh.sh
 source $ZSH_CONF/kasumi-zsh_alias.conf         # Ruta de ALIAS personalizados
-source $ZSH_CONF/kasumi-zsh_funtions.conf      # Ruta de FUNCIONES personalizadas
+source $ZSH_CONF/kasumi-zsh_functions.conf     # Ruta de FUNCIONES personalizadas
 # ------------------------------------------------------
 #  export LC_ALL="en_US.UTF-8" # Configura idioma en_US y codificación UTF-8 - RECIEN, me dio error en ARCH
 export RANGER_LOAD_DEFAULT_RC=FALSE            # Carga mi rc.conf y no el propio de ranger
@@ -44,7 +44,7 @@ export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101
 export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
 
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
---color=fg:#455e60,fg+:#c8d0d6,bg:-1,bg+:#333c42
+--color=fg:#818f98,fg+:#c8d0d6,bg:-1,bg+:#333c42
 --color=hl:#a88e6b,hl+:#fbc06e,info:#94b8bc,marker:#ff62e0
 --color=prompt:#AFEEAE,spinner:#ea676d,pointer:#fbc06e,header:#87afaf
 --color=border:#5e6a72,label:#5e6a72,query:#d8dee2
