@@ -1,0 +1,52 @@
+# ──────────────────────< Notificaciones >──────────────────────
+  set notification-error-bg       "#632e2e"         # Alerta
+  set notification-error-fg       "#fc697c"         # Alerta
+  set notification-warning-bg     "#625347"         # Alerta
+  set notification-warning-fg     "#FFCE80"         # Alerta
+  set notification-bg             "#3a474e"         # Mensaje de selección
+  set notification-fg             "#c0cdd3"         # Mensaje de selección
+
+# ─────────────────< Completado / Sugerencias >─────────────────
+  set completion-bg               "#2E383E"         # Fondo de la lista de comandos
+  set completion-fg               "#6f9093"         # Texto de la lista de comandos
+  set completion-group-bg         "#3B4252"
+  set completion-group-fg         "#D8DEE9"
+  set completion-highlight-bg     "#badfdc"         # Resaltado de la lista de comandos
+  set completion-highlight-fg     "#3B4252"         # Texto dentro del resaltado de comandos
+
+# ──────────────────────────< Índice >──────────────────────────
+  set index-bg                    "#2E383E"
+  set index-fg                    "#87c7c2"
+  set index-active-bg             "#87c7c2"
+  set index-active-fg             "#2E383E"
+
+# ────────────────────< Barra de comandos >──────────────────
+  set inputbar-bg                 "#59767a"         # Fondo comandos
+  set inputbar-fg                 "#badfdc"         # Texto comandos
+
+# ─────────────────────< Barra de estado >───────────────────
+  set statusbar-bg                "#bbbbbb"
+  set statusbar-fg                "#E5E9F0"
+
+# ───────────────────< Resaltado / Búsqueda >───────────────────
+  set highlight-color             "#c4d8e2"         # Fondo del resaltado
+  set highlight-active-color      "#BF616A"
+  set highlight-fg                "#ECEFF0"         # (nuevo) color del texto resaltado
+
+# ────────────────────< Colores generales >──────────────────
+  set default-bg                  "#2E383E"         # Fondo fuera del documento
+  set default-fg                  "#D8DEE9"
+
+# ───────────────────< Renderizado / Carga >─────────────────
+  set render-loading              "true"
+  set render-loading-bg           "#2E3440"
+  set render-loading-fg           "#434C5E"
+
+# ───────────────────< Recolor / Inversión >─────────────────
+  set recolor                     "true"
+  set recolor-lightcolor          "#2E383E"         # Fondo del documento
+  set recolor-darkcolor           "#c0cdd3"         # Color de texto del documento
+  set recolor-keephue             "true"            # (nuevo) mantiene matices originales
+
+# ───────────────────< Opciones de interfaz >───────────────────
+  set guioptions                  ""                # vacío en lugar de "none"
