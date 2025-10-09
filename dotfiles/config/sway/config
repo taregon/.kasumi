@@ -71,8 +71,8 @@ bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
 # Puedes jugar con valores temporales
 # swaymsg gaps outer current set 8
 # swaymsg gaps inner all set 8
-default_border          pixel 3
-default_floating_border pixel 1
+default_border          pixel 2
+default_floating_border pixel 2
 gaps inner 6
 gaps outer 2
 smart_gaps    off
@@ -109,27 +109,29 @@ for_window [app_id="imv"                                ] floating enable, borde
 for_window [app_id="mpv"                                ] floating enable, border pixel 1, resize set 1343 756, move position center
 for_window [title="(?i)bitwarden"                       ] splitv, move container to workspace current, opacity $opacity_low, exec "sleep 0.05 && swaymsg resize set width 20 ppt"
 for_window [title="Renombrar"                           ] floating enable, sticky enable
+# for_window [app_id="org.pwmt.zathura"                                ] opacity $opacity_low
+
 # ╒═════════════════════════════════════════════════════════════╕
 # │                       Temas de color                        │
 # ╘═════════════════════════════════════════════════════════════╛
 # Borde de ventanas
 set $accent_focus  #5dbdc9
-set $accent_idle   #4e6668
+set $accent_idle   #4b565c
 set $accent_urgent #ffa563
 
 # Fondo de pestañas
 set $bg_focus      #356c73
-set $bg_idle       #2E383E
+set $bg_idle       #2e383d
 set $bg_urgent     #8b6044
 
 # Borde de pestañas
 set $border_focus  #74c6d1
-set $border_idle   #455e60
+set $border_idle   #4b565c
 set $border_urgent #ffb077
 
 # Texto de pestañas
 set $text_focus    #a2d9e0
-set $text_idle     #617e81
+set $text_idle     #87959c
 set $text_urgent   #ffcba4
 
 client.focused   $border_focus  $bg_focus  $text_focus  $bg_focus  $accent_focus
