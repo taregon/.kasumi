@@ -1,8 +1,8 @@
+---
 actions:
   pre:
-    nvim-plug-install: '[ ! -e "$HOME/.local/share/nvim/site/autoload/plug.vim" ]
-      && mkdir -p "$HOME/.local/share/nvim/site/autoload" && curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim"
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    nvim-plug-install: '[ ! -e "$HOME/.local/share/nvim/site/autoload/plug.vim" ] && mkdir -p "$HOME/.local/share/nvim/site/autoload"
+      && curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   post:
     nvim-update: nvim --headless +PlugInstall +qall
 config:
@@ -42,9 +42,9 @@ dotfiles:
     src: config/zsh/kasumi-zsh_alias.conf
     dst: ~/.config/zsh/kasumi-zsh_alias.conf
     link: absolute
-  f_zsh_funtions:
-    src: config/zsh/kasumi-zsh_funtions.conf
-    dst: ~/.config/zsh/kasumi-zsh_funtions.conf
+  f_zsh_functions:
+    src: config/zsh/kasumi-zsh_functions.conf
+    dst: ~/.config/zsh/kasumi-zsh_functions.conf
     link: absolute
   f_neovim:
     src: config/nvim/init.lua
@@ -55,8 +55,8 @@ dotfiles:
     dst: ~/.config/nvim/lua
     link: absolute
     actions:
-    - nvim-plug-install
-    - nvim-update
+      - nvim-plug-install
+      - nvim-update
   d_git:
     src: config/git
     dst: ~/.config/git
@@ -89,29 +89,34 @@ dotfiles:
     src: config/waybar
     dst: ~/.config/waybar
     link: absolute
+  d_zathura:
+    src: config/zathura
+    dst: ~/.config/zathura
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
-    - d_git
-    - f_cava
-    - f_gitconfig
-    - f_kitty
-    - f_kitty_theme
-    - f_lazygit
-    - f_redshift
-    - f_tmux
-    - f_zsh
-    - f_rc.conf
+      - d_git
+      - d_zathura
+      - f_cava
+      - f_gitconfig
+      - f_kitty
+      - f_kitty_theme
+      - f_lazygit
+      - f_rc.conf
+      - f_redshift
+      - f_tmux
+      - f_zsh
   kasumi_extras:
     dotfiles:
-    - d_neovim
-    - f_neovim
-    - f_starttree
-    - f_zsh_alias
-    - f_zsh_funtions
+      - d_neovim
+      - f_neovim
+      - f_starttree
+      - f_zsh_alias
+      - f_zsh_functions
   kasumi_wayland:
     dotfiles:
-    - d_sway
-    - d_swaylock
-    - d_wofi
-    - d_waybar
+      - d_sway
+      - d_swaylock
+      - d_wofi
+      - d_waybar
