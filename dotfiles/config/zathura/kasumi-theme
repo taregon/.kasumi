@@ -1,6 +1,6 @@
 # ──────────────────────< Notificaciones >──────────────────────
-  set notification-bg             "#3a474e"         # Mensaje de selección
-  set notification-fg             "#c0cdd3"         # Mensaje de selección
+  set notification-bg             "#2E383D"         # Mensaje de texto copiado
+  set notification-fg             "#bd8896"         # Mensaje de texto copiado
 
   set notification-error-bg       "#632e2e"         # Alerta
   set notification-error-fg       "#fc697c"         # Alerta
@@ -10,7 +10,7 @@
 
 # ─────────────────< Completado / Sugerencias >─────────────────
   set completion-bg               "#2E383D"         # Fondo de la lista de comandos
-  set completion-fg               "#A1C4A9"         # Texto de la lista de comandos
+  set completion-fg               "#62717a"         # Texto de la lista de comandos
 
   set completion-group-bg         "#2E383D"         # La barra de titulo cuando ejecutas :open
   set completion-group-fg         "#A1C4A9"         # La barra de titulo cuando ejecutas :open
@@ -26,7 +26,7 @@
   set index-fg                    "#A1C4A9"         # Indice de saltos dentro del documento
 
 # ────────────────────< Barra de comandos >──────────────────
-  set inputbar-bg                 "#92ab97"         # Fondo comandos
+  set inputbar-bg                 "#A1C4A9"         # Fondo comandos
   set inputbar-fg                 "#2E383D"         # Texto comandos
 
 # ─────────────────────< Barra de estado >───────────────────
@@ -34,8 +34,8 @@
   set statusbar-fg                "#62717a"         # Donde sale el numero de pagina
 
 # ───────────────────< Resaltado / Búsqueda >───────────────────
-  set highlight-active-color      "#0b182b"         # Cuando realizas "/" y devuelven muchos resultados
-  set highlight-color             "#dc5349"         # Resaltado de selección y búsqueda
+  set highlight-active-color      "#8022f4"         # Cuando realizas "/" y devuelven muchos resultados
+  set highlight-color             "#e11e5d"         # Resaltado de selección y búsqueda
   set highlight-fg                "#D8DEE9"         # (nuevo) color del texto resaltado
 
 # ────────────────────< Colores generales >──────────────────
