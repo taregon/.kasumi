@@ -50,18 +50,3 @@
 # ───────────────────< Recolor / Inversión >─────────────────
   set recolor-darkcolor           "#061424"         # Color de texto del documento
   set recolor-lightcolor          "#C9DBDA"         # Fondo del documento
-
-# ────────────────────────────────────────────────────────────
-#171531
-#061d20
-#101F27
-#04121e
-#c3d3ce
-#
-#062548
-#b7e6e4
-#
-#110618
-#cbd7d1
-#
-#4e0925
