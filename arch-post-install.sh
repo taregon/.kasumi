@@ -20,10 +20,12 @@ sudo pacman -S --needed \
     git-delta \
     grc \
     iputils \
+    iw \
     jq \
     kitty \
     less \
     lsd \
+    toilet \
     zoxide \
     zsh \
     zsh-completions
@@ -60,7 +62,15 @@ sudo pacman -S --needed networkmanager
 sudo systemctl enable --now NetworkManager
 
 # Documentación y manuales
-sudo pacman -S --needed man man-pages-es man-db
+sudo pacman -S --needed \
+    man man-pages-es man-db
+
+# Visor de PDF y OCR
+sudo pacman -S --needed \
+    zathura \
+    zathura-pdf-mupdf \
+    tesseract-data-eng \
+    tesseract-data-spa
 
 # Ranger y complementos
 sudo pacman -S --needed \
@@ -69,12 +79,21 @@ sudo pacman -S --needed \
 
 # Gestión de archivos
 sudo pacman -S --needed \
+    exfat-utils \
     gvfs \
+    gvfs-gphoto2 \
     gvfs-mtp \
     imv \
     mpv \
+    mtpfs \
+    ntfs-3g \
     thunar \
-    tumbler
+    thunar-volman \
+    tumbler \
+    udisks2
+
+sudo systemctl enable udisks2.service
+sudo systemctl start udisks2.service
 
 # Gestión de archivos comprimidos
 sudo pacman -S --needed \
