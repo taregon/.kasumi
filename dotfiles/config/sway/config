@@ -126,12 +126,12 @@ set $bg_urgent     #8b6044
 
 # Borde de pestañas
 set $border_focus  #74c6d1
-set $border_idle   #4b565c
+set $border_idle   #4f5c63
 set $border_urgent #ffb077
 
 # Texto de pestañas
 set $text_focus    #a2d9e0
-set $text_idle     #87959c
+set $text_idle     #7a8a94
 set $text_urgent   #ffcba4
 
 client.focused   $border_focus  $bg_focus  $text_focus  $bg_focus  $accent_focus
