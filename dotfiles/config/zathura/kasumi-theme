@@ -40,12 +40,12 @@
 
 # ────────────────────< Colores generales >──────────────────
   set default-bg                  "#2E383D"         # Fondo fuera del documento
-  set default-fg                  "#D8DEE9"
+  set default-fg                  "#C9DBDA"         # No se que hace
 
 # ───────────────────< Renderizado / Carga >─────────────────
-  set render-loading              "true"
-  set render-loading-bg           "#2E3440"
-  set render-loading-fg           "#434C5E"
+  set render-loading              "true"            # De momento, no lo he usado / activado
+  set render-loading-bg           "#2E3440"         # De momento, no lo he usado / activado
+  set render-loading-fg           "#434C5E"         # De momento, no lo he usado / activado
 
 # ───────────────────< Recolor / Inversión >─────────────────
   set recolor-darkcolor           "#061424"         # Color de texto del documento
