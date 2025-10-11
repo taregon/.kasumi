@@ -48,8 +48,8 @@
   set render-loading-fg           "#434C5E"
 
 # ───────────────────< Recolor / Inversión >─────────────────
-  set recolor-darkcolor           "#0b182b"         # Color de texto del documento
-  set recolor-lightcolor          "#C9DBD6"         # Fondo del documento
+  set recolor-darkcolor           "#061424"         # Color de texto del documento
+  set recolor-lightcolor          "#C9DBDA"         # Fondo del documento
 
 # ────────────────────────────────────────────────────────────
 #171531
@@ -63,3 +63,5 @@
 #
 #110618
 #cbd7d1
+#
+#4e0925
