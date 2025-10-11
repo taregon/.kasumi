@@ -1,18 +1,29 @@
+# ███████╗ █████╗ ████████╗██╗  ██╗██╗   ██╗██████╗  █████╗
+# ╚══███╔╝██╔══██╗╚══██╔══╝██║  ██║██║   ██║██╔══██╗██╔══██╗
+#   ███╔╝ ███████║   ██║   ███████║██║   ██║██████╔╝███████║
+#  ███╔╝  ██╔══██║   ██║   ██╔══██║██║   ██║██╔══██╗██╔══██║
+# ███████╗██║  ██║   ██║   ██║  ██║╚██████╔╝██║  ██║██║  ██║
+# ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+
 include kasumi-theme
 
-set font                        "JetBrainsMono Nerd Font 10"
+set adjust-open             "best-fit"
+set database                "null"
+set font                    "JetBrainsMono Nerd Font    medium   10"
+set guioptions              s
+set scroll-step             120
+set selection-clipboard     "clipboard"
+set statusbar-basename      "true"
+set statusbar-home-tilde    "false"
+set statusbar-h-padding     "6"
+set statusbar-v-padding     "4"
+set recolor                 "true"
+set recolor-keephue         "false"
 
-set adjust-open                 "best-fit"
-
-set selection-clipboard         "clipboard"
-# set adjust-open "best-fit"
-
-# set adjust-open width
+# set synctex-editor-command      "nvim"
 
 # set recolor false
 # set selection-clipboard clipboard
-# set statusbar-h-padding 0
-# set statusbar-v-padding 0
 # map u scroll half-up
 # map d scroll half-down
 # map T toggle_page_mode
@@ -24,6 +35,5 @@ set selection-clipboard         "clipboard"
 # map D zoom out
 # map i recolor
 # map p print
-# # set font                        "Jetbrains Mono 9"
 # #prime one
 # map b toggle_statusbar

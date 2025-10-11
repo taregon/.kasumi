@@ -1,40 +1,45 @@
 # ──────────────────────< Notificaciones >──────────────────────
-  set notification-error-bg       "#632e2e"         # Alerta
-  set notification-error-fg       "#fc697c"         # Alerta
-  set notification-warning-bg     "#625347"         # Alerta
-  set notification-warning-fg     "#FFCE80"         # Alerta
   set notification-bg             "#3a474e"         # Mensaje de selección
   set notification-fg             "#c0cdd3"         # Mensaje de selección
 
+  set notification-error-bg       "#632e2e"         # Alerta
+  set notification-error-fg       "#fc697c"         # Alerta
+
+  set notification-warning-bg     "#625347"         # Alerta
+  set notification-warning-fg     "#FFCE80"         # Alerta
+
 # ─────────────────< Completado / Sugerencias >─────────────────
-  set completion-bg               "#2E383E"         # Fondo de la lista de comandos
-  set completion-fg               "#6f9093"         # Texto de la lista de comandos
-  set completion-group-bg         "#3B4252"
-  set completion-group-fg         "#D8DEE9"
-  set completion-highlight-bg     "#badfdc"         # Resaltado de la lista de comandos
+  set completion-bg               "#2E383D"         # Fondo de la lista de comandos
+  set completion-fg               "#A1C4A9"         # Texto de la lista de comandos
+
+  set completion-group-bg         "#2E383D"         # La barra de titulo cuando ejecutas :open
+  set completion-group-fg         "#A1C4A9"         # La barra de titulo cuando ejecutas :open
+
+  set completion-highlight-bg     "#A1C4A9"         # Resaltado de la lista de comandos
   set completion-highlight-fg     "#3B4252"         # Texto dentro del resaltado de comandos
 
 # ──────────────────────────< Índice >──────────────────────────
-  set index-bg                    "#2E383E"
-  set index-fg                    "#87c7c2"
-  set index-active-bg             "#87c7c2"
-  set index-active-fg             "#2E383E"
+  set index-active-bg             "#A1C4A9"         # Indice de saltos dentro del documento
+  set index-active-fg             "#2E383D"         # Indice de saltos dentro del documento
+
+  set index-bg                    "#2E383D"         # Indice de saltos dentro del documento
+  set index-fg                    "#A1C4A9"         # Indice de saltos dentro del documento
 
 # ────────────────────< Barra de comandos >──────────────────
-  set inputbar-bg                 "#59767a"         # Fondo comandos
-  set inputbar-fg                 "#badfdc"         # Texto comandos
+  set inputbar-bg                 "#92ab97"         # Fondo comandos
+  set inputbar-fg                 "#2E383D"         # Texto comandos
 
 # ─────────────────────< Barra de estado >───────────────────
-  set statusbar-bg                "#bbbbbb"
-  set statusbar-fg                "#E5E9F0"
+  set statusbar-bg                "#2E383D"         # Donde sale el numero de pagina
+  set statusbar-fg                "#62717a"         # Donde sale el numero de pagina
 
 # ───────────────────< Resaltado / Búsqueda >───────────────────
-  set highlight-color             "#c4d8e2"         # Fondo del resaltado
-  set highlight-active-color      "#BF616A"
-  set highlight-fg                "#ECEFF0"         # (nuevo) color del texto resaltado
+  set highlight-active-color      "#0b182b"         # Cuando realizas "/" y devuelven muchos resultados
+  set highlight-color             "#dc5349"         # Resaltado de selección y búsqueda
+  set highlight-fg                "#D8DEE9"         # (nuevo) color del texto resaltado
 
 # ────────────────────< Colores generales >──────────────────
-  set default-bg                  "#2E383E"         # Fondo fuera del documento
+  set default-bg                  "#2E383D"         # Fondo fuera del documento
   set default-fg                  "#D8DEE9"
 
 # ───────────────────< Renderizado / Carga >─────────────────
@@ -43,10 +48,18 @@
   set render-loading-fg           "#434C5E"
 
 # ───────────────────< Recolor / Inversión >─────────────────
-  set recolor                     "true"
-  set recolor-lightcolor          "#2E383E"         # Fondo del documento
-  set recolor-darkcolor           "#c0cdd3"         # Color de texto del documento
-  set recolor-keephue             "true"            # (nuevo) mantiene matices originales
+  set recolor-darkcolor           "#0b182b"         # Color de texto del documento
+  set recolor-lightcolor          "#C9DBD6"         # Fondo del documento
 
-# ───────────────────< Opciones de interfaz >───────────────────
-  set guioptions                  ""                # vacío en lugar de "none"
+# ────────────────────────────────────────────────────────────
+#171531
+#061d20
+#101F27
+#04121e
+#c3d3ce
+#
+#062548
+#b7e6e4
+#
+#110618
+#cbd7d1
