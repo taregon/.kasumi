@@ -20,6 +20,11 @@ local toggle_virtual_text = function()
 	end
 end
 
+-- ┌──────────────────────────────────┐
+-- │░█░█░█░█░▀█▀░█▀▀░█░█░░░█░█░█▀▀░█░█│
+-- │░█▄█░█▀█░░█░░█░░░█▀█░░░█▀▄░█▀▀░░█░│
+-- │░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░░░▀░▀░▀▀▀░░▀░│
+-- └──────────────────────────────────┘
 require("which-key").add({
 	-- ──────────────────────< COMMENT BOX >───────────────────────
 	-- Puedes ver mas estilos ejecutando :CBcatalog
@@ -39,7 +44,6 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
 	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
-	{ "<Leader>ti", ":set invlist!<CR>:GitGutterSignsToggle<CR>", desc = "Toggle Special Chars" },
-	{ "<Leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
-	{ "<Leader>tz", "z=", desc = "Sugerencias ortográficas" },
+	{ "<leader>ti", ":set invlist!<CR>:GitGutterSignsToggle<CR>", desc = "Toggle Special Chars" },
+	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
 })
