@@ -8,8 +8,9 @@
 # ╒═════════════════════════════════════════════════════════════╕
 # │                 Configuraciones Adicionales                 │
 # ╘═════════════════════════════════════════════════════════════╛
+include ~/.config/sway/modules/appearance.conf
 exec --no-startup-id ~/.config/sway/helpers/swaybg-random-wall
-
+# ────────────────────────────────────────────────────────────
 exec --no-startup-id nm-applet
 exec mpDris2
 exec mpd
@@ -109,33 +110,6 @@ for_window [app_id="mpv"                                ] floating enable, borde
 for_window [title="(?i)bitwarden"                       ] splitv, move container to workspace current, opacity $opacity_low, exec "sleep 0.05 && swaymsg resize set width 20 ppt"
 for_window [title="Renombrar"                           ] floating enable, sticky enable
 # for_window [app_id="org.pwmt.zathura"                                ] opacity $opacity_low
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │                       Temas de color                        │
-# ╘═════════════════════════════════════════════════════════════╛
-# Borde de ventanas
-set $accent_focus  #5dbdc9
-set $accent_idle   #4b565c
-set $accent_urgent #ffa563
-
-# Fondo de pestañas
-set $bg_focus      #356c73
-set $bg_idle       #2e383d
-set $bg_urgent     #8b6044
-
-# Borde de pestañas
-set $border_focus  #74c6d1
-set $border_idle   #4f5c63
-set $border_urgent #ffb077
-
-# Texto de pestañas
-set $text_focus    #a2d9e0
-set $text_idle     #7a8a94
-set $text_urgent   #ffcba4
-
-client.focused   $border_focus  $bg_focus  $text_focus  $bg_focus  $accent_focus
-client.unfocused $border_idle   $bg_idle   $text_idle   $bg_idle   $accent_idle
-client.urgent    $border_urgent $bg_urgent $text_urgent $bg_urgent $accent_urgent
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                     Gestión de Ventanas                     │
