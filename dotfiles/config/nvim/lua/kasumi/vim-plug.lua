@@ -17,14 +17,11 @@ vim.call("plug#begin")
 Plug("catppuccin/nvim", { ["as"] = "catppuccin" })
 Plug("crispybaccoon/aurora")
 Plug("navarasu/onedark.nvim")
-Plug("profesorpaiche/toytiza.nvim")
-Plug("shawilly/ponokai")
-Plug("vague2k/vague.nvim")
 
 -- ╒═════════════════════════════════════════════════════════╕
 -- │                         PLUGINS                         │
 -- ╘═════════════════════════════════════════════════════════╛
-Plug("LudoPinelli/comment-box.nvim") -- Agrega atajos para comentar con boxes
+Plug("LudoPinelli/comment-box.nvim") -- Agrega cajas de texto / boxes
 Plug("airblade/vim-gitgutter") -- Resalta lineas con cambios git
 Plug("akinsho/bufferline.nvim") -- Muestra los buffer en pestañas
 Plug("echasnovski/mini.nvim") -- Pack de módulos. Tengo varios en uso
@@ -40,17 +37,20 @@ Plug("nvim-treesitter/nvim-treesitter", { ["do"] = ":TSUpdate" }) -- Syntax High
 Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
 Plug("petertriho/nvim-scrollbar") -- Barra de scroll
 
--- PLUGINS que no requieren "require" obligatoriamente
 -- ────────────────────────────────────────────────────────────
-Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
--- Plug("DaikyXendo/nvim-material-icon") -- Alternativa a nvim-web-devicons
+-- PLUGINS que no requieren "require" obligatoriamente
+--
 Plug("MunifTanjim/nui.nvim") -- Depende: neo-tree
 Plug("mechatroner/rainbow_csv") -- Colora archivos CSV
 Plug("mhinz/vim-startify") -- Dashboard
+Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
+Plug("sindrets/diffview.nvim") -- Ajustes en settins.lua  Presiona F5 (sin require)
 Plug("tpope/vim-fugitive") -- Habilita comandos de git
+Plug("vague2k/vague.nvim") -- Agrega nuevas variaciones de text case
 
--- PLUGINS relacionados con LSP
 -- ────────────────────────────────────────────────────────────
+-- PLUGINS relacionados con LSP
+--
 Plug("SmiteshP/nvim-navic") -- Winbar que usa LSP
 Plug("WhoIsSethDaniel/mason-tool-installer.nvim") -- Le indicas a mason que linter o formatter instalar
 Plug("j-hui/fidget.nvim") -- Barra de carga, para los lsp. Aparece en la esquina abajo
@@ -77,12 +77,14 @@ Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencia
 -- │                       Probando FIX                        │
 -- ╘═══════════════════════════════════════════════════════════╛
 -- Plug("folke/todo-comments.nvim") -- Resalta las lineas con comentarios
-Plug("nvim-telescope/telescope-fzf-native.nvim", { ["do"] = "make" })
-Plug("nvim-telescope/telescope-live-grep-args.nvim")
-Plug("nvim-telescope/telescope.nvim", { tag = "0.1.x" })
-Plug("sindrets/diffview.nvim") -- sin require
-Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se)
-Plug("supermaven-inc/supermaven-nvim")
+-- Plug("nvim-telescope/telescope-fzf-native.nvim", { ["do"] = "make" })
+-- Plug("nvim-telescope/telescope-live-grep-args.nvim")
+-- Plug("nvim-telescope/telescope.nvim", { tag = "0.1.x" })
+-- Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se) y ya pa que, lo archivaron
+-- Plug("supermaven-inc/supermaven-nvim")
+Plug("smoka7/multicursors.nvim") -- Editar multiples lineas
 Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
 
+-- ────────────────────────────────────────────────────────────
+-- FIN
 vim.call("plug#end")
