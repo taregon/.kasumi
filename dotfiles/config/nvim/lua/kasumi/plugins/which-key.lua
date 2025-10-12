@@ -7,6 +7,19 @@ require("which-key").setup({
 })
 require("which-key.health").check()
 
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │            Función para alternar virtual text             │
+-- ╘═══════════════════════════════════════════════════════════╛
+local toggle_virtual_text = function()
+	local current = vim.diagnostic.config().virtual_text
+	vim.diagnostic.config({ virtual_text = not current })
+	if not current then
+		vim.notify("Virtual text ACTIVADO")
+	else
+		vim.notify("Virtual text DESACTIVADO")
+	end
+end
+
 require("which-key").add({
 	-- ──────────────────────< COMMENT BOX >───────────────────────
 	-- Puedes ver mas estilos ejecutando :CBcatalog
@@ -19,4 +32,14 @@ require("which-key").add({
 	{ "<leader>cb", ":CBlcbox8<CR>", desc = "Box" },
 	{ "<leader>cl", ":CBline<CR>", desc = "Line" },
 	{ "<leader>cr", ":CBd<CR>", desc = "Remove", mode = "v" },
+	-- ───────────────────────< DIAGNOSTICS >───────────────────────
+	-- Debido a nuevas actualizaciones, los mensajes del linter / LSP
+	-- ya no se muestran así que se activan por atajos
+	{ "<leader>t", group = "󰂖  Diagnostic", mode = { "n", "v" } },
+	-- ────────────────────────────────────────────────────────────
+	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
+	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
+	{ "<Leader>ti", ":set invlist!<CR>:GitGutterSignsToggle<CR>", desc = "Toggle Special Chars" },
+	{ "<Leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
+	{ "<Leader>tz", "z=", desc = "Sugerencias ortográficas" },
 })
