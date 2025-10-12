@@ -8,15 +8,14 @@
 # ╒═════════════════════════════════════════════════════════════╕
 # │                 Configuraciones Adicionales                 │
 # ╘═════════════════════════════════════════════════════════════╛
-include /etc/sway/config-vars.d/*
-include /etc/sway/config.d/*
+exec --no-startup-id ~/.config/sway/helpers/swaybg-random-wall
 
 exec --no-startup-id nm-applet
 exec mpDris2
 exec mpd
 exec wl-paste --type images --watch cliphist store
 exec wl-paste --type text --watch cliphist store
-exec ~/.config/sway/scripts/bg_random_auto
+# exec ~/.config/sway/scripts/bg_random_auto
 exec ~/.config/sway/scripts/sleep
 
 # ╒═════════════════════════════════════════════════════════════╕
