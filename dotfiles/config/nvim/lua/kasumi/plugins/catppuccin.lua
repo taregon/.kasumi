@@ -21,7 +21,7 @@ require("catppuccin").setup({
 			mauve     = "#ff9dcd", -- Barra (visual) | Comando (set, remap), loading [=== ].
 			peach     = "#ffcf94", -- Barra (comando) | Valores
 			yellow    = "#f8e084", -- ALERTA Warning
-			green     = "#addd92", -- Barra (insert) | ALERTA | STRINGS
+			green     = "#90bf9d", -- Barra (insert) | ALERTA | STRINGS
 			teal      = "#89DCEB", -- (plug)
 			sky       = "#f8a984", -- < =  > >> is not or
 			maroon    = "#b3a7e5", -- Opciones en scripts
