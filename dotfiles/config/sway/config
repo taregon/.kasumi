@@ -5,10 +5,6 @@
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 
-# ╒═════════════════════════════════════════════════════════════╕
-# │                 Configuraciones Adicionales                 │
-# ╘═════════════════════════════════════════════════════════════╛
-include ~/.config/sway/modules/appearance.conf
 exec --no-startup-id ~/.config/sway/helpers/swaybg-random-wall
 # ────────────────────────────────────────────────────────────
 exec --no-startup-id nm-applet
@@ -22,11 +18,11 @@ exec ~/.config/sway/scripts/sleep
 # ╒═════════════════════════════════════════════════════════════╕
 # │                          VARIABLES                          │
 # ╘═════════════════════════════════════════════════════════════╛
-set $mod Mod4
+set $mod   Mod4
 
-set $left h
-set $down j
-set $up k
+set $left  h
+set $down  j
+set $up    k
 set $right l
 
 set $launcher wofi -show drun
@@ -36,8 +32,7 @@ set $colorpicker hyprpicker --autocopy
 set $browser firefox
 set $filemanager thunar
 
-set $opacity 0.88
-set $opacity_low 0.97
+floating_modifier $mod
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                      ATAJOS DE TECLADO                      │
@@ -65,117 +60,12 @@ bindsym Print                 exec ~/.config/sway/scripts/rofi_screenshot
 bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
 bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
 
-# ╒═════════════════════════════════════════════════════════════╕
-# │                     Apariencia y Bordes                     │
-# ╘═════════════════════════════════════════════════════════════╛
-# Puedes jugar con valores temporales
-# swaymsg gaps outer current set 8
-# swaymsg gaps inner all set 8
-default_border          pixel 2
-default_floating_border pixel 2
-gaps inner 6
-gaps outer 2
-smart_gaps    off
-smart_borders off
-font pango:JetbrainsMono Nerd Font 10
     # Lock screen
     # bindsym $mod+l exec hyprlock
 # exec /usr/bin/lxpolkit
 # exec mako
 # exec nm-applet --indicator
 # nm-applet
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │                     Reglas de ventanas                      │
-# ╘═════════════════════════════════════════════════════════════╛
-# Para encontrar nombres de los procesos, ejecuta:
-# swaymsg -t get_tree | grep app_id
-# swaymsg -t get_tree | jq -c '.nodes[].nodes[].nodes[] | {id, app_id, name}'
-# swaymsg -t get_tree | jq '.. | objects | select(.name? != null and .id? != null) | {name, app_id, id, focused, urgent}'
-# swaymsg "[con_id=30] urgent enable"
-
-floating_modifier $mod
-for_window [app_id="engrampa"                           ] floating enable
-for_window [app_id="firefox" title="Picture-in-Picture" ] floating enable, sticky enable, move position top left
-for_window [app_id="firefox"                            ] inhibit_idle fullscreen
-for_window [app_id="nm-connection-editor"               ] floating enable
-for_window [app_id="org.telegram.desktop"               ] move container to workspace number 6, focus
-for_window [app_id="pavucontrol"                        ] floating enable
-for_window [app_id="ristretto"                          ] floating enable
-for_window [app_id="thunar"                             ] move container to workspace number 3, focus, opacity $opacity
-for_window [app_id="xed"                                ] opacity $opacity
-for_window [class="vlc"                                 ] floating enable
-for_window [app_id="imv"                                ] floating enable, border pixel 1, resize set 1343 756, move position center
-for_window [app_id="mpv"                                ] floating enable, border pixel 1, resize set 1343 756, move position center
-for_window [title="(?i)bitwarden"                       ] splitv, move container to workspace current, opacity $opacity_low, exec "sleep 0.05 && swaymsg resize set width 20 ppt"
-for_window [title="Renombrar"                           ] floating enable, sticky enable
-# for_window [app_id="org.pwmt.zathura"                                ] opacity $opacity_low
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │                     Gestión de Ventanas                     │
-# ╘═════════════════════════════════════════════════════════════╛
-bindsym $mod+$left        focus      left
-bindsym $mod+$down        focus      down
-bindsym $mod+$up          focus      up
-bindsym $mod+$right       focus      right
-bindsym $mod+Shift+$left  move       left
-bindsym $mod+Shift+$down  move       down
-bindsym $mod+Shift+$up    move       up
-bindsym $mod+Shift+$right move       right
-# ────────────────────────────────────────────────────────────
-bindsym $mod+Shift+minus  move       scratchpad
-bindsym $mod+Shift+space  floating   toggle
-bindsym $mod+minus        scratchpad show
-bindsym $mod+space        focus      mode_toggle
-# ────────────────────────────────────────────────────────────
-bindsym $mod+a            focus      parent
-bindsym $mod+b            splith
-bindsym $mod+e            layout     toggle split
-bindsym $mod+f            fullscreen
-bindsym $mod+s            layout     stacking
-bindsym $mod+v            splitv
-bindsym $mod+w            layout     tabbed
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │                     Espacios de Trabajo                     │
-# ╘═════════════════════════════════════════════════════════════╛
-bindsym $mod+0 workspace number 10
-bindsym $mod+1 workspace number 1
-bindsym $mod+2 workspace number 2
-bindsym $mod+3 workspace number 3
-bindsym $mod+4 workspace number 4
-bindsym $mod+5 workspace number 5
-bindsym $mod+6 workspace number 6
-bindsym $mod+7 workspace number 7
-bindsym $mod+8 workspace number 8
-bindsym $mod+9 workspace number 9
-# ────────────────────────────────────────────────────────────
-bindsym $mod+Shift+0 move container to workspace number 10
-bindsym $mod+Shift+1 move container to workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5
-bindsym $mod+Shift+6 move container to workspace number 6
-bindsym $mod+Shift+7 move container to workspace number 7
-bindsym $mod+Shift+8 move container to workspace number 8
-bindsym $mod+Shift+9 move container to workspace number 9
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │               Re-dimensionamiento de Ventanas               │
-# ╘═════════════════════════════════════════════════════════════╛
-mode "resize" {
-    bindsym $left  resize shrink width  60px
-    bindsym $down  resize grow   height 60px
-    bindsym $up    resize shrink height 60px
-    bindsym $right resize grow   width  60px
-    bindsym Left   resize shrink width  10px
-    bindsym Down   resize grow   height 10px
-    bindsym Up     resize shrink height 10px
-    bindsym Right  resize grow   width  10px
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                       Barra de estado                       │
@@ -191,3 +81,15 @@ input type:keyboard {
     xkb_layout  latam,us
     xkb_options grp:alt_shift_toggle
 }
+
+# ╒═════════════════════════════════════════════════════════════╕
+# │                 Configuraciones Adicionales                 │
+# ╘═════════════════════════════════════════════════════════════╛
+# No muevas esta sección o sino cuando cargue la configuración,
+# no sabrán que teclas asignaste
+#
+include ~/.config/sway/modules/appearance.conf
+include ~/.config/sway/modules/keybinds-navigation.conf
+include ~/.config/sway/modules/keybinds-resize.conf
+include ~/.config/sway/modules/windows-floating.conf
+include ~/.config/sway/modules/workspaces.conf
