@@ -93,6 +93,10 @@ dotfiles:
     src: config/zathura
     dst: ~/.config/zathura
     link: absolute
+  f_nanorc:
+    src: nanorc
+    dst: ~/.nanorc
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -103,6 +107,7 @@ profiles:
       - f_kitty
       - f_kitty_theme
       - f_lazygit
+      - f_nanorc
       - f_rc.conf
       - f_redshift
       - f_tmux
