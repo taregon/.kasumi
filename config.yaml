@@ -1,14 +1,14 @@
 ---
-actions:
-  pre:
-    nvim-plug-install: '[ ! -e "$HOME/.local/share/nvim/site/autoload/plug.vim" ] && mkdir -p "$HOME/.local/share/nvim/site/autoload"
-      && curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  post:
-    nvim-update: nvim --headless +PlugInstall +qall
+# Todos los ajustes
+# https://dotdrop.readthedocs.io/en/latest/config/config-config/
+#
 config:
-  backup: true
   create: true
   dotpath: dotfiles
+  link_dotfile_default: absolute
+  import_actions:
+    - actions.d/nano.yaml
+    - actions.d/nvim.yaml
 dotfiles:
   f_cava:
     src: config/cava/kasumi-cava.conf
@@ -97,6 +97,8 @@ dotfiles:
     src: nanorc
     dst: ~/.nanorc
     link: absolute
+    actions:
+      - dir-nano-backup
 profiles:
   kasumi:
     dotfiles:
@@ -123,5 +125,5 @@ profiles:
     dotfiles:
       - d_sway
       - d_swaylock
-      - d_wofi
       - d_waybar
+      - d_wofi
