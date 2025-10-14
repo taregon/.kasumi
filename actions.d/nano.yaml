@@ -1,0 +1,3 @@
+---
+actions:
+  dir-nano-backup: mkdir -p ~/.cache/nano/backups/
