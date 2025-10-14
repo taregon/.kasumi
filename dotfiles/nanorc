@@ -1,0 +1,25 @@
+# ███╗   ██╗ █████╗ ███╗   ██╗ ██████╗
+# ████╗  ██║██╔══██╗████╗  ██║██╔═══██╗
+# ██╔██╗ ██║███████║██╔██╗ ██║██║   ██║
+# ██║╚██╗██║██╔══██║██║╚██╗██║██║   ██║
+# ██║ ╚████║██║  ██║██║ ╚████║╚██████╔╝
+# ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝
+
+# Habilitar todos los resaltados provistos por el sistema
+include "/usr/share/nano/*.nanorc"
+include "/usr/share/nano/extra/*.nanorc"
+
+# ╒═════════════════════════════════════════════════════════════╕
+# │                       COMPORTAMIENTO                        │
+# ╘═════════════════════════════════════════════════════════════╛
+# set constantshow      # mostrar posición del cursor en la barra de estado
+# set linenumbers       # mostrar números de línea a la izquierda
+# set minibar           # mostrar barra de estado compacta
+# set mouse             # permitir uso del ratón en terminales compatibles
+
+set autoindent          # mantener la indentación de la línea anterior al crear una nueva
+set indicator           # mostrar barra lateral con posición de desplazamiento
+set positionlog         # recordar la posición del cursor al volver a abrir un archivo
+set softwrap            # mostrar líneas largas completas sin insertar saltos reales
+set tabsize 4           # definir ancho de tabulación en 4 espacios
+set tabstospaces        # convertir tabulaciones en espacios al escribir
