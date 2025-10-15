@@ -25,6 +25,10 @@
   set tabsize 4           # definir ancho de tabulación en 4 espacios
   set tabstospaces        # convertir tabulaciones en espacios al escribir
 
+# Copias de seguridad
+  set backup                              # Crear una copia de seguridad del archivo antes de sobrescribirlo
+  set backupdir "~/.cache/nano/backups/"  # Directorio donde se guardarán las copias de seguridad
+
   set titlecolor brightwhite,blue
 #set selectedcolor brightwhite,magenta
 #set statuscolor brightwhite,black
