@@ -1,3 +1,6 @@
 ---
+# Crea una carpeta donde guardar las copias de seguridad
+# las cuales indique en nanorc. Sino existe, te va a dar error
+#
 actions:
   dir-nano-backup: mkdir -p ~/.cache/nano/backups/
