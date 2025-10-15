@@ -1,2 +1,10 @@
-vim.g.mapleader = "," -- Define la tecla líder. Puedes revisar con :echo mapleader
+-- ┌────────────────────────────────────┐
+-- │░█▄█░█▀█░█▀█░█░░░█▀▀░█▀█░█▀▄░█▀▀░█▀▄│
+-- │░█░█░█▀█░█▀▀░█░░░█▀▀░█▀█░█░█░█▀▀░█▀▄│
+-- │░▀░▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀░▀░▀▀░░▀▀▀░▀░▀│
+-- └────────────────────────────────────┘
+-- Define la tecla líder. Puedes revisar con :echo mapleader
+vim.g.mapleader = ","
+
+-- Cargas mis ajustes en lua
 require("kasumi")
