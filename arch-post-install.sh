@@ -49,6 +49,8 @@ paru -S --needed \
     ttf-pragmasevka-nerd-font \
     ttf-signika \
     ttf-sofia-sans
+# Este  entra en conflicto con ttf-ms-fonts
+paru -S ttf-ms-win10-auto
 # ────────────────────────────────────────────────────────────
 echo ">> Herramientas del sistema"
 sudo pacman -S --needed \
