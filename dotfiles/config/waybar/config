@@ -183,8 +183,8 @@
     "tooltip": false
   },
   "bluetooth": {
-    "format": "󰂯",                           // Encendido sin conexión
-    "format-disabled": "󰂲",                  // Apagado
+    "format": " 󰂯 ",                           // Encendido sin conexión
+    "format-disabled": " 󰂲 ",                  // Apagado
     "format-connected": " {device_alias}", // Dispositivo conectado
     "tooltip-format": "Dispositivos conectados: {num_connections}",
     "on-click": "blueman-manager"
@@ -238,10 +238,9 @@
   },
   "custom/pacman": {
     "format": " {}",
-    "interval": 7200,                                // Cada 2 horas
-    "exec": "i=$(checkupdates); echo \"$i\" |wc -l; echo \"$i\" |column -t |tr '\n' '\r'",
-    "exec-if": "exit 0",                             // Ejecutar siempre
-    "on-click": "kitty -e sudo pacman -Syu",         // Actualizar sistema
+    "interval": 300,
+    "exec": "~/.config/sway/helpers/check-updates",
+    "on-click": "kitty -e sudo pacman -Syu",
     "signal": 8
   },
   "custom/launcher": {
