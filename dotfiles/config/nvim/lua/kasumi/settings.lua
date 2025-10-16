@@ -13,7 +13,6 @@ opt.termguicolors = true -- Activa los colores de terminal de 24 bits
 -- │                          AJUSTES                          │
 -- ╘═══════════════════════════════════════════════════════════╛
 opt.cursorline = true -- Resalta la línea actual
-opt.foldmethod = "manual" -- Método manual de plegado
 opt.lazyredraw = true -- No actualizar la pantalla durante la ejecución de macros y scripts
 opt.number = true -- Mostrar el número de línea actual (absoluto)
 opt.pumblend = 6 -- Transparencia del Pop-up
@@ -76,13 +75,13 @@ opt.listchars = {
 -- │                   CARACTERES DE RELLENO                   │
 -- ╘═══════════════════════════════════════════════════════════╛
 opt.fillchars = {
-	-- foldsep = "│",
 	-- msgsep = "‾",
 	diff = "",
 	eob = " ", -- Suprime el carácter "~" EndOfBuffer
 	fold = "🮥", -- Queda bonito por que sirve de relleno en la barra del diff
-	foldclose = "",
-	foldopen = "",
+	foldclose = " ",
+	foldopen = "🭬",
+	foldsep = "🮨",
 	vert = "▕", --Carácter vertical (vsplit)
 }
 
@@ -120,7 +119,11 @@ opt.wildignore = {
 -- │             AJUSTES PARA EL PLEGADO DE TEXTO              │
 -- ╘═══════════════════════════════════════════════════════════╛
 -- Se aprecia cuando presionas F5 para el git diff
-opt.foldenable = false -- Deshabilita el plegado de forma predeterminada
+opt.foldenable = true -- Habilita el plegado de forma predeterminada
+opt.foldmethod = "expr" -- Método de plegado
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99 -- todos los folds abiertos al inicio
+opt.foldcolumn = "auto"
 --   ___       __    __
 -- .'  _.-----|  .--|  |
 -- |   _|  _  |  |  _  |
