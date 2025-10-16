@@ -1,0 +1,8 @@
+#!/bin/bash
+# Contar paquetes pendientes de actualizar (repos + AUR)
+
+arch=$(checkupdates 2> /dev/null | wc -l)
+aur=$(paru -Qum 2> /dev/null | wc -l)
+number=$((arch + aur))
+
+echo $number
