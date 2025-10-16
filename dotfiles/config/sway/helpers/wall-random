@@ -1,0 +1,28 @@
+#!/bin/bash
+# ╒════════════════════════════════════════════════════════════╕
+# │          Cambia el fondo automáticamente en Sway           │
+# ╘════════════════════════════════════════════════════════════╛
+#
+INTERVAL=120 # Ajustar según necesidad
+BACKGROUND_DIR="$HOME/.config/sway/backgrounds"
+
+# Función para aplicar un fondo aleatorio
+set_random_wallpaper() {
+    # Elegir imagen aleatoria
+    local random_image
+    random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
+
+    # Matar instancia anterior de swaybg
+    pkill -x swaybg
+
+    # Aplicar fondo en todos los monitores activos
+    for output in $(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .name'); do
+        swaybg -o "$output" -i "$random_image" -m fill &
+    done
+}
+
+# Bucle principal
+while true; do
+    set_random_wallpaper
+    sleep "$INTERVAL"
+done
