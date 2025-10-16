@@ -5,7 +5,7 @@
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 
-exec --no-startup-id ~/.config/sway/helpers/swaybg-random-wall
+exec --no-startup-id ~/.config/sway/helpers/wall-random
 # ────────────────────────────────────────────────────────────
 exec --no-startup-id nm-applet
 exec mpDris2
