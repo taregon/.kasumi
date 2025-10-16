@@ -11,7 +11,7 @@ while [ $i -lt ${#bar} ]; do
 done
 
 # write cava config
-config_file=~/.config/cava/kasumi-cava.conf
+config_file=~/.config/cava/cava-waybar.conf
 echo "
 [general]
 bars = 18
