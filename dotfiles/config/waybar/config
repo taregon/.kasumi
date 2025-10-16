@@ -1,11 +1,12 @@
+// vim: filetype=jsonc
 {
   // --------------------------------------------------
   // General bar configuration
   // --------------------------------------------------
-  "layer": "top",                        // Waybar sobre todas las capas
-  "position": "top",                     // Posición: top | bottom | left | right
-  "height": 20,                          // Altura de la barra
-  "margin": "0 0 0 0",                   // Márgenes exteriores
+  "layer": "top", // Waybar sobre todas las capas
+  "position": "top", // Posición: top | bottom | left | right
+  "height": 20, // Altura de la barra
+  "margin": "0 0 0 0", // Márgenes exteriores
   // "width": 1350,                      // (Opcional) Ancho de la barra
 
   // --------------------------------------------------
@@ -45,22 +46,27 @@
   // Sway modules
   // --------------------------------------------------
   "sway/workspaces": {
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": [],
+      "9": [],
+      "10": []
+    },
     "all-outputs": true,
     "format": "{icon}",
     "format-icons": {
       "1": "",
       "2": "",
       "3": "",
-      "4": "󰨞",
-      "5": "",
-      "6": "",
-      "7": "",
-      "8": "",
-      "9": "",
-      "10": "",
       "urgent": "  ",
       "focused": "  ",
-      "default": "  "
+      "default": "  "
     }
   },
   "sway/mode": {
@@ -122,44 +128,38 @@
     "exec": "mpc current --format='\"title\":\"%title%\",\"artist\":\"%artist%\"'"
   },
   "custom/cava-internal": {
-    "exec": "sh ~/.config/waybar/scripts/cava.sh",
     "format": "{}",
-    "tooltip": false,
-    "on-click": "swaymsg reload & pkill waybar & waybar",
-    "layer": "below",
-    "output": "all"
+    "exec": "~/.config/sway/helpers/cava-bar",
+    "on-click": "swaymsg reload & pkill waybar & waybar"
   },
 
-  // --------------------------------------------------
-  // System resources
-  // --------------------------------------------------
-  "cpu": {
-    "format": " {usage}%",
-    "on-click": "kitty -e gtop"
-  },
-  "memory": {
-    "format": " {}%",
-    "on-click": "kitty -e gtop"
-  },
-  "temperature": {
-    "critical-threshold": 80,
-    "format-critical": " {temperatureC}°C",
-    "format": " {temperatureC}°C",
-    "on-click": "kitty -e sensors"
-  },
+// ╒═══════════════════════════════════════════════════════════╕
+// │                     System resources                      │
+// ╘═══════════════════════════════════════════════════════════╛
   "backlight": {
-    "format": "{icon} {percent: >1}%",
-    "format-icons": ["", ""],
-    "on-scroll-down": "brightnessctl -c backlight set 5%-",
-    "on-scroll-up": "brightnessctl -c backlight set +5%"
+      "format": "{icon} {percent: >1}%",
+      "format-icons": ["", ""],
+      "on-scroll-down": "brightnessctl -c backlight set 5%-",
+      "on-scroll-up": "brightnessctl -c backlight set +5%"
   },
   "battery": {
-    "states": {
-      "warning": 30,
-      "critical": 15
-    },
-    "format": "{icon} {capacity: >3}%",
-    "format-icons": ["", "", "", "", ""]
+      "states": { "warning": 30, "critical": 15 },
+      "format": "{icon} {capacity: >3}%",
+      "format-icons": ["", "", "", "", ""]
+  },
+  "cpu": {
+      "format": " {usage}%",
+      "on-click": "kitty -e gtop"
+  },
+  "memory": {
+      "format": " {}%",
+      "on-click": "kitty -e gtop"
+  },
+  "temperature": {
+      "critical-threshold": 80,
+      "format-critical": " {temperatureC}°C",
+      "format": " {temperatureC}°C",
+      "on-click": "kitty -e sensors"
   },
 
   // --------------------------------------------------
@@ -183,8 +183,8 @@
     "tooltip": false
   },
   "bluetooth": {
-    "format": " 󰂯 ",                           // Encendido sin conexión
-    "format-disabled": " 󰂲 ",                  // Apagado
+    "format": " 󰂯 ", // Encendido sin conexión
+    "format-disabled": " 󰂲 ", // Apagado
     "format-connected": " {device_alias}", // Dispositivo conectado
     "tooltip-format": "Dispositivos conectados: {num_connections}",
     "on-click": "blueman-manager"
@@ -240,7 +240,7 @@
     "format": " {}",
     "interval": 300,
     "exec": "~/.config/sway/helpers/check-updates",
-    "on-click": "kitty -e sudo pacman -Syu",
+    "on-click": "kitty -e paru -Syu",
     "signal": 8
   },
   "custom/launcher": {
