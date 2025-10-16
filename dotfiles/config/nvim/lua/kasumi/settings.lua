@@ -81,7 +81,7 @@ opt.fillchars = {
 	fold = "🮥", -- Queda bonito por que sirve de relleno en la barra del diff
 	foldclose = " ",
 	foldopen = "🭬",
-	foldsep = "🮨",
+	foldsep = " ",
 	vert = "▕", --Carácter vertical (vsplit)
 }
 
@@ -123,7 +123,7 @@ opt.foldenable = true -- Habilita el plegado de forma predeterminada
 opt.foldmethod = "expr" -- Método de plegado
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevel = 99 -- todos los folds abiertos al inicio
-opt.foldcolumn = "auto"
+opt.foldcolumn = "auto" -- Muestra columna de folds solo si hay folds en el buffer
 --   ___       __    __
 -- .'  _.-----|  .--|  |
 -- |   _|  _  |  |  _  |
@@ -131,11 +131,20 @@ opt.foldcolumn = "auto"
 --
 -- Definir la función personalizada para el texto del fold
 function CustomFoldText()
+	-- Obtener la primera línea del fold (nombre de función, condicional, etc.)
+	local line = vim.fn.getline(vim.v.foldstart)
+
+	-- Calcular tamaño del fold
 	local fold_size = 1 + vim.v.foldend - vim.v.foldstart
-	local fold_size_str = " " .. fold_size .. " lines "
+	local fold_size_str = " " .. fold_size .. " │ "
+
+	-- Decoración con foldlevel
 	local fold_level_str = string.rep("🮤🮤🮤  ", vim.v.foldlevel)
-	return fold_level_str .. fold_size_str
+
+	-- Combinar decoración y primera línea del fold
+	return fold_level_str .. fold_size_str .. line
 end
+
 opt.foldtext = "v:lua.CustomFoldText()"
 
 -- ╒═══════════════════════════════════════════════════════════╕
