@@ -30,4 +30,5 @@ sudo sh -c "printf '# Fondo\nwallpaper: boot():/EFI/limine/wallpaper.jpg\nwallpa
 echo "  Copiando wallpaper a: $WALLPAPER_DST"
 sudo cp "$WALLPAPER_SRC" "$WALLPAPER_DST"
 
+echo
 echo "  Actualización completada."
