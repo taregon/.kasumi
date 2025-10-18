@@ -88,8 +88,8 @@ input type:keyboard {
 # No muevas esta sección o sino cuando cargue la configuración,
 # no sabrán que teclas asignaste
 #
-include ~/.config/sway/modules/appearance.conf
-include ~/.config/sway/modules/keybinds-navigation.conf
-include ~/.config/sway/modules/keybinds-resize.conf
-include ~/.config/sway/modules/windows-floating.conf
-include ~/.config/sway/modules/workspaces.conf
+include ~/.config/sway/sway.d/appearance.conf
+include ~/.config/sway/sway.d/keybinds-navigation.conf
+include ~/.config/sway/sway.d/keybinds-resize.conf
+include ~/.config/sway/sway.d/windows-floating.conf
+include ~/.config/sway/sway.d/workspaces.conf
