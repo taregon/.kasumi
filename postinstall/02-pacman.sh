@@ -14,10 +14,10 @@ add_opt() {
     # Verificar si la opción ya existe (sin el valor)
     opt=$(echo "$line" | cut -d '=' -f1)
 
-    if ! grep -q -E "^$opt=" "$CONF"; then
+    if ! grep -q -E "^$opt" "$CONF"; then
         # Inserta después de la línea [options]
         sudo sed -i "/^\[options\]/a $line" "$CONF"
-        echo "  Opción agregada: $line"
+        echo "  Opción agregada: $opt"
     else
         echo "  Opción ya existe: $opt"
     fi
