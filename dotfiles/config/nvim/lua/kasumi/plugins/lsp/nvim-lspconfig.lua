@@ -77,7 +77,8 @@ vim.lsp.config["lua_ls"] = {
 				globals = { "vim" },
 			},
 			workspace = {
-				library = vim.api.nvim_get_runtime_file("", true),
+				-- library = vim.api.nvim_get_runtime_file("", true), -- Esta linea eleva el CPU
+				library = { [vim.fn.stdpath("config")] = true }, -- limita el diagnostico a ~/.config/nvim/
 				checkThirdParty = false,
 			},
 			telemetry = {
