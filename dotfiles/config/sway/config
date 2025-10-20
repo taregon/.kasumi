@@ -5,8 +5,7 @@
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 
-exec --no-startup-id ~/.config/sway/helpers/wall-random
-# ────────────────────────────────────────────────────────────
+# NOTA: debes mover estos exec al archivo autostart
 exec --no-startup-id nm-applet
 exec mpDris2
 exec mpd
@@ -89,6 +88,7 @@ input type:keyboard {
 # no sabrán que teclas asignaste
 #
 include ~/.config/sway/sway.d/appearance.conf
+include ~/.config/sway/sway.d/autostart.conf
 include ~/.config/sway/sway.d/keybinds-navigation.conf
 include ~/.config/sway/sway.d/keybinds-resize.conf
 include ~/.config/sway/sway.d/windows-floating.conf
