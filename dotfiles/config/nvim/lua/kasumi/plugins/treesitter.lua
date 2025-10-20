@@ -62,7 +62,7 @@ require("nvim-treesitter.configs").setup({
 		additional_vim_regex_highlighting = false, -- Solo se aplicarán las reglas de Treesitter,
 	},
 	-- https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#indentation
-	indent = { enable = false }, -- Desactiva la indentación automática
+	indent = { enable = true }, -- Habilita la indentación. EXPERIMENTAL
 })
 
 -- Este plugin muestra el CONTEXTO actual en la parte superior de la ventana mientras navegas por el código.
