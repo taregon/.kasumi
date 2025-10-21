@@ -31,16 +31,48 @@ instalar() {
 
 # ─[ FASTEST MIRRORS ]────────────────────────────────────────
 update_mirror() {
-    echo ">> Estableciendo los 20 mirrors mas rapidos"
+    echo ">> Estableciendo los 20 mirrors más rápidos"
     sudo pacman -S --needed reflector
     sudo reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 }
 
+# ─[ COMPROBACIONES INICIALES ]────────────────────────────────
+# Verificación del entorno y condiciones previas de instalación
+prepare_system() {
+    echo ">> Comprobando conexión a Internet"
+    if ping -c 1 archlinux.org &> /dev/null; then
+        echo "✅ Conexión activa"
+    else
+        echo "⚠️ No hay conexión a Internet. Revisa tu red antes de continuar."
+        return 1
+    fi
+
+    echo ">> Actualizando el sistema"
+    sudo pacman -Syu
+
+    echo ">> Verificando configuración de idioma y teclado"
+    localectl status
+
+    echo ">> Verificando disponibilidad de paru"
+    if ! command -v paru &> /dev/null; then
+        echo "⚠️ Paru no está instalado. Se recomienda instalarlo antes de continuar."
+        return 1
+    fi
+
+    echo ">> Comprobando sincronización de reloj"
+    timedatectl show | grep "NTPSynchronized=yes" &> /dev/null || {
+        echo "⚠️ NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true"
+    }
+
+    echo ">> VERIFICACIÓN DEL SISTEMA COMPLETADA"
+}
+
 # ╒════════════════════════════════════════════════════════════╕
-# │                    FUNCIONES POR AREAS                     │
+# │                    FUNCIONES POR ÁREAS                     │
 # ╘════════════════════════════════════════════════════════════╛
+
 install_fonts() {
-    echo ">> Instalando fuentes y tipografias"
+    echo ">> Instalando fuentes y tipografías"
     local pkgs=(
         noto-fonts-cjk
         noto-fonts-emoji
@@ -48,12 +80,12 @@ install_fonts() {
         ttf-jetbrains-mono-nerd
         ttf-recursive-nerd
 
-        #  Fuentes de windows
-        #  Este  entra en conflicto con ttf-ms-fonts
-        #  que a su ves es mas básico, menos fuentes.
+        # Fuentes de Windows
+        # Este entra en conflicto con ttf-ms-fonts,
+        # que a su vez es más básico (menos fuentes).
         ttf-ms-win10-auto
 
-        # Estas las puedes omitir
+        # Fuentes opcionales
         fontforge
         ttf-alegreya-sans
         ttf-pragmasevka-nerd-font
@@ -79,19 +111,18 @@ install_ranger() {
 }
 
 install_zathura() {
-    echo "Instalando visor pdf y complementos ocr "
+    echo ">> Instalando visor PDF y complementos OCR"
     local pkgs=(
         zathura            # Visor de documentos ligero
         zathura-pdf-mupdf  # Backend para abrir archivos PDF en Zathura
         tesseract-data-eng # Datos de reconocimiento OCR en inglés
         tesseract-data-spa # Datos de reconocimiento OCR en español
-
     )
     instalar "${pkgs[@]}"
 }
 
 install_network_manager() {
-    echo "Instalando networkmanager y complementos"
+    echo ">> Instalando NetworkManager y complementos"
     local pkgs=(
         networkmanager         # Servicio principal para gestionar redes
         networkmanager-openvpn # Soporte para conexiones VPN (OpenVPN)
@@ -103,7 +134,7 @@ install_network_manager() {
 }
 
 install_system_tools() {
-    echo "Instalando herramientas del sistema y utilidades Wayland "
+    echo ">> Instalando herramientas del sistema y utilidades Wayland"
     local pkgs=(
         # Monitoreo y sensores
         btop       # Monitor de sistema
@@ -119,7 +150,7 @@ install_system_tools() {
         grim         # Captura de pantalla para Wayland
         hyprpicker   # Selector de color Wayland
         mako         # Demonio de notificaciones para Wayland
-        wl-clipboard # Porta papeles Wayland
+        wl-clipboard # Portapapeles Wayland
         wlogout      # Pantalla de logout minimalista
     )
     instalar "${pkgs[@]}"
@@ -135,7 +166,7 @@ install_misc_tools() {
 }
 
 install_compression_tools() {
-    echo "Instalando herramientas de compresión más comunes"
+    echo ">> Instalando herramientas de compresión más comunes"
     local pkgs=(
         engrampa # GUI MATE para archivos comprimidos
         p7zip    # .7z
@@ -147,7 +178,7 @@ install_compression_tools() {
 }
 
 install_editors() {
-    echo "Instalando editores y herramientas de desarrollo más comunes"
+    echo ">> Instalando editores y herramientas de desarrollo"
     local pkgs=(
         # Editores
         obsidian               # Editor de notas (AUR)
@@ -164,7 +195,7 @@ install_editors() {
 }
 
 install_man() {
-    echo "Instalando documentación y manuales"
+    echo ">> Instalando documentación y manuales"
     local pkgs=(
         man          # Comando man
         man-db       # Base de datos de man
@@ -174,7 +205,7 @@ install_man() {
 }
 
 install_terminal_utils() {
-    echo "Instalando utilidades de terminal."
+    echo ">> Instalando utilidades de terminal"
     local pkgs=(
         bat                # Mejor cat con resaltado de sintaxis
         exa                # Reemplazo moderno de ls
@@ -187,7 +218,7 @@ install_terminal_utils() {
         iw                 # Configuración Wi-Fi
         jq                 # Procesamiento JSON
         kitty              # Terminal moderna
-        less               # Paginar texto
+        less               # Paginador de texto
         lsd                # ls con iconos
         pacman-contrib     # Herramientas adicionales pacman
         toilet             # Texto con estilos ASCII
@@ -203,7 +234,7 @@ install_terminal_utils() {
 }
 
 install_file_management() {
-    echo "Instalando herramientas de archivos y multimedia"
+    echo ">> Instalando herramientas de archivos y multimedia"
     local pkgs=(
         exfat-utils   # Sistemas de archivos exFAT
         gvfs          # Sistema virtual de archivos
@@ -213,7 +244,7 @@ install_file_management() {
         mpv           # Reproductor multimedia
         mtpfs         # Montaje de MTP
         ntfs-3g       # Soporte NTFS
-        thunar        # Explorador de archivos MATE
+        thunar        # Explorador de archivos GTK
         thunar-volman # Gestión de volúmenes para Thunar
         tumbler       # Generador de miniaturas
         udisks2       # Gestión de discos y volúmenes
@@ -222,11 +253,11 @@ install_file_management() {
 }
 
 install_luakit() {
-    echo "Instalando Luakit y sus complementos"
+    echo ">> Instalando Luakit y complementos multimedia"
     local pkgs=(
         luakit           # Navegador web minimalista basado en WebKit
         gst-plugins-good # Plugins GStreamer recomendados
-        gst-plugins-bad  # Plugins GStreamer menos comunes, a veces experimentales
+        gst-plugins-bad  # Plugins GStreamer menos comunes, algunos experimentales
         gst-plugins-ugly # Plugins GStreamer con licencias restrictivas
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
         hunspell         # Corrector ortográfico
@@ -248,43 +279,92 @@ install_theme() {
     instalar "${pkgs[@]}"
 }
 
-install_() {
-    echo "→ Instalando ..."
-    local pkgs=(
-        man # Comando man
-    )
-    instalar "${pkgs[@]}"
-}
 # ╒════════════════════════════════════════════════════════════╕
 # │                       MENÚ PRINCIPAL                       │
 # ╘════════════════════════════════════════════════════════════╛
 mostrar_menu() {
+
+    echo
+    echo -e "\e[36m=== Instalador de Paquetes (con paru) ===\e[0m"
+    echo -e "\e[33m1)\e[0m Multimedia"
+    echo -e "\e[33m2)\e[0m Ranger"
+    echo -e "\e[33m3)\e[0m Internet"
+    echo -e "\e[33m4)\e[0m Utilidades del sistema"
+    echo -e "\e[33m5)\e[0m Todo"
+    echo -e "\e[33m0)\e[0m Salir"
+    echo
+
     echo
     echo "=== Instalador de Paquetes (con paru) ==="
-    echo "1) Multimedia"
-    echo "2) Ranger"
-    echo "3) Internet"
-    echo "4) Utilidades del sistema"
-    echo "5) Todo"
+    echo "1) Preparar sistema (red, mirrors, verificación)"
+    echo "2) Utilidades del sistema y entorno gráfico"
+    echo "3) Editores y herramientas de desarrollo"
+    echo "4) Administración de archivos y multimedia"
+    echo "5) Fuentes y temas"
+    echo "6) Herramientas de red e Internet"
+    echo "7) Terminal y documentación"
+    echo "8) Instalar todo"
     echo "0) Salir"
     echo
 }
 
 main() {
     mostrar_menu
+
     read -rp "Seleccione una opción: " opcion
-    confirmar
 
     case "$opcion" in
-        1) install_multimedia ;;
-        2) install_ranger ;;
-        3) install_internet ;;
-        4) install_system_utils ;;
+        1)
+            confirmar
+            prepare_system
+            update_mirror
+            ;;
+        2)
+            confirmar
+            install_system_tools
+            install_misc_tools
+            ;;
+        3)
+            confirmar
+            install_editors
+            ;;
+        4)
+            confirmar
+            install_file_management
+            install_ranger
+            install_zathura
+            install_luakit
+            ;;
         5)
-            install_multimedia
-            install_devtools
-            install_internet
-            install_system_utils
+            confirmar
+            install_fonts
+            install_theme
+            ;;
+        6)
+            confirmar
+            install_network_manager
+            ;;
+        7)
+            confirmar
+            install_terminal_utils
+            install_man
+            ;;
+        8)
+            confirmar
+            prepare_system
+            update_mirror
+            install_system_tools
+            install_misc_tools
+            install_editors
+            install_file_management
+            install_ranger
+            install_zathura
+            install_luakit
+            install_fonts
+            install_theme
+            install_network_manager
+            install_terminal_utils
+            install_man
             ;;
         0)
             echo "Saliendo..."
