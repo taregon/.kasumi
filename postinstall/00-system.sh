@@ -107,17 +107,29 @@ install_system_tools() {
     local pkgs=(
         # Monitoreo y sensores
         btop       # Monitor de sistema
+        cava       # Visualización de audio en terminal
         gotop      # Monitor moderno de sistema
         lm_sensors # Sensores de hardware
-        cava       # Visualización de audio en terminal
 
         # Bluetooth y permisos
         blueman      # Gestor de Bluetooth
         polkit-gnome # Polkit GUI
 
         # Wayland / entorno gráfico
-        wl-clipboard # Portapapeles Wayland
+        grim         # Captura de pantalla para Wayland
         hyprpicker   # Selector de color Wayland
+        mako         # Demonio de notificaciones para Wayland
+        wl-clipboard # Porta papeles Wayland
+        wlogout      # Pantalla de logout minimalista
+    )
+    instalar "${pkgs[@]}"
+}
+
+install_misc_tools() {
+    echo ">> Instalando herramientas varias"
+    local pkgs=(
+        localsend-bin # Compartir archivos en red local
+        spek-x-git    # Analizador de espectro de audio
     )
     instalar "${pkgs[@]}"
 }
@@ -125,11 +137,11 @@ install_system_tools() {
 install_compression_tools() {
     echo "Instalando herramientas de compresión más comunes"
     local pkgs=(
-        zip      # Comprimir archivos .zip
-        unzip    # Descomprimir .zip
+        engrampa # GUI MATE para archivos comprimidos
         p7zip    # .7z
         unrar    # .rar
-        engrampa # GUI MATE para archivos comprimidos
+        unzip    # Descomprimir .zip
+        zip      # Comprimir archivos .zip
     )
     instalar "${pkgs[@]}"
 }
@@ -137,13 +149,16 @@ install_compression_tools() {
 install_editors() {
     echo "Instalando editores y herramientas de desarrollo más comunes"
     local pkgs=(
-        luarocks               # Gestor de paquetes para Lua (plugins de nvim)
-        neovim                 # Editor de texto/IDE ligero
-        nodejs                 # Requerido por VSCode y plugins de nvim
-        npm                    # Gestor de paquetes para Node.js
+        # Editores
         obsidian               # Editor de notas (AUR)
         visual-studio-code-bin # IDE completo (AUR)
         xed                    # Editor de texto simple (MATE)
+
+        # NEOVIM y dependencias
+        luarocks # Gestor de paquetes para Lua (plugins de nvim)
+        neovim   # Editor de texto/IDE ligero
+        nodejs   # Requerido por VSCode y plugins de nvim
+        npm      # Gestor de paquetes para Node.js
     )
     instalar "${pkgs[@]}"
 }
@@ -152,8 +167,8 @@ install_man() {
     echo "Instalando documentación y manuales"
     local pkgs=(
         man          # Comando man
-        man-pages-es # Páginas de manual en español
         man-db       # Base de datos de man
+        man-pages-es # Páginas de manual en español
     )
     instalar "${pkgs[@]}"
 }
@@ -161,22 +176,24 @@ install_man() {
 install_terminal_utils() {
     echo "Instalando utilidades de terminal."
     local pkgs=(
-        bat             # Mejor cat con resaltado de sintaxis
-        exa             # Reemplazo moderno de ls
-        fzf             # Buscador interactivo
-        git-delta       # Diferencias de Git con color
-        grc             # Colores para comandos
-        iputils         # ping, traceroute, etc.
-        iw              # Configuración Wi-Fi
-        jq              # Procesamiento JSON
-        kitty           # Terminal moderna
-        less            # Paginar texto
-        lsd             # ls con iconos
-        pacman-contrib  # Herramientas adicionales pacman
-        toilet          # Texto con estilos ASCII
-        zoxide          # Navegación rápida de directorios
-        zsh             # Shell moderno
-        zsh-completions # Autocompletado para zsh
+        bat                # Mejor cat con resaltado de sintaxis
+        exa                # Reemplazo moderno de ls
+        figlet             # Texto ASCII art
+        figlet-fonts-extra # Fuentes adicionales para Figlet
+        fzf                # Buscador interactivo
+        git-delta          # Diferencias de Git con color
+        grc                # Colores para comandos
+        iputils            # ping, traceroute, etc.
+        iw                 # Configuración Wi-Fi
+        jq                 # Procesamiento JSON
+        kitty              # Terminal moderna
+        less               # Paginar texto
+        lsd                # ls con iconos
+        pacman-contrib     # Herramientas adicionales pacman
+        toilet             # Texto con estilos ASCII
+        zoxide             # Navegación rápida de directorios
+        zsh                # Shell moderno
+        zsh-completions    # Autocompletado para zsh
     )
     instalar "${pkgs[@]}"
 
@@ -214,6 +231,19 @@ install_luakit() {
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
         hunspell         # Corrector ortográfico
         hunspell-es_pa   # Diccionario español (Panamá) para Hunspell
+    )
+    instalar "${pkgs[@]}"
+}
+
+install_theme() {
+    echo ">> Instalando temas y elementos de estética"
+    local pkgs=(
+        gtk-engine-murrine # Motor de temas GTK clásico
+        gtk-engines        # Motores de temas GTK adicionales
+        nwg-look           # Gestor de temas e iconos NWG
+        matcha-gtk-theme   # Tema GTK Matcha
+        arc-gtk-theme      # Tema GTK Arc
+        zukitwo-themes-git # Temas GTK Zukitwo (AUR)
     )
     instalar "${pkgs[@]}"
 }
