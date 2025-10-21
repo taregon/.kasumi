@@ -204,10 +204,16 @@ install_file_management() {
     instalar "${pkgs[@]}"
 }
 
-install_() {
-    echo "→ Instalando ..."
+install_luakit() {
+    echo "Instalando Luakit y sus complementos"
     local pkgs=(
-        man # Comando man
+        luakit           # Navegador web minimalista basado en WebKit
+        gst-plugins-good # Plugins GStreamer recomendados
+        gst-plugins-bad  # Plugins GStreamer menos comunes, a veces experimentales
+        gst-plugins-ugly # Plugins GStreamer con licencias restrictivas
+        gst-libav        # Soporte para códecs FFmpeg en GStreamer
+        hunspell         # Corrector ortográfico
+        hunspell-es_pa   # Diccionario español (Panamá) para Hunspell
     )
     instalar "${pkgs[@]}"
 }
