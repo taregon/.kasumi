@@ -81,10 +81,11 @@ install_ranger() {
 install_zathura() {
     echo "Instalando visor pdf y complementos ocr "
     local pkgs=(
-        zathura
-        zathura-pdf-mupdf
-        tesseract-data-eng
-        tesseract-data-spa
+        zathura            # Visor de documentos ligero
+        zathura-pdf-mupdf  # Backend para abrir archivos PDF en Zathura
+        tesseract-data-eng # Datos de reconocimiento OCR en inglés
+        tesseract-data-spa # Datos de reconocimiento OCR en español
+
     )
     instalar "${pkgs[@]}"
 }
@@ -92,9 +93,9 @@ install_zathura() {
 install_network_manager() {
     echo "Instalando networkmanager y complementos"
     local pkgs=(
-        networkmanager
-        networkmanager-openvpn
-        network-manager-applet
+        networkmanager         # Servicio principal para gestionar redes
+        networkmanager-openvpn # Soporte para conexiones VPN (OpenVPN)
+        network-manager-applet # Indicador gráfico para entornos GTK
     )
     instalar "${pkgs[@]}"
 
