@@ -285,16 +285,6 @@ install_theme() {
 mostrar_menu() {
 
     echo
-    echo -e "\e[36m=== Instalador de Paquetes (con paru) ===\e[0m"
-    echo -e "\e[33m1)\e[0m Multimedia"
-    echo -e "\e[33m2)\e[0m Ranger"
-    echo -e "\e[33m3)\e[0m Internet"
-    echo -e "\e[33m4)\e[0m Utilidades del sistema"
-    echo -e "\e[33m5)\e[0m Todo"
-    echo -e "\e[33m0)\e[0m Salir"
-    echo
-
-    echo
     echo "=== Instalador de Paquetes (con paru) ==="
     echo "1) Preparar sistema (red, mirrors, verificación)"
     echo "2) Utilidades del sistema y entorno gráfico"
