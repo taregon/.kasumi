@@ -284,17 +284,19 @@ install_theme() {
 # ╘════════════════════════════════════════════════════════════╛
 mostrar_menu() {
 
+    # Título en cian
     echo
-    echo "=== Instalador de Paquetes (con paru) ==="
-    echo "1) Preparar sistema (red, mirrors, verificación)"
-    echo "2) Utilidades del sistema y entorno gráfico"
-    echo "3) Editores y herramientas de desarrollo"
-    echo "4) Administración de archivos y multimedia"
-    echo "5) Fuentes y temas"
-    echo "6) Herramientas de red e Internet"
-    echo "7) Terminal y documentación"
-    echo "8) Instalar todo"
-    echo "0) Salir"
+    echo -e "\e[36m = = = Instalador de Paquetes (con paru) = = =\e[0m"
+    # Opciones en amarillo + texto normal
+    echo -e "\e[33m1)\e[0m Preparar sistema (OBLIGATORIO)"
+    echo -e "\e[33m2)\e[0m Utilidades del sistema y entorno gráfico"
+    echo -e "\e[33m3)\e[0m Editores y herramientas de desarrollo"
+    echo -e "\e[33m4)\e[0m Administración de archivos y multimedia"
+    echo -e "\e[33m5)\e[0m Fuentes y temas"
+    echo -e "\e[33m6)\e[0m Herramientas de red e Internet"
+    echo -e "\e[33m7)\e[0m Terminal y documentación"
+    echo -e "\e[33m8)\e[0m Instalar todo"
+    echo -e "\e[33m0)\e[0m Salir"
     echo
 }
 
