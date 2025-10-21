@@ -288,14 +288,14 @@ mostrar_menu() {
     echo
     echo -e "\e[36m = = = Instalador de Paquetes (con paru) = = =\e[0m"
     # Opciones en amarillo + texto normal
-    echo -e "\e[33m1)\e[0m Preparar sistema (OBLIGATORIO)"
+    echo -e "\e[33m1)\e[0m Preparar sistema (Obligatorio)"
     echo -e "\e[33m2)\e[0m Utilidades del sistema y entorno gráfico"
     echo -e "\e[33m3)\e[0m Editores y herramientas de desarrollo"
     echo -e "\e[33m4)\e[0m Administración de archivos y multimedia"
     echo -e "\e[33m5)\e[0m Fuentes y temas"
     echo -e "\e[33m6)\e[0m Herramientas de red e Internet"
     echo -e "\e[33m7)\e[0m Terminal y documentación"
-    echo -e "\e[33m8)\e[0m Instalar todo"
+    echo -e "\e[33m8)\e[0m INSTALAR TODO"
     echo -e "\e[33m0)\e[0m Salir"
     echo
 }
