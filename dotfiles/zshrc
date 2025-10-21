@@ -56,7 +56,27 @@ export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
 
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERM="xterm-256color"  # Soporte de colores para terminales modernas
+
+# ┌───────────────────────────────────────────────────────────┐
+#   Configuración de TERM para habilitar
+#   pre visualización de imágenes en Ranger según la terminal
+# └───────────────────────────────────────────────────────────┘
+# Se verifica si la sesión actual corresponde a Kitty.
+# La variable KITTY_WINDOW_ID es proporcionada automáticamente por Kitty
+# y contiene un identificador único de la ventana.
+# Se usa para que aplicaciones como ranger puedan determinar
+# que el protocolo de imágenes de Kitty puede ser empleado.
+if [[ "$KITTY_WINDOW_ID" != "" ]]; then
+    # Si se está en Kitty, se ajusta TERM a xterm-kitty.
+    # Esto es obligatorio para que ranger reconozca la terminal
+    # y se puedan mostrar pre visualizaciones de imágenes.
+    export TERM="xterm-kitty"
+else
+    # Para cualquier otra terminal (alacritty, gnome-terminal, etc.)
+    # se utiliza xterm-256color para mantener soporte completo de colores.
+    export TERM="xterm-256color"
+fi
+
 # ------------------------------------------------------
 # Solo afecta al comando 'bat'
 # export BAT_STYLE=plain
