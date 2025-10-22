@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# ============================================================
-# Script: install-packages.sh
-# Descripción: Instala grupos de aplicaciones usando paru,
-#              abarcando tanto repos oficiales como AUR.
-# Sistema: Arch Linux / Manjaro
-# Requiere: paru instalado previamente
-# ============================================================
+# ┌──────────────────────────────────────────────────────────┐
+#   Script: POST INSTALL ARCH
+#   Descripción: Instala grupos de aplicaciones usando paru,
+#   abarcando tanto repos oficiales como AUR.
+#   Sistema: Arch Linux / Manjaro
+#   Requiere: paru instalado previamente
+# └──────────────────────────────────────────────────────────┘
 
 # ─[ CONFIGURACIÓN GENERAL ]──────────────────────────────────
 set -e          # Detiene el script si ocurre un error
@@ -21,7 +21,7 @@ confirmar() {
     }
 }
 
-# Ejecuta paru de forma segura
+# Comprueba que las listas que entren en paru no estén vacías
 instalar() {
     local paquetes=("$@")
     if [[ ${#paquetes[@]} -gt 0 ]]; then
@@ -29,7 +29,9 @@ instalar() {
     fi
 }
 
-# ─[ FASTEST MIRRORS ]────────────────────────────────────────
+# ╒════════════════════════════════════════════════════════════╕
+# │                         REFLECTOR                          │
+# ╘════════════════════════════════════════════════════════════╛
 update_mirror() {
     echo ">> Estableciendo los 20 mirrors más rápidos"
     sudo pacman -S --needed reflector
@@ -37,7 +39,9 @@ update_mirror() {
     echo ">> ACTUALIZACIÓN DE MIRRORS COMPLETADA"
 }
 
-# ─[ COMPROBACIONES INICIALES ]────────────────────────────────
+# ╒════════════════════════════════════════════════════════════╕
+# │                  COMPROBACIÓN OBLIGATORIA                  │
+# ╘════════════════════════════════════════════════════════════╛
 # Verificación del entorno y condiciones previas de instalación
 prepare_system() {
     echo ">> Comprobando conexión a Internet"
@@ -74,13 +78,13 @@ prepare_system() {
 install_app_luakit() {
     echo ">> Instalando Luakit y complementos multimedia"
     local pkgs=(
-        luakit           # Navegador web minimalista basado en WebKit
-        gst-plugins-good # Plugins GStreamer recomendados
-        gst-plugins-bad  # Plugins GStreamer menos comunes, algunos experimentales
-        gst-plugins-ugly # Plugins GStreamer con licencias restrictivas
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
+        gst-plugins-bad  # Plugins GStreamer menos comunes, algunos experimentales
+        gst-plugins-good # Plugins GStreamer recomendados
+        gst-plugins-ugly # Plugins GStreamer con licencias restrictivas
         hunspell         # Corrector ortográfico
         hunspell-es_pa   # Diccionario español (Panamá) para Hunspell
+        luakit           # Navegador web minimalista basado en WebKit
     )
     instalar "${pkgs[@]}"
 }
@@ -301,9 +305,7 @@ mostrar_menu() {
 
 main() {
     mostrar_menu
-
     read -rp "Seleccione una opción: " opcion
-
     case "$opcion" in
         1)
             confirmar
