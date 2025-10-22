@@ -22,7 +22,7 @@ Plug("navarasu/onedark.nvim")
 -- │                         PLUGINS                         │
 -- ╘═════════════════════════════════════════════════════════╛
 Plug("LudoPinelli/comment-box.nvim") -- Agrega cajas de texto / boxes
-Plug("airblade/vim-gitgutter") -- Resalta lineas con cambios git
+-- Plug("airblade/vim-gitgutter") -- Resalta lineas con cambios git
 Plug("akinsho/bufferline.nvim") -- Muestra los buffer en pestañas
 Plug("echasnovski/mini.nvim") -- Pack de módulos. Tengo varios en uso
 Plug("folke/which-key.nvim") -- Muestra atajos al comenzar a escribir
@@ -69,7 +69,11 @@ Plug("hrsh7th/cmp-buffer")
 Plug("hrsh7th/cmp-nvim-lsp")
 Plug("hrsh7th/cmp-path")
 Plug("hrsh7th/nvim-cmp")
-Plug("junegunn/fzf", { ["do"] = vim.fn["fzf#install()"] })
+Plug("junegunn/fzf", {
+	["do"] = function()
+		vim.fn["fzf#install"]()
+	end,
+})
 Plug("junegunn/fzf.vim")
 Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencias de CMP (sin require)
 
@@ -84,6 +88,9 @@ Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencia
 -- Plug("supermaven-inc/supermaven-nvim")
 Plug("smoka7/multicursors.nvim") -- Editar multiples lineas
 Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
+Plug("gregorias/coerce.nvim")
+Plug("gregorias/coop.nvim")
+Plug("lewis6991/gitsigns.nvim")
 
 -- ────────────────────────────────────────────────────────────
 -- FIN
