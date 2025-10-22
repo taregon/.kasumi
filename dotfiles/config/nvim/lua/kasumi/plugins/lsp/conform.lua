@@ -49,7 +49,7 @@ require("conform").setup({
 		-- stylua: ignore end
 	},
 	format_on_save = {
-		timeout_ms = 3000,
-		lsp_format = "fallback",
+		timeout_ms = 5000, -- Tiempo máximo para esperar el formateo (en ms)
+		lsp_format = "fallback", -- Estrategia: usar LSP si está disponible; si no, recurrir a Conform
 	},
 })
