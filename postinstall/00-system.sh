@@ -34,6 +34,7 @@ update_mirror() {
     echo ">> Estableciendo los 20 mirrors más rápidos"
     sudo pacman -S --needed reflector
     sudo reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+    echo ">> ACTUALIZACIÓN DE MIRRORS COMPLETADA"
 }
 
 # ─[ COMPROBACIONES INICIALES ]────────────────────────────────
@@ -287,7 +288,7 @@ mostrar_menu() {
     echo -e "\e[36m = = = Instalador de Paquetes (con paru) = = =\e[0m"
     # Opciones en amarillo + texto normal
     echo -e "\e[33m1)\e[0m Preparar sistema (\e[31mObligatorio\e[0m)"
-    echo -e "\e[33m2)\e[0m Utilidades del sistema y entorno gráfico"
+    echo -e "\e[33m2)\e[0m Herramientas del sistema y utilidades Wayland"
     echo -e "\e[33m3)\e[0m Editores y herramientas de desarrollo"
     echo -e "\e[33m4)\e[0m Administración de archivos y multimedia"
     echo -e "\e[33m5)\e[0m Fuentes y temas"
@@ -311,50 +312,50 @@ main() {
             ;;
         2)
             confirmar
-            install_system_tools
             install_misc_tools
+            install_sys_tools
             ;;
         3)
             confirmar
-            install_editors
+            install_app_neovim
             ;;
         4)
             confirmar
-            install_file_management
-            install_ranger
-            install_zathura
-            install_luakit
+            install_app_luakit
+            install_app_ranger
+            install_app_zathura
+            install_utils_file_management
             ;;
         5)
             confirmar
-            install_fonts
-            install_theme
+            install_sys_fonts
+            install_sys_theme
             ;;
         6)
             confirmar
-            install_network_manager
+            install_sys_network_manager
             ;;
         7)
             confirmar
-            install_terminal_utils
-            install_man
+            install_app_man
+            install_utils_terminal
             ;;
         8)
             confirmar
             prepare_system
             update_mirror
-            install_system_tools
+            install_app_luakit
+            install_app_man
+            install_app_neovim
+            install_app_ranger
+            install_app_zathura
             install_misc_tools
-            install_editors
-            install_file_management
-            install_ranger
-            install_zathura
-            install_luakit
-            install_fonts
-            install_theme
-            install_network_manager
-            install_terminal_utils
-            install_man
+            install_sys_fonts
+            install_sys_network_manager
+            install_sys_theme
+            install_sys_tools
+            install_utils_file_management
+            install_utils_terminal
             ;;
         0)
             echo "Saliendo..."
