@@ -40,13 +40,16 @@ echo "  Insertando ajustes..."
 # Comprueba si el bloque ya existe
 if ! grep -Fq "$WALL_CONF" "$LIMINE_CONF"; then
     # Insertar al inicio
-    {
+    if {
         printf "%s\n" "$WALL_CONF"
         cat "$LIMINE_CONF"
-    } | sudo tee "${LIMINE_CONF}.tmp" > /dev/null && sudo mv "${LIMINE_CONF}.tmp" "$LIMINE_CONF" || {
+    } | sudo tee "${LIMINE_CONF}.tmp" > /dev/null \
+        && sudo mv "${LIMINE_CONF}.tmp" "$LIMINE_CONF"; then
+        echo "  Archivo modificado correctamente"
+    else
         echo "  Error al modificar el archivo"
         exit 1
-    }
+    fi
 else
     echo "  Bloque ya insertado, no se hace nada"
 fi
