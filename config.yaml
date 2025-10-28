@@ -1,7 +1,4 @@
 ---
-# Todos los ajustes
-# https://dotdrop.readthedocs.io/en/latest/config/config-config/
-#
 config:
   create: true
   dotpath: dotfiles
@@ -99,6 +96,10 @@ dotfiles:
     link: absolute
     actions:
       - dir-nano-backup
+  d_gotop:
+    src: config/gotop
+    dst: ~/.config/gotop
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -114,6 +115,7 @@ profiles:
       - f_redshift
       - f_tmux
       - f_zsh
+      - d_gotop
   kasumi_extras:
     dotfiles:
       - d_neovim
