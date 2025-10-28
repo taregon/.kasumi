@@ -38,14 +38,15 @@ require("conform").setup({
 		html     = { "prettierd" },
 		json     = { "deno_fmt" },
 		json5    = { "fixjson" },
+		jsonc    = { "fixjson" },
 		lua      = { "stylua" },
 		markdown = { "deno_fmt" },
-        zsh      = { "beautysh" }, --
 		python   = { "isort", "black" },
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
 		toml     = { "taplo" },
 		yaml     = { "yamlfix" },
+		zsh      = { "beautysh" }, --
 		-- stylua: ignore end
 	},
 	format_on_save = {
