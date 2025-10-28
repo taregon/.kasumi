@@ -157,11 +157,11 @@
   },
   "cpu": {
     "format": " {usage}%",
-    "on-click": "kitty -e gtop"
+    "on-click": "kitty -e gotop"
   },
   "memory": {
     "format": " {}%",
-    "on-click": "kitty -e gtop"
+    "on-click": "kitty -e gotop"
   },
   "temperature": {
     "critical-threshold": 80,
