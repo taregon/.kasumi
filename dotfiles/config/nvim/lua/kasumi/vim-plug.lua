@@ -81,6 +81,7 @@ Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencia
 -- │                       Probando FIX                        │
 -- ╘═══════════════════════════════════════════════════════════╛
 -- Plug("folke/todo-comments.nvim") -- Resalta las lineas con comentarios
+Plug("folke/todo-comments.nvim") -- Resalta las lineas con comentarios
 -- Plug("nvim-telescope/telescope-fzf-native.nvim", { ["do"] = "make" })
 -- Plug("nvim-telescope/telescope-live-grep-args.nvim")
 -- Plug("nvim-telescope/telescope.nvim", { tag = "0.1.x" })
