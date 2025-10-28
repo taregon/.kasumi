@@ -1,16 +1,10 @@
-/* =============================================================================
- *
- * Waybar configuration
- *
- * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
- *
- * =========================================================================== */
-
 @import "color.css";
 
-/* -----------------------------------------------------------------------------
- * Base styles
- * -------------------------------------------------------------------------- */
+/*
+ * ╒═══════════════════════════════════════════════════════════╕
+ * │                        ESTILO BASE                        │
+ * ╘═══════════════════════════════════════════════════════════╛
+*/
 
 * {
   color: @lavender;
@@ -26,24 +20,10 @@ window#waybar {
   background-color: shade(#1e1e2e, 0.95);
 }
 
-#workspaces button {
-  color: @base;
-  border-radius: 50%;
-  margin-left: 1px;
-  margin-right: 1px;
-  padding: 2 6 2 0;
-}
-
-#workspaces button:hover * {
+#mode {
   color: @mauve;
-}
-
-#workspaces button:hover {
-  color: @mauve;
-  box-shadow: none;
-  text-shadow: none;
-  border: 0;
-  background: none;
+  border-radius: 10px;
+  margin-right: 5px;
 }
 
 #workspaces * {
@@ -58,19 +38,33 @@ window#waybar {
   margin: 8px 0px 8px 10px;
 }
 
-#workspaces button.focused {
-  color: @mauve;
-  border-radius: 20px;
+#workspaces button {
+  color: @base;
+  border-radius: 50%;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding: 2 6 2 0;
 }
 
 #workspaces button.focused * {
   color: @mauve;
 }
 
-#mode {
+#workspaces button.focused {
   color: @mauve;
-  border-radius: 10px;
-  margin-right: 5px;
+  border-radius: 20px;
+}
+
+#workspaces button:hover * {
+  color: @mauve;
+}
+
+#workspaces button:hover {
+  color: @mauve;
+  box-shadow: none;
+  text-shadow: none;
+  border: 0;
+  background: none;
 }
 
 /* -----------------------------------------------------------------------------
