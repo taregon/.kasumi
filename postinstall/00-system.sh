@@ -279,6 +279,10 @@ install_utils_terminal() {
 
     echo "Cambiando shell predeterminada a zsh..."
     chsh -s "$(which zsh)"
+
+    echo "Usuario $USER agregado al grupo input" # requerido para módulos de waybar
+    sudo usermod -aG input "$USER"
+
     echo "[!] Reinicia la sesión para aplicar el cambio de shell"
 }
 
