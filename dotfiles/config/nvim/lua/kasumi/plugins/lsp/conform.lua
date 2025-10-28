@@ -38,7 +38,7 @@ require("conform").setup({
 		html     = { "prettierd" },
 		json     = { "deno_fmt" },
 		json5    = { "fixjson" },
-		jsonc    = { "fixjson" },
+		jsonc    = { "deno_fmt" },
 		lua      = { "stylua" },
 		markdown = { "deno_fmt" },
 		python   = { "isort", "black" },
