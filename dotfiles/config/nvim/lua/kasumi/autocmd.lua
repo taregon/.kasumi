@@ -70,3 +70,17 @@ augroup("CsvFileTypes", function(group)
 		command = "set filetype=csv_pipe",
 	})
 end)
+
+-- ────────────────────────────────────────────────────────────
+-- Auto-indentación y limpieza de archivos AWK al guardar:
+-- Re-aplica GetAwkIndent() a todo el buffer
+augroup("AwkIndent", function(group)
+	aucmd("BufWritePre", {
+		group = group,
+		pattern = "*.awk",
+		callback = function()
+			vim.cmd("normal! gg=G")
+		end,
+	})
+end)
+
