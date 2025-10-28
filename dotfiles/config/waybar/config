@@ -188,6 +188,7 @@
     },
     "scroll-step": 2,
     "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "tooltip": false
   },
   "bluetooth": {

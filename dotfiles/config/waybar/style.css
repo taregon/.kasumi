@@ -253,5 +253,5 @@ window#waybar {
 }
 
 #wireplumber.muted {
-  color: #3b4252;
+  color: @overlay1;
 }
