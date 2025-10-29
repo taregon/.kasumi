@@ -49,8 +49,12 @@ require("conform").setup({
 		zsh      = { "beautysh" }, --
 		-- stylua: ignore end
 	},
-	format_on_save = {
+	default_format_opts = {
+		lsp_format = "fallback",
 		timeout_ms = 5000, -- Tiempo máximo para esperar el formateo (en ms)
-		lsp_format = "fallback", -- Estrategia: usar LSP si está disponible; si no, recurrir a Conform
 	},
+	-- Como el orden afecta, pase estas lineas a una función en el archivo de autocmd
+	-- format_on_save = {
+	-- 	lsp_format = "fallback", -- Estrategia: usar LSP si está disponible; si no, recurrir a Conform
+	-- },
 })
