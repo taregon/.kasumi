@@ -1,12 +1,14 @@
---    __   _      __
---   / /  (_)__  / /____ ____
---  / /__/ / _ \/ __/ -_) __/
--- /____/_/_//_/\__/\__/_/
+-- ██╗     ██╗███╗   ██╗████████╗███████╗██████╗
+-- ██║     ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗
+-- ██║     ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝
+-- ██║     ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗
+-- ███████╗██║██║ ╚████║   ██║   ███████╗██║  ██║
+-- ╚══════╝╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
 --
 -- Este plugin proporciona una interfaz para mostrar y manejar
 -- los errores y advertencias producidos por los linters,
--- pero no incluye los linters en sí mismos.
--- https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
+--  https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
+-- NOTA: no incluye los linters en sí mismos.
 -- Los linters que puedes utilizar son los que dispone :Mason
 -- Si ocupas uno, recuerda agregar su instalación en: mason-tool-installer
 --
