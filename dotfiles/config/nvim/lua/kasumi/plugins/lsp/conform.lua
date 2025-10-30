@@ -28,6 +28,10 @@ require("conform").setup({
 		awk = {
 			args = { "-f", vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/format.awk") },
 		},
+		deno_fmt = {
+			args = { "fmt", "--ext", "jsonc", "-" },
+			stdin = true,
+		},
 	},
 	formatters_by_ft = {
 		-- stylua: ignore start
