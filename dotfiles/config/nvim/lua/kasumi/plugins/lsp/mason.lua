@@ -1,6 +1,12 @@
+-- ███╗   ███╗ █████╗ ███████╗ ██████╗ ███╗   ██╗
+-- ████╗ ████║██╔══██╗██╔════╝██╔═══██╗████╗  ██║
+-- ██╔████╔██║███████║███████╗██║   ██║██╔██╗ ██║
+-- ██║╚██╔╝██║██╔══██║╚════██║██║   ██║██║╚██╗██║
+-- ██║ ╚═╝ ██║██║  ██║███████║╚██████╔╝██║ ╚████║
+-- ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═══╝
 -- INSTRUCCIONES
 -- ejecutas :Mason, presionas 5 para elegir 'formatters'
--- eliges el necesario y presionas i, para desinstalar usas x.
+-- eliges el necesario y presionas i. Para desinstalar usas x.
 
 require("mason").setup({
 	ui = {
@@ -10,5 +16,6 @@ require("mason").setup({
 			package_pending     = "󰦖",
 			package_uninstalled = "󱧕",
 		},
+		border = "single",
 	},
 })
