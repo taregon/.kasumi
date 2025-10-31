@@ -6,14 +6,16 @@
 // ╚███╔███╔╝██║  ██║   ██║   ██████╔╝██║  ██║██║  ██║
 //  ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
 {
-  // --------------------------------------------------
-  // General bar configuration
-  // --------------------------------------------------
+  // ╒═══════════════════════════════════════════════════════════╕
+  // │                  CONFIGURACIÓN DE BARRA                   │
+  // ╘═══════════════════════════════════════════════════════════╛
+  // Mas ajuste: https://github.com/Alexays/Waybar/wiki/Configuration
+  //
+  // "width": 1350,                      // (Opcional) Ancho de la barra
   "layer": "top", // Waybar sobre todas las capas
   "position": "top", // Posición: top | bottom | left | right
   "height": 20, // Altura de la barra
   "margin": "0 0 0 0", // Márgenes exteriores
-  // "width": 1350,                      // (Opcional) Ancho de la barra
 
   // --------------------------------------------------
   // Modules placement
