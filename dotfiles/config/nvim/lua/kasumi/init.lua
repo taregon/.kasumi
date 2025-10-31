@@ -1,6 +1,14 @@
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                 NEOVIM MAIN CONFIGURATION                 │
+-- ╘═══════════════════════════════════════════════════════════╛
+-- Configuración principal de Neovim. Define:
+--    - Carga inicial de plugins y ajustes base.
+--    - Integración con LSP, autocompletado, formato y diagnóstico.
+--    - Configuración visual y atajos globales.
+-- Se recomienda dividir en módulos la configuración.
+-- para facilitar mantenimiento y depuración.
+-- WARN: El orden de las líneas define la secuencia de carga
 -- ─────────────────────────< GENERAL >─────────────────────────
--- Carga las demás configuraciones
--- INFO: importa el orden
 vim.loader.enable()
 require("kasumi/vim-plug")
 require("kasumi/settings")
