@@ -14,6 +14,7 @@
 --
 require("lint").linters_by_ft = {
 	json = { "jsonlint" },
+	jsonc = { "deno" },
 	lua = { "luacheck" }, -- Debes tener instalado: luarocks
 	markdown = { "markdownlint" },
 	python = { "pylint" },
@@ -39,4 +40,23 @@ sqlfluff.args = {
 	-- "-–dialect=postgres",
 	-- "--exclude-rules=LT01",
 	-- "-",
+}
+
+-- Definición de linter personalizado para JSONC usando deno_fmt
+local lint = require("lint")
+lint.linters.deno = {
+	cmd = "deno",
+	-- stdin = true,
+	-- ignore_exitcode = true, -- evita que la ejecución se interrumpa por exit code
+	-- stream = "stderr", -- los errores se envían a stderr
+	-- stream = "stdout", -- deno fmt imprime errores en stdout
+	args = {
+		"-",
+		"fmt",
+		"--check", -- chequea formato sin modificar
+	},
+	-- parser = require("lint.parser").from_errorformat(
+	-- 	"%f:%l:%c: %m", -- formatea: archivo:linea:columna: mensaje
+	-- 	{ source = "deno" }
+	-- ),
 }
