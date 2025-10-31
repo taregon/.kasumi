@@ -1,15 +1,17 @@
---    ____                    __  __
---   / __/__  ______ _  ___ _/ /_/ /____ ____
---  / _// _ \/ __/  ' \/ _ `/ __/ __/ -_) __/
--- /_/  \___/_/ /_/_/_/\_,_/\__/\__/\__/_/
+-- ███████╗ ██████╗ ██████╗ ███╗   ███╗ █████╗ ████████╗████████╗███████╗██████╗
+-- ██╔════╝██╔═══██╗██╔══██╗████╗ ████║██╔══██╗╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
+-- █████╗  ██║   ██║██████╔╝██╔████╔██║███████║   ██║      ██║   █████╗  ██████╔╝
+-- ██╔══╝  ██║   ██║██╔══██╗██║╚██╔╝██║██╔══██║   ██║      ██║   ██╔══╝  ██╔══██╗
+-- ██║     ╚██████╔╝██║  ██║██║ ╚═╝ ██║██║  ██║   ██║      ██║   ███████╗██║  ██║
+-- ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
 --
 -- Lista de opciones: https://github.com/stevearc/conform.nvim/blob/master/doc/conform.txt
 -- Formatters: https://github.com/stevearc/conform.nvim#formatters
 -- Ver informe de errores `:ConformInfo`
--- Deseas agregar mas, recuerda colocarlos en mason-tool-installer.lua
+-- NOTA: Deseas agregar mas, recuerda colocarlos en mason-tool-installer.lua
 -- Este plug no instala, solo invoca su ejecución, aunque ciertos como
 -- `trim_newlines` vienen configurados y solo se llaman.
-
+--
 require("conform").setup({
 	formatters = {
 		sql_formatter = {
@@ -37,14 +39,14 @@ require("conform").setup({
 		-- stylua: ignore start
 		["*"]    = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
 		conf     = { "awk" },
-		css      = { "prettierd" },
-		graphql  = { "prettierd" },
-		html     = { "prettierd" },
+		css      = { "prettier" },
+		graphql  = { "prettier" },
+		html     = { "prettier" },
 		json     = { "deno_fmt" },
 		json5    = { "fixjson" },
 		jsonc    = { "deno_fmt" },
 		lua      = { "stylua" },
-		markdown = { "deno_fmt" },
+		markdown = { "mdformat" },
 		python   = { "isort", "black" },
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
