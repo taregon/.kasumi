@@ -84,3 +84,17 @@ augroup("AwkIndent", function(group)
 	})
 end)
 
+-- ────────────────────────────────────────────────────────────
+-- Ejecutar automáticamente los formatters configurados al guardar.
+local conform = require("conform")
+
+augroup("FormatOnSave", function(group)
+	aucmd("BufWritePre", {
+		group = group,
+		pattern = "*",
+		callback = function(args)
+			conform.format({ bufnr = args.buf })
+		end,
+	})
+end)
+
