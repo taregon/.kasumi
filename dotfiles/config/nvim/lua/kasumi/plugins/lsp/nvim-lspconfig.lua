@@ -3,7 +3,9 @@
 -- │░█░░░▀▀█░█▀▀░░░█░░░█░█░█░█░█▀▀░░█░░█░█│
 -- │░▀▀▀░▀▀▀░▀░░░░░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀│
 -- └──────────────────────────────────────┘
-
+-- Facilita conectar Neovim con servidores LSP para autocompletado,
+-- diagnósticos y navegación de código.
+--
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- ─[ BASH ]─────────────────────────────────────────────────
@@ -34,9 +36,19 @@ vim.lsp.config["html"] = {
 }
 vim.lsp.enable("html")
 
+-- ─[ MARKDOWN ]─────────────────────────────────────────────
+vim.lsp.config["marksman"] = {
+	filetypes = { "md" },
+	capabilities = lsp_capabilities,
+}
+vim.lsp.enable("marksman")
+
 -- ─[ JSON ]─────────────────────────────────────────────────
 vim.lsp.config["jsonls"] = {
-	filetypes = { "json" },
+	filetypes = {
+		"json",
+		"jsonc",
+	},
 	capabilities = lsp_capabilities,
 }
 vim.lsp.enable("jsonls")
