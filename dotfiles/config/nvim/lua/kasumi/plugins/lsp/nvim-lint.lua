@@ -11,23 +11,35 @@
 -- NOTA: no incluye los linters en sí mismos.
 -- Los linters que puedes utilizar son los que dispone :Mason
 -- Si ocupas uno, recuerda agregar su instalación en: mason-tool-installer
+-- WARN:  Para ver los mensajes de diagnostico, debes agregar las extensiones en nvim-lspconfig.lua
 --
-require("lint").linters_by_ft = {
-	json = { "jsonlint" },
-	jsonc = { "deno" },
-	lua = { "luacheck" }, -- Debes tener instalado: luarocks
+local lint = require("lint")
+
+lint.linters_by_ft = {
+	-- stylua: ignore start
+	css      = { "stylelint" },
+	json     = { "jsonlint" },
+	json5    = { "deno" },
+	jsonc    = { "deno" },
+	lua      = { "luacheck" }, -- Debes tener instalado: luarocks
 	markdown = { "markdownlint" },
-	python = { "pylint" },
-	sh = { "shellcheck" },
-	sql = { "sqlfluff" },
-	yaml = { "yamllint" },
+	python   = { "pylint" },
+	sh       = { "shellcheck" },
+	sql      = { "sqlfluff" },
+	yaml     = { "yamllint" },
+	-- stylua: ignore end
 }
 
 -- Suprime los warnings al agregar el valor como global
-local luacheck = require("lint").linters.luacheck
-luacheck.args = {
+lint.linters.luacheck.args = {
 	"--globals",
 	"vim",
+}
+
+-- Desactiva la regla MD013 (líneas demasiado largas) en markdownlint,
+lint.linters.markdownlint.args = {
+	"--disable",
+	"MD013",
 }
 
 -- https://docs.sqlfluff.com/en/stable/reference/cli.html
