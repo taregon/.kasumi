@@ -16,6 +16,7 @@ require("mason-lspconfig").setup({
 		"html",
 		"jsonls",
 		"lua_ls",
+		"marksman",
 		"pyright",
 		"sqlls",
 		"yamlls",
