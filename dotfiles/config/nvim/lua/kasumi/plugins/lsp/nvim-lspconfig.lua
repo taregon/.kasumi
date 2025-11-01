@@ -53,6 +53,13 @@ vim.lsp.config["jsonls"] = {
 }
 vim.lsp.enable("jsonls")
 
+-- ─[ CSS ]──────────────────────────────────────────────────
+vim.lsp.config["cssls"] = {
+	filetypes = { "css" },
+	capabilities = lsp_capabilities,
+}
+vim.lsp.enable("cssls")
+
 -- Python
 vim.lsp.config["pyright"] = {
 	filetypes = { "python" },

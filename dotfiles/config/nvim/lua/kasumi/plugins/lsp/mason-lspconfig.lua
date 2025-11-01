@@ -11,6 +11,7 @@ require("mason-lspconfig").setup({
 	ensure_installed = {
 		"awk_ls",
 		"bashls",
+		"cssls",
 		"dockerls",
 		"graphql",
 		"html",
