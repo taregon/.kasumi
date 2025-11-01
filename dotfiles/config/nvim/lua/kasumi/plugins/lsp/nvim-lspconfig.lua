@@ -8,66 +8,34 @@
 --
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- ─[ BASH ]─────────────────────────────────────────────────
-vim.lsp.config["bashls"] = {
-	filetypes = { "sh" },
-	capabilities = lsp_capabilities,
+-- ┌────────────────────────────────────────────────────────────────────┐
+--   Agrupa y activa servidores LSP con configuración básica.
+--   NOTA: Solo aplica con filetypes y capabilities compartidos.
+--   Si algún servidor requiere ajustes específicos (por ej. settings),
+--   debe declararse fuera de este bloque, como el caso de yamlls.
+-- └────────────────────────────────────────────────────────────────────┘
+local lsp_servers = {
+    -- stylua: ignore start
+	bashls   = { "sh" },
+	cssls    = { "css" },
+	dockerls = { "dockerfile" },
+	graphql  = { "graphql" },
+	html     = { "html" },
+	jsonls   = { "json", "jsonc" },
+	marksman = { "md" },
+	pyright  = { "python" },
+	-- stylua: ignore end
 }
-vim.lsp.enable("bashls")
 
--- ─[ Docker ]───────────────────────────────────────────────
-vim.lsp.config["dockerls"] = {
-	filetypes = { "dockerfile" },
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("dockerls")
+for name, types in pairs(lsp_servers) do
+	vim.lsp.config[name] = {
+		filetypes = types,
+		capabilities = lsp_capabilities,
+	}
+	vim.lsp.enable(name)
+end
 
--- ─[ GraphQL ]──────────────────────────────────────────────
-vim.lsp.config["graphql"] = {
-	filetypes = { "graphql" },
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("graphql")
-
--- ─[ HTML ]─────────────────────────────────────────────────
-vim.lsp.config["html"] = {
-	filetypes = { "html" },
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("html")
-
--- ─[ MARKDOWN ]─────────────────────────────────────────────
-vim.lsp.config["marksman"] = {
-	filetypes = { "md" },
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("marksman")
-
--- ─[ JSON ]─────────────────────────────────────────────────
-vim.lsp.config["jsonls"] = {
-	filetypes = {
-		"json",
-		"jsonc",
-	},
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("jsonls")
-
--- ─[ CSS ]──────────────────────────────────────────────────
-vim.lsp.config["cssls"] = {
-	filetypes = { "css" },
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("cssls")
-
--- Python
-vim.lsp.config["pyright"] = {
-	filetypes = { "python" },
-	capabilities = lsp_capabilities,
-}
-vim.lsp.enable("pyright")
-
--- YAML
+-- ──────────────────────────< YAML >───────────────────────
 vim.lsp.config["yamlls"] = {
 	filetypes = { "yaml" },
 	capabilities = lsp_capabilities,
@@ -81,7 +49,8 @@ vim.lsp.config["yamlls"] = {
 }
 vim.lsp.enable("yamlls")
 
--- Lua
+-- ───────────────────────────< LUA >───────────────────────────
+
 vim.lsp.config["lua_ls"] = {
 	cmd = { "lua-language-server" },
 	filetypes = { "lua" },
