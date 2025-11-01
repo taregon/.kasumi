@@ -269,8 +269,9 @@ install_utils_terminal() {
         kitty              # Terminal moderna
         less               # Paginador de texto
         lsd                # ls con iconos
-        ripgrep            # para búsqueda recursiva de texto en archivos
         pacman-contrib     # Herramientas adicionales pacman
+        ripgrep            # para búsqueda recursiva de texto en archivos
+        source-highlight   # Resalta la sintaxis del código (en less)
         toilet             # Texto con estilos ASCII
         zoxide             # Navegación rápida de directorios
         zsh                # Shell moderno
