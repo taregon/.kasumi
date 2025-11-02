@@ -50,7 +50,6 @@ vim.lsp.config["yamlls"] = {
 vim.lsp.enable("yamlls")
 
 -- ───────────────────────────< LUA >───────────────────────────
-
 vim.lsp.config["lua_ls"] = {
 	cmd = { "lua-language-server" },
 	filetypes = { "lua" },
