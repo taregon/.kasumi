@@ -46,4 +46,10 @@ require("which-key").add({
 	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
 	{ "<leader>ti", ":set invlist!<CR>:GitGutterSignsToggle<CR>", desc = "Toggle Special Chars" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
+	-- ────────────────────────────────────────────────────────────
+	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
+	-- ────────────────────────────────────────────────────────────
+	{ "<leader>gp", ":Gitsigns preview_hunk<CR>", desc = "Preview hunk" },
+	{ "<leader>gr", ":Gitsigns reset_hunk_inline<CR>", desc = "Revert hunk" },
+	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
 })
