@@ -43,7 +43,7 @@ require("catppuccin").setup({
 		},
 	},
 	integrations = { -- Extiende los colores a los plug soportados
-		gitgutter = true,
+		gitsigns = true,
 		fidget = true,
 		diffview = true,
 		neotree = true,
