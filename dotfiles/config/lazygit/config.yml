@@ -1,3 +1,4 @@
+---
 # El manual por si necesitas mas ajustes
 # https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
@@ -17,9 +18,9 @@ gui:
     selectedLineBgColor:
       - '#5c775f'
 git:
-  paging:
-    colorArg: always
-    pager: delta --paging=never
+  pagers:
+    - colorArg: always
+      pager: delta --paging=never
 customCommands:
   # https://github.com/jesseduffield/lazygit/wiki/Custom-Commands-Compendium#blame-via-tig
   # Estos atajos corresponden a los comandos de tig
