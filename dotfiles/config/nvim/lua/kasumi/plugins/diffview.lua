@@ -22,7 +22,8 @@ local toggle_diffview = function()
 		diffview.close()
 		diffview_open = false
 	else
-		diffview.open()
+		-- Abre comparación contra origin/main (estable)
+		vim.cmd("DiffviewOpen origin/main")
 		vim.cmd("DiffviewToggleFiles") -- Cierra el panel automáticamente
 		-- vim.cmd("wincmd r") -- Invierte las vistas
 		diffview_open = true
