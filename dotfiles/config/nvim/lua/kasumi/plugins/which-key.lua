@@ -54,6 +54,6 @@ require("which-key").add({
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert hunk" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert hunk", mode = "v" },
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
 })
