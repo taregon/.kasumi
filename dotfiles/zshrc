@@ -154,6 +154,9 @@ plugins=( fzf zoxide )
 # https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
 # https://zsh.sourceforge.io/Doc/Release/Options.html#History
 PROMPT_EOL_MARK="🐙"                # Define el símbolo que se mostrará al final de la línea de comandos en el prompt.
+HISTFILE=~/.cache/zsh_history
+HISTSIZE=40000
+SAVEHIST=40000
 setopt APPEND_HISTORY               # Permite que múltiples sesiones de terminal agreguen comandos al historial en lugar de sobrescribirlo.
 setopt BANG_HIST                    # Permite tratar el carácter '!' de manera especial durante la expansión de comandos.
 setopt COMPLETE_ALIASES             # Activa la auto completado para alias.
@@ -174,29 +177,29 @@ setopt NO_HIST_NO_FUNCTIONS         # No elimina definiciones de funciones del h
 setopt RM_STAR_WAIT                 # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
 setopt SHARE_HISTORY                # Comparte el historial entre todas las sesiones de terminal.
 
-# ------------------------------------------------------
-# A BETTER ZSH HISTORY
-# https://tinyurl.com/ynarukx9
-HISTFILE=~/.cache/zsh_history
-HISTSIZE=40000
-SAVEHIST=40000
-HISTCONTROL=ignoreboth
-HISTORY_IGNORE="* --help|clear|exa|exit|man|pwd|q|yt-dlp|yt-mp3|ranger"
-# ------------------------------------------------------
-# HOW TO MAKE ZSH NOT STORE FAILED COMMAND
-# https://superuser.com/a/902508
-#  zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
-function zshaddhistory {
-    whence "${${(z)1}[1]}" >| /dev/null || return 1
+# ── SOLO GUARDAR COMANDOS EXISTENTES ────────────────────────
+# Lista de comandos a ignorar
+HISTORY_IGNORE="* --help|clear|exa|ls|exit|man *|pwd|q|yt-dlp|yt-mp3|ranger"
+
+# Hook: decidir qué comandos se guardan en el historial
+zshaddhistory() {
     local line cmd
+
+    # El comando completo sin salto de línea
     line=${1%%$'\n'}
     cmd=${line%% *}
-    [[ ${#line} -ge 5 && ${cmd} != ${~HISTORY_IGNORE} ]]
-}
-# How to change zsh-autosuggestions color
-#   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#747A74'
-# ------------------------------------------------------
 
+    # 1. Ignorar si el comando no existe
+    whence "$cmd" >| /dev/null || return 1
+
+    # 2. Ignorar si coincide con algún patrón en HISTORY_IGNORE
+    [[ $cmd == ${~HISTORY_IGNORE} ]] && return 1
+
+    # 3. Guardar los demás
+    return 0
+}
+
+# ────────────────────────────────────────────────────────────
 ZSH_THEME="heapbytes"
 
 # Zoxide recuerda los directorios más frecuentados
