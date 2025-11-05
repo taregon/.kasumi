@@ -1,4 +1,11 @@
-require("nvim-navic").setup({
+-- ┌────────────────────┐
+-- │░█▀█░█▀█░█░█░▀█▀░█▀▀│
+-- │░█░█░█▀█░▀▄▀░░█░░█░░│
+-- │░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀│
+-- └────────────────────┘
+local navic = require("nvim-navic")
+
+navic.setup({
 	lsp = { auto_attach = true },
 	separator = " ❯ ",
 	highlight = true,
