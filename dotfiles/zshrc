@@ -153,9 +153,9 @@ plugins=( fzf zoxide )
 # https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
 # https://zsh.sourceforge.io/Doc/Release/Options.html#History
 PROMPT_EOL_MARK="🐙"                # Define el símbolo que se mostrará al final de la línea de comandos en el prompt.
-HISTFILE=~/.cache/zsh_history
-HISTSIZE=40000
-SAVEHIST=40000
+HISTFILE=~/.cache/zsh_history       # Archivo donde se guarda el historial
+HISTSIZE=30000                      # Comandos que se mantienen en memoria
+SAVEHIST=30000                      # Comandos que se guardan en disco
 setopt APPEND_HISTORY               # Permite que múltiples sesiones de terminal agreguen comandos al historial en lugar de sobrescribirlo.
 setopt BANG_HIST                    # Permite tratar el carácter '!' de manera especial durante la expansión de comandos.
 setopt COMPLETE_ALIASES             # Activa la auto completado para alias.
@@ -202,24 +202,36 @@ zshaddhistory() {
 }
 
 # ────────────────────────────────────────────────────────────
+# ╓
+# ║ Tema activo de Zsh
+# ╙
 ZSH_THEME="heapbytes"
 
-# Zoxide recuerda los directorios más frecuentados
-# Es como cd, pero utilizando el comando z
-# Debes tener previamente instalado: pacman -S zoxide
+# ╓
+# ║ Zoxide: recuerda los directorios más frecuentados
+# ║ Es como cd, pero utilizando el comando z
+# ║ Requiere: pacman -S zoxide
+# ╙
 eval "$(zoxide init zsh)"
 
-# Carga starship-promp (NO VA)
-# Debes tener previamente instalado: pacman -S starship
-# eval "$(starship init zsh)"
-
-# fzf es un buscador interactivo:
-# Debes tener previamente instalado: pacman -S fzf
+# ╓
+# ║ fzf: buscador interactivo
+# ║ Requiere: pacman -S fzf
+# ╙
 source <(fzf --zsh)
 
-# Cargar el sistema de auto completado
+# ╓
+# ║ Auto Completado
+# ╙
 autoload -Uz compinit
 compinit
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# ────────────────────────────────────────────────────────────
+# 💤 Líneas desactivadas (referencia o pruebas)
+
+# Starship prompt (no en uso actualmente)
+# Requiere: pacman -S starship
+# eval "$(starship init zsh)"
+# ────────────────────────────────────────────────────────────
+# Cargar configuración de Powerlevel10k (si existe)
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
