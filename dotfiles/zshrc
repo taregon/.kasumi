@@ -29,27 +29,28 @@ export RANGER_LOAD_DEFAULT_RC=FALSE            # Carga mi rc.conf y no el propio
 # ------------------------------------------------------
 export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
 # ------------------------------------------------------
-#    ___        ___
-#  .'  _.-----.'  _|
-#  |   _|-- __|   _|
-#  |__| |_____|__|
+# █▀▀▀▀ ▀▀▀▀█ █▀▀▀▀
+# █▀▀   ▄▀▀▀  █▀▀
+# ▀     ▀▀▀▀▀ ▀
 #
-
-# export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --preview 'cat {}' --border --margin=1 --padding=1"
-# export FZF_DEFAULT_OPTS='--height=40% --preview="cat {}" --preview-window=right:60%:wrap'
-# --preview '([[ -f {} ]] && (bat --style=numbers --color=always --line-range :500 {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
 # Generador de TEMAS para fzf
 # https://vitormv.github.io/fzf-themes/
-
 export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
-
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
---color=fg:#818f98,fg+:#c8d0d6,bg:-1,bg+:#333c42
---color=hl:#a88e6b,hl+:#fbc06e,info:#94b8bc,marker:#ff62e0
---color=prompt:#AFEEAE,spinner:#ea676d,pointer:#fbc06e,header:#87afaf
---color=border:#5e6a72,label:#5e6a72,query:#d8dee2
---border="sharp" --border-label="( 󱐋 )" --preview-window="sharp" --prompt="󰘧 "
---info=right --marker="›" --pointer="▒" --separator="─" --scrollbar="▐"'
+  --color=fg:#818F98,fg+:#C8D0D6,bg:-1,bg+:#333C42
+  --color=hl:#A88E6B,hl+:#FBC06E,info:#94B8BC,marker:#FF62E0
+  --color=prompt:#AFEEAE,spinner:#EA676D,pointer:#FBC06E,header:#87AFAF
+  --color=border:#5E6A72,label:#5E6A72,query:#D8DEE2
+  --border="sharp"
+  --border-label="( 󱐋 )"
+  --preview-window="sharp"
+  --prompt="󰘧 "
+  --info=right
+  --marker="›"
+  --pointer="▒"
+  --separator="─"
+  --scrollbar="▐"
+'
 
 # export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
@@ -116,10 +117,9 @@ zstyle ':completion:*' menu select
 # OPCIONALES
 # autoload -U compinit                           # https://mrigank11.github.io/2018/03/zsh-auto-completion/
 # ------------------------------------------------------
-#         __       __ __
-#  .-----|__.-----|__|  |_
-#  |-- __|  |     |  |   _|
-#  |_____|__|__|__|__|____|
+# ▀▀▀▀█ ▀▀█▀▀ █▄  █ ▀▀█▀▀ ▀▀█▀▀
+# ▄▀▀▀    █   █ ▀▄█   █     █
+# ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
 #
 # INITIAL ZINIT SETUP ----------------------------------
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -129,15 +129,15 @@ source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# ZINIT PLUGINS-----------------------------------------
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+# ─[ ZINIT PLUGINS ]──────────────────────────────────────────
 # zinit ice from"gh-r" as"command" atload'eval "$(starship init zsh)"'; zinit load starship/starship
+# zinit light agkozak/zsh-z
+# zinit light wfxr/forgit
+# zinit pack"default+keys" for fzf
+zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-syntax-highlighting
-# zinit light wfxr/forgit
-# zinit light agkozak/zsh-z
-# zinit pack"default+keys" for fzf
 
 # SNIPPETS ---------------------------------------------
 # zinit snippet OMZ::plugins/git/git.plugin.zsh
@@ -145,11 +145,10 @@ zinit light zsh-users/zsh-syntax-highlighting
 # https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins
 plugins=( fzf zoxide )
 # ------------------------------------------------------
-#   __    __       __
-#  |  |--|__.-----|  |_.-----.----.--.--.
-#  |     |  |__ --|   _|  _  |   _|  |  |
-#  |__|__|__|_____|____|_____|__| |___  |
-#                                 |_____|
+# █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
+# █▀▀▀█   █    ▀▀▀▄   █   █   █ █▀▀▀▄ ▀▀▀▀█
+# ▀   ▀ ▀▀▀▀▀ ▀▀▀▀    ▀    ▀▀▀  ▀   ▀ ▀▀▀▀▀
+#
 # HISTORY COMMAND CONFIGURATION
 # https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
 # https://zsh.sourceforge.io/Doc/Release/Options.html#History
@@ -177,7 +176,6 @@ setopt NO_HIST_NO_FUNCTIONS         # No elimina definiciones de funciones del h
 setopt RM_STAR_WAIT                 # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
 setopt SHARE_HISTORY                # Comparte el historial entre todas las sesiones de terminal.
 
-# ────────────────────────────────────────────────────────────
 # Filtra el historial de Zsh antes de guardarlo.
 # Solo almacena comandos que existen en el sistema y que no coincidan
 # con los patrones definidos en HISTORY_IGNORE
