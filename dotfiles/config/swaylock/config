@@ -1,35 +1,62 @@
-daemonize
-show-failed-attempts
-clock
-effect-blur=7x3
-color=1f1d2e80
-font="JetbrainsMono Nerd Font"
-indicator
-indicator-radius=150
-indicator-thickness=20
-line-color=1f1d2e
-ring-color=191724
-inside-color=1f1d2e
-key-hl-color=eb6f92
-separator-color=00000000
-text-color=e0def4
-text-caps-lock-color=""
-line-ver-color=eb6f92
-ring-ver-color=eb6f92
-inside-ver-color=1f1d2e
-text-ver-color=e0def4
-ring-wrong-color=31748f
-text-wrong-color=31748f
-inside-wrong-color=1f1d2e
-inside-clear-color=1f1d2e
-text-clear-color=e0def4
-ring-clear-color=9ccfd8
-line-clear-color=1f1d2e
-line-wrong-color=1f1d2e
-bs-hl-color=31748f
-grace=2
-grace-no-mouse
-grace-no-touch
-datestr="%d.%m"
-fade-in="0.1"
-ignore-empty-password
+
+# ╒════════════════════════════════════════════════════════════╕
+# │                   Comportamiento general                   │
+# ╘════════════════════════════════════════════════════════════╛
+  daemonize                 # Ejecuta swaylock en segundo plano
+  show-failed-attempts      # Muestra intentos fallidos
+  clock                     # Muestra el reloj
+  grace=2                   # Segundos de gracia antes de requerir contraseña
+  grace-no-mouse            # La gracia no aplica si hay movimiento del mouse
+  grace-no-touch            # La gracia no aplica si hay actividad táctil
+  ignore-empty-password     # Ignora bloqueo si la contraseña está vacía
+  datestr="%d.%m"           # Formato de fecha mostrado
+  fade-in="0.1"             # Tiempo de transición al mostrar la pantalla
+
+# ===============================
+# Efectos visuales
+# ===============================
+  effect-blur=7x3           # Desenfoque de fondo (horizontal x vertical)
+
+# ===============================
+# Fuente y tipografía
+# ===============================
+  font="JetbrainsMono Nerd Font"   # Fuente para reloj y texto
+  text-color=e0def4                # Color general del texto
+  text-caps-lock-color=""          # Color para Caps Lock (no definido)
+
+# ===============================
+# Indicador de desbloqueo
+# ===============================
+  indicator                    # Activa el indicador circular
+  indicator-radius=150          # Radio del indicador en píxeles
+  indicator-thickness=20        # Grosor del indicador
+  line-color=1f1d2e             # Color de línea base
+  ring-color=191724             # Color del anillo base
+  inside-color=1f1d2e           # Color interior del indicador
+  separator-color=00000000      # Separadores transparentes
+
+# ===============================
+# Colores por estado
+# ===============================
+
+## Correcto / Clear
+  ring-clear-color=9ccfd8
+  text-clear-color=e0def4
+  inside-clear-color=1f1d2e
+  line-clear-color=1f1d2e
+
+## Incorrecto / Wrong
+  ring-wrong-color=31748f
+  text-wrong-color=31748f
+  inside-wrong-color=1f1d2e
+  line-wrong-color=1f1d2e
+
+## Verificación / Ver
+  line-ver-color=eb6f92
+  ring-ver-color=eb6f92
+  inside-ver-color=1f1d2e
+  text-ver-color=e0def4
+
+## Resaltado de teclas
+  key-hl-color=eb6f92   # Color al presionar tecla
+  bs-hl-color=31748f    # Color al presionar Backspace
