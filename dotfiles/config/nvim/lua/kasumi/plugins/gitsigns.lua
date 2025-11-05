@@ -26,7 +26,6 @@ require("gitsigns").setup({
 	},
 	-- Opciones ajustadas (el resto se hereda por defecto)
 	attach_to_untracked = true, -- permite mostrar signos en archivos no rastreados
-	show_untracked = true, -- asegura que los signos `untracked` sean visibles
 })
 
 -- Color personalizado del signo untracked
