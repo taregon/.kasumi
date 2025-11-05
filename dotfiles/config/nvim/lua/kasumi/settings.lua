@@ -78,7 +78,7 @@ opt.fillchars = {
 	-- msgsep = "‾",
 	diff = "",
 	eob = " ", -- Suprime el carácter "~" EndOfBuffer
-	fold = "🮥", -- Queda bonito por que sirve de relleno en la barra del diff
+	fold = "🮨", -- Queda bonito por que sirve de relleno en la barra del diff
 	foldclose = " ",
 	foldopen = "🭬",
 	foldsep = " ",
@@ -123,7 +123,7 @@ opt.foldenable = true -- Habilita el plegado de forma predeterminada
 opt.foldmethod = "expr" -- Método de plegado
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevel = 99 -- todos los folds abiertos al inicio
-opt.foldcolumn = "auto" -- Muestra columna de folds solo si hay folds en el buffer
+opt.foldcolumn = "auto:9" -- PEND: Muestra columna de folds solo si hay folds en el buffer
 --   ___       __    __
 -- .'  _.-----|  .--|  |
 -- |   _|  _  |  |  _  |
@@ -133,13 +133,14 @@ opt.foldcolumn = "auto" -- Muestra columna de folds solo si hay folds en el buff
 function CustomFoldText()
 	-- Obtener la primera línea del fold (nombre de función, condicional, etc.)
 	local line = vim.fn.getline(vim.v.foldstart)
+	line = line:gsub("^%s+", "") -- elimina espacios o tabs iniciales
 
 	-- Calcular tamaño del fold
 	local fold_size = 1 + vim.v.foldend - vim.v.foldstart
-	local fold_size_str = " " .. fold_size .. " │ "
+	local fold_size_str = "" .. fold_size .. " 🮥🮥🮥 "
 
 	-- Decoración con foldlevel
-	local fold_level_str = string.rep("🮤🮤🮤  ", vim.v.foldlevel)
+	local fold_level_str = string.rep("🮤🮤🮤   ", vim.v.foldlevel)
 
 	-- Combinar decoración y primera línea del fold
 	return fold_level_str .. fold_size_str .. line
