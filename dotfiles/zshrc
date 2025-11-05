@@ -177,7 +177,11 @@ setopt NO_HIST_NO_FUNCTIONS         # No elimina definiciones de funciones del h
 setopt RM_STAR_WAIT                 # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
 setopt SHARE_HISTORY                # Comparte el historial entre todas las sesiones de terminal.
 
-# ── SOLO GUARDAR COMANDOS EXISTENTES ────────────────────────
+# ────────────────────────────────────────────────────────────
+# Filtra el historial de Zsh antes de guardarlo.
+# Solo almacena comandos que existen en el sistema y que no coincidan
+# con los patrones definidos en HISTORY_IGNORE
+
 # Lista de comandos a ignorar
 HISTORY_IGNORE="* --help|clear|exa|ls|exit|man *|pwd|q|yt-dlp|yt-mp3|ranger"
 
