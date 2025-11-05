@@ -4,7 +4,8 @@
 -- ██║     ██║   ██║██╔══██║██║     ██║██║╚██╗██║██╔══╝
 -- ███████╗╚██████╔╝██║  ██║███████╗██║██║ ╚████║███████╗
 -- ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
---
+local lualine = require("lualine")
+
 -- ─[ CATPPUCCIN ]───────────────────────────────────────────
 local catppuccin = require("catppuccin.palettes").get_palette()
 local u = require("catppuccin.utils.colors")
@@ -36,10 +37,47 @@ local function diff_source()
 	end
 end
 
+-- ────────────────────────────────────────────────────────────
+-- Changing filename color based on modified status
+-- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#changing-filename-color-based-on--modified-status
+local highlight = require("lualine.highlight")
+local Fname = require("lualine.components.filename"):extend()
+
+-- Define colores usando la paleta de Catppuccin
+local fname_colors = {
+	saved = { fg = u.darken(catppuccin.text, 0.5, catppuccin.base) }, -- gris claro o neutro
+	modified = { fg = catppuccin.red }, -- rojo tenue
+}
+
+function Fname:init(options)
+	Fname.super.init(self, options)
+
+	-- Define grupos de color para los dos estados
+	self.status_colors = {
+		saved = highlight.create_component_highlight_group(fname_colors.saved, "lualine_fname_saved", self.options),
+		modified = highlight.create_component_highlight_group(
+			fname_colors.modified,
+			"lualine_fname_modified",
+			self.options
+		),
+	}
+
+	if self.options.color == nil then
+		self.options.color = ""
+	end
+end
+
+function Fname:update_status()
+	local data = Fname.super.update_status(self)
+	local color_group = vim.bo.modified and self.status_colors.modified or self.status_colors.saved
+	data = highlight.component_format_highlight(color_group) .. data
+	return data
+end
+
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                          LUALINE                          │
 -- ╘═══════════════════════════════════════════════════════════╛
-require("lualine").setup({
+lualine.setup({
 	options = {
 		-- theme = "catppuccin",
 		component_separators = { left = "›", right = "" },
@@ -75,7 +113,8 @@ require("lualine").setup({
 		},
 		lualine_c = {
 			{
-				"filename",
+				-- "filename",  -- Si un día la función falla, solo descomenta
+				Fname,
 				path = 4, -- Carpeta principal y nombre
 				shorting_target = 24,
 				symbols = {
