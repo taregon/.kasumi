@@ -10,24 +10,42 @@
 
 require("mason-tool-installer").setup({
 	ensure_installed = {
-		"beautysh", -- zsh formatter
-		"black", -- python formatter
-		"deno", -- markdown, javascript, typescript, json formatter
-		"fixjson", -- json5
-		"isort", -- python formatter
-		"jsonlint", -- json linter
-		"luacheck", -- lua linter
-		"markdownlint", -- Markdown
-		"prettierd", -- GraphQL
-		"pylint", -- python linter
-		"shellcheck", -- shell linter
-		"shfmt", -- A shell parser, formatter, and interpreter with bash support.
-		"sql-formatter",
-		"sqlfluff", -- The SQL Linter for Humans
-		"stylua", -- lua formatter
-		"taplo", -- TOML
-		"yamlfix", -- YAML formatter that keeps comments.
-		"yamllint", -- YAML linter
+		-- ───────────────────────< Shell / Zsh >──────────────────
+		"beautysh", -- Formateador para scripts shell, pero en mi caso: ZSH
+		"shellcheck", -- Linter para shell
+		"shfmt", -- Formateador y parser para bash/sh
+
+		-- ─────────────────────────< Python >─────────────────────
+		"black", -- Formateador
+		"isort", -- Ordena imports
+		"pylint", -- Linter
+
+		-- ──────────────────────────< JSON >──────────────────────
+		"deno", -- Formateador: JSON, JSONC
+		"fixjson", -- Formateador para JSON5
+		"jsonlint", -- Linter para JSON
+
+		-- ─────────────────────< Multipropósito >─────────────────
+		"prettier", -- Formateador: CSS, GRAPHQL, HTML,
+
+		-- Lua
+		"luacheck", -- Linter
+		"stylua", -- Formateador
+
+		-- ────────────────────────< Markdown >────────────────────
+		"markdownlint", -- Linter
+		"mdformat", -- Formateador
+
+		-- ───────────────────────────< SQL >──────────────────────
+		"sql-formatter", -- Formateador
+		"sqlfluff", -- Linter
+
+		-- ──────────────────────────< TOML >──────────────────────
+		"taplo", -- Formateador
+
+		-- ──────────────────────────< YAML >──────────────────────
+		"yamlfix", -- Formateador que conserva comentarios
+		"yamllint", -- Linter
 	},
 	run_on_start = true,
 	auto_update = true,
