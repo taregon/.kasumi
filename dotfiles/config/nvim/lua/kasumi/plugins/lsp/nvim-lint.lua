@@ -17,7 +17,6 @@ local lint = require("lint")
 
 lint.linters_by_ft = {
 	-- stylua: ignore start
-	css      = { "stylelint" },
 	json     = { "jsonlint" },
 	json5    = { "deno" },
 	jsonc    = { "deno" },
@@ -41,7 +40,7 @@ lint.linters.markdownlint.args = {
 	"--disable",
 	"MD013",
 }
-
+-- PEND: Faltan realizar pruebas o descartar esta idea
 -- https://docs.sqlfluff.com/en/stable/reference/cli.html
 -- https://docs.sqlfluff.com/en/stable/rules.html#rule-aliasing.table
 --
@@ -52,23 +51,4 @@ sqlfluff.args = {
 	-- "-–dialect=postgres",
 	-- "--exclude-rules=LT01",
 	-- "-",
-}
-
--- Definición de linter personalizado para JSONC usando deno_fmt
-local lint = require("lint")
-lint.linters.deno = {
-	cmd = "deno",
-	-- stdin = true,
-	-- ignore_exitcode = true, -- evita que la ejecución se interrumpa por exit code
-	-- stream = "stderr", -- los errores se envían a stderr
-	-- stream = "stdout", -- deno fmt imprime errores en stdout
-	args = {
-		"-",
-		"fmt",
-		"--check", -- chequea formato sin modificar
-	},
-	-- parser = require("lint.parser").from_errorformat(
-	-- 	"%f:%l:%c: %m", -- formatea: archivo:linea:columna: mensaje
-	-- 	{ source = "deno" }
-	-- ),
 }
