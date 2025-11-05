@@ -1,6 +1,11 @@
--- ╒═══════════════════════════════════════════════════════════╕
--- │                        CATPPUCCIN                         │
--- ╘═══════════════════════════════════════════════════════════╛
+-- ██╗     ██╗   ██╗ █████╗ ██╗     ██╗███╗   ██╗███████╗
+-- ██║     ██║   ██║██╔══██╗██║     ██║████╗  ██║██╔════╝
+-- ██║     ██║   ██║███████║██║     ██║██╔██╗ ██║█████╗
+-- ██║     ██║   ██║██╔══██║██║     ██║██║╚██╗██║██╔══╝
+-- ███████╗╚██████╔╝██║  ██║███████╗██║██║ ╚████║███████╗
+-- ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
+--
+-- ─[ CATPPUCCIN ]───────────────────────────────────────────
 local catppuccin = require("catppuccin.palettes").get_palette()
 local u = require("catppuccin.utils.colors")
 
@@ -16,6 +21,19 @@ local function get_mode_color()
 		[""] = u.darken(catppuccin.pink, 0.5, catppuccin.base), -- Visual block mode
 	}
 	return { fg = mode_color[vim.fn.mode()], gui = "bold" }
+end
+
+-- ─[ GITSIGNS ]─────────────────────────────────────────────
+-- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
+local function diff_source()
+	local gitsigns = vim.b.gitsigns_status_dict
+	if gitsigns then
+		return {
+			added = gitsigns.added,
+			modified = gitsigns.changed,
+			removed = gitsigns.removed,
+		}
+	end
 end
 
 -- ╒═══════════════════════════════════════════════════════════╕
@@ -46,6 +64,7 @@ require("lualine").setup({
 			"branch",
 			{
 				"diff",
+				source = diff_source,
 				symbols = {
 					added = "󱐮 ",
 					modified = "󱐯 ",
@@ -92,8 +111,8 @@ require("lualine").setup({
 		},
 	},
 	extensions = {
-		"fugitive",
-		"neo-tree",
+		-- "fugitive",
+		-- "neo-tree",
 		"quickfix",
 		"fzf",
 	},
