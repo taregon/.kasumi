@@ -183,7 +183,7 @@ setopt SHARE_HISTORY                # Comparte el historial entre todas las sesi
 # con los patrones definidos en HISTORY_IGNORE
 
 # Lista de comandos a ignorar
-HISTORY_IGNORE="* --help|clear|exa|ls|exit|man *|pwd|q|yt-dlp|yt-mp3|ranger"
+HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|ranger|yt-mp3"
 
 # Hook: decidir qué comandos se guardan en el historial
 zshaddhistory() {
