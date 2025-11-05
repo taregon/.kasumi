@@ -38,19 +38,19 @@ local function diff_source()
 end
 
 -- ────────────────────────────────────────────────────────────
--- Changing filename color based on modified status
+-- Ajustar el color del nombre del archivo dependiendo si ha sido modificado o no.
 -- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#changing-filename-color-based-on--modified-status
 local highlight = require("lualine.highlight")
-local Fname = require("lualine.components.filename"):extend()
+local file_status_name = require("lualine.components.filename"):extend()
 
 -- Define colores usando la paleta de Catppuccin
 local fname_colors = {
-	saved = { fg = u.darken(catppuccin.text, 0.5, catppuccin.base) }, -- gris claro o neutro
-	modified = { fg = catppuccin.red }, -- rojo tenue
+	saved = { fg = u.darken(catppuccin.text, 0.4, catppuccin.base) }, -- color opaco
+	modified = { fg = u.darken(catppuccin.yellow, 0.7, catppuccin.base) }, -- color opaco
 }
 
-function Fname:init(options)
-	Fname.super.init(self, options)
+function file_status_name:init(options)
+	file_status_name.super.init(self, options)
 
 	-- Define grupos de color para los dos estados
 	self.status_colors = {
@@ -67,8 +67,8 @@ function Fname:init(options)
 	end
 end
 
-function Fname:update_status()
-	local data = Fname.super.update_status(self)
+function file_status_name:update_status()
+	local data = file_status_name.super.update_status(self)
 	local color_group = vim.bo.modified and self.status_colors.modified or self.status_colors.saved
 	data = highlight.component_format_highlight(color_group) .. data
 	return data
@@ -86,11 +86,11 @@ lualine.setup({
 	},
 	disabled_filetypes = {
 		statusline = {
-			"neo-tree",
+			-- "neo-tree", -- Quite el plug
 			"undotree",
 		},
 		winbar = {
-			"neo-tree",
+			-- "neo-tree", -- Quite el plug
 			"undotree",
 		},
 	},
@@ -103,35 +103,23 @@ lualine.setup({
 			{
 				"diff",
 				source = diff_source,
-				symbols = {
-					added = "󱐮 ",
-					modified = "󱐯 ",
-					removed = "󱐰 ",
-				},
+				symbols = { added = "󱐮 ", modified = "󱐯 ", removed = "󱐰 " },
 			},
-			"diagnostics",
+			-- "diagnostics",
 		},
 		lualine_c = {
 			{
 				-- "filename",  -- Si un día la función falla, solo descomenta
-				Fname,
+				file_status_name,
 				path = 4, -- Carpeta principal y nombre
 				shorting_target = 24,
-				symbols = {
-					modified = "",
-					readonly = "󰍁",
-					newfile = "󰽃",
-				},
+				symbols = { modified = "", readonly = "", newfile = "󰽃" },
 			},
 		},
 		lualine_x = {
 			{
 				"fileformat",
-				symbols = {
-					unix = "󰻀",
-					dos = "󰍲",
-					mac = "",
-				},
+				symbols = { unix = "󰻀", dos = "󰍲", mac = "" },
 				color = get_mode_color,
 			},
 			{
