@@ -113,7 +113,7 @@ lualine.setup({
 				file_status_name,
 				path = 4, -- Carpeta principal y nombre
 				shorting_target = 24,
-				symbols = { modified = "", readonly = "", newfile = "󰽃" },
+				symbols = { modified = "", readonly = "󰞀", newfile = "󰽃" },
 			},
 		},
 		lualine_x = {
