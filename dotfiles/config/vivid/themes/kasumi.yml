@@ -1,0 +1,162 @@
+---
+colors:
+  # Original "catppuccin" theme
+
+  blue: 8aadf4
+  flamingo: C099FF
+  green: a6da95
+  lavender: b7bdf8
+  maroon: ee99a0
+  mauve: c6a0f6
+  pink: f5bde6
+  rosewater: f4dbd6
+  sapphire: 7dc4e4
+  sky: 91d7e3
+  # yellow: eed49f
+
+  celeste: 5a9ed6
+  orange: FFC777
+  peach: f3a77e
+  red: ff757f
+  silver: 758DB0
+  teal: 62d1c0
+  turquoise: 4fd6be
+  moon: c5cdd0
+  mist: E292E2
+  aqua: 8ec2d3
+
+  text: cad3f5
+  subtext1: b8c0e0
+  subtext0: a5adcb
+  overlay2: 939ab7
+  overlay1: 8087a2
+  overlay0: 6e738d
+  surface2: 5b6078
+  surface1: 494d64
+  surface0: 363a4f
+  base: 22282c
+  mantle: '1e2030'
+  crust: '181926'
+
+core:
+  normal_text: {}
+  regular_file: {}
+  reset_to_normal: {}
+
+  directory:
+    foreground: aqua
+
+  symlink:
+    foreground: pink
+
+  multi_hard_link: {}
+
+  fifo:
+    foreground: crust
+    background: blue
+
+  socket:
+    foreground: crust
+    background: pink
+
+  door:
+    foreground: crust
+    background: pink
+
+  block_device:
+    foreground: sapphire
+    background: surface0
+
+  character_device:
+    foreground: pink
+    background: surface0
+
+  broken_symlink:
+    foreground: crust
+    background: red
+
+  missing_symlink_target:
+    foreground: crust
+    background: red
+
+  setuid: {}
+
+  setgid: {}
+
+  file_with_capability: {}
+
+  sticky_other_writable: {}
+
+  other_writable: {}
+
+  sticky: {}
+
+  executable_file:
+    foreground: red
+    font-style: bold
+
+text:
+  special:
+    foreground: base
+    background: orange
+
+  todo:
+    foreground: teal
+    font-style: bold
+
+  licenses:
+    foreground: overlay2
+
+  configuration:
+    foreground: peach
+
+    dockerfile:
+      foreground: celeste
+
+  other:
+    foreground: moon
+
+markup:
+  foreground: turquoise
+
+programming:
+  source:
+    foreground: orange
+
+  tooling:
+    foreground: teal
+
+    continuous-integration:
+      foreground: green
+
+media:
+  foreground: flamingo
+
+  fonts:
+    foreground: celeste
+
+  image:
+    foreground: flamingo
+
+    raw:
+      foreground: silver
+
+    bitmap:
+      foreground: mist
+
+office:
+  foreground: sapphire
+
+archives:
+  foreground: red
+  font-style: underline
+
+executable:
+  foreground: base
+  background: green
+
+  # foreground: red
+  # font-style: bold
+
+unimportant:
+  foreground: surface2
