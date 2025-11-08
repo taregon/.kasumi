@@ -12,9 +12,8 @@ require("which-key").setup({
 })
 require("which-key.health").check()
 
--- ╒═══════════════════════════════════════════════════════════╕
--- │            FUNCIÓN PARA ALTERNAR VIRTUAL TEXT             │
--- ╘═══════════════════════════════════════════════════════════╛
+-- ────────────────────────────────────────────────────────────
+-- FUNCIÓN PARA ALTERNAR VIRTUAL TEXT
 local toggle_virtual_text = function()
 	local current = vim.diagnostic.config().virtual_text
 	vim.diagnostic.config({ virtual_text = not current })
@@ -54,6 +53,7 @@ require("which-key").add({
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert hunk", mode = "v" },
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert selected lines", mode = "v" },
+	{ "<leader>gR", ":Gitsigns reset_hunk<CR>", desc = "Revert current hunk" },
 })
