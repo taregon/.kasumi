@@ -4,42 +4,24 @@ colors:
 
   flamingo: C099FF
   green: a6da95
-  # lavender: b7bdf8
-  # maroon: ee99a0
-  # mauve: c6a0f6
   pink: f5bde6
-  # rosewater: f4dbd6
   sapphire: 7dc4e4
-  # sky: 91d7e3
-  # yellow: eed49f
+  surface0: 363a4f
+  base: 22282c
+  crust: '181926'
 
   celeste: 5a9ed6
-  sunset: FFC777
+  indigo: 5c6176
+  mist: E292E2
+  moon: c5cdd0
+  nebula: 7f9dc2
   peach: faa177
   red: ff757f
   silver: 8196b6
+  sky: 85cffe
+  sunset: FFC777
   teal: 62d1c0
   turquoise: 4fd6be
-  moon: c5cdd0
-  mist: E292E2
-  nebula: 7f9dc2
-  # aqua: 8ec2d3
-  indigo: 5c6176
-  # testo: 987a50
-  sky: 85cffe
-
-  # text: cad3f5
-  # subtext1: b8c0e0
-  # subtext0: a5adcb
-  # overlay2: 939ab7
-  # overlay1: 8087a2
-  # overlay0: 6e738d
-  # surface2: 5b6078
-  # surface1: 494d64
-  surface0: 363a4f
-  base: 22282c
-  # mantle: '1e2030'
-  crust: '181926'
 
 core:
   normal_text: {}
@@ -159,9 +141,6 @@ archives:
 executable:
   foreground: base
   background: green
-
-  # foreground: red
-  # font-style: bold
 
 unimportant:
   foreground: indigo
