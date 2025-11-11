@@ -202,22 +202,29 @@ install_sys_theme() {
 install_sys_tools() {
     echo ">> Instalando herramientas del sistema y utilidades Wayland"
     local pkgs=(
+
         # Monitoreo y sensores
-        btop       # Monitor de sistema
-        cava       # Visualización de audio en terminal
-        gotop      # Monitor moderno de sistema
-        lm_sensors # Sensores de hardware
+        btop       # Monitor de sistema interactivo
+        fastfetch  # Muestra información detallada del sistema con alto rendimiento
+        gotop      # Monitor moderno con interfaz TUI
+        lm_sensors # Lectura de sensores de hardware (CPU, GPU, etc.)
+        wluma      # Ajusta dinámicamente el brillo según la iluminación detectada
 
-        # Bluetooth y permisos
-        blueman      # Gestor de Bluetooth
-        polkit-gnome # Polkit GUI
+        # Audio y visualización
+        cava # Visualizador de espectro de audio en terminal
 
-        # Wayland / entorno gráfico
+        # Conectividad y Bluetooth
+        blueman # Gestor gráfico de Bluetooth
+
+        # Seguridad y permisos
+        polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
+
+        # Entorno gráfico (Wayland)
         grim         # Captura de pantalla para Wayland
-        hyprpicker   # Selector de color Wayland
-        mako         # Demonio de notificaciones para Wayland
-        wl-clipboard # Portapapeles Wayland
-        wlogout      # Pantalla de logout minimalista
+        hyprpicker   # Selector de color para Wayland
+        mako         # Demonio de notificaciones Wayland
+        wl-clipboard # Herramienta de portapapeles para Wayland
+        wlogout      # Pantalla de cierre de sesión minimalista
     )
     instalar "${pkgs[@]}"
 }
