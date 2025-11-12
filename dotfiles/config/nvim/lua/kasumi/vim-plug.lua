@@ -18,10 +18,12 @@ vim.call("plug#begin")
 Plug("catppuccin/nvim", { ["as"] = "catppuccin" })
 Plug("crispybaccoon/aurora")
 Plug("navarasu/onedark.nvim")
+Plug("EdenEast/nightfox.nvim")
 
 -- ╒═════════════════════════════════════════════════════════╕
 -- │                         PLUGINS                         │
 -- ╘═════════════════════════════════════════════════════════╛
+-- Plug("nvim-neo-tree/neo-tree.nvim") -- Navegador de archivos
 Plug("akinsho/bufferline.nvim") -- Muestra los buffer en pestañas
 Plug("echasnovski/mini.nvim") -- Pack de módulos. Tengo varios en uso
 Plug("folke/todo-comments.nvim") -- Resalta las lineas con comentarios
@@ -34,7 +36,6 @@ Plug("norcalli/nvim-colorizer.lua") -- Colorea los códigos RGB/HEX
 Plug("numToStr/Comment.nvim") -- Para comentar lineas o bloques  con F2 / F3
 Plug("nvim-lua/plenary.nvim") -- Depende: cokeline, neo-tree
 Plug("nvim-lualine/lualine.nvim") -- Barra de estado
-Plug("nvim-neo-tree/neo-tree.nvim") -- Navegador de archivos
 Plug("nvim-treesitter/nvim-treesitter", { ["do"] = ":TSUpdate" }) -- Syntax Highlighting / colorea el código
 Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
 Plug("petertriho/nvim-scrollbar") -- Barra de scroll
@@ -42,14 +43,15 @@ Plug("petertriho/nvim-scrollbar") -- Barra de scroll
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS que no requieren "require" obligatoriamente
 --
+-- Plug("MunifTanjim/nui.nvim") -- Depende: neo-tree
+Plug("ibhagwan/fzf-lua") -- Integración con FZF en Lua (requerido por nvim-bqf)
+Plug("kevinhwang91/nvim-bqf") -- Mejora la vista y navegación del quickfix list
 Plug("mechatroner/rainbow_csv") -- Colora archivos CSV
 Plug("mhinz/vim-startify") -- Dashboard
-Plug("MunifTanjim/nui.nvim") -- Depende: neo-tree
 Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
 Plug("sindrets/diffview.nvim") -- Ajustes en settins.lua  Presiona F5 (sin require)
 Plug("tpope/vim-fugitive") -- Habilita comandos de git
 Plug("vague2k/vague.nvim") -- Agrega nuevas variaciones de text case
-
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS relacionados con LSP
 --
