@@ -54,7 +54,7 @@ bindsym $mod+m                exec $music
 bindsym $mod+p                exec $colorpicker
 bindsym $mod+r                mode "resize"
 bindsym $mod+t                exec $filemanager
-bindsym Control+space         exec $launcher
+bindsym $mod+n                exec $launcher
 bindsym Print                 exec ~/.config/sway/scripts/rofi_screenshot
 bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
 bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
