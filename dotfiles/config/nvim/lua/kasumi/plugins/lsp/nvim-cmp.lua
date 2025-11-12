@@ -50,7 +50,7 @@ cmp.setup({
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 
 		-- Forzar apertura del menú
-		["<TAB>"] = cmp.mapping.complete(),
+		["<C-Space>"] = cmp.mapping.complete(),
 
 		-- Cancelar el menú
 		["<C-e>"] = cmp.mapping.abort(),
