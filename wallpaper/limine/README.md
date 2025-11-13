@@ -1,7 +1,8 @@
 # Fondos de Limine
 
 Esta carpeta contiene los fondos utilizados por el gestor de arranque **Limine**.\
-El archivo activo usado por el tema se define en el script [🔗 limine.sh](../../postinstall/01-limine.sh)
+El archivo activo usado por el tema se define en el script:
+[⚙️ limine.sh](../../postinstall/01-limine.sh) *(ruta sujeta a cambios)*
 
 ## Archivo activo
 
