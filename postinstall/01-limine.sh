@@ -7,7 +7,7 @@ set -euo pipefail # Detenerse ante cualquier error y definir variables antes de 
 LIMINE_CONF="/boot/EFI/limine/limine.conf"
 LIMINE_BACK="${LIMINE_CONF}.bak"
 WALLPAPER_DST="/boot/EFI/limine/wallpaper.jpg"
-WALLPAPER_SRC=~/.kasumi/wallpaper/wall_134239802.jpg
+WALLPAPER_SRC=~/.kasumi/wallpaper/limine/boot-bg.jpg
 
 # ─[ Ajustes para el wallpaper ]──────────────────────────────
 WALL_CONF=$(
