@@ -214,7 +214,8 @@ install_sys_tools() {
         cava # Visualizador de espectro de audio en terminal
 
         # Conectividad y Bluetooth
-        blueman # Gestor gráfico de Bluetooth
+        # blueman # Gestor gráfico de Bluetooth
+        blueberry
 
         # Seguridad y permisos
         polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
