@@ -104,6 +104,10 @@ dotfiles:
     src: config/vivid
     dst: ~/.config/vivid
     link: absolute
+  d_wallpapers:
+    src: wallpapers
+    dst: ~/.local/share/kasumi/wallpapers
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -121,6 +125,7 @@ profiles:
       - f_zsh
       - d_gotop
       - d_vivid
+      - d_wallpapers
   kasumi_extras:
     dotfiles:
       - d_neovim
