@@ -1,14 +1,16 @@
 configuration {
     font: "JetBrainsMono Nerd Font 12";
-    modi: "drun,window,filebrowser";
-    display-combi:  " ";
-    display-filebrowser: " ";
-    display-drun:   " ";
-    display-run:    " ";
-    display-ssh:    " ";
-    display-window: " ";
     line-margin: 10;
-    show-icons:     true;
+    show-icons: true;
+
+    modi: "drun,window,filebrowser";
+
+    display-combi:       " ";
+    display-drun:        " ";
+    display-filebrowser: " ";
+    display-run:         " ";
+    display-ssh:         " ";
+    display-window:      " ";
 }
 
 @theme "~/.config/rofi/kasumi-ex.rasi"
