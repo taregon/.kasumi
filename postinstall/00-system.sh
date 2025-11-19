@@ -113,14 +113,15 @@ install_app_neovim() {
 install_app_ranger() {
     echo ">> Instalando ranger y complementos"
     local pkgs=(
-        atool          # Soporte para archivos comprimidos
-        imagemagick    # Conversión y vista previa de imágenes
-        mediainfo      # Muestra metadatos de audio y video
-        poppler        # Vista previa y utilidades para PDF
-        python-chardet # Detección de codificación de texto
-        python-pillow  # Librería para procesar imágenes (PIL)
-        ranger         # Gestor de archivos en terminal tipo VI
-        trash-cli      # Envío de archivos a la papelera desde CLI
+        atool               # Soporte para archivos comprimidos
+        imagemagick         # Conversión y vista previa de imágenes
+        mediainfo           # Muestra metadatos de audio y video
+        perl-image-exiftool # Lee y extrae metadatos EXIF/IPTC/XMP.
+        poppler             # Vista previa y utilidades para PDF
+        python-chardet      # Detección de codificación de texto
+        python-pillow       # Librería para procesar imágenes (PIL)
+        ranger              # Gestor de archivos en terminal tipo VI
+        trash-cli           # Envío de archivos a la papelera desde CLI
     )
     instalar "${pkgs[@]}"
 }

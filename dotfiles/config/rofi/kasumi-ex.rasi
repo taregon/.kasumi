@@ -1,0 +1,134 @@
+/** Nordic rofi theme limpio con mode-switcher **/
+
+* {
+    bg-dark:      #374247;
+    bg-light:     #356c73;
+    fg-color:     #a2d9e0;
+    overlay:      #a2d9e0;
+    border-color: #74c6d1;
+
+    foreground: @fg-color;
+    text-normal: #8798a0;
+
+    highlight-bg: @overlay;
+    highlight-fg: @bg-dark;
+
+    transparent: @bg-dark;
+}
+
+/* --- Window --- */
+window {
+    location: center;
+    anchor: center;
+    padding: 10px;
+    border: 1px;
+    border-color: @overlay;
+    border-radius: 0px;
+    background-color: @bg-dark;
+
+    spacing: 0;
+    children: [ mainbox ];
+}
+
+/* --- Layout principal --- */
+mainbox {
+    padding: 10px;
+    spacing: 10px;
+    background-color: @bg-dark;
+    children: [ inputbar, message, listview, mode-switcher ];
+}
+
+/* --- Mensajes --- */
+message {
+    color: @bg-dark;
+    padding: 5px;
+    border: 0px;
+    background-color: @bg-dark;
+}
+
+/* --- Input bar --- */
+inputbar {
+    color: @fg-color;
+    padding: 11px;
+    spacing: 12px;
+    background-color: @bg-light;
+
+    border: 1px;
+    border-radius: 0px;
+    border-color: @border-color;
+}
+
+entry, prompt, case-indicator {
+    text-color: inherit;
+    background-color: @bg-light;
+}
+
+prompt {
+    margin: 0px 1em 0px 0px;
+}
+
+/* --- List view --- */
+listview {
+    padding: 8px;
+
+    /* 2 columnas */
+    columns: 2;
+    lines: 6;
+
+    border: 0px;
+    background-color: @bg-dark;
+
+    dynamic: false;
+}
+
+/* --- Items --- */
+element {
+    padding: 6px;
+    vertical-align: 0.5;
+    border-radius: 0px;
+
+    background-color: transparent;
+    text-color: @text-normal;
+}
+
+element selected.normal {
+    background-color: @highlight-bg;
+    text-color: @highlight-fg;
+}
+
+element-text, element-icon {
+    background-color: inherit;
+    text-color: inherit;
+}
+
+/* --- Mode Switcher (barra de modos) --- */
+mode-switcher {
+    spacing: 6px;
+    padding: 6px 0px;
+    background-color: @bg-dark;
+}
+
+/* Botones de modo */
+button {
+    padding: 6px;
+    border: 1px;
+    border-radius: 0px;
+    border-color: @border-color;
+    background-color: @bg-light;
+    text-color: @foreground;
+}
+
+button selected {
+    background-color: @highlight-bg;
+    text-color: @highlight-fg;
+}
+
+/* --- Textbox --- */
+textbox {
+    padding: 8px;
+    border-radius: 0px;
+    border: 1px;
+    border-color: @border-color;
+    background-color: @bg-dark;
+    text-color: @foreground;
+}

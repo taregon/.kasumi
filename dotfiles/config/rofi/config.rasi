@@ -1,0 +1,22 @@
+configuration {
+    font: "JetBrainsMono Nerd Font 12";
+    modi: "drun,window,filebrowser";
+    display-combi:  " ";
+    display-filebrowser: " ";
+    display-drun:   " ";
+    display-run:    " ";
+    display-ssh:    " ";
+    display-window: " ";
+    line-margin: 10;
+    show-icons:     true;
+}
+
+@theme "~/.config/rofi/kasumi-ex.rasi"
+
+inputbar {
+    font: "JetBrainsMono Nerd Font 20";
+}
+
+window {
+	width: 30%;
+}
