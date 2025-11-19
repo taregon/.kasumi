@@ -5,6 +5,9 @@
 -- ╚██████╗██║  ██║   ██║   ██║     ██║     ╚██████╔╝╚██████╗╚██████╗██║██║ ╚████║
 --  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝      ╚═════╝  ╚═════╝ ╚═════╝╚═╝╚═╝  ╚═══╝
 
+-- La escala de colores las genero en https://components.ai/color-scale
+-- Opciones: HSV y Natural / RGV y Lineal
+
 -- Importa el módulo de utilidades de colores desde el tema Catppuccin.
 local u = require("catppuccin.utils.colors")
 
@@ -35,9 +38,9 @@ require("catppuccin").setup({
 			overlay1  = "#9eb7c6", -- Fondo de los 'folds'
 			overlay0  = "#5d6c74", -- Comentarios
 			surface1  = "#4a585f", -- Numero de linea, resaltado linea horizontal, (end-of-line)
-			surface0  = "#414b50", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
+			surface0  = "#414e55", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
 			base      = "#2e383d", -- A. Fondo
-			mantle    = "#354146", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
+			mantle    = "#374247", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
 			crust     = "#49575e", -- C. Divisor de paneles, fondo pestañas,
 			-- stylua: ignore end
 		},
