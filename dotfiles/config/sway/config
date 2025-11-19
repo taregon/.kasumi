@@ -12,7 +12,6 @@ exec mpd
 exec wl-paste --type images --watch cliphist store
 exec wl-paste --type text --watch cliphist store
 # exec ~/.config/sway/scripts/bg_random_auto
-exec ~/.config/sway/scripts/sleep
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                          VARIABLES                          │
@@ -24,7 +23,7 @@ set $down  j
 set $up    k
 set $right l
 
-set $launcher wofi -show drun
+set $launcher rofi -show drun
 set $term kitty
 set $music ~/.config/sway/scripts/rofi_music
 set $colorpicker hyprpicker --autocopy
@@ -50,6 +49,7 @@ bindsym $mod+Return           exec $term
 bindsym $mod+Shift+q          kill
 bindsym $mod+c                exec $browser
 bindsym $mod+grave            exec ~/.config/sway/scripts/keybind
+# REVISAR: atajo de música, pues llama rofi
 bindsym $mod+m                exec $music
 bindsym $mod+p                exec $colorpicker
 bindsym $mod+r                mode "resize"
