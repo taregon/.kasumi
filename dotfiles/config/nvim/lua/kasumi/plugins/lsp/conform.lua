@@ -39,9 +39,9 @@ require("conform").setup({
 		-- stylua: ignore start
 		["*"]    = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
 		conf     = { "awk" },
-		css      = { "prettier" },
-		graphql  = { "prettier" },
-		html     = { "prettier" },
+		css      = { "prettierd" },
+		graphql  = { "prettierd" },
+		html     = { "prettierd" },
 		json     = { "deno_fmt" },
 		json5    = { "fixjson" },
 		jsonc    = { "deno_fmt" },

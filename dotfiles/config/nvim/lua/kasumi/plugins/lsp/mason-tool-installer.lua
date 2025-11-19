@@ -26,7 +26,7 @@ require("mason-tool-installer").setup({
 		"jsonlint", -- Linter para JSON
 
 		-- ─────────────────────< Multipropósito >─────────────────
-		"prettier", -- Formateador: CSS, GRAPHQL, HTML,
+		"prettierd", -- Formateador: CSS, GRAPHQL, HTML,
 
 		-- Lua
 		"luacheck", -- Linter
