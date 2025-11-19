@@ -108,10 +108,18 @@ dotfiles:
     src: wallpapers
     dst: ~/.local/share/kasumi/wallpapers
     link: absolute
+  d_rofi:
+    src: config/rofi
+    dst: ~/.config/rofi
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
       - d_git
+      - d_gotop
+      - d_rofi
+      - d_vivid
+      - d_wallpapers
       - d_zathura
       - f_cava
       - f_gitconfig
@@ -123,9 +131,6 @@ profiles:
       - f_redshift
       - f_tmux
       - f_zsh
-      - d_gotop
-      - d_vivid
-      - d_wallpapers
   kasumi_extras:
     dotfiles:
       - d_neovim
