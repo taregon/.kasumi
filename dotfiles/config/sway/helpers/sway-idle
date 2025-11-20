@@ -12,7 +12,7 @@ LOCK_SCRIPT="$HOME/.config/sway/helpers/sway-lock"
 # 5. Bloquea antes de suspender (manual o automático)
 
 swayidle -w \
-    timeout 30 "$LOCK_SCRIPT" \
+    timeout 300 "$LOCK_SCRIPT" \
     timeout 600 'swaymsg "output * dpms off"' \
     resume 'swaymsg "output * dpms on"' \
     timeout 900 'systemctl suspend' \

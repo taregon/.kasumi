@@ -3,7 +3,7 @@
 # │          Cambia el fondo automáticamente en Sway           │
 # ╘════════════════════════════════════════════════════════════╛
 #
-INTERVAL=120 # Ajustar según necesidad
+INTERVAL=120 # Tiempo en segundos. Ajustar según necesidad
 BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
 
 # Función para aplicar un fondo aleatorio
@@ -27,7 +27,7 @@ set_random_wallpaper() {
     done
 }
 
-# Bucle principal
+# ── BUCLE PRINCIPAL ─────────────────────────────────────────
 while true; do
     set_random_wallpaper
     sleep "$INTERVAL"
