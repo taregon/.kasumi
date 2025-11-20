@@ -45,7 +45,7 @@ local file_status_name = require("lualine.components.filename"):extend()
 
 -- Define colores usando la paleta de Catppuccin
 local fname_colors = {
-	saved = { fg = u.darken(catppuccin.text, 0.4, catppuccin.base) }, -- color opaco
+	saved = { fg = u.darken(catppuccin.surface1, 1.5, catppuccin.base) }, -- color opaco
 	modified = { fg = u.darken(catppuccin.yellow, 0.7, catppuccin.base) }, -- color opaco
 }
 
