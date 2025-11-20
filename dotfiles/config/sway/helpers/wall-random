@@ -4,16 +4,13 @@
 # ╘════════════════════════════════════════════════════════════╛
 #
 INTERVAL=120 # Ajustar según necesidad
-BACKGROUND_DIR="$HOME/.config/sway/backgrounds"
+BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
 
 # Función para aplicar un fondo aleatorio
 set_random_wallpaper() {
     # Elegir imagen aleatoria
     local random_image
     random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
-
-    # Matar instancia anterior de swaybg
-    pkill -x swaybg
 
     # Aplicar fondo en todos los monitores activos
     for output in $(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .name'); do
