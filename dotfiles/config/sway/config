@@ -5,32 +5,55 @@
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 
-# NOTA: debes mover estos exec al archivo autostart
-exec --no-startup-id nm-applet
-exec mpDris2
-exec mpd
-exec wl-paste --type images --watch cliphist store
-exec wl-paste --type text --watch cliphist store
+# ╒═════════════════════════════════════════════════════════════╕
+# │         NOTA: SINCRONIZACIÓN DE VARIABLES DE ENTORNO        │
+# ╘═════════════════════════════════════════════════════════════╛
+# Necesario si Sway se inicia desde TTY o apps dependen de systemd/D-Bus
+
+# Importa al entorno de systemd --user las variables de Sway
+# para que servicios como mako, swayidle o kanshi detecten Wayland.
+  exec systemctl --user import-environment \
+  WAYLAND_DISPLAY \
+  XDG_CURRENT_DESKTOP \
+  XDG_SESSION_TYPE \
+  SWAYSOCK
+
+# Actualiza el entorno D-Bus con las mismas variables.
+# Esto asegura que las aplicaciones que se activan mediante D-Bus
+# operen dentro del entorno correcto de Wayland.
+  exec dbus-update-activation-environment --systemd \
+  WAYLAND_DISPLAY \
+  XDG_CURRENT_DESKTOP \
+  XDG_SESSION_TYPE \
+  SWAYSOCK
+
+# ────────────────────────────────────────────────────────────
+# PEND: debes mover estos exec al archivo autostart
+  exec --no-startup-id nm-applet
+  exec mpDris2
+  exec mpd
+  exec wl-paste --type images --watch cliphist store
+  exec wl-paste --type text --watch cliphist store
 # exec ~/.config/sway/scripts/bg_random_auto
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                          VARIABLES                          │
 # ╘═════════════════════════════════════════════════════════════╛
-set $mod   Mod4
+  set $mod   Mod4
 
-set $left  h
-set $down  j
-set $up    k
-set $right l
+  set $left  h
+  set $down  j
+  set $up    k
+  set $right l
 
-set $launcher rofi -show drun
-set $term kitty
-set $music ~/.config/sway/scripts/rofi_music
-set $colorpicker hyprpicker --autocopy
-set $browser firefox
-set $filemanager thunar
+  set $launcher rofi -show drun
+  set $term kitty
+  set $music ~/.config/sway/scripts/rofi_music
+  set $colorpicker hyprpicker --autocopy
+  set $browser firefox
+  set $filemanager thunar
 
-floating_modifier $mod
+  floating_modifier $mod
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                      ATAJOS DE TECLADO                      │
@@ -42,25 +65,25 @@ floating_modifier $mod
 #bindsym XF86AudioPrev exec playerctl previous
 #bindsym XF86AudioRaiseVolume exec ~/.config/sway/scripts/volume --inc
 #bindsym XF86AudioStop exec playerctl stop
-bindsym $mod+Alt+e            exec ~/.config/sway/scripts/rofi_powermenu
-bindsym $mod+Alt+r            reload
-bindsym $mod+Print            exec ~/.config/sway/scripts/rofi_screenrecord
-bindsym $mod+Return           exec $term
-bindsym $mod+Shift+q          kill
-bindsym $mod+c                exec $browser
-bindsym $mod+grave            exec ~/.config/sway/scripts/keybind
+  bindsym $mod+Alt+e            exec ~/.config/sway/scripts/rofi_powermenu
+  bindsym $mod+Alt+r            reload
+  bindsym $mod+Print            exec ~/.config/sway/scripts/rofi_screenrecord
+  bindsym $mod+Return           exec $term
+  bindsym $mod+Shift+q          kill
+  bindsym $mod+c                exec $browser
+  bindsym $mod+grave            exec ~/.config/sway/scripts/keybind
 # REVISAR: atajo de música, pues llama rofi
-bindsym $mod+m                exec $music
-bindsym $mod+p                exec $colorpicker
-bindsym $mod+r                mode "resize"
-bindsym $mod+t                exec $filemanager
-bindsym $mod+n                exec $launcher
-bindsym Print                 exec ~/.config/sway/scripts/rofi_screenshot
-bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
-bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
+  bindsym $mod+m                exec $music
+  bindsym $mod+p                exec $colorpicker
+  bindsym $mod+r                mode "resize"
+  bindsym $mod+t                exec $filemanager
+  bindsym $mod+n                exec $launcher
+  bindsym Print                 exec ~/.config/sway/scripts/rofi_screenshot
+  bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
+  bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
 
-    # Lock screen
-    # bindsym $mod+l exec hyprlock
+# Lock screen
+# bindsym $mod+l exec hyprlock
 # exec /usr/bin/lxpolkit
 # exec mako
 # exec nm-applet --indicator
@@ -69,17 +92,17 @@ bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
 # ╒═════════════════════════════════════════════════════════════╕
 # │                       Barra de estado                       │
 # ╘═════════════════════════════════════════════════════════════╛
-bar {
-    swaybar_command waybar
-}
+  bar {
+  swaybar_command waybar
+  }
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                   Distribución de Teclado                   │
 # ╘═════════════════════════════════════════════════════════════╛
-input type:keyboard {
-    xkb_layout  latam,us
-    xkb_options grp:alt_shift_toggle
-}
+  input type:keyboard {
+  xkb_layout  latam,us
+  xkb_options grp:alt_shift_toggle
+  }
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                 Configuraciones Adicionales                 │
@@ -87,9 +110,9 @@ input type:keyboard {
 # No muevas esta sección o sino cuando cargue la configuración,
 # no sabrán que teclas asignaste
 #
-include ~/.config/sway/sway.d/appearance.conf
-include ~/.config/sway/sway.d/autostart.conf
-include ~/.config/sway/sway.d/keybinds-navigation.conf
-include ~/.config/sway/sway.d/keybinds-resize.conf
-include ~/.config/sway/sway.d/windows-floating.conf
-include ~/.config/sway/sway.d/workspaces.conf
+  include ~/.config/sway/sway.d/appearance.conf
+  include ~/.config/sway/sway.d/autostart.conf
+  include ~/.config/sway/sway.d/keybinds-navigation.conf
+  include ~/.config/sway/sway.d/keybinds-resize.conf
+  include ~/.config/sway/sway.d/windows-floating.conf
+  include ~/.config/sway/sway.d/workspaces.conf
