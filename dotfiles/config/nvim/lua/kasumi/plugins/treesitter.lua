@@ -62,13 +62,13 @@ require("nvim-treesitter.configs").setup({
 		additional_vim_regex_highlighting = false, -- Solo se aplicarán las reglas de Treesitter,
 	},
 	-- https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#indentation
-	indent = { enable = true }, -- Habilita la indentación. EXPERIMENTAL
+	-- indent = { enable = true }, -- Habilita la indentación. EXPERIMENTAL
 })
 
--- Este plugin muestra el CONTEXTO actual en la parte superior de la ventana mientras navegas por el código.
--- Por si te cansas de navic, puedes activar esto
+-- NOTA: Este plugin muestra el CONTEXTO actual en la parte superior de la ventana
+-- mientras navegas por el código. Por si te cansas de navic, puedes activar esto
 require("treesitter-context").setup({
-	enable = false,
+	enable = false, -- pero lo desactive
 })
 
 -- Configuración para autotag
