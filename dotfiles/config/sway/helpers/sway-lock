@@ -1,0 +1,11 @@
+#!/bin/bash
+# Bloqueo de pantalla con imagen aleatoria en Sway
+# Selecciona una imagen al azar de la carpeta de fondos y la usa con swaylock.
+
+BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
+RANDOM_BG=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
+
+# Bloquea la pantalla con la imagen seleccionada
+if swaylock -f -i "$RANDOM_BG"; then
+    playerctl stop 2> /dev/null
+fi

@@ -1,0 +1,19 @@
+#!/bin/bash
+# Gestiona bloqueo automático, apagado de pantalla y suspensión bajo Sway.
+
+# Ruta al script de bloqueo personalizado
+LOCK_SCRIPT="$HOME/.config/sway/helpers/sway-lock"
+
+# Inicia swayidle con distintos temporizadores y acciones
+# 1. Bloquea la sesión tras 5 min de inactividad
+# 2. Apaga pantallas a los 10 min
+# 3. Enciende pantallas al reanudar actividad
+# 4. Suspende el sistema a los 15 min
+# 5. Bloquea antes de suspender (manual o automático)
+
+swayidle -w \
+    timeout 30 "$LOCK_SCRIPT" \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    timeout 900 'systemctl suspend' \
+    before-sleep "$LOCK_SCRIPT"

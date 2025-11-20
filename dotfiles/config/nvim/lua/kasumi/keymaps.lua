@@ -18,6 +18,17 @@ local function map(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, options)
 end
 
+-- ────────────────────────────────────────────────────────────
+-- Numerar líneas en un bloque visual con <leader>n
+map("v", "<leader>n", function()
+	local start_line = vim.fn.line("'<")
+	local end_line = vim.fn.line("'>")
+	for i = start_line, end_line do
+		local line = vim.fn.getline(i)
+		local num = i - start_line + 1
+		vim.api.nvim_buf_set_lines(0, i - 1, i, false, { num .. ". " .. line })
+	end
+end)
 -- Muestra / oculta caracteres especiales
 map("n", "<Leader>i", ":set invlist<CR>")
 
