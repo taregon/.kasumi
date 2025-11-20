@@ -49,11 +49,10 @@ message {
 /* --- Input bar --- */
 inputbar {
     color: @fg-color;
-    padding: 11px;
-    spacing: 12px;
+    padding: 12px;
+    spacing: 10px;
     background-color: @bg-light;
-
-    border: 1px;
+    border: 2px;
     border-radius: 0px;
     border-color: @border-color;
 }
@@ -69,8 +68,8 @@ prompt {
 
 /* --- List view --- */
 listview {
-    padding: 8px;
-
+    padding: 12px;
+    spacing: 6px;
     /* 2 columnas */
     columns: 2;
     lines: 6;
