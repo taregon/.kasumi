@@ -1,0 +1,8 @@
+# ┌────────────────────────────────────────┐
+# │░█░█░█▀█░█░░░█░░░█▀█░█▀▀░█▀█░█▀▀░█▀▄░█▀▀│
+# │░█▄█░█▀█░█░░░█░░░█▀▀░█▀▀░█▀▀░█▀▀░█▀▄░▀▀█│
+# │░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀▀▀░▀░░░▀▀▀░▀░▀░▀▀▀│
+# └────────────────────────────────────────┘
+# Directorio estándar en $HOME para almacenar los
+# fondos de pantalla gestionados por el dotfile kasumi
+export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
