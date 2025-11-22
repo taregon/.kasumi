@@ -9,21 +9,20 @@ BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
 # Función para aplicar un fondo aleatorio
 set_random_wallpaper() {
     # Obtener PID del proceso swaybg existente
-    local pid
-    pid=$(pidof swaybg)
+    local pids
+    pids=$(pidof swaybg)
 
     # Elegir imagen aleatoria
     local random_image
     random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
 
     # Si hay un proceso anterior, matarlo primero
-    if [ -n "$pid" ]; then
-        kill "$pid" || true
-    fi
+    [ -n "$pids" ] && kill $pids
 
     # Aplicar fondo en todos los monitores activos
     for output in $(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .name'); do
         swaybg -o "$output" -i "$random_image" -m fill &
+        sleep 0.1
     done
 }
 
