@@ -20,9 +20,6 @@ set_random_wallpaper() {
         --transition-fps $FPS
 }
 
-# Matar antes el servicio
-pkill swaybg
-
 # ── BUCLE PRINCIPAL ─────────────────────────────────────────
 while true; do
     set_random_wallpaper
