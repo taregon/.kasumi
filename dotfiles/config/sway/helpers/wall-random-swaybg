@@ -17,7 +17,7 @@ set_random_wallpaper() {
     random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
 
     # Si hay un proceso anterior, matarlo primero
-    [ -n "$pids" ] && kill $pids
+    [ -n "$pids" ] && kill "$pids"
 
     # Aplicar fondo en todos los monitores activos
     for output in $(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .name'); do

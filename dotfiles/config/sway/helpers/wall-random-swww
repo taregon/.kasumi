@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Ruta donde están los fondos de pantalla
+BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
+
+# Configuración del cambio automático de fondo
+INTERVAL=20 # Tiempo que tarda en cambiar el wallpaper (en segundos)
+FPS=60      # Fotogramas para la transición
+TYPE=fade   # Tipo de transición
+DURATION=3  # Duración de la transición en segundos
+
+set_random_wallpaper() {
+
+    local random_image
+    random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
+
+    swww img "$random_image" \
+        --transition-type $TYPE \
+        --transition-duration $DURATION \
+        --transition-fps $FPS
+}
+
+# Matar antes el servicio
+pkill swaybg
+
+# ── BUCLE PRINCIPAL ─────────────────────────────────────────
+while true; do
+    set_random_wallpaper
+    sleep "$INTERVAL"
+done
