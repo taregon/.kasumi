@@ -2,8 +2,8 @@
 --
 require("ibl").setup({
 	indent = {
-		char = "┊",
-		tab_char = "│",
+		char = "│",
+		tab_char = "│", -- hack para los tabs. Sino saldrían flechas
 	},
 	exclude = {
 		filetypes = {
