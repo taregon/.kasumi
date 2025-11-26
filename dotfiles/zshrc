@@ -170,7 +170,7 @@ export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
 # █▀▀▀█   █    ▀▀▀▄   █   █   █ █▀▀▀▄ ▀▀▀▀█
 # ▀   ▀ ▀▀▀▀▀ ▀▀▀▀    ▀    ▀▀▀  ▀   ▀ ▀▀▀▀▀
 # COMMAND CONFIGURATION
-
+# Puedes revisar las opciones activas con el comando: set -o
 # https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
 # https://zsh.sourceforge.io/Doc/Release/Options.html#History
 
@@ -228,35 +228,79 @@ zshaddhistory() {
 # ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
 # FAST ZSHELL PLUGIN MANAGER
 
-# Tema Powerlevel10k
-zinit ice depth=1
+# Clona de manera superficial para acelerar la carga
+# y muestra el prompt con información completa y personalizable
+zinit ice depth"1"
 zinit light romkatv/powerlevel10k
 
-# FZF Tab Completion (carga bajo demanda)
-# zinit ice wait lucid atpull'%atclone'
-# zinit light Aloxaf/fzf-tab
-
-# Zsh Autosuggestions (inmediata)
-zinit ice wait lucid atload'!_zsh_autosuggest_start'
-zinit light zsh-users/zsh-autosuggestions
-
-# Zsh Syntax Highlighting (inmediata)
-zinit ice wait lucid
-zinit light zsh-users/zsh-syntax-highlighting
-
-# Zsh Completions (carga diferida y segura)
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
+# Completa comandos externos y utilidades del sistema
+# que Zsh no cubre por defecto, con ligero retraso para no
+# bloquear el inicio del shell
+zinit ice wait"1" lucid
 zinit light zsh-users/zsh-completions
 
+# Interfaz avanzada para la autocompletación con fzf
+zinit ice lucid
+zinit light Aloxaf/fzf-tab
+
+# Muestra sugerencias basadas en el historial mientras se escribe,
+# permitiendo completar con la flecha derecha.
+# Inicia automáticamente tras la carga del plugin.
+zinit ice wait"0" lucid atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions
+
+# Colorea la sintaxis de los comandos a medida que se escriben.
+# Carga al final para no interferir con completados
+# ni con las sugerencias de autosugestión.
+zinit ice wait"0" lucid
+zinit light zsh-users/zsh-syntax-highlighting
+
 # ────────────────────────────────────────────────────────────
-# setopt clobber                             # Permite que las redirecciones de salida sobrescriban archivos existentes sin confirmación.
-# zstyle ':completion:*' special-dirs true   # Muestra directorios especiales ('.' y '..') durante el auto completado de rutas.
+# ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
+# █     █   █ █   █ █▀▀▀  █     █▀▀     █     █   █   █ █ ▀▄█
+#  ▀▀▀▀  ▀▀▀  ▀   ▀ ▀     ▀▀▀▀▀ ▀▀▀▀▀   ▀   ▀▀▀▀▀  ▀▀▀  ▀   ▀
+
+# NOTA: Para revisar las activas, ejecuta: zstyle -L ':completion:*'
+
+# ── AJUSTES DE AUTOCOMPLETADO NATIVO DE ZSH (SIN FZF-TAB) ───
+
+# Muestra los directorios especiales '.' y '..' en la
+# autocompletación de rutas.
+# zstyle ':completion:*' special-dirs true
+
+# Agrupa resultados de coincidencias por categoría (comandos,
+# archivos, procesos, etc.) para una visualización ordenada.
 # zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*' menu select        # Habilita navegación por menú en el autocompletado (con teclas ↑ ↓)
-zstyle ':completion:*' rehash true           # Actualiza la lista de comandos, cada que se instalen nuevos
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# Activa navegación por menú cuando hay múltiples resultados,
+# permitiendo desplazarse con las flechas.
+# zstyle ':completion:*' menu select
+
+# Muestra descripciones detalladas de cada ítem del completion
+# (por ejemplo: “(archivo)”, “(directorio)”, etc.).
 # zstyle ':completion:*' verbose yes
-zstyle ':fzf-tab:*' use-fzf-default-opts yes # # https://github.com/Aloxaf/fzf-tab#configure
+
+# Define el formato para las descripciones mostradas por Zsh.
+# %d se reemplaza por la descripción del grupo.
+# zstyle ':completion:*:descriptions' format '-- %d --'
+
+# Usa los colores definidos en LS_COLORS para colorear los
+# elementos listados en el menú de completado.
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# ── AJUSTES DE AUTOCOMPLETADO CON FZF-TAB ───────────────────
+
+# Fuerza actualización automática de comandos recién instalados.
+zstyle ':completion:*' rehash true
+
+# Coincidencia insensible a mayúsculas.
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Proveedor de lista de procesos (para kill y similares).
+zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm,cmd -w -w'
+
+# Habilita los valores por defecto de fzf en fzf-tab. https://github.com/Aloxaf/fzf-tab#configure
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
 # ────────────────────────────────────────────────────────────
 # ╓
