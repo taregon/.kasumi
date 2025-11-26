@@ -51,7 +51,7 @@ require("conform").setup({
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
 		toml     = { "taplo" },
-		yaml     = { "yamlfix" },
+		yaml     = { "yamlfix" }, -- yamlfix preserva los comentarios
 		zsh      = { "beautysh" }, --
 		-- stylua: ignore end
 	},
