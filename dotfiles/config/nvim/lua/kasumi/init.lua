@@ -35,11 +35,12 @@ require("kasumi/plugins/diffview")
 require("kasumi/plugins/indent-blankline")
 require("kasumi/plugins/lualine")
 require("kasumi/plugins/mini")
-require("kasumi/plugins/neo-tree")
+-- require("kasumi/plugins/neo-tree")
 require("kasumi/plugins/scrollbar")
 require("kasumi/plugins/treesitter")
 require("kasumi/plugins/which-key")
 require("kasumi/plugins/todo")
+require("kasumi/plugins/fzf")
 
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                   Formatting & Linting                    │
