@@ -49,7 +49,8 @@ source $ZSH_CONF/kasumi-zsh_functions.conf
 if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
     autoload -Uz compinit && compinit -i
 else
-    # carga rápida sin chequear seguridad de archivos
+    # Activación rápida del sistema de autocompletado de Zsh
+    # (omite comprobación de seguridad de ficheros)
     compinit -C
 fi
 
