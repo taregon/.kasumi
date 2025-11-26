@@ -1,6 +1,8 @@
 ---
 colors:
   # Original "catppuccin" theme
+  # Si deseas revisar los colores de este tema, ejecuta
+  # vivid preview kasumi
 
   flamingo: C099FF
   green: a6da95
