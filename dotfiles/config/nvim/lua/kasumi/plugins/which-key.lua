@@ -24,6 +24,20 @@ local toggle_virtual_text = function()
 	end
 end
 
+-- Funciones seguras para navegar quickfix
+local function qf_next()
+	local ok = pcall(vim.cmd, "cnext")
+	if not ok then
+		vim.cmd("cfirst")
+	end
+end
+
+local function qf_prev()
+	local ok = pcall(vim.cmd, "cprev")
+	if not ok then
+		vim.cmd("clast")
+	end
+end
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                          ATAJOS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
@@ -56,4 +70,6 @@ require("which-key").add({
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert selected lines", mode = "v" },
 	{ "<leader>gR", ":Gitsigns reset_hunk<CR>", desc = "Revert current hunk" },
+	{ "<leader>qs", qf_next, desc = "Quickfix next" },
+	{ "<leader>qw", qf_prev, desc = "Quickfix previous" },
 })
