@@ -12,11 +12,11 @@ opt.termguicolors = true -- Activa los colores de terminal de 24 bits
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                          AJUSTES                          │
 -- ╘═══════════════════════════════════════════════════════════╛
+-- NOTA: opt.relativenumber paso a ser un autocomando
 opt.cursorline = true -- Resalta la línea actual
 opt.lazyredraw = true -- No actualizar la pantalla durante la ejecución de macros y scripts
 opt.number = true -- Mostrar el número de línea actual (absoluto)
 opt.pumblend = 6 -- Transparencia del Pop-up
-opt.relativenumber = true -- Mostrar las líneas relativas a la actual
 opt.showmode = false -- Ocultar el aviso que indica en qué modo estás
 opt.spell = true -- Activa la corrección ortográfica
 opt.spelllang = { "en", "es" } -- Corregir palabras usando diccionarios en inglés y español

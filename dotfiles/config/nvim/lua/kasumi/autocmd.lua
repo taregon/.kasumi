@@ -98,3 +98,53 @@ augroup("FormatOnSave", function(group)
 	})
 end)
 
+-- Alterna números relativos según el modo:
+-- activa relativos en Normal, los desactiva en Insert y en cualquier modo Visual.
+augroup("ToggleRelativeNumber", function(group)
+	-- Al abrir buffer → relativos por defecto
+	aucmd({ "BufEnter", "BufWinEnter" }, {
+		group = group,
+		callback = function()
+			vim.opt.number = true
+			vim.opt.relativenumber = true
+		end,
+	})
+
+	-- Insert → desactiva relativos
+	aucmd("InsertEnter", {
+		group = group,
+		callback = function()
+			vim.opt.relativenumber = false
+		end,
+	})
+
+	-- Normal → activa relativos
+	aucmd("InsertLeave", {
+		group = group,
+		callback = function()
+			vim.opt.relativenumber = true
+		end,
+	})
+
+	-- Visual modes → desactiva relativos
+	aucmd("ModeChanged", {
+		group = group,
+		pattern = "*:[vV]*", -- cualquier transición hacia v, V o Ctrl-v
+		callback = function()
+			vim.opt.relativenumber = false
+		end,
+	})
+
+	-- Salir de Visual → reactiva relativos
+	aucmd("ModeChanged", {
+		group = group,
+		pattern = "[vV]*:*", -- cualquier transición desde modos Visual
+		callback = function()
+			-- Solo reactiva si no estamos en Insert
+			if vim.fn.mode():match("i") then
+				return
+			end
+			vim.opt.relativenumber = true
+		end,
+	})
+end)
