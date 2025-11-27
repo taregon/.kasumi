@@ -52,15 +52,15 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk" },
-	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert selected lines", mode = "v" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert current hunk" },
-	{ "<leader>gc", ":Git commit<CR>", desc = "Commit" },
+	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
+	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage selected hunk", mode = "v" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset selected hunk", mode = "v" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk" },
+	{ "<leader>gc", ":Git commit<CR>", desc = "Create commit" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  Fix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Git changes (buffer)" },
-	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Git changes (repo)" },
-	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "Todo" },
+	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes to quickfix" },
+	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes to quickfix" },
+	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs to quickfix" },
 })
