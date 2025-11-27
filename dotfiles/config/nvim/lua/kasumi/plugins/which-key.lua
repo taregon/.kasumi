@@ -56,6 +56,7 @@ require("which-key").add({
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert selected lines", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert current hunk" },
+	{ "<leader>gc", ":Git commit<CR>", desc = "Commit" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  Fix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
