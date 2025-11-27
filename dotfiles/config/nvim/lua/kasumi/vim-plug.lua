@@ -34,7 +34,6 @@ Plug("LudoPinelli/comment-box.nvim") -- Agrega cajas de texto / boxes
 Plug("lukas-reineke/indent-blankline.nvim") -- Lineas de identacion
 Plug("norcalli/nvim-colorizer.lua") -- Colorea los códigos RGB/HEX
 Plug("numToStr/Comment.nvim") -- Para comentar lineas o bloques  con F2 / F3
-Plug("nvim-lua/plenary.nvim") -- Depende: cokeline, neo-tree
 Plug("nvim-lualine/lualine.nvim") -- Barra de estado
 Plug("nvim-treesitter/nvim-treesitter", { ["do"] = ":TSUpdate" }) -- Syntax Highlighting / colorea el código
 Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
@@ -51,7 +50,6 @@ Plug("mhinz/vim-startify") -- Dashboard
 Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
 Plug("sindrets/diffview.nvim") -- Ajustes en settins.lua  Presiona F5 (sin require)
 Plug("tpope/vim-fugitive") -- Habilita comandos de git
-Plug("vague2k/vague.nvim") -- Agrega nuevas variaciones de text case
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS relacionados con LSP
 --
@@ -87,10 +85,10 @@ Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencia
 -- Plug("nvim-telescope/telescope-fzf-native.nvim", { ["do"] = "make" })
 -- Plug("nvim-telescope/telescope-live-grep-args.nvim")
 -- Plug("nvim-telescope/telescope.nvim", { tag = "0.1.x" })
+-- Plug("smoka7/multicursors.nvim") -- Editar multiples lineas
 -- Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se) y ya pa que, lo archivaron
 -- Plug("supermaven-inc/supermaven-nvim")
--- Plug("smoka7/multicursors.nvim") -- Editar multiples lineas
-Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
+-- Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
 
 -- ────────────────────────────────────────────────────────────
 -- FIN
