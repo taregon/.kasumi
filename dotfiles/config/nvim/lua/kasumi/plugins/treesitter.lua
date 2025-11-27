@@ -59,7 +59,9 @@ require("nvim-treesitter.configs").setup({
 	auto_install = true,
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = false, -- Solo se aplicarán las reglas de Treesitter,
+		-- WARN: Porque catppuccin así lo requiere
+		-- https://github.com/catppuccin/nvim#why-do-my-treesitter-highlights-look-incorrect
+		additional_vim_regex_highlighting = false, -- Así solo se aplicarán las reglas de Treesitter,
 	},
 	-- https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#indentation
 	-- indent = { enable = true }, -- Habilita la indentación. EXPERIMENTAL
