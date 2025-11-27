@@ -50,11 +50,11 @@ require("catppuccin").setup({
 		fidget = true,
 		gitsigns = true,
 		mini = {
-		    enabled = true,
-		    indentscope_color = "pink",
+			enabled = true,
+			indentscope_color = "pink",
 		},
 		navic = {
-		    enabled = true,
+			enabled = true,
 			-- custom_bg = require("catppuccin.palettes").get_palette("macchiato").surface1, -- "lualine" will set background to mantle
 		},
 		neotree = true,
