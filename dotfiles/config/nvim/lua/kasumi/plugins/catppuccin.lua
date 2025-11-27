@@ -46,19 +46,19 @@ require("catppuccin").setup({
 		},
 	},
 	integrations = { -- Extiende los colores a los plug soportados
-		gitsigns = true,
-		fidget = true,
 		diffview = true,
-		neotree = true,
-		which_key = false, -- Considero que mejor desactivado
+		fidget = true,
+		gitsigns = true,
+		mini = {
+		    enabled = true,
+		    indentscope_color = "pink",
+		},
 		navic = {
-			enabled = true,
+		    enabled = true,
 			-- custom_bg = require("catppuccin.palettes").get_palette("macchiato").surface1, -- "lualine" will set background to mantle
 		},
-		mini = {
-			enabled = true,
-			indentscope_color = "pink",
-		},
+		neotree = true,
+		which_key = false, -- Considero que mejor desactivado
 	},
 	styles = { -- Sino sabes que cambia, coloca: standout
     -- stylua: ignore start
