@@ -24,20 +24,6 @@ local toggle_virtual_text = function()
 	end
 end
 
--- Funciones seguras para navegar quickfix
-local function qf_next()
-	local ok = pcall(vim.cmd, "cnext")
-	if not ok then
-		vim.cmd("cfirst")
-	end
-end
-
-local function qf_prev()
-	local ok = pcall(vim.cmd, "cprev")
-	if not ok then
-		vim.cmd("clast")
-	end
-end
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                          ATAJOS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
@@ -49,7 +35,8 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>ca", ":CBlabox20<CR>", desc = "Title Squared (adaptive)", mode = "v" },
 	{ "<leader>cc", ":CBlcline8<CR>", desc = "Title Spiked (center)" },
-	{ "<leader>cx", ":CBllline6<CR>", desc = "Title Squared (left)" },
+	{ "<leader>cs", ":CBllline1<CR>", desc = "Title Line (left)" },
+	{ "<leader>cx", ":CBllline6<CR>", desc = "Title Line Squared (left)" },
 	{ "<leader>cb", ":CBlcbox8<CR>", desc = "Box" },
 	{ "<leader>cl", ":CBline<CR>", desc = "Line" },
 	{ "<leader>cr", ":CBd<CR>", desc = "Remove", mode = "v" },
@@ -60,16 +47,19 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
 	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
-	{ "<leader>ti", ":set invlist!<CR>", desc = "Toggle Special Chars" },
+	{ "<leader>ti", ":set invlist! | Gitsigns toggle_signs<CR>", desc = "Toggle Special Chars" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
-	{ "<leader>tc", "<cmd>lua require('coerce').to_title()<CR>", desc = "Title Case", mode = "v" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk" },
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage hunk", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert selected lines", mode = "v" },
-	{ "<leader>gR", ":Gitsigns reset_hunk<CR>", desc = "Revert current hunk" },
-	{ "<leader>qs", qf_next, desc = "Quickfix next" },
-	{ "<leader>qw", qf_prev, desc = "Quickfix previous" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Revert current hunk" },
+	-- ────────────────────────────────────────────────────────────
+	{ "<leader>q", group = "󰚔  Fix", mode = { "n", "v" } },
+	-- ────────────────────────────────────────────────────────────
+	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Git changes (buffer)" },
+	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Git changes (repo)" },
+	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "Todo" },
 })
