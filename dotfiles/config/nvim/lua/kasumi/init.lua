@@ -16,10 +16,13 @@ require("kasumi/autocmd")
 require("kasumi/keymaps")
 
 -- ╒═══════════════════════════════════════════════════════════╕
--- │                           PLUGS                           │
+-- │                        COLORSCHEME                        │
 -- ╘═══════════════════════════════════════════════════════════╛
 require("kasumi/plugins/catppuccin") -- No mover
--- ────────────────────────────────────────────────────────────
+
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                           PLUGS                           │
+-- ╘═══════════════════════════════════════════════════════════╛
 -- require("kasumi/plugins/dressing") -- Lo archivaron
 -- require("kasumi/plugins/lsp/nvim-navbuddy")
 -- require("kasumi/plugins/lsp/nvim-supermaven") -- se me acabo el demo
