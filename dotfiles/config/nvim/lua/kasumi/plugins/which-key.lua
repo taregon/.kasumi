@@ -53,9 +53,11 @@ require("which-key").add({
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
-	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage selected hunk", mode = "v" },
+	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
+	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk" },
+	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset selected hunk", mode = "v" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = "n" },
 	{ "<leader>gc", ":Git commit<CR>", desc = "Create commit" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  Fix", mode = { "n", "v" } },
