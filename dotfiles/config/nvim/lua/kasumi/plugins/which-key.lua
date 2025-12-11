@@ -3,6 +3,8 @@
 -- │░█▄█░█▀█░░█░░█░░░█▀█░░░█▀▄░█▀▀░░█░│
 -- │░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░░░▀░▀░▀▀▀░░▀░│
 -- └──────────────────────────────────┘
+local k = require("kasumi/keymaps") -- Carga las funciones para los atajos
+
 require("which-key").setup({
 	preset = "modern",
 	icons = {
@@ -53,16 +55,21 @@ require("which-key").add({
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
+	{ "<leader>gn", ":Gitsigns next_hunk<CR>", desc = "Next hunk" },
 	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
 	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk" },
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = "v" },
+	{ "<leader>gb", ":Gitsigns stage_buffer<CR>", desc = "Stage entire buffer" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset selected hunk", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = "n" },
+	{ "<leader>gi", ":Gitsigns preview_hunk_inline<CR>", desc = "Inline hunk preview" },
 	{ "<leader>gc", ":Git commit<CR>", desc = "Create commit" },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>q", group = "󰚔  Fix", mode = { "n", "v" } },
+	{ "<leader>q", group = "󰚔  QuickFix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes to quickfix" },
-	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes to quickfix" },
-	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs to quickfix" },
+	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes" },
+	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes" },
+	{ "<leader>qd", k.show_todos_dir, desc = "Show TODOs directory" },
+	{ "<leader>qf", k.show_todos_file, desc = "Show TODOs file" },
+	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs" },
 })
