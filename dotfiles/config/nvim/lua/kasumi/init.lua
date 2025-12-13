@@ -13,7 +13,7 @@ vim.loader.enable()
 require("kasumi/vim-plug")
 require("kasumi/settings")
 require("kasumi/autocmd")
-require("kasumi/keymaps")
+require("kasumi/keymaps") -- PEND: Evaluar la posibilidad de mover esta linea a which-key
 
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                        COLORSCHEME                        │
