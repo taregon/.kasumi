@@ -25,7 +25,11 @@ require("gitsigns").setup({
 		-- stylua: ignore end
 	},
 	-- Opciones ajustadas (el resto se hereda por defecto)
-	attach_to_untracked = true, -- permite mostrar signos en archivos no rastreados
+	attach_to_untracked = true, -- Adjunta gitsigns a archivos nuevos archivos no rastreados
+	current_line_blame = true, -- Muestra automáticamente el autor y commit de la línea actual
+	current_line_blame_opts = {
+		delay = 1500, -- Retraso (ms) antes de mostrar el blame para evitar distracciones al moverse
+	},
 })
 
 -- Color personalizado del signo untracked
