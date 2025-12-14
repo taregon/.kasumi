@@ -16,6 +16,11 @@
 local lint = require("lint")
 
 lint.linters_by_ft = {
+   	-- Deshabilitado shellcheck independiente porque bashls
+	-- ya integra linting con shellcheck, lo que causaba mensajes
+	-- virtuales duplicados para el mismo diagnóstico.
+	-- sh       = { "shellcheck" },
+
 	-- stylua: ignore start
 	json     = { "jsonlint" },
 	json5    = { "deno" },
