@@ -8,24 +8,6 @@ require("mini.splitjoin").setup({
 	},
 })
 
--- MANIPULA DELIMITADORES DE TEXTO: PARÉNTESIS, CORCHETES Y COMILLAS.
-require("mini.surround").setup({
-    -- stylua: ignore
-	mappings = {
-		add            = "<leader>sa", -- Añadir
-		delete         = "<leader>sd", -- Eliminar
-		find           = "", -- Encontrar (hacia la derecha)
-		find_left      = "", -- Encontrar (hacia la izquierda)
-		highlight      = "<leader>sh", -- Resaltar
-		replace        = "<leader>sr", -- Reemplazar
-		update_n_lines = "", -- Actualizar `n_lines`
-		suffix_last    = "", -- Sufijo para buscar con el método "prev"
-		suffix_next    = "", -- Sufijo para buscar con el método "next"
-	},
-	search_method = "cover_or_nearest",
-	highlight_duration = 2500, -- Duración del resaltado en milisegundos
-})
-
 -- MUEVE EL TEXTO
 require("mini.move").setup({
 	mappings = {
@@ -61,3 +43,15 @@ require("mini.align").setup({
 		start = "<F12>",
 	},
 })
+
+-- MANIPULA DELIMITADORES DE TEXTO: PARÉNTESIS, CORCHETES Y COMILLAS.
+-- require("mini.surround").setup({
+-- 	mappings = {
+-- 		add = "<leader>sa", -- Añadir delimitador
+-- 		delete = "<leader>sd", -- Eliminar delimitador
+-- 		replace = "<leader>sr", -- Reemplazar delimitador
+-- 		highlight = "<leader>sh", -- Resaltar delimitador
+-- 	},
+-- 	search_method = "cover_or_nearest", -- cómo buscar delimitadores
+-- 	highlight_duration = 250, -- duración del resaltado en ms
+-- })
