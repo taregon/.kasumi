@@ -9,4 +9,10 @@
 # 2. Lista las claves cargadas en el agente:
 #    ssh-add -l
 
-  AddKeysToAgent yes
+# Configuración anterior para cargar automáticamente la clave SSH en el agente.
+# Actualmente, la gestión de claves se delega a KeePassXC,
+# por lo que esta sección queda deshabilitada.
+#
+# Host github.com
+#   IdentityFile ~/.ssh/id_ed25519_tartar
+#   AddKeysToAgent yes
