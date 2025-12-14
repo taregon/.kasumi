@@ -28,7 +28,6 @@ lint.linters_by_ft = {
 	lua      = { "luacheck" }, -- Debes tener instalado: luarocks
 	markdown = { "markdownlint" },
 	python   = { "pylint" },
-	sh       = { "shellcheck" },
 	sql      = { "sqlfluff" },
 	yaml     = { "yamllint" },
 	-- stylua: ignore end
