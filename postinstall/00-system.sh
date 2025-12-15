@@ -102,10 +102,11 @@ install_app_man() {
 install_app_neovim() {
     echo ">> Instalando editor nvim"
     local pkgs=(
-        luarocks # Gestor de paquetes para Lua (plugins de nvim)
-        neovim   # Editor de texto/IDE ligero
-        nodejs   # Requerido por VSCode y plugins de nvim
-        npm      # Gestor de paquetes para Node.js
+        luarocks        # Gestor de paquetes para Lua (plugins de nvim)
+        neovim          # Editor de texto/IDE ligero
+        neovim-symlinks # vim y vi se redirigen a Neovim
+        nodejs          # Requerido por VSCode y plugins de nvim
+        npm             # Gestor de paquetes para Node.js
     )
     instalar "${pkgs[@]}"
 }
