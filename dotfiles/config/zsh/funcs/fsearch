@@ -1,0 +1,37 @@
+# vim: filetype=zsh
+# ────────────────────────────────────────────────────────────
+# Busca interactivamente texto dentro de  archivos
+# para luego abrir la linea resultante en Neovim
+#
+# Uso:
+#   fsearch [directorio]
+
+local SEARCH_DIR="${1:-.}"
+local selection file line
+
+selection=$(
+    fzf --ansi --phony --query "" \
+    --bind "change:reload(
+                grep -rIi --exclude-dir='.git' --color=always --line-number {q} \"$SEARCH_DIR\" || true
+            )" \
+    --preview '
+                file=$(echo {} | cut -d: -f1)
+                line=$(echo {} | cut -d: -f2)
+
+                if [ -f "$file" ] && [[ "$line" =~ ^[0-9]+$ ]]; then
+                    start=$(( line > 2 ? line - 2 : 1 ))
+                    end=$(( line + 10 ))
+
+                    bat --style=numbers --color=always \
+                        --line-range "$start:$end" \
+                        --highlight-line "$line" "$file"
+                fi
+            ' \
+        | awk -F: '{ file=$1; line=$2; if (file && line) print file":"line }'
+)
+
+if [[ -n "$selection" ]]; then
+    file="${selection%%:*}"
+    line="${selection#*:}"
+    nvim "+${line}" "${file}"
+fi
