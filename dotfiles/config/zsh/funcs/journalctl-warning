@@ -1,0 +1,7 @@
+# vim: filetype=zsh
+
+journalctl --since "1 day ago" -p 4 -o json \
+    | jq -r '.SYSLOG_IDENTIFIER + "\t" + .MESSAGE' \
+    | sort -u \
+    | grep -v 'Failed to issue ReleaseSession()' \
+    | less -S
