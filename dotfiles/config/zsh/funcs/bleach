@@ -1,0 +1,11 @@
+# vim: filetype=zsh
+# Elimina líneas vacías y comentarios,
+# mostrando únicamente las líneas efectivas de un archivo de configuración.
+
+# Comando legacy
+# grep -v '^[[:space:]]*$' -- "$1" | grep -v '^[[:space:]]*#'
+
+sed -E '
+        s/[[:space:]]*#.*$//     # borra comentarios al final de la línea
+        /^[[:space:]]*$/d        # elimina líneas vacías resultantes
+    ' -- "$1"
