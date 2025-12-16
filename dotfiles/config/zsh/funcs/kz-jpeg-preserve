@@ -1,0 +1,11 @@
+# vim: filetype=zsh
+#
+# Optimiza un JPEG preservando metadatos, generando un archivo progresivo
+# y limitando la calidad máxima a 92.
+
+jpegoptim \
+    --stdout \
+    --strip-none \
+    --all-progressive \
+    --max=92 \
+    "$1" > "${1%.*}-opt.jpg"

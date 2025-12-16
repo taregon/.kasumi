@@ -1,0 +1,30 @@
+# vim: filetype=zsh
+#
+# Script para optimizar imágenes JPEG mientras preserva la calidad y profundidad de color
+# Utiliza cjpeg para realizar la compresión manteniendo un alto nivel de calidad (94%)
+# Implementa submuestreo 4:4:4 para preservar la máxima fidelidad de color
+#
+# Configuración:
+#   - Calidad: 94%
+#   - Submuestreo: 1x1 (4:4:4)
+#   - Modo progresivo: activado
+#   - Optimización: activada
+
+local in="$1"
+local tmp="/tmp/cjpeg_tmp_$$"
+local out="${in%.*}-hq444.jpg"
+
+# Decodificar a PPM
+djpeg "$in" > "$tmp"
+
+# Re-encodear en 4:4:4 con calidad alta
+cjpeg \
+    -quality 94 \
+    -sample 1x1 \
+    -progressive \
+    -optimize \
+    -outfile "$out" \
+    "$tmp"
+
+rm "$tmp"
+echo "  Archivo generado: $out"

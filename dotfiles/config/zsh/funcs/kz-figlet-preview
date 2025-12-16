@@ -1,0 +1,6 @@
+# vim: filetype=zsh
+#
+# Permite elegir interactivamente una fuente de Figlet de /usr/share/figlet/fonts
+# y muestra una vista previa con la palabra "Kasumi" antes de seleccionarla.
+
+ls /usr/share/figlet/fonts/*.flf | fzf --preview 'figlet -f {} "Kasumi"'

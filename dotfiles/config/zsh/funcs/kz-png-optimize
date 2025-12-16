@@ -1,0 +1,14 @@
+# vim: filetype=zsh
+
+# Comprime y optimiza un PNG usando Oxipng, preservando metadatos esenciales,
+# usando 2 hilos y nivel medio-alto de optimización, generando un archivo
+# de salida con sufijo "-compress.png" sin sobrescribir el original.
+
+oxipng "$1" \
+    --strip safe \
+    --preserve \
+    --threads 2 \
+    -i 1 \
+    -o 3 \
+    -av \
+    --out "${1%.*}-compress.png"

@@ -1,0 +1,15 @@
+# vim: filetype=zsh
+
+# Función para optimizar imágenes JPEG usando jpegoptim
+# Realiza compresión agresiva manteniendo calidad visual aceptable
+# Utiliza múltiples núcleos para procesamiento paralelo
+# Elimina todos los metadatos para máxima compresión
+
+jpegoptim \
+    -pt \
+    --workers=4 \
+    --all-normal \
+    --strip-all \
+    --stdin \
+    --size=10k \
+    < "$1" > "${1%.*}-deflate.jpg"
