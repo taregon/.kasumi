@@ -1,0 +1,6 @@
+#compdef fgrep
+
+_arguments \
+    '1:archivo:_files' \
+    '2:patrón:' \
+    '*:opciones:'
