@@ -1,0 +1,21 @@
+# Combina 'grep' con 'bat' para buscar texto
+# en archivos, mostrando resultados con
+# resaltado de sintaxis y número de línea.
+#
+# Uso:
+#   batgrep <archivo> <patrón> [opciones_grep]
+#
+# Ejemplo:
+#   batgrep *.py "TODO|FIXME"
+
+if [[ $# -lt 2 ]]; then
+    echo "Uso: batgrep <archivo> <patrón> [opciones_grep]"
+    return 1
+fi
+
+local files="$1"
+local pattern="$2"
+shift 2
+
+grep --color=always -E -n "$pattern" $files "$@" \
+    | bat --paging=never --plain
