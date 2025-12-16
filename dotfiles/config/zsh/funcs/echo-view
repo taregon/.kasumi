@@ -1,0 +1,14 @@
+# vim: filetype=zsh
+
+# Función para buscar todas las líneas con 'echo' en un archivo o directorio
+# Permite revisar rápidamente los mensajes impresos por echo sin distracciones de formato
+
+if [[ $# -lt 1 ]]; then
+    echo "Uso: batrg <archivo>"
+    return 1
+fi
+
+local pattern="$1"
+
+rg --line-number "echo" $pattern \
+    | sed -E 's/^([0-9]+:)[[:space:]]*echo[[:space:]]*/\1/'
