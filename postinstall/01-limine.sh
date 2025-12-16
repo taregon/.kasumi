@@ -35,7 +35,7 @@ echo "Agregando configuración del fondo de pantalla en Limine,"
 echo "  Creando respaldo en: $LIMINE_BACK"
 sudo cp "$LIMINE_CONF" "$LIMINE_BACK"
 
-echo "  Insertando ajustes..."
+echo "  Insertando ajustes..."
 
 # Comprueba si el bloque ya existe
 if ! grep -Fq "$WALL_CONF" "$LIMINE_CONF"; then
@@ -45,7 +45,7 @@ if ! grep -Fq "$WALL_CONF" "$LIMINE_CONF"; then
         cat "$LIMINE_CONF"
     } | sudo tee "${LIMINE_CONF}.tmp" > /dev/null \
         && sudo mv "${LIMINE_CONF}.tmp" "$LIMINE_CONF"; then
-        echo "  Archivo modificado correctamente"
+        echo "  Archivo modificado correctamente"
     else
         echo "  Error al modificar el archivo"
         exit 1
@@ -54,7 +54,7 @@ else
     echo "  Bloque ya insertado, no se hace nada"
 fi
 
-echo "  Copiando wallpaper a: $WALLPAPER_DST"
+echo "  Copiando wallpaper a: $WALLPAPER_DST"
 sudo cp "$WALLPAPER_SRC" "$WALLPAPER_DST"
 
 echo

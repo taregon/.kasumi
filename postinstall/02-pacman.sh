@@ -17,7 +17,7 @@ add_opt() {
     if ! grep -q -E "^$opt" "$CONF"; then
         # Inserta después de la línea [options]
         sudo sed -i "/^\[options\]/a $line" "$CONF"
-        echo "  Opción agregada: $opt"
+        echo "  Opción agregada: $opt"
     else
         echo "  Opción ya existe: $opt"
     fi
