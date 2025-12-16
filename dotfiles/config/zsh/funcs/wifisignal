@@ -1,0 +1,49 @@
+# vim: filetype=zsh
+
+# Escanea redes WiFi cercanas y muestra SSID con nivel de señal,
+# ordenadas por potencia (mejor señal primero) y coloreadas por rango.
+
+local iface="${1:?Uso: wifisignal <adaptador>}"
+
+sudo iw "$iface" scan 2>/dev/null \
+| awk '
+        /signal:/ {
+            signal = $2
+        }
+        /SSID:/ {
+            ssid = substr($0, index($0, $2))
+            if (ssid == "")
+                ssid = "[unknown SSID]"
+
+            if (signal != "")
+                printf "%.2f %s\n", signal, ssid
+
+            signal = ""
+        }
+    ' \
+    | sort -gr \
+| awk '
+        BEGIN {
+            green  = "\033[32m"
+            yellow = "\033[33m"
+            orange = "\033[38;5;208m"
+            red    = "\033[31m"
+            reset  = "\033[0m"
+        }
+        {
+            signal = $1
+
+            if (signal >= -50)
+                color = green
+            else if (signal >= -65)
+                color = yellow
+            else if (signal >= -80)
+                color = orange
+            else
+                color = red
+
+            printf "%s%.2f dBm%s  %s\n",
+                color, signal, reset,
+                substr($0, index($0, $2))
+        }
+    '
