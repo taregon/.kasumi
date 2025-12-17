@@ -17,26 +17,33 @@ if ! command -v xxhsum &> /dev/null; then
     return 1
 fi
 
-# Itera sobre archivos regulares en el directorio actual
+# Itera sobre los archivos del directorio actual
 for file in "$dir"/*; do
-    # Verifica si el archivo es un archivo regular
-    if [[ -f "$file" ]]; then
-        # Calcula el hash xxHash del archivo
-        local hash
-        hash=$(xxhsum "$file" | awk '{print $1}')
+    # Continúa solo si es un archivo regular (ignora directorios y enlaces)
+    [[ -f "$file" ]] || continue
 
-        # Extrae el nombre del archivo
-        local filename
-        filename=$(basename "$file")
+    # Calcula el hash xxHash basado exclusivamente en el contenido del archivo
+    local hash
+    hash=$(xxhsum "$file" | awk '{print $1}')
 
-        # Construye el nuevo nombre con el hash como prefijo
-        local new_filename="${hash}_${filename}"
+    # Obtiene el nombre del archivo sin la ruta
+    local filename
+    filename=$(basename "$file")
 
-        # Renombra el archivo
-        mv -- "$file" "$dir/$new_filename"
+    # Extrae la extensión original del archivo (si existe)
+    local ext=""
+    [[ "$filename" == *.* ]] && ext=".${filename##*.}"
 
-        echo "  Archivo renombrado: '$filename' -> '$new_filename'"
+    # Construye el nuevo nombre usando el hash como identificador del contenido
+    local new_filename="$dir/${hash}${ext}"
+
+    # Si ya existe un archivo con ese hash, marca el duplicado con el sufijo "_dup"
+    if [[ -e "$new_filename" ]]; then
+        new_filename="$dir/${hash}_dup${ext}"
     fi
-done
 
-echo "✔ Proceso completado."
+    # Renombra el archivo
+    mv -- "$file" "$new_filename"
+
+    echo "  Archivo renombrado: '$filename' -> '$(basename "$new_filename")'"
+done
