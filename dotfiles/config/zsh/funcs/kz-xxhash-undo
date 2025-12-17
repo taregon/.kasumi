@@ -12,14 +12,14 @@ if [[ ! -f "$logfile" ]]; then
     return 1
 fi
 
+# tac: muestra las líneas de un archivo en orden inverso (última → primera)
 tac "$logfile" |
 grep ' | RENAMED   | ' |
 while IFS='|' read -r _ _ mapping; do
-    local src dst
 
     # Extrae destino y origen
-    src="${mapping##* -> }"
-    dst="${mapping%% -> *}"
+    local src="${mapping##* -> }"
+    local dst="${mapping%% -> *}"
 
     # Limpia espacios
     src="${src## }"
