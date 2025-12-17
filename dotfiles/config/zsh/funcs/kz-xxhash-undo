@@ -4,11 +4,10 @@
 # Lee las entradas RENAMED y reconstruye el nombre original.
 # Útil para deshacer cambios en caso de error.
 
-local dir="$(pwd)"
-local logfile="$dir/xxhash.log"
+local logfile="./xxhash.log"
 
 if [[ ! -f "$logfile" ]]; then
-    echo "  Error: no se encontró el log: $logfile"
+    echo "  Error: no se encontró el registro: $(basename "$logfile")"
     return 1
 fi
 
