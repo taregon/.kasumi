@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # NOTA: Puedes revisar su funcionamiento con: ❯ swww query
-
+# también con:  pgrep -af "swww"
+#
 # Ruta donde están los fondos de pantalla
 BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
 
