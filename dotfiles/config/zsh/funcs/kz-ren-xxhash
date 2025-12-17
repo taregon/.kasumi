@@ -1,0 +1,42 @@
+# vim: filetype=zsh
+
+# La función renombra archivos agregando un hash xxHash como prefijo.
+# Nota importante:
+# - El hash se genera a partir del contenido del archivo, no de su nombre.
+# - Cambiar el nombre del archivo no altera el hash.
+# - Cualquier cambio en el contenido modifica el hash, lo que permite:
+#     • Identificar archivos idénticos aunque tengan nombres distintos.
+#     • Detectar cambios en el contenido.
+#     • Evitar colisiones de nombres al renombrar archivos usando el hash como prefijo.
+
+local dir="$(pwd)"
+
+# Verifica si 'xxhsum' está instalado
+if ! command -v xxhsum &> /dev/null; then
+    echo "  Error: 'xxhsum' no está instalado. Instala 'xxhash' primero."
+    return 1
+fi
+
+# Itera sobre archivos regulares en el directorio actual
+for file in "$dir"/*; do
+    # Verifica si el archivo es un archivo regular
+    if [[ -f "$file" ]]; then
+        # Calcula el hash xxHash del archivo
+        local hash
+        hash=$(xxhsum "$file" | awk '{print $1}')
+
+        # Extrae el nombre del archivo
+        local filename
+        filename=$(basename "$file")
+
+        # Construye el nuevo nombre con el hash como prefijo
+        local new_filename="${hash}_${filename}"
+
+        # Renombra el archivo
+        mv -- "$file" "$dir/$new_filename"
+
+        echo "  Archivo renombrado: '$filename' -> '$new_filename'"
+    fi
+done
+
+echo "✔ Proceso completado."
