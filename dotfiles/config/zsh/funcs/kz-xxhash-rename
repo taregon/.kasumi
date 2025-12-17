@@ -44,6 +44,11 @@ for file in "$dir"/*; do
     local ext=""
     [[ "$filename" == *.* ]] && ext=".${filename##*.}"
 
+    # Evita reprocesar archivos cuyo nombre ya refleja su digest xxHash.
+    if [[ "$filename" == "${digest}${ext}" ]]; then
+        continue
+    fi
+
     # Nuevo nombre basado en el digest
     local new_filename="$dir/${digest}${ext}"
 
