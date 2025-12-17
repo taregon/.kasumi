@@ -1,0 +1,36 @@
+# vim: filetype=zsh
+
+# Revierte renombrados realizados por xxhash a partir del archivo de log.
+# Lee las entradas RENAMED y reconstruye el nombre original.
+# Útil para deshacer cambios en caso de error.
+
+local dir="$(pwd)"
+local logfile="$dir/xxhash.log"
+
+if [[ ! -f "$logfile" ]]; then
+    echo "  Error: no se encontró el log: $logfile"
+    return 1
+fi
+
+tac "$logfile" |
+grep ' | RENAMED   | ' |
+while IFS='|' read -r _ _ mapping; do
+    local src dst
+
+    # Extrae destino y origen
+    src="${mapping##* -> }"
+    dst="${mapping%% -> *}"
+
+    # Limpia espacios
+    src="${src## }"
+    src="${src%% }"
+    dst="${dst## }"
+    dst="${dst%% }"
+
+    if [[ -e "$src" ]]; then
+        mv -- "$src" "$dst"
+        echo "  Revertido: '$src' -> '$dst'"
+    else
+        echo "  No existe: '$src'"
+    fi
+done
