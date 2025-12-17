@@ -1,13 +1,13 @@
 # vim: filetype=zsh
 
-# La función renombra archivos agregando un hash xxHash como prefijo.
+# La función renombra archivos agregando un digest xxHash como prefijo.
 # Nota importante:
-# - El hash se genera a partir del contenido del archivo, no de su nombre.
-# - Cambiar el nombre del archivo no altera el hash.
-# - Cualquier cambio en el contenido modifica el hash, lo que permite:
+# - El digest se genera a partir del contenido del archivo, no de su nombre.
+# - Cambiar el nombre del archivo no altera el digest.
+# - Cualquier cambio en el contenido modifica el digest, lo que permite:
 #     • Identificar archivos idénticos aunque tengan nombres distintos.
 #     • Detectar cambios en el contenido.
-#     • Evitar colisiones de nombres al renombrar archivos usando el hash como prefijo.
+#     • Evitar colisiones de nombres al renombrar archivos usando el digest como prefijo.
 
 local dir="$(pwd)"
 
@@ -18,7 +18,7 @@ if ! command -v xxhsum &> /dev/null; then
 fi
 
 # Archivo de log (local al directorio)
-local logfile="$dir/ren_xxhash.log"
+local logfile="$dir/xxhash.log"
 
 # Función auxiliar para escribir en el log
 log() {
@@ -33,24 +33,22 @@ for file in "$dir"/*; do
     # Continúa solo si es un archivo regular (ignora directorios y enlaces)
     [[ -f "$file" ]] || continue
 
-    # Calcula el hash xxHash del archivo (basado en el contenido)
-    local hash
-    hash=$(xxhsum "$file" | awk '{print $1}')
+    # Calcula el digest xxHash del archivo (basado en el contenido)
+    local digest=$(xxhsum "$file" | awk '{print $1}')
 
     # Nombre original del archivo
-    local filename
-    filename=$(basename "$file")
+    local filename=$(basename "$file")
 
     # Extrae la extensión (si existe)
     local ext=""
     [[ "$filename" == *.* ]] && ext=".${filename##*.}"
 
-    # Nuevo nombre basado en el hash
-    local new_filename="$dir/${hash}${ext}"
+    # Nuevo nombre basado en el digest
+    local new_filename="$dir/${digest}${ext}"
 
     # Manejo de duplicados
     if [[ -e "$new_filename" ]]; then
-        new_filename="$dir/${hash}_dup${ext}"
+        new_filename="$dir/${digest}_dup${ext}"
         log "DUPLICATE" "$filename -> $(basename "$new_filename")"
     fi
 
