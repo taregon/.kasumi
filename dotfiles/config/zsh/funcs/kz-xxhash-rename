@@ -32,6 +32,8 @@ log() {
 for file in "$dir"/*; do
     # Continúa solo si es un archivo regular (ignora directorios y enlaces)
     [[ -f "$file" ]] || continue
+    # Impide que el script se aplique sobre su propio log.
+    [[ "$file" == "$logfile" ]] && continue
 
     # Calcula el digest xxHash del archivo (basado en el contenido)
     # Usa XXH64 explícitamente (-H1) para evitar cambios de default en xxhsum
