@@ -1,0 +1,28 @@
+# vim: filetype=zsh
+
+# Genera un código QR desde texto o archivo de entrada.
+# El QR se guarda como PNG con nombre basado en fecha y hora.
+# Ejemplos:
+#   qrgen "Texto"       -> QR desde texto literal
+#   qrgen < archivo.txt -> QR desde contenido de un archivo
+# Más info: https://www.howtogeek.com/devops/how-to-create-qr-codes-from-the-linux-command-line/
+
+local outfile
+outfile="$(date +"qrcode_%F_%H%M%S").png"
+
+# Generar el QR
+qrencode \
+    --background=faedeb \
+    --foreground=9b044c \
+    -s 16 \
+    -m 2 \
+    -l M \
+    -o "$outfile" \
+    "$1"
+
+# Mostrar mensaje claro de éxito
+if [[ -f "$outfile" ]]; then
+    echo "  QR generado: $outfile"
+else
+    echo "  Error al generar el QR"
+fi
