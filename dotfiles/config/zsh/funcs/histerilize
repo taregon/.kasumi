@@ -1,0 +1,15 @@
+# vim: filetype=zsh
+
+# Elimina del historial solo las líneas donde el comando sea exactamente $1
+
+# Archivo de respaldo de eliminadas
+backup_deleted="$HISTFILE.deleted_$(date +%Y%m%d_%H%M%S).bak"
+
+# Guardar las líneas que coinciden en el respaldo
+LC_ALL=C grep -E "^: [0-9]+:[0-9]+;$1($|[[:space:]])" "$HISTFILE" > "$backup_deleted"
+
+# Eliminar las líneas del historial
+LC_ALL=C sed -i -E "/^: [0-9]+:[0-9]+;$1($|[[:space:]])/d" "$HISTFILE"
+
+echo "  Entradas que contienen '$1' eliminadas y exportadas a $backup_deleted"
+echo "-- Cambios se aplicarán al reiniciar la terminal."
