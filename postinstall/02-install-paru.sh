@@ -24,5 +24,6 @@ makepkg -si --noconfirm
 cd "$tmp_dir"
 rm -rf paru
 
+echo
 echo "  Instalación completada."
 echo "Paru está disponible en el sistema."
