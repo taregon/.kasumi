@@ -11,5 +11,6 @@ LC_ALL=C grep -E "^: [0-9]+:[0-9]+;$1($|[[:space:]])" "$HISTFILE" > "$backup_del
 # Eliminar las líneas del historial
 LC_ALL=C sed -i -E "/^: [0-9]+:[0-9]+;$1($|[[:space:]])/d" "$HISTFILE"
 
-echo "  Entradas que contienen '$1' eliminadas y exportadas a $backup_deleted"
+echo "  Entradas que contienen '$1' eliminadas y "
+echo "exportadas a: $backup_deleted"
 echo "-- Cambios se aplicarán al reiniciar la terminal."
