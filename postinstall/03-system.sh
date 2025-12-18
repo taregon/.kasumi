@@ -245,8 +245,8 @@ install_utils_compression() {
         unzip    # Descomprimir .zip
         zip      # Comprimir archivos .zip
         # Otros
-        jpegoptim # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
-
+        jpegoptim     # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
+        libwebp-utils # Utilidades CLI de WebP (incluye dwebp, cwebp, gif2webp)
     )
     instalar "${pkgs[@]}"
 }
