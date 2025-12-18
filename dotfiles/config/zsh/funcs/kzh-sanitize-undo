@@ -1,0 +1,17 @@
+# vim: filetype=zsh
+
+local backup="$1"
+
+if [[ -z "$backup" || ! -f "$backup" ]]; then
+    echo "  Uso: histerilize-undo <archivo_backup>"
+    echo "Los <archivo_backup> se encuentran en:"
+    echo "$HISTFILE.deleted-*.bak"
+    return 1
+fi
+
+# Añade las entradas eliminadas al final del historial
+cat "$backup" >> "$HISTFILE"
+
+echo "  Respaldo restaurado desde:"
+echo "$backup"
+echo "-- Los cambios se verán al abrir una nueva terminal."

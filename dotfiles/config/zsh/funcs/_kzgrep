@@ -1,4 +1,4 @@
-#compdef fgrep
+#compdef kzgrep
 
 _arguments \
     '1:archivo:_files' \

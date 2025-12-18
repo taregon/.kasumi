@@ -1,0 +1,4 @@
+# vim: filetype=zsh
+
+[[ -f "$1" ]] || return 1        # aborta si el argumento no es un archivo regular válido
+dwebp "$1" -o "${1%.*}.png"      # convierte el WebP a PNG sin pérdida adicional

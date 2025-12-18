@@ -1,5 +1,8 @@
 # vim: filetype=zsh
 
+# Muestra los mensajes de advertencia (priority 4) del sistema
+# de las últimas 24 horas
+
 journalctl --since "1 day ago" -p 4 -o json \
     | jq -r '.SYSLOG_IDENTIFIER + "\t" + .MESSAGE' \
     | sort -u \
