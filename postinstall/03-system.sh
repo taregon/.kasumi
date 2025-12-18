@@ -143,6 +143,7 @@ install_misc_tools() {
     local pkgs=(
         localsend-bin # Compartir archivos en red local
         spek-x-git    # Analizador de espectro de audio
+        syncthing     # Sincroniza carpetas entre dispositivos de forma privada
 
         # Editores
         obsidian               # Editor de notas (AUR)
@@ -150,6 +151,8 @@ install_misc_tools() {
         xed                    # Editor de texto simple (MATE)
     )
     instalar "${pkgs[@]}"
+
+    systemctl --user enable --now syncthing.service
 }
 
 install_sys_fonts() {
@@ -223,9 +226,10 @@ install_sys_tools() {
         polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
 
         # Entorno gráfico (Wayland)
-        grim         # Captura de pantalla para Wayland
-        hyprpicker   # Selector de color para Wayland
-        mako         # Demonio de notificaciones Wayland
+        grim       # Captura de pantalla para Wayland
+        hyprpicker # Selector de color para Wayland
+        mako       # Demonio de notificaciones Wayland
+        rofi
         wl-clipboard # Herramienta de portapapeles para Wayland
         wlogout      # Pantalla de cierre de sesión minimalista
     )
@@ -240,6 +244,9 @@ install_utils_compression() {
         unrar    # .rar
         unzip    # Descomprimir .zip
         zip      # Comprimir archivos .zip
+        # Otros
+        jpegoptim # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
+
     )
     instalar "${pkgs[@]}"
 }
@@ -279,6 +286,7 @@ install_utils_terminal() {
         kitty              # Terminal moderna
         less               # Paginador de texto
         lsd                # ls con iconos
+        openssh            # Cliente SSH + ssh-agent
         pacman-contrib     # Herramientas adicionales pacman
         ripgrep            # para búsqueda recursiva de texto en archivos
         source-highlight   # Resalta la sintaxis del código (en less)
@@ -288,6 +296,8 @@ install_utils_terminal() {
         zsh-completions    # Autocompletado para zsh
     )
     instalar "${pkgs[@]}"
+
+    systemctl --user enable --now ssh-agent.service
 
     echo "Cambiando shell predeterminada a zsh..."
     chsh -s "$(which zsh)"
