@@ -36,12 +36,12 @@ dotfiles:
     dst: ~/.config/StartTree/config.yaml
     link: absolute
   f_zsh_alias:
-    src: config/zsh/kasumi-zsh_alias.conf
-    dst: ~/.config/zsh/kasumi-zsh_alias.conf
+    src: config/zsh/kasumi-zsh_alias.zsh
+    dst: ~/.config/zsh/kasumi-zsh_alias.zsh
     link: absolute
-  f_zsh_functions:
-    src: config/zsh/kasumi-zsh_functions.conf
-    dst: ~/.config/zsh/kasumi-zsh_functions.conf
+  d_zsh_functions:
+    src: config/zsh/funcs
+    dst: ~/.config/zsh/funcs
     link: absolute
   f_neovim:
     src: config/nvim/init.lua
@@ -116,6 +116,15 @@ dotfiles:
     src: zprofile
     dst: ~/.zprofile
     link: absolute
+  f_zshenv:
+    src: zshenv
+    dst: ~/.zshenv
+    link: absolute
+  f_ssh:
+    src: ssh/config
+    dst: ~/.ssh/config
+    link: absolute
+    chmod: '600'
 profiles:
   kasumi:
     dotfiles:
@@ -139,10 +148,12 @@ profiles:
   kasumi_extras:
     dotfiles:
       - d_neovim
+      - d_zsh_functions
       - f_neovim
+      - f_ssh
       - f_starttree
       - f_zsh_alias
-      - f_zsh_functions
+      - f_zshenv
   kasumi_wayland:
     dotfiles:
       - d_sway
