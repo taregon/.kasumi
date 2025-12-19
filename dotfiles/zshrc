@@ -30,9 +30,20 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Definir ruta base para archivos de configuración adicionales
 local ZSH_CONF=~/.config/zsh
 
-# Cargar alias y funciones personalizados
-source $ZSH_CONF/kasumi-zsh_alias.conf
-source $ZSH_CONF/kasumi-zsh_functions.conf
+# CARGAR ALIAS
+source $ZSH_CONF/kasumi-zsh_alias.zsh
+
+# CARGAR FUNCIONES (anterior método)
+# source $ZSH_CONF/funcs/kasumi-zsh_functions.zsh
+
+# DIRECTORIOS DE FUNCIONES (AUTOLOAD)
+# Directorio donde Zsh localiza funciones y las carga bajo demanda.
+fpath=(
+    $ZSH_CONF/funcs
+    $fpath
+)
+autoload -Uz $ZSH_CONF/funcs/*(.N:t)
+
 # ────────────────────────────────────────────────────────────
 # AUTO COMPLETADO
 # Este código verifica si necesita reconstruir el caché de completado (.zcompdump):
