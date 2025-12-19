@@ -41,18 +41,19 @@ Plug("petertriho/nvim-scrollbar") -- Barra de scroll
 
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS que no requieren "require" obligatoriamente
---
--- Plug("MunifTanjim/nui.nvim") -- Depende: neo-tree
+-- ────────────────────────────────────────────────────────────
 Plug("ibhagwan/fzf-lua") -- Integración con FZF en Lua (requerido por nvim-bqf)
 Plug("kevinhwang91/nvim-bqf") -- Mejora la vista y navegación del quickfix list
 Plug("mechatroner/rainbow_csv") -- Colora archivos CSV
 Plug("mhinz/vim-startify") -- Dashboard
+Plug("nvim-lua/plenary.nvim") -- Depende: nvim-bqf
 Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
 Plug("sindrets/diffview.nvim") -- Ajustes en settins.lua  Presiona F5 (sin require)
 Plug("tpope/vim-fugitive") -- Habilita comandos de git
+
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS relacionados con LSP
---
+-- ────────────────────────────────────────────────────────────
 Plug("j-hui/fidget.nvim") -- Barra de carga, para los lsp. Aparece en la esquina abajo
 Plug("mfussenegger/nvim-lint") -- Configura los linter. Muestra mensajes con relación al formato
 Plug("neovim/nvim-lspconfig") -- Configura los servidores LSP
@@ -89,7 +90,6 @@ Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencia
 -- Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se) y ya pa que, lo archivaron
 -- Plug("supermaven-inc/supermaven-nvim")
 -- Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
-
 -- ────────────────────────────────────────────────────────────
 -- FIN
 vim.call("plug#end")
