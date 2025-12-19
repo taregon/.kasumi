@@ -1,0 +1,29 @@
+# vim: filetype=zsh
+
+local url shortened_url
+
+# Validación básica
+if [[ -z "$1" ]]; then
+    print "Uso: tinyurl <url>" >&2
+    return 1
+fi
+
+url="$1"
+
+# Solicitud a TinyURL con escapado correcto
+shortened_url=$(
+    curl -fsG \
+        --data-urlencode "url=$url" \
+        https://tinyurl.com/api-create.php
+    ) || {
+    print "Error: no se pudo contactar con TinyURL" >&2
+    return 2
+}
+
+# Validar respuesta
+if [[ -z "$shortened_url" ]]; then
+    print "Error: respuesta vacía del servicio" >&2
+    return 3
+fi
+
+print -- "$shortened_url"
