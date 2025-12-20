@@ -72,4 +72,12 @@ require("which-key").add({
 	{ "<leader>qd", k.show_todos_dir, desc = "Show TODOs directory" },
 	{ "<leader>qf", k.show_todos_file, desc = "Show TODOs file" },
 	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs" },
+	-- ────────────────────────────────────────────────────────────
+	{ "m", group = "  Move text", mode = { "n", "v" } },
+	-- ────────────────────────────────────────────────────────────
+	-- Solo documentación para which-key; los mappings reales los define mini.move
+	{ "mh", desc = "Move left" },
+	{ "mj", desc = "Move down" },
+	{ "mk", desc = "Move up" },
+	{ "ml", desc = "Move right" },
 })
