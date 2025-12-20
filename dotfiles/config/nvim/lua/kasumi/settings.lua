@@ -123,7 +123,7 @@ opt.foldenable = true -- Habilita el plegado de forma predeterminada
 opt.foldmethod = "expr" -- Método de plegado
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevel = 99 -- todos los folds abiertos al inicio
-opt.foldcolumn = "auto:9" -- PEND: Muestra columna de folds solo si hay folds en el buffer
+opt.foldcolumn = "0" -- Antes "auto:9", pero cuando se anidan se ve feo el `statuscolumn`
 --   ___       __    __
 -- .'  _.-----|  .--|  |
 -- |   _|  _  |  |  _  |
