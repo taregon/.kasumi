@@ -1,15 +1,17 @@
+-- NOTA: Carga las funciones para algunos atajos
+local k = require("kasumi/keymaps")
+
 -- ┌──────────────────────────────────┐
 -- │░█░█░█░█░▀█▀░█▀▀░█░█░░░█░█░█▀▀░█░█│
 -- │░█▄█░█▀█░░█░░█░░░█▀█░░░█▀▄░█▀▀░░█░│
 -- │░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░░░▀░▀░▀▀▀░░▀░│
 -- └──────────────────────────────────┘
-local k = require("kasumi/keymaps") -- Carga las funciones para los atajos
-
 require("which-key").setup({
 	preset = "modern",
 	icons = {
 		separator = "",
 		breadcrumb = "",
+		mappings = false, -- desactiva todos los iconos en los mappings
 	},
 })
 require("which-key.health").check()
