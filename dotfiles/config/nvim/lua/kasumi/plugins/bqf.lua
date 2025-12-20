@@ -12,7 +12,8 @@ require("bqf").setup({
 	},
 	func_map = {
 		openc = "q", -- abrir y cerrar quickfix
-		-- desactivar todo lo demás
+
+		-- ─[ Desactivar todo los demás atajos ]─────────────────────
 		drop = "",
 		filter = "",
 		filterr = "",

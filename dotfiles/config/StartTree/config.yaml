@@ -1,5 +1,5 @@
 ---
-# config: ~/.config/StartTree/config.yaml
+# yamllint disable rule:line-length
 #
 # Repo: https://github.com/Paul-Houser/StartTree
 # Pagina de inicio..: ~/.cache/StartTree/index.html
@@ -146,31 +146,31 @@ tree_7:
   Generator:
     Color palette generator (IA): https://huemint.com/
   Tools:
-    hlc-wizard: https://hclwizard.org/
+    aa-generator: https://www.learnui.design/tools/accessible-color-generator.html
     color-contrast-1: https://colourcontrast.cc/
     color-contrast-2: https://colorshark.io/
+    color-picker-comparison: https://bottosson.github.io/misc/colorpicker/#F8F8FF
+    color-scales: https://components.ai/color-scale/5PAxBy4dabxhohtd2w1B
     colourco.de: https://www.toptal.com/designers/colourcode/monochrome-color-builder
     coolors: https://coolors.co/
     gradient-generator-1: https://learnui.design/tools/gradient-generator.html
-    hotpot.ai: https://hotpot.ai/color-generator
-    la-flor: https://htmlcolors.com/shades-and-tints
-    random-colors: https://www.crispedge.com/random-colors
-    shadegenerator: https://www.shadegenerator.com/BD1366-FADAD7
-    shadowlord: https://noeldelgado.github.io/shadowlord/
-    tints-shades: https://noeldelgado.github.io/shadowlord/#000000
-    web-color-tool: https://color.joelb.dev/
-    randoma11y: https://randoma11y.com/
-    shapefactory-pigment: https://pigment.shapefactory.co/?d=0&a=E1D05C&b=F4F1CA
-    shapefactory-duotome: https://duotone.shapefactory.co/?f=26b7a0&t=3d3f4c
-    hue.tools: https://hue.tools/?format=hex
-    color-scales: https://components.ai/color-scale/5PAxBy4dabxhohtd2w1B
-    webgradients: https://webgradients.com/
-    aa-generator: https://www.learnui.design/tools/accessible-color-generator.html
-    tint-tone-shade: https://gradients.app/en/shades/
     gradient-generator-2: https://colordesigner.io/gradient-generator
     hcolor: https://hcolor.info/en/
-    color-picker-comparison: https://bottosson.github.io/misc/colorpicker/#F8F8FF
+    hlc-wizard: https://hclwizard.org/
+    hotpot.ai: https://hotpot.ai/color-generator
+    hue.tools: https://hue.tools/?format=hex
+    la-flor: https://htmlcolors.com/shades-and-tints
+    random-colors: https://www.crispedge.com/random-colors
+    randoma11y: https://randoma11y.com/
+    shadegenerator: https://www.shadegenerator.com/BD1366-FADAD7
+    shadowlord: https://noeldelgado.github.io/shadowlord/
+    shapefactory-duotome: https://duotone.shapefactory.co/?f=26b7a0&t=3d3f4c
+    shapefactory-pigment: https://pigment.shapefactory.co/?d=0&a=E1D05C&b=F4F1CA
+    tint-tone-shade: https://gradients.app/en/shades/
+    tints-shades: https://noeldelgado.github.io/shadowlord/#000000
     visualize_colors: https://artistpigments.org/visualize_colors
+    web-color-tool: https://color.joelb.dev/
+    webgradients: https://webgradients.com/
   ColorNames:
     colorxs: https://www.colorxs.com/
     encycolorpedia: https://encycolorpedia.com/
