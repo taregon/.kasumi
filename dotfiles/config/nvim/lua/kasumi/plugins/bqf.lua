@@ -1,10 +1,15 @@
 local fn = vim.fn
 
 require("bqf").setup({
+	-- auto_resize_height = true,
 	preview = {
-		show_title = false,
 		border = "single",
+		show_title = false,
+		win_height = 11, -- altura del preview
 		winblend = 5, -- 0 = sin transparencia
+		show_scroll_bar = false,
+		wrap = true, -- líneas largas se muestran completas,
+	},
 	},
 	filter = {
 		fzf = {
