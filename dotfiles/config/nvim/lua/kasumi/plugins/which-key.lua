@@ -54,8 +54,8 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
+	{ "h", ":Gitsigns next_hunk<CR>", desc = "Next hunk" }, -- Experimental
 	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
-	{ "<leader>gn", ":Gitsigns next_hunk<CR>", desc = "Next hunk" },
 	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
 	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk" },
 	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = "v" },
