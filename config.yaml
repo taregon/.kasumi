@@ -43,13 +43,9 @@ dotfiles:
     src: config/zsh/funcs
     dst: ~/.config/zsh/funcs
     link: absolute
-  f_neovim:
-    src: config/nvim/init.lua
-    dst: ~/.config/nvim/init.lua
-    link: absolute
   d_neovim:
-    src: config/nvim/lua
-    dst: ~/.config/nvim/lua
+    src: config/nvim
+    dst: ~/.config/nvim
     link: absolute
     actions:
       - nvim-plug-install
@@ -149,7 +145,6 @@ profiles:
     dotfiles:
       - d_neovim
       - d_zsh_functions
-      - f_neovim
       - f_ssh
       - f_starttree
       - f_zsh_alias
