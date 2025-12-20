@@ -82,7 +82,7 @@ opt.fillchars = {
 	foldclose = " ",
 	foldopen = "🭬",
 	foldsep = " ",
-	vert = "▕", --Carácter vertical (vsplit)
+	vert = "│", --Carácter vertical (vsplit)
 }
 
 -- ╒═══════════════════════════════════════════════════════════╕
