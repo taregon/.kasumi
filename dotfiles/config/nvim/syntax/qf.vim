@@ -6,7 +6,8 @@ if exists('b:current_syntax')
   finish
 endif
 
-" ─────────────────────────────────────────────
+" ── QUICKFIX SYNTAX GROUPS ──────────────────────────────────
+
 " Archivo
 syn match qfFileName /^[^│]*/ nextgroup=qfSeparator1
 
@@ -27,17 +28,21 @@ syn match qfAdded   /\<Added\>/   containedin=qfStatus
 syn match qfRemoved /\<Removed\>/ containedin=qfStatus
 syn match qfChanged /\<Changed\>/ containedin=qfStatus
 
-" Highlight links
+" ── QUICKFIX COLORS (HIGHLIGHT LINKS) ───────────────────────
+
 hi def link qfFileName Directory
-hi def link qfLineNr   LineNr
 hi def link qfText     Normal
 
 hi def link qfAdded    DiffAdd
 hi def link qfRemoved  DiffDelete
-hi def link qfChanged  DiffChange
+hi def link qfChanged  DiffText
 
-hi def link qfSeparator1 Delimiter
-hi def link qfSeparator2 Delimiter
-hi def link qfSeparator3 Delimiter
+" Intento igualarlos a los de catppuccin
+hi qfSeparator1 guifg=#49575e
+hi qfSeparator2 guifg=#49575e
+hi qfSeparator3 guifg=#49575e
 
+hi qfLineNr guifg=#8598b2
+
+" ────────────────────────────────────────────────────────────
 let b:current_syntax = 'qf'
