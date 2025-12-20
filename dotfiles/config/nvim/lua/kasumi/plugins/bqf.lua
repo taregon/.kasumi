@@ -64,7 +64,7 @@ require("bqf").setup({
 -- 4. Extrae y separa el estado de cambios (Added / Removed / Changed)
 -- 5. Genera columnas alineadas para nvim-bqf y fzf usando '│'.
 
-function _G.qftf(info)
+local function qftf(info)
 	local items
 	local ret = {}
 
@@ -128,4 +128,8 @@ function _G.qftf(info)
 	return ret
 end
 
-vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
+-- EXPONE EL FORMATEADOR DE QUICKFIX A VIMSCRIPT
+-- `qftf` se define como función local (evita warnings del LSP) y se exporta
+-- explícitamente a `_G` para que `quickfixtextfunc` pueda invocarla vía `v:lua`.
+vim.o.qftf = "{info -> v:lua.qftf(info)}"
+_G.qftf = qftf
