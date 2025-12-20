@@ -11,16 +11,15 @@ require("mini.splitjoin").setup({
 -- MUEVE EL TEXTO
 require("mini.move").setup({
 	mappings = {
-		-- Utilizando  <ALT>
-		left = "<M-h>",
-		right = "<M-l>",
-		down = "<M-j>",
-		up = "<M-k>",
-		-- Utilizando <ALT> en NORMAL
-		line_left = "<M-h>",
-		line_right = "<M-l>",
-		line_down = "<M-j>",
-		line_up = "<M-k>",
+		left = "mh",
+		right = "ml",
+		down = "mj",
+		up = "mk",
+
+		line_left = "mh",
+		line_right = "ml",
+		line_down = "mj",
+		line_up = "mk",
 	},
 })
 
