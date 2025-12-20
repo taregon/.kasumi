@@ -67,11 +67,11 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  QuickFix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes" },
-	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes" },
+	-- { "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs" },
 	{ "<leader>qd", k.show_todos_dir, desc = "Show TODOs directory" },
 	{ "<leader>qf", k.show_todos_file, desc = "Show TODOs file" },
-	{ "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs" },
+	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes" },
+	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes" },
 	-- ────────────────────────────────────────────────────────────
 	{ "m", group = "  Move text", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
