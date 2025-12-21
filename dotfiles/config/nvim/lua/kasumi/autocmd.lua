@@ -109,7 +109,95 @@ augroup("DisableIndentScopeForCertainTypes", function(group)
 	})
 end)
 -- ────────────────────────────────────────────────────────────
+-- ORDENA FUNCIONES EN BASH
+-- PEND: buscar un plug que haga esto para descartar este código
 
+-- Extrae el nombre de la función Bash
+local function get_func_name(func_text)
+	-- Estilo: function foo { ... }
+	local name = func_text:match("^%s*function%s+([%w_]+)")
+	if name then
+		return name
+	end
+	-- Estilo: foo() { ... }
+	name = func_text:match("^%s*([%w_]+)%s*%(%s*%)")
+	return name
+end
+
+-- Ordena funciones Bash dentro de un rango, manteniendo comentarios encima
+local function sort_bash_functions_range(start_line, end_line)
+	local bufnr = vim.api.nvim_get_current_buf()
+	start_line = start_line or 0
+	end_line = end_line or vim.api.nvim_buf_line_count(bufnr)
+
+	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
+
+	local funcs = {}
+	local current_func = {}
+	local inside_func = false
+
+	for i, line in ipairs(lines) do
+		if line:match("^%s*function%s+%w+") or line:match("^%s*[%w_]+%s*%(%s*%)%s*{") then
+			if inside_func then
+				table.insert(funcs, table.concat(current_func, "\n"))
+				current_func = {}
+			end
+			inside_func = true
+		end
+
+		if inside_func then
+			table.insert(current_func, line)
+		end
+	end
+
+	if #current_func > 0 then
+		table.insert(funcs, table.concat(current_func, "\n"))
+	end
+
+	if #funcs == 0 then
+		vim.notify("No se detectaron funciones Bash en el rango seleccionado", vim.log.levels.WARN)
+		return
+	end
+
+	-- Ordenar alfabéticamente según el nombre de la función
+	table.sort(funcs, function(a, b)
+		return (get_func_name(a) or ""):lower() > (get_func_name(b) or ""):lower()
+	end)
+
+	-- Reescribir solo el rango indicado
+	vim.api.nvim_buf_set_lines(bufnr, start_line, end_line, false, {})
+	for _, f in ipairs(funcs) do
+		local func_lines = vim.split(f, "\n")
+		vim.api.nvim_buf_set_lines(bufnr, start_line, start_line, false, func_lines)
+		vim.api.nvim_buf_set_lines(bufnr, start_line + #func_lines, start_line + #func_lines, false, { "" })
+	end
+
+	vim.notify("Funciones Bash ordenadas correctamente", vim.log.levels.INFO)
+end
+
+-- Comando flexible que soporta rango visual
+local function sort_bash_functions_cmd(opts)
+	local start_line, end_line
+	if opts.range and opts.range ~= 0 then
+		start_line = opts.line1 - 1
+		end_line = opts.line2
+	else
+		start_line = 0
+		end_line = vim.api.nvim_buf_line_count(0)
+	end
+	sort_bash_functions_range(start_line, end_line)
+end
+
+-- Registrar autocomando para Bash
+augroup("BashSortF", function(group)
+	aucmd("FileType", {
+		group = group,
+		pattern = { "sh", "bash" },
+		callback = function()
+			vim.api.nvim_create_user_command("SortBashFunctions", sort_bash_functions_cmd, { range = true })
+		end,
+	})
+end)
 -- Alterna números relativos según el modo:
 -- números relativos activados en Normal,
 -- desactivados en Insert y en cualquier modo Visual.
