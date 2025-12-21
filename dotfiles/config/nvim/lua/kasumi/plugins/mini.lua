@@ -27,8 +27,13 @@ require("mini.move").setup({
 require("mini.cursorword").setup()
 
 -- Animación del indent scope
+-- Las otras lineas verticales están en indent-blankline
 require("mini.indentscope").setup({
-	symbol = "┊",
+	symbol = "┆",
+	draw = {
+		delay = 300, -- en ms
+		priority = 50,
+	},
 })
 
 -- AUTOMÁTICAMENTE COMPLETA EL PAR DE {[("'`
