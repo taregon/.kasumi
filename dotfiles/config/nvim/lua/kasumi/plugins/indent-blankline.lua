@@ -2,6 +2,7 @@
 --
 require("ibl").setup({
 	indent = {
+		-- La linea vertical faltante esta en mini.lua
 		char = "│",
 		tab_char = "│", -- hack para los tabs. Sino saldrían flechas
 	},
