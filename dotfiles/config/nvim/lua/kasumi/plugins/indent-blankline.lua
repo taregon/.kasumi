@@ -1,10 +1,18 @@
--- Lineas de indentación / sangría
---
+-- ┌──────────────────────────────────────┐
+-- │░▀█▀░█▀▄░█░░░░░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀│
+-- │░░█░░█▀▄░█░░░░░█░░░█░█░█░█░█▀▀░░█░░█░█│
+-- │░▀▀▀░▀▀░░▀▀▀░░░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀│
+-- └──────────────────────────────────────┘
+-- Lineas de sangría
+
 require("ibl").setup({
 	indent = {
 		-- La linea vertical faltante esta en mini.lua
 		char = "│",
 		tab_char = "│", -- hack para los tabs. Sino saldrían flechas
+	},
+	scope = {
+		char = "▎", -- más gruesa o distinta
 	},
 	exclude = {
 		filetypes = {
@@ -19,12 +27,13 @@ require("ibl").setup({
 			"startify",
 			"terminal",
 			"text",
+			"conf",
 		},
 		buftypes = {
-			"terminal",
 			"nofile",
-			"quickfix",
 			"prompt",
+			"quickfix",
+			"terminal",
 		},
 	},
 })
