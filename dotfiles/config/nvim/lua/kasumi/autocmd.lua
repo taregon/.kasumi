@@ -97,6 +97,18 @@ augroup("FormatOnSave", function(group)
 		end,
 	})
 end)
+-- ────────────────────────────────────────────────────────────
+-- Desactiva mini.indentscope en buffers donde no tiene sentido
+augroup("DisableIndentScopeForCertainTypes", function(group)
+	vim.api.nvim_create_autocmd("FileType", {
+		group = group,
+		pattern = { "help", "TelescopePrompt", "TelescopeResults", "conf" },
+		callback = function()
+			vim.b.miniindentscope_disable = true
+		end,
+	})
+end)
+-- ────────────────────────────────────────────────────────────
 
 -- Alterna números relativos según el modo:
 -- números relativos activados en Normal,
