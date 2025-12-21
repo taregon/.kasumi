@@ -70,7 +70,6 @@ augroup("CsvFileTypes", function(group)
 		command = "set filetype=csv_pipe",
 	})
 end)
-
 -- ────────────────────────────────────────────────────────────
 -- Auto-indentación y limpieza de archivos AWK al guardar:
 -- Re-aplica GetAwkIndent() a todo el buffer
@@ -83,7 +82,6 @@ augroup("AwkIndent", function(group)
 		end,
 	})
 end)
-
 -- ────────────────────────────────────────────────────────────
 -- Ejecutar automáticamente los formatters configurados al guardar.
 local conform = require("conform")
@@ -198,6 +196,7 @@ augroup("BashSortF", function(group)
 		end,
 	})
 end)
+-- ────────────────────────────────────────────────────────────
 -- Alterna números relativos según el modo:
 -- números relativos activados en Normal,
 -- desactivados en Insert y en cualquier modo Visual.
@@ -248,3 +247,4 @@ augroup("ToggleRelativeNumber", function(group)
 		end,
 	})
 end)
+-- ────────────────────────────────────────────────────────────
