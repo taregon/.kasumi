@@ -4,11 +4,11 @@ require("mini.animate").setup() -- El efecto cuando haces scroll
 -- Atajo por defecto: gS
 require("mini.splitjoin").setup({
 	mappings = {
-		toggle = "<F4>",
+		toggle = "<F4>", -- Atajo
 	},
 })
 
--- MUEVE EL TEXTO
+-- MUEVE EL TEXTO (Atajos)
 require("mini.move").setup({
 	mappings = {
 		left = "mh",
@@ -44,7 +44,7 @@ require("mini.pairs").setup()
 require("mini.align").setup({
 	-- Atajo solo en VISUAL
 	mappings = {
-		start = "<F12>",
+		start = "<F12>", -- Atajo
 	},
 })
 
