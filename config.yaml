@@ -121,11 +121,16 @@ dotfiles:
     dst: ~/.ssh/config
     link: absolute
     chmod: '600'
+  d_mako:
+    src: config/mako
+    dst: ~/.config/mako
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
       - d_git
       - d_gotop
+      - d_mako
       - d_rofi
       - d_vivid
       - d_wallpapers
