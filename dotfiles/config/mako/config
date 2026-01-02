@@ -1,10 +1,15 @@
 # Para aplicar los ajustes, debes ejecutar:
 # ❯ makoctl reload
-
-  default-timeout=8000
+#
+  font=JetbrainsMono Nerd Font 10
+  default-timeout=15000
+  margin=18
+  padding=6
+  progress-color=source #e37bcf77
+  format=<span size="small">󰫣 %a</span>\n<b>%s</b>\n%b
 
 # ── Colors ──────────────────────────────────────────────────
-  background-color=#24273a
+  background-color=#22282c
   text-color=#cad3f5
   border-color=#7dc4e4
   progress-color=over #363a4f
@@ -12,3 +17,6 @@
 [urgency=high]
   default-timeout=0
   border-color=#f5a97f
+
+[app-name=vlc]
+  border-color=#ffc0d0
