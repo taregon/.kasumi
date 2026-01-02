@@ -1,6 +1,7 @@
 # Para aplicar los ajustes, debes ejecutar:
 # ❯ makoctl reload
-#
+
+# ── General ─────────────────────────────────────────────────
   font=JetbrainsMono Nerd Font 10
   default-timeout=15000
   margin=18
@@ -14,6 +15,7 @@
   border-color=#7dc4e4
   progress-color=over #363a4f
 
+# ────────────────────────────────────────────────────────────
 [urgency=high]
   default-timeout=0
   border-color=#f5a97f
