@@ -7,7 +7,7 @@
   margin=18
   padding=6
   progress-color=source #e37bcf77
-  format=<span size="small">󰫣 %a</span>\n<b>%s</b>\n%b
+  format=<span foreground="#7dc4e4">󰂟 %a</span>\n<b>%s</b>\n%b
 
 # ── Colors ──────────────────────────────────────────────────
   background-color=#22282c
@@ -22,3 +22,6 @@
 
 [app-name=vlc]
   border-color=#ffc0d0
+
+[grouped]
+  format=<span foreground="#7dc4e4">󰂟 %a</span> <span foreground="#6c7086">(×%g)</span>\n<b>%s</b>\n%b
