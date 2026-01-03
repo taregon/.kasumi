@@ -1,27 +1,40 @@
-# Para aplicar los ajustes, debes ejecutar:
-# ❯ makoctl reload
+# ── Comandos Útiles ─────────────────────────────────────────
+# Recargar configuración              : makoctl reload
+# Cerrar notificaciones visibles      : makoctl dismiss --all
+# Listar notificaciones activas       : makoctl list
+# Listar notificaciones del historial : makoctl history
+
+# ── Binding ─────────────────────────────────────────────────
+  on-button-left=invoke-default-action
+  on-button-right=dismiss-group
 
 # ── General ─────────────────────────────────────────────────
   font=JetbrainsMono Nerd Font 10
-  default-timeout=15000
+  default-timeout=825000
   margin=18
   padding=6
-  progress-color=source #e37bcf77
-  format=<span foreground="#7dc4e4">󰂟 %a</span>\n<b>%s</b>\n%b
+  group-by=summary,desktop-entry
+  history=1
+  max-history=20
 
 # ── Colors ──────────────────────────────────────────────────
   background-color=#22282c
-  text-color=#cad3f5
+  text-color=#c9d9dd
   border-color=#7dc4e4
-  progress-color=over #363a4f
+  progress-color=over #376078
+  format=<span foreground="#7dc4e47a">󰂟 %a</span>\n<b>%s</b>\n%b
 
 # ────────────────────────────────────────────────────────────
 [urgency=high]
   default-timeout=0
   border-color=#f5a97f
 
-[app-name=vlc]
-  border-color=#ffc0d0
+# [app-name=notify-send]
+#   progress-color=over #dbb77dbf
+#   background-color=#2c2b28
+#   border-color=#FFCE80
+#   text-color=#ffeed3
 
 [grouped]
-  format=<span foreground="#7dc4e4">󰂟 %a</span> <span foreground="#6c7086">(×%g)</span>\n<b>%s</b>\n%b
+  default-timeout=60000
+  format=<span foreground="#7dc4e4">󰂟 %a</span> <span foreground="#7dc4e47a">(×%g)</span>\n<b>%s</b>\n%b
