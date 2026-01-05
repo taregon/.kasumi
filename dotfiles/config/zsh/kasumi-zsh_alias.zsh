@@ -72,6 +72,18 @@ alias ssh="TERM=xterm kitty +kitten ssh"
 alias stat-date="stat --printf '%w\t%n\n'"
 alias unimatrix="unimatrix -c yellow -l ns -af"
 alias wg3t='wget --user-agent=$IXOS_USER_AGENT --ignore-length --retry-connrefused --restrict-file-names=windows --random-wait -w 8 --show-progress --output-file=wget-log.txt -c'
+alias ar1a='aria2c \
+    --user-agent="$IXOS_USER_AGENT" \
+    --continue=true \
+    --max-connection-per-server=4 \
+    --split=4 \
+    --retry-wait=5 \
+    --max-tries=5 \
+    --auto-file-renaming=false \
+    --summary-interval=1 \
+    --show-console-readout=true \
+    --dir=. \
+    --log=aria2c-log.txt'
 #               __                    _      __
 #    ___  __ __/ /_____ ___________ _(_)__  / /  ___ _    _____
 #   / _ \/ // /  '_/ -_)___/ __/ _ `/ / _ \/ _ \/ _ \ |/|/ / _ \
