@@ -77,13 +77,17 @@ alias ar1a='aria2c \
     --continue=true \
     --max-connection-per-server=4 \
     --split=4 \
+    --min-split-size=5M \
     --retry-wait=5 \
     --max-tries=5 \
     --auto-file-renaming=false \
-    --summary-interval=1 \
+    --summary-interval=30 \
     --show-console-readout=true \
+    --auto-save-interval=30 \
+    --log-level=notice \
+    --console-log-level=error \
     --dir=. \
-    --log=aria2c-log.txt'
+    --log=aria2c.log'
 #               __                    _      __
 #    ___  __ __/ /_____ ___________ _(_)__  / /  ___ _    _____
 #   / _ \/ // /  '_/ -_)___/ __/ _ `/ / _ \/ _ \/ _ \ |/|/ / _ \
