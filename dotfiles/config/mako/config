@@ -10,7 +10,7 @@
 
 # ── General ─────────────────────────────────────────────────
   font=JetbrainsMono Nerd Font 10
-  default-timeout=825000
+  default-timeout=25000
   margin=18
   padding=6
   group-by=summary,desktop-entry
@@ -36,5 +36,4 @@
 #   text-color=#ffeed3
 
 [grouped]
-  default-timeout=60000
   format=<span foreground="#7dc4e4">󰂟 %a</span> <span foreground="#7dc4e47a">(×%g)</span>\n<b>%s</b>\n%b
