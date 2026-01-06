@@ -71,7 +71,23 @@ alias rm='nocorrect rm -Iv'
 alias ssh="TERM=xterm kitty +kitten ssh"
 alias stat-date="stat --printf '%w\t%n\n'"
 alias unimatrix="unimatrix -c yellow -l ns -af"
-alias wg3t='wget --user-agent=$IXOS_USER_AGENT --ignore-length --retry-connrefused --restrict-file-names=windows --random-wait -w 8 --show-progress --output-file=wget-log.txt -c'
+
+alias wg3t='wget \
+    --user-agent="$IXOS_USER_AGENT" \
+    -c \
+    --tries=5 \
+    --waitretry=5 \
+    -w 8 \
+    --random-wait \
+    --retry-connrefused \
+    --no-check-certificate \
+    --content-disposition \
+    --ignore-length \
+    --progress=bar:force \
+    --show-progress \
+    --timeout=30 \
+    --output-file=wget.log'
+
 alias ar1a='aria2c \
     --user-agent="$IXOS_USER_AGENT" \
     --continue=true \
