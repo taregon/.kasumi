@@ -1,0 +1,13 @@
+# vim: filetype=zsh
+# Puedes revisar sitios activos en:
+# https://newtrackon.com/
+
+ARIA2_CONFIG_PATH="$HOME/.config/aria2" \
+
+    aria2c \
+    --conf-path="$ARIA2_CONFIG_PATH/aria2.conf" \
+    --dht-file-path="$ARIA2_CONFIG_PATH/dht.dat" \
+    --dht-file-path6="$ARIA2_CONFIG_PATH/dht6.dat" \
+    --user-agent="$IXOS_USER_AGENT" \
+    --dir=. \
+    "$@"

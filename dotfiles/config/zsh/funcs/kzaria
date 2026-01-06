@@ -1,0 +1,28 @@
+# vim: filetype=zsh
+
+# Crear cache efímero
+umask 077
+local ARIA2_TMP_CACHE="$(mktemp -d --tmpdir aria2.XXXXXX)"
+
+# Garantizar limpieza incluso si se interrumpe
+trap 'rm -rf "$ARIA2_TMP_CACHE"' EXIT INT TERM
+
+aria2c \
+    --auto-file-renaming=false \
+    --auto-save-interval=30 \
+    --console-log-level=error \
+    --continue=true \
+    --dht-file-path6="${ARIA2_TMP_CACHE}/dht6.dat" \
+    --dht-file-path="${ARIA2_TMP_CACHE}/dht.dat" \
+    --dir=. \
+    --log-level=notice \
+    --log=aria2.log \
+    --max-connection-per-server=4 \
+    --max-tries=5 \
+    --min-split-size=5M \
+    --retry-wait=5 \
+    --show-console-readout=true \
+    --split=4 \
+    --summary-interval=30 \
+    --user-agent="$IXOS_USER_AGENT" \
+    "$@"
