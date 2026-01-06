@@ -125,6 +125,11 @@ dotfiles:
     src: config/mako
     dst: ~/.config/mako
     link: absolute
+  d_aria2:
+    src: config/aria2
+    dst: ~/.config/aria2
+    link: absolute
+    chmod: '700'
 profiles:
   kasumi:
     dotfiles:
@@ -148,6 +153,7 @@ profiles:
       - f_zsh
   kasumi_extras:
     dotfiles:
+      - d_aria2
       - d_neovim
       - d_zsh_functions
       - f_ssh
