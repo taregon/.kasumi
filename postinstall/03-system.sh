@@ -141,6 +141,7 @@ install_app_zathura() {
 install_misc_tools() {
     echo ">> Instalando herramientas varias"
     local pkgs=(
+        keepassxc     # Gestor de contraseñas local con cifrado fuerte
         localsend-bin # Compartir archivos en red local
         spek-x-git    # Analizador de espectro de audio
         syncthing     # Sincroniza carpetas entre dispositivos de forma privada
@@ -273,7 +274,9 @@ install_utils_file_management() {
 install_utils_terminal() {
     echo ">> Instalando utilidades de terminal"
     local pkgs=(
+        aria2              # Gestor de descargas que soporta torrents
         bat                # Mejor cat con resaltado de sintaxis
+        cdu                # Analizador interactivo de uso de disco (ncurses)
         exa                # Reemplazo moderno de ls
         figlet             # Texto ASCII art
         figlet-fonts-extra # Fuentes adicionales para Figlet
