@@ -87,4 +87,12 @@ function M.show_todos_file()
 	vim.cmd("TodoQuickFix cwd=" .. vim.fn.fnameescape(file))
 end
 
+-- Abre un vsplit de Kitty en el directorio del archivo actual.
+function M.vsplit_in_bufdir()
+	local dir = vim.fn.expand("%:p:h")
+	local cmd =
+		string.format("silent !kitty @ launch --type=window --location=vsplit --cwd=%s", vim.fn.shellescape(dir))
+	vim.cmd(cmd)
+end
+
 return M

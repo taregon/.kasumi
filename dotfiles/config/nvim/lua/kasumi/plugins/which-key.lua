@@ -1,11 +1,14 @@
--- NOTA: Carga las funciones para algunos atajos
-local k = require("kasumi/keymaps")
-
 -- ┌──────────────────────────────────┐
 -- │░█░█░█░█░▀█▀░█▀▀░█░█░░░█░█░█▀▀░█░█│
 -- │░█▄█░█▀█░░█░░█░░░█▀█░░░█▀▄░█▀▀░░█░│
 -- │░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀░░░▀░▀░▀▀▀░░▀░│
 -- └──────────────────────────────────┘
+-- NOTA: Carga las funciones para algunos atajos
+-- Para no saturar este archivo, las funciones las coloco
+-- en keymaps.lua y las invoco con la ´k´
+local k = require("kasumi/keymaps")
+
+-- ────────────────────────────────────────────────────────────
 require("which-key").setup({
 	preset = "modern",
 	icons = {
@@ -82,4 +85,7 @@ require("which-key").add({
 	{ "mj", desc = "Move down" },
 	{ "mk", desc = "Move up" },
 	{ "ml", desc = "Move right" },
+	-- ────────────────────────────────────────────────────────────
+	--  Abre un split vertical en Kitty usando el directorio del archivo abierto en Neovim
+	{ "<leader>l", k.vsplit_in_bufdir, desc = "Kitty vsplit here" },
 })
