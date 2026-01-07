@@ -73,6 +73,17 @@ alias stat-date="stat --printf '%w\t%n\n'"
 alias unimatrix="unimatrix -c yellow -l ns -af"
 
 alias wg3t='wget \
+    --progress=bar:force \
+    --rejected-log=wget.log \
+    --random-wait \
+    --retry-connrefused \
+    --timeout=30 \
+    --tries=5 \
+    --user-agent="$IXOS_USER_AGENT" \
+    --waitretry=5 \
+    -c \
+'
+alias wget-beta='wget \
     --content-disposition \
     --ignore-length \
     --no-check-certificate \
