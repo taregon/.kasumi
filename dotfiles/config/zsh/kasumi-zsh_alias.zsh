@@ -101,16 +101,18 @@ alias wget-beta='wget \
     -c \
     -w 8 \
 '
-    --retry-wait=5 \
-    --max-tries=5 \
-    --auto-file-renaming=false \
-    --summary-interval=30 \
-    --show-console-readout=true \
-    --auto-save-interval=30 \
-    --log-level=notice \
-    --console-log-level=error \
-    --dir=. \
-    --log=aria2c.log'
+
+alias statf='stat --printf "  Fichero: %n
+E/S: %o\t%F
+Links: %h ModoHEX: %f  SELinux: %C
+Acceso: (%a/%t)  Uid: (%u/%U)\tGid: (%g/%G)
+      Acceso: %x
+Modificación: %y
+      Cambio: %z
+    Creación: %w"'
+
+alias mako-restore="for i in {1..20}; do makoctl restore; done"
+
 #               __                    _      __
 #    ___  __ __/ /_____ ___________ _(_)__  / /  ___ _    _____
 #   / _ \/ // /  '_/ -_)___/ __/ _ `/ / _ \/ _ \/ _ \ |/|/ / _ \

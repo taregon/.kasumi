@@ -1,0 +1,46 @@
+# vim: filetype=zsh
+
+# Verifica que se pase al menos una URL
+if [ $# -eq 0 ]; then
+    echo "Uso: wg3t <URL> [más URLs...]"
+    return 1
+fi
+
+for url in "$@"; do
+    echo "Iniciando descarga: $url"
+
+    # Ejecuta wget normalmente, barra de progreso limpia
+    wget \
+        --content-disposition \
+        --ignore-length \
+        --no-check-certificate \
+        --no-verbose \
+        --progress=bar:force:noscroll \
+        --random-wait \
+        --retry-connrefused \
+        --timeout=30 \
+        --timestamping \
+        --tries=5 \
+        --trust-server-names \
+        --user-agent="$IXOS_USER_AGENT" \
+        --waitretry=5 \
+        -c \
+        -w 8 \
+        "$url"
+
+    # Comprobar si wget terminó correctamente
+    if [ $? -eq 0 ]; then
+        # Intentar extraer el nombre de archivo final
+        file=$(basename "${url%%\?*}")  # usa nombre de URL sin parámetros
+        if [ -f "$file" ]; then
+            echo "✅ Descarga completada: $file"
+        else
+            echo "✅ Descarga completada."
+        fi
+    else
+        echo "❌ La descarga falló: $url"
+    fi
+    echo "-----------------------------------------"
+done
+
+echo "Todas las descargas han finalizado."

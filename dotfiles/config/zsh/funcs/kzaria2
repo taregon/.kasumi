@@ -10,4 +10,5 @@ ARIA2_CONFIG_PATH="$HOME/.config/aria2" \
     --dht-file-path6="$ARIA2_CONFIG_PATH/dht6.dat" \
     --user-agent="$IXOS_USER_AGENT" \
     --dir=. \
+    --log=aria2.log \
     "$@"
