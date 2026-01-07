@@ -73,27 +73,23 @@ alias stat-date="stat --printf '%w\t%n\n'"
 alias unimatrix="unimatrix -c yellow -l ns -af"
 
 alias wg3t='wget \
-    --user-agent="$IXOS_USER_AGENT" \
-    -c \
-    --tries=5 \
-    --waitretry=5 \
-    -w 8 \
-    --random-wait \
-    --retry-connrefused \
-    --no-check-certificate \
     --content-disposition \
     --ignore-length \
+    --no-check-certificate \
+    --no-verbose \
+    --output-file=wget.log \
     --progress=bar:force \
+    --random-wait \
+    --retry-connrefused \
     --show-progress \
     --timeout=30 \
-    --output-file=wget.log'
-
-alias ar1a='aria2c \
+    --tries=5 \
+    --trust-server-names \
     --user-agent="$IXOS_USER_AGENT" \
-    --continue=true \
-    --max-connection-per-server=4 \
-    --split=4 \
-    --min-split-size=5M \
+    --waitretry=5 \
+    -c \
+    -w 8 \
+'
     --retry-wait=5 \
     --max-tries=5 \
     --auto-file-renaming=false \
