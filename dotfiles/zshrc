@@ -57,11 +57,13 @@ autoload -Uz $ZSH_CONF/funcs/*(.N:t)
 # Esto asegura que el sistema de completado siempre esté sincronizado con
 # tus configuraciones actuales en .zshrc
 #
+autoload -Uz compinit
+
 if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
-    autoload -Uz compinit && compinit -i
+    # Reconstrucción del caché (ignora advertencias de seguridad)
+    compinit -i
 else
-    # Activación rápida del sistema de autocompletado de Zsh
-    # (omite comprobación de seguridad de ficheros)
+    # Uso del caché existente para carga rápida
     compinit -C
 fi
 
