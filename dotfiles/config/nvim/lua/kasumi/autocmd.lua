@@ -270,11 +270,11 @@ augroup("TreesitterStart", function(group)
 			pcall(vim.treesitter.start, buf, lang)
 
 			-- Indentación basada en Tree-sitter (experimental)
-			vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			-- vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 			-- Folding basado en Tree-sitter
-			vim.wo.foldmethod = "expr"
-			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			-- vim.wo.foldmethod = "expr"
+			-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		end,
 	})
 end)
