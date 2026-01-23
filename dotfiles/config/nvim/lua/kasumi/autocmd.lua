@@ -252,6 +252,10 @@ end)
 -- Activa el resaltado y (si lo configuras, la indentación)
 -- con Tree-sitter.
 -- https://mhpark.me/posts/update-treesitter-main/
+--
+-- Ajustes personalizada para fold la encuentras en
+-- kasumi/settings.lua
+
 augroup("TreesitterStart", function(group)
 	aucmd("FileType", {
 		group = group,
