@@ -124,12 +124,13 @@ opt.foldmethod = "expr" -- Método de plegado
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevel = 99 -- todos los folds abiertos al inicio
 opt.foldcolumn = "0" -- Antes "auto:9", pero cuando se anidan se ve feo el `statuscolumn`
---   ___       __    __
--- .'  _.-----|  .--|  |
--- |   _|  _  |  |  _  |
--- |__| |_____|__|_____|
---
--- Definir la función personalizada para el texto del fold
+
+-- ────────────────────────────────────────────────────────────
+-- █▀▀▀▀ ▄▀▀▀▄ █     █▀▀▀▄
+-- █▀▀   █   █ █     █   █
+-- ▀      ▀▀▀  ▀▀▀▀▀ ▀▀▀▀
+-- FUNCIÓN PERSONALIZADA PARA EL TEXTO DEL FOLD
+
 function CustomFoldText()
 	-- Obtener la primera línea del fold (nombre de función, condicional, etc.)
 	local line = vim.fn.getline(vim.v.foldstart)
