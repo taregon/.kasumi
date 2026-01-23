@@ -247,4 +247,27 @@ augroup("ToggleRelativeNumber", function(group)
 		end,
 	})
 end)
+
 -- ────────────────────────────────────────────────────────────
+-- Activa el resaltado y (si lo configuras, la indentación)
+-- con Tree-sitter.
+-- https://mhpark.me/posts/update-treesitter-main/
+augroup("TreesitterStart", function(group)
+	aucmd("FileType", {
+		group = group,
+		callback = function(args)
+			local buf = args.buf
+			local ft = vim.bo[buf].filetype
+
+			-- Traduce filetype a language válido
+			local lang = vim.treesitter.language.get_lang(ft)
+			if not lang then
+				return
+			end
+
+			-- Arranca treesitter en este buffer
+			-- Si no hay parser instalado o hay error, pcall evita crash
+			pcall(vim.treesitter.start, buf, lang)
+		end,
+	})
+end)
