@@ -268,6 +268,13 @@ augroup("TreesitterStart", function(group)
 			-- Arranca treesitter en este buffer
 			-- Si no hay parser instalado o hay error, pcall evita crash
 			pcall(vim.treesitter.start, buf, lang)
+
+			-- PEND: Indentación
+			-- vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+			-- PEND: Folding
+			-- vim.wo.foldmethod = "expr"
+			-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		end,
 	})
 end)
