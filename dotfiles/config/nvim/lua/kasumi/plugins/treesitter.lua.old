@@ -1,9 +1,7 @@
 -- Lista de lenguajes soportados
 -- https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
 
-local nts = require("nvim-treesitter")
-
-local ts_parsers = {
+require("nvim-treesitter").install({
 	"awk",
 	"bash",
 	"comment",
@@ -55,8 +53,6 @@ local ts_parsers = {
 	"yaml",
 	"yuck",
 	"zathurarc",
-}
+})
 
-for _, parser in ipairs(ts_parsers) do
-	nts.install(parser)
-end
+-- require("nvim-treesitter").update()
