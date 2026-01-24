@@ -27,7 +27,7 @@ lint.linters_by_ft = {
 	jsonc    = { "deno" },
 	lua      = { "luacheck" }, -- Debes tener instalado: luarocks
 	markdown = { "markdownlint" },
-	python   = { "pylint" },
+    -- python = { "pylint" }, -- Podría usarse ruff, pero provoca diagnósticos duplicados
 	sql      = { "sqlfluff" },
 	yaml     = { "yamllint" },
 	-- stylua: ignore end

@@ -34,6 +34,21 @@ require("conform").setup({
 			args = { "fmt", "--ext", "jsonc", "-" },
 			stdin = true,
 		},
+		ruff_fix = {
+			args = {
+				"check",
+				"--fix",
+				"--unsafe-fixes",
+				"--no-cache",
+				-- "--exit-zero",
+				-- "--stdin-filename",
+				-- "$FILENAME",
+				"-",
+			},
+		},
+		ruff_format = {
+			args = { "format", "-" },
+		},
 	},
 	formatters_by_ft = {
 		-- stylua: ignore start
@@ -47,7 +62,7 @@ require("conform").setup({
 		jsonc    = { "deno_fmt" },
 		lua      = { "stylua" },
 		markdown = { "mdformat" },
-		python   = { "isort", "black" },
+		python   = { "ruff_fix", "ruff_format" },
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
 		toml     = { "taplo" },

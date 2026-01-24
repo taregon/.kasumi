@@ -23,7 +23,7 @@ local lsp_servers = {
 	html     = { "html" },
 	jsonls   = { "json", "jsonc" },
 	marksman = { "md" },
-	pyright  = { "python" },
+	-- pyright  = { "python" },
 	-- stylua: ignore end
 }
 

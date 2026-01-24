@@ -16,9 +16,10 @@ require("mason-tool-installer").setup({
 		"shfmt", -- Formateador y parser para bash/sh
 
 		-- ─────────────────────────< Python >─────────────────────
-		"black", -- Formateador
-		"isort", -- Ordena imports
-		"pylint", -- Linter
+		-- "black", -- Formateador
+		-- "isort", -- Ordena imports
+		-- "pylint", -- Linter
+		"ruff",
 
 		-- ──────────────────────────< JSON >──────────────────────
 		"deno", -- Formateador: JSON, JSONC
