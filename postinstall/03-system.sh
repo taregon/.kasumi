@@ -255,18 +255,22 @@ install_utils_compression() {
 install_utils_file_management() {
     echo ">> Instalando herramientas de archivos y multimedia"
     local pkgs=(
-        exfat-utils   # Sistemas de archivos exFAT
-        gvfs          # Sistema virtual de archivos
-        gvfs-gphoto2  # Acceso cámaras PTP
-        gvfs-mtp      # Acceso MTP
+        exfatprogs    # Herramientas para exFAT (moderno)
+        f2fs-tools    # Herramientas para F2FS
+        gvfs          # Sistema virtual de archivos (GVFS)
+        gvfs-gphoto2  # Soporte cámaras PTP
+        gvfs-mtp      # Soporte MTP (Android, etc.)
         imv           # Visor de imágenes ligero
         mpv           # Reproductor multimedia
-        mtpfs         # Montaje de MTP
-        ntfs-3g       # Soporte NTFS
+        mtools        # Manipular discos MS-DOS/FAT
+        mtpfs         # Montaje MTP vía FUSE
+        nilfs-utils   # Herramientas para NILFS2
+        ntfs-3g       # Soporte lectura/escritura NTFS
         thunar        # Explorador de archivos GTK
-        thunar-volman # Gestión de volúmenes para Thunar
+        thunar-volman # Gestión volúmenes en Thunar
         tumbler       # Generador de miniaturas
-        udisks2       # Gestión de discos y volúmenes
+        udisks2       # Gestión discos y montaje automático
+        xorg-xhost    # Control acceso servidor X (X11)
     )
     instalar "${pkgs[@]}"
 }
