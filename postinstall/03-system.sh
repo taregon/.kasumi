@@ -107,6 +107,7 @@ install_app_neovim() {
         neovim-symlinks # vim y vi se redirigen a Neovim
         nodejs          # Requerido por VSCode y plugins de nvim
         npm             # Gestor de paquetes para Node.js
+        tree-sitter-cli # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
     )
     instalar "${pkgs[@]}"
 }
