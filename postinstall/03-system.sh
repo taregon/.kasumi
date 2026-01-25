@@ -278,29 +278,32 @@ install_utils_file_management() {
 install_utils_terminal() {
     echo ">> Instalando utilidades de terminal"
     local pkgs=(
-        aria2              # Gestor de descargas que soporta torrents
-        bat                # Mejor cat con resaltado de sintaxis
-        cdu                # Analizador interactivo de uso de disco (ncurses)
-        exa                # Reemplazo moderno de ls
-        figlet             # Texto ASCII art
-        figlet-fonts-extra # Fuentes adicionales para Figlet
-        fzf                # Buscador interactivo
-        git-delta          # Diferencias de Git con color
-        grc                # Colores para comandos
-        iputils            # ping, traceroute, etc.
-        iw                 # Configuración Wi-Fi
-        jq                 # Procesamiento JSON
-        kitty              # Terminal moderna
-        less               # Paginador de texto
-        lsd                # ls con iconos
-        openssh            # Cliente SSH + ssh-agent
-        pacman-contrib     # Herramientas adicionales pacman
-        ripgrep            # para búsqueda recursiva de texto en archivos
-        source-highlight   # Resalta la sintaxis del código (en less)
-        toilet             # Texto con estilos ASCII
-        zoxide             # Navegación rápida de directorios
-        zsh                # Shell moderno
-        zsh-completions    # Autocompletado para zsh
+        aria2              # Gestor de descargas (HTTP, FTP, torrents)
+        bat                # cat con resaltado de sintaxis y git
+        cdu                # Analizador interactivo de uso de disco (histograma)
+        exa                # ls moderno con colores e iconos (obsoleto, mira lsd)
+        figlet             # Texto en ASCII art grande
+        figlet-fonts-extra # Fuentes extras para figlet
+        fzf                # Buscador fuzzy interactivo (Ctrl+R, etc.)
+        git-delta          # Visualizador de diffs en git (mejor que default)
+        grc                # Colores automáticos para comandos (ls, ping, etc.)
+        iputils            # ping, traceroute, ping6 y más
+        iw                 # Configuración inalámbrica (Wi-Fi avanzado)
+        jq                 # Procesador de JSON desde terminal
+        kitty              # Terminal rápida con GPU y ligatures
+        less               # Paginador de texto (mejor con source-highlight)
+        lsd                # ls con iconos y colores (recomendado sobre exa)
+        openssh            # Cliente y servidor SSH + agente
+        python-pip         # Gestor de paquetes Python (pip)
+        dotdrop            # Gestor de dotfiles (perfiles, plantillas, git)
+        lnav               # Visor avanzado de logs (tail + search + filters)
+        pacman-contrib     # extras pacman (pactree, pkgdelta, updpkgsums, etc.)
+        ripgrep            # Búsqueda recursiva ultrarrápida (rg)
+        source-highlight   # Resaltado sintaxis en less y más
+        toilet             # Texto ASCII con estilos y filtros
+        zoxide             # cd inteligente (recuerda directorios frecuentes)
+        zsh                # Shell interactivo moderno (mejor que bash)
+        zsh-completions    # Autocompletado mejorado para zsh
     )
     instalar "${pkgs[@]}"
 
