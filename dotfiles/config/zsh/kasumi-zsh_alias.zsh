@@ -68,7 +68,7 @@ alias lsd="lsd --group-directories-first"
 alias history="history 0"
 alias neofetch="neofetch --size 220px --kitty --source ~/Dropbox/profile_pics/"
 alias rm='nocorrect rm -Iv'
-alias ssh="TERM=xterm kitty +kitten ssh"
+# alias ssh="TERM=xterm kitty +kitten ssh"
 alias stat-date="stat --printf '%w\t%n\n'"
 alias unimatrix="unimatrix -c yellow -l ns -af"
 
