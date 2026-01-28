@@ -114,6 +114,11 @@ export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101
 export EDITOR="nvim"
 export VISUAL="nvim"
 
+# ────────────────────────────────────────────────────────────
+# ▄▀▀▀▀ ▄▀▀▀▄ █     ▄▀▀▀▄ █▀▀▀▄ ▄▀▀▀▀
+# █     █   █ █     █   █ █▀▀▀▄  ▀▀▀▄
+#  ▀▀▀▀  ▀▀▀  ▀▀▀▀▀  ▀▀▀  ▀   ▀ ▀▀▀▀
+#
 # ─[ COLORES PARA BAT ]───────────────────────────────────────
 export BAT_STYLE="full"
 export BAT_THEME="base16"   # Tema de colores compatible con kitty
@@ -124,7 +129,8 @@ export BAT_THEME="base16"   # Tema de colores compatible con kitty
 export LS_COLORS="$(vivid generate kasumi)"
 
 # ─[ COLORES PARA GREP ]──────────────────────────────────────
-# export GREP_COLORS="mt=1;33"              # REVISAR: Resalta en negrita y amarillo las búsquedas con grep
+# PEND: Resalta en negrita y amarillo las búsquedas con grep
+# export GREP_COLORS="mt=1;33"
 
 # ─[ COLORES PARA LESS ]──────────────────────────────────────
 # Primero tienes que instalar: 'source-highlight'
@@ -147,7 +153,6 @@ export MANPAGER='less -M +Gg -R --use-color'
 # Asegura que groff use SGR (necesario para -R)
 export MANROFFOPT='-c'
 
-# LESS_TERMCAP
 # Personalización de colores para man pages (y less en general)
 # Usa tput para máxima compatibilidad (mejor que secuencias \e hardcoded)
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 3)      # Inicio de parpadeo (blinking) → amarillo bold (poco usado en man, pero resalta warnings)
