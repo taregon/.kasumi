@@ -81,16 +81,32 @@ autoload -Uz _zinit
 # Se usa para que aplicaciones como ranger puedan determinar
 # que el protocolo de imágenes de Kitty puede ser empleado.
 #
-if [[ "$KITTY_WINDOW_ID" != "" ]]; then
-    # Si se está en Kitty, se ajusta TERM a xterm-kitty.
-    # Esto es obligatorio para que ranger reconozca la terminal
-    # y se puedan mostrar pre visualizaciones de imágenes.
+if [[ -n "$KITTY_WINDOW_ID" ]] && [[ -z "$TMUX" ]]; then
+    # Se detecta Kitty mediante la variable KITTY_WINDOW_ID.
+    # Se establece TERM=xterm-kitty para activar el protocolo gráfico nativo,
+    # lo que permite a ranger mostrar previsualizaciones de imágenes rápidas y de alta calidad.
+    # Este ajuste resulta la opción recomendada y más fiable en entornos Kitty.
     export TERM="xterm-kitty"
+
+    # Se define un alias para ssh que invoca el kitten oficial de Kitty (kitty +kitten ssh).
+    # Beneficios principales:
+    #   - Copia automáticamente el terminfo de Kitty al host remoto (solo en la primera conexión),
+    #     evitando errores de terminal desconocido o visualizaciones incorrectas.
+    #   - Habilita la integración con el shell en el remoto (si resulta compatible: marcado de prompts,
+    #     navegación entre prompts anteriores, etc.).
+    #   - Reutiliza conexiones internas (multiplexing) para reducir la latencia en reconexiones.
+    #   - Mejora la compatibilidad general: las características avanzadas de Kitty (incluido el
+    #     protocolo gráfico) funcionan de manera más consistente en sesiones remotas.
+    #   - Evita conflictos frecuentes que surgen al propagar TERM=xterm-kitty directamente mediante SSH convencional.
+    alias ssh='kitty +kitten ssh'
+
 else
-    # Para cualquier otra terminal (alacritty, gnome-terminal, etc.)
-    # se utiliza xterm-256color para mantener soporte completo de colores.
+    # En terminales distintas a Kitty (Alacritty, WezTerm, GNOME Terminal, etc.) o dentro de tmux
+    # (donde el protocolo gráfico de Kitty suele fallar), se utiliza un TERM seguro
+    # con soporte completo para 256 colores y alta compatibilidad general.
     export TERM="xterm-256color"
 fi
+
 # ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▀▀█▀▀ █▄  █ ▄▀▀▀▀ ▄▀▀▀▀
 #  ▀▀▀▄ █▀▀     █     █     █   █ ▀▄█ █ ▀▀█  ▀▀▀▄
