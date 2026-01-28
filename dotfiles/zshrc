@@ -101,49 +101,62 @@ fi
 # export LC_ALL="en_US.UTF-8"
 
 # RANGER
+# ─[ RANGER ]─────────────────────────────────────────────────
 # Desactiva la carga de ajustes predeterminado para rc.conf
 export RANGER_LOAD_DEFAULT_RC=FALSE
 
-# USER AGENT
+# ─[ USER AGENT ]─────────────────────────────────────────────
 # Personalizado para scripts o utilidades
 export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
 
-# EDITORES
+# ─[ EDITORES ]───────────────────────────────────────────────
 # Definen el editor por defecto para terminal y GUI
 export EDITOR="nvim"
 export VISUAL="nvim"
 
-# COLORES PARA BAT
+# ─[ COLORES PARA BAT ]───────────────────────────────────────
 export BAT_STYLE="full"
 export BAT_THEME="base16"   # Tema de colores compatible con kitty
 
-# COLORES PARA LESS
+# ─[ COLORES PARA LS ]────────────────────────────────────────
+# export LS_COLORS="*.zip=36:*.rar=36:*.tar=36:*.gz=36:*.tar.gz=36:*.7z=36:$LS_COLORS"
+# export LS_COLORS="ex=30;42"               # Ejecutables con fondo verde
+export LS_COLORS="$(vivid generate kasumi)"
+
+# ─[ COLORES PARA GREP ]──────────────────────────────────────
+# export GREP_COLORS="mt=1;33"              # REVISAR: Resalta en negrita y amarillo las búsquedas con grep
+
+# ─[ COLORES PARA LESS ]──────────────────────────────────────
 # Primero tienes que instalar: 'source-highlight'
 # export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESSOPEN="| src-hilite-lesspipe.sh %s"      # Coloco únicamente el nombre, sino sirve, prueba con la ruta
+
+# Opciones globales para less
+#   -M prompt,    -F quit-if-one-screen,
+#   -R ANSI,      -I ignore-case
 export LESS='-MRFI'                                # Estas opciones funcionan en man (en realidad la aplica globalmente)
 
-# COLORES PARA MAN
-# Configuraciones que aplican tanto a man como a grep
-# export LS_COLORS="*.zip=36:*.rar=36:*.tar=36:*.gz=36:*.tar.gz=36:*.7z=36:$LS_COLORS"
-export GREP_COLORS="mt=1;33"              # Resalta en negrita y amarillo las búsquedas con grep
-export MANROFFOPT='-c'                    # Activa color en man
-export LS_COLORS="ex=30;42"               # Ejecutables con fondo verde
+# ─[ COLORES PARA MAN ]───────────────────────────────────────
+# Define el paginador para man (MANPAGER) usando less con:
+# - Soporte completo para colores/ANSI (-R + --use-color)
+# - Prompt más legible y con info (-M)
+# - Compresión de líneas en blanco (-s)
+# - Carga total del documento al abrir (+Gg) → scroll suave y porcentaje exacto desde el inicio
+export MANPAGER='less -M +Gg -R --use-color'
+
+# Asegura que groff use SGR (necesario para -R)
+export MANROFFOPT='-c'
 
 # LESS_TERMCAP
-# Controla estilos dentro de less/man
-export LESS_TERMCAP_mb=$'\e[1;34m'        # Bold azul
-export LESS_TERMCAP_md=$'\e[1;32m'        # Blink verde
-export LESS_TERMCAP_so=$'\e[1;33m'        # Reverse video amarillo
-export LESS_TERMCAP_us=$'\e[3;35m'        # Underline magenta
-export LESS_TERMCAP_me=$'\e[0m'           # Reset bold/blink
-export LESS_TERMCAP_se=$'\e[0m'           # Reset reverse video
-export LESS_TERMCAP_ue=$'\e[0m'           # Reset underline
-
-# Define LESS como paginador para MAN,
-# con soporte de color, formato legible
-# y desplazamiento fluido.
-export MANPAGER='less -s -M +Gg -R --use-color'    # Pregúntale a GPT, ya lo tuné
+# Personalización de colores para man pages (y less en general)
+# Usa tput para máxima compatibilidad (mejor que secuencias \e hardcoded)
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 3)      # Inicio de parpadeo (blinking) → amarillo bold (poco usado en man, pero resalta warnings)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 6)      # Inicio de negrita → cyan bold (ideal para títulos, comandos y secciones)
+export LESS_TERMCAP_me=$(tput sgr0)                    # Fin de todos los modos (reset a normal)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3)      # Highlight de búsqueda / standout → amarillo bold (mejor contraste que blanco en fondos oscuros)
+export LESS_TERMCAP_se=$(tput sgr0)                    # Fin de standout
+export LESS_TERMCAP_us=$(tput smul; tput setaf 2)      # Inicio de subrayado → verde (clásico para opciones, flags y argumentos)
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)         # Fin de subrayado (rmul es más preciso que sgr0 solo)
 
 # ------------------------------------------------------
 # █▀▀▀▀ ▀▀▀▀█ █▀▀▀▀
