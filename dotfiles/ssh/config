@@ -8,7 +8,12 @@
 #    ps -u "$USER" -o pid,comm | grep ssh-agent
 # 2. Lista las claves cargadas en el agente:
 #    ssh-add -l
-
+#
+# En mi sesión de Sway, ya se carga el IdentityAgent,
+# que puedes verificar con: echo $SSH_AUTH_SOCK
+# Además, en KeePassXC → Configuración → Agente SSH,
+# habilitas: la integración con el agente SSH.
+#
 # Configuración anterior para cargar automáticamente la clave SSH en el agente.
 # Actualmente, la gestión de claves se delega a KeePassXC,
 # por lo que esta sección queda deshabilitada.
