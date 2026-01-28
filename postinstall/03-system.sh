@@ -282,6 +282,7 @@ install_utils_terminal() {
         aria2              # Gestor de descargas (HTTP, FTP, torrents)
         bat                # cat con resaltado de sintaxis y git
         cdu                # Analizador interactivo de uso de disco (histograma)
+        dotdrop            # Gestor de dotfiles (perfiles, plantillas, git)
         exa                # ls moderno con colores e iconos (obsoleto, mira lsd)
         figlet             # Texto en ASCII art grande
         figlet-fonts-extra # Fuentes extras para figlet
@@ -293,14 +294,14 @@ install_utils_terminal() {
         jq                 # Procesador de JSON desde terminal
         kitty              # Terminal rápida con GPU y ligatures
         less               # Paginador de texto (mejor con source-highlight)
+        lnav               # Visor avanzado de logs (tail + search + filters)
         lsd                # ls con iconos y colores (recomendado sobre exa)
         openssh            # Cliente y servidor SSH + agente
-        python-pip         # Gestor de paquetes Python (pip)
-        dotdrop            # Gestor de dotfiles (perfiles, plantillas, git)
-        lnav               # Visor avanzado de logs (tail + search + filters)
         pacman-contrib     # extras pacman (pactree, pkgdelta, updpkgsums, etc.)
+        python-pip         # Gestor de paquetes Python (pip)
         ripgrep            # Búsqueda recursiva ultrarrápida (rg)
         source-highlight   # Resaltado sintaxis en less y más
+        sshfs              # Montar directorios remotos vía SSH como si fueran locales
         toilet             # Texto ASCII con estilos y filtros
         zoxide             # cd inteligente (recuerda directorios frecuentes)
         zsh                # Shell interactivo moderno (mejor que bash)
@@ -310,13 +311,21 @@ install_utils_terminal() {
 
     systemctl --user enable --now ssh-agent.service
 
-    echo "Cambiando shell predeterminada a zsh..."
+    echo "  Cambiando shell predeterminada a zsh..."
     chsh -s "$(which zsh)"
 
-    echo "Usuario $USER agregado al grupo input" # requerido para módulos de waybar
+    echo "  Usuario $USER agregado al grupo input" # requerido para módulos de waybar
     sudo usermod -aG input "$USER"
 
-    echo "[!] Reinicia la sesión para aplicar el cambio de shell"
+    # Verificar que el grupo fuse exista
+    if ! getent group fuse > /dev/null; then
+        sudo groupadd fuse
+    fi
+
+    echo "  Usuario $USER agregado al grupo fuse" # requerido para módulos de waybar
+    sudo usermod -a -G fuse "$USER"
+
+    echo "  Reinicia la sesión para aplicar el cambio de shell"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
