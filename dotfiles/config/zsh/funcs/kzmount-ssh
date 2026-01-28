@@ -1,9 +1,9 @@
 # vim: filetype=zsh
 
-# Ejemplo de uso:
-# mount_sshfs cisne SWAN
-#
-# Parámetros obligatorios
+# DEFINIR COLOR
+YELLOW='\033[0;33m'
+NC="\033[0m" # Sin color
+
 local user="$1"    # usuario remoto: cisne
 local host="$2"    # host remoto: SWAN
 
@@ -12,20 +12,72 @@ if [[ -z "$user" || -z "$host" ]]; then
     return 1
 fi
 
+# Verificar que el grupo fuse exista
+if ! getent group fuse >/dev/null; then
+    echo "  Grupo 'fuse' no existe. "
+    echo "Creándolo..."
+    sudo groupadd fuse
+fi
+
+# Verificar que el usuario esté en el grupo fuse
+if ! id -nG "$USER" | grep -qw fuse; then
+    echo "  Agregando $USER al grupo 'fuse'."
+    sudo usermod -a -G fuse "$USER"
+
+    echo
+    echo -e "${YELLOW}Necesitarás reiniciar sesión.${NC}"
+    echo "   El usuario fue agregado al grupo 'fuse',"
+    echo "   pero la sesión actual no lo refleja todavía."
+    echo "   El script se detiene para evitar errores."
+    return 2
+fi
+
 # Ruta de montaje
 local mount_point="/mnt/servers/$host/$user"
+
+# Evitar ruido: ya está montado
+if mountpoint -q "$mount_point"; then
+    echo
+    echo "  Ya está montado en: $mount_point"
+    return 0
+fi
+
+# Crear estructura completa como root
 sudo mkdir -p "$mount_point"
-sudo chown $USER:$USER /mnt/servers
+sudo chown -R "$USER:$USER" "/mnt/servers/$host"
+sudo chmod 755 "$mount_point"
+
+# Crear el subdirectorio del host/usuario
+mkdir -p "$mount_point"
+
+# Validar permisos sobre el punto de montaje
+if [[ ! -w "$mount_point" ]]; then
+    echo "  Sin permiso de escritura en: $mount_point"
+    echo
+    echo "   Posibles causas:"
+    echo "     - El directorio pertenece a root"
+    echo "     - El usuario no tiene el grupo 'fuse' activo en esta sesión"
+    echo
+    echo "   Verificaciones sugeridas:"
+    echo "     id -nG $USER"
+    echo "     ls -ld /mnt/servers"
+    echo
+    echo "   Si acabas de agregar el usuario al grupo 'fuse',"
+    echo "   cierra sesión y vuelve a entrar."
+    return 3
+fi
 
 # Montaje SSHFS
 sshfs "$user@$host:/home/$user" "$mount_point" \
     -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3
 
 if [[ $? -eq 0 ]]; then
-    echo "  Montaje completado: $user@$host -> $mount_point"
+    echo
+    echo "  Montaje completado:"
+    echo "  $user@$host -> $mount_point"
 else
+    echo
     echo "  Error al montar $user@$host"
-
     # Eliminar la carpeta creada para no ensuciar /mnt
     rmdir "$mount_point" 2>/dev/null
 fi
