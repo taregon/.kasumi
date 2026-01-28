@@ -134,13 +134,14 @@ export LS_COLORS="$(vivid generate kasumi)"
 
 # ─[ COLORES PARA LESS ]──────────────────────────────────────
 # Primero tienes que instalar: 'source-highlight'
+# Coloco únicamente el nombre, sino sirve, prueba con la ruta
 # export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
-export LESSOPEN="| src-hilite-lesspipe.sh %s"      # Coloco únicamente el nombre, sino sirve, prueba con la ruta
+export LESSOPEN="| src-hilite-lesspipe.sh %s"
 
 # Opciones globales para less
 #   -M prompt,    -F quit-if-one-screen,
 #   -R ANSI,      -I ignore-case
-export LESS='-MRFI'                                # Estas opciones funcionan en man (en realidad la aplica globalmente)
+export LESS='-MRFI'
 
 # ─[ COLORES PARA MAN ]───────────────────────────────────────
 # Define el paginador para man (MANPAGER) usando less con:
