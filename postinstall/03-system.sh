@@ -12,11 +12,18 @@ set -e          # Detiene el script si ocurre un error
 set -u          # Error si se usa una variable no declarada
 set -o pipefail # Propaga errores en tuberías
 
-# Confirma la acción antes de proceder
+# Elevación automática de privilegios:
+# relanza con sudo si no es root
+if [[ $EUID -ne 0 ]]; then
+    echo "  Elevando privilegios..."
+    exec sudo -- "$0" "$@"
+fi
+
+# Confirmación interactiva antes de aplicar cambios en el sistema
 confirmar() {
-    read -rp "¿Desea continuar con la instalación? [s/N]: " respuesta
+    read -rp "¿Desea volver a la instalación? [s/N]: " respuesta
     [[ "$respuesta" =~ ^[sS]$ ]] || {
-        echo "Cancelado."
+        echo "  Cancelado."
         exit 0
     }
 }
