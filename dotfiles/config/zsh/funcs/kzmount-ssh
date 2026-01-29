@@ -2,18 +2,29 @@
 
 # DEFINIR COLOR
 YELLOW='\033[0;33m'
+BLUE="\033[0;34m"
+GREEN="\033[0;32m"
 NC="\033[0m" # Sin color
 
-local user="$1"    # usuario remoto: cisne
-local host="$2"    # host remoto: SWAN
+local user="$1" # usuario remoto: cisne
+local host="$2" # host remoto: SWAN
 
 if [[ -z "$user" || -z "$host" ]]; then
     echo "Uso: kzmount-ssh <usuario> <host>"
+    return 0
+fi
+
+# Requiere privilegios de superusuario
+if ! sudo -v > /dev/null 2>&1; then
+    echo -e "${YELLOW}  Se requiere autenticación sudo.${NC}"
     return 1
 fi
 
+echo -e "${BLUE}Montando vía SSHFS el directorio /home del usuario remoto${NC}"
+echo
+
 # Verificar que el grupo fuse exista
-if ! getent group fuse >/dev/null; then
+if ! getent group fuse > /dev/null; then
     echo "  Grupo 'fuse' no existe. "
     echo "Creándolo..."
     sudo groupadd fuse
@@ -68,7 +79,7 @@ if [[ ! -w "$mount_point" ]]; then
     echo
     echo "   Si acabas de agregar el usuario al grupo 'fuse',"
     echo "   cierra sesión y vuelve a entrar."
-    return 3
+    return 4
 fi
 
 # ╒════════════════════════════════════════════════════════════╕
