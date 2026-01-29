@@ -19,6 +19,14 @@ if [[ $EUID -ne 0 ]]; then
     exec sudo -- "$0" "$@"
 fi
 
+# PEND: Mantener viva la sesión sudo mientras el script corre
+# (while true; do
+#     sudo -v
+#     sleep 60
+# done) 2> /dev/null &
+# SUDO_KEEPALIVE_PID=$!
+# trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
+
 # Confirmación interactiva antes de aplicar cambios en el sistema
 confirmar() {
     read -rp "¿Desea volver a la instalación? [s/N]: " respuesta
