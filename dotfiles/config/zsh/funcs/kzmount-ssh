@@ -82,13 +82,21 @@ if ! ssh-add -L > /dev/null 2>&1; then
     read dummy
 fi
 
-if [[ $? -eq 0 ]]; then
+echo "  Ejecutando montaje SSHFS..."
+
+if sshfs "$user@$host:/home/$user" "$mount_point" \
+    -o reconnect \
+    -o ServerAliveInterval=15 \
+    -o ServerAliveCountMax=3 \
+    -o follow_symlinks; then
+
     echo
     echo "  Montaje completado:"
-    echo "  $user@$host -> $mount_point"
+    echo "${GREEN}  $user@$host -> $mount_point${NC}"
+
 else
     echo
     echo "  Error al montar $user@$host"
     # Eliminar la carpeta creada para no ensuciar /mnt
-    rmdir "$mount_point" 2>/dev/null
+    rmdir "$mount_point" 2> /dev/null
 fi
