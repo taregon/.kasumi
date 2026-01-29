@@ -37,9 +37,13 @@ local mount_point="/mnt/servers/$host/$user"
 
 # Evitar ruido: ya está montado
 if mountpoint -q "$mount_point"; then
+    echo "  Ya está montado en: ${YELLOW}$mount_point${NC}"
+    echo " - Puedes desmontar con:"
+    echo "   fusermount -u <ruta>"
+    echo " - También puedes listar los montajes con:"
+    echo "   findmnt -t fuse.sshfs --output SOURCE,TARGET"
     echo
-    echo "  Ya está montado en: $mount_point"
-    return 0
+    return 3
 fi
 
 # Crear estructura completa como root
