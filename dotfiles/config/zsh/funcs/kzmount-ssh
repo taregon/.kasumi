@@ -71,9 +71,16 @@ if [[ ! -w "$mount_point" ]]; then
     return 3
 fi
 
-# Montaje SSHFS
-sshfs "$user@$host:/home/$user" "$mount_point" \
-    -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3
+# ╒════════════════════════════════════════════════════════════╕
+# │                       MONTAJE SSHFS                        │
+# ╘════════════════════════════════════════════════════════════╛
+if ! ssh-add -L > /dev/null 2>&1; then
+    echo "${YELLOW}  No hay claves SSH cargadas.${NC}"
+    echo "Abre KeePassXC para desbloquear la clave SSH (si está configurada así)."
+    echo "De lo contrario, se solicitará la contraseña del servidor remoto."
+    echo "  Presiona Enter para proceder con el montaje... "
+    read dummy
+fi
 
 if [[ $? -eq 0 ]]; then
     echo
