@@ -1,5 +1,19 @@
 # vim: filetype=zsh
 
+# NOTA: Este script monta SOLO el HOME personal de un usuario remoto vía SSHFS
+#
+# Lo que hace:
+# - Mapea tu usuario remoto al local (idmap=user), así los  archivos se ven y
+#   comportan como tuyos (para edición con Neovim).
+# - Permisos se chequean localmente (default_permissions).
+# - Solo tú (el que monta) tienes acceso práctico.
+#
+# NO usar para:
+# - Carpetas compartidas entre varios usuarios
+# - Datos sensibles o de sistema
+# - Mantener UID/GID originales del servidor
+#  mount | grep sshfs
+
 # DEFINIR COLOR
 YELLOW='\033[0;33m'
 BLUE="\033[0;34m"
@@ -8,9 +22,10 @@ NC="\033[0m" # Sin color
 
 local user="$1" # usuario remoto: cisne
 local host="$2" # host remoto: SWAN
+local mount_point="/mnt/servers/$host/$user" # Ruta de montaje
 
 if [[ -z "$user" || -z "$host" ]]; then
-    echo "Uso: kzmount-ssh <usuario> <host>"
+    echo "Uso: kzmount-ssh <usuario> <HOST>"
     return 0
 fi
 
@@ -43,9 +58,6 @@ if ! id -nG "$USER" | grep -qw fuse; then
     return 2
 fi
 
-# Ruta de montaje
-local mount_point="/mnt/servers/$host/$user"
-
 # Evitar ruido: ya está montado
 if mountpoint -q "$mount_point"; then
     echo "  Ya está montado en: ${YELLOW}$mount_point${NC}"
@@ -57,13 +69,12 @@ if mountpoint -q "$mount_point"; then
     return 3
 fi
 
-# Crear estructura completa como root
-sudo mkdir -p "$mount_point"
-sudo chown -R "$USER:$USER" "/mnt/servers/$host"
-sudo chmod 755 "$mount_point"
-
-# Crear el subdirectorio del host/usuario
-mkdir -p "$mount_point"
+# Crear el punto de montaje local para SSHFS, solo si no existe
+if [[ ! -d "$mount_point" ]]; then
+    sudo mkdir -p "$mount_point"
+    sudo chown "$USER:$USER" "$mount_point"
+    sudo chmod 755 "$mount_point"
+fi
 
 # Validar permisos sobre el punto de montaje
 if [[ ! -w "$mount_point" ]]; then
@@ -96,10 +107,12 @@ fi
 echo "  Ejecutando montaje SSHFS..."
 
 if sshfs "$user@$host:/home/$user" "$mount_point" \
-    -o reconnect \
-    -o ServerAliveInterval=15 \
     -o ServerAliveCountMax=3 \
-    -o follow_symlinks; then
+    -o ServerAliveInterval=15 \
+    -o default_permissions \
+    -o follow_symlinks \
+    -o idmap=user \
+    -o reconnect; then
 
     echo
     echo "  Montaje completado:"
@@ -109,5 +122,4 @@ else
     echo
     echo "  Error al montar $user@$host"
     # Eliminar la carpeta creada para no ensuciar /mnt
-    rmdir "$mount_point" 2> /dev/null
-fi
+    rmdir "$mount_point" 2> /dev/nui
