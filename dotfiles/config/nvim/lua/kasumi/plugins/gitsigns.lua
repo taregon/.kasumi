@@ -24,12 +24,15 @@ require("gitsigns").setup({
 		untracked    = { text = "󰛞" },
 		-- stylua: ignore end
 	},
-	-- Opciones ajustadas (el resto se hereda por defecto)
 	attach_to_untracked = true, -- Adjunta gitsigns a archivos nuevos archivos no rastreados
 	current_line_blame = true, -- Muestra automáticamente el autor y commit de la línea actual
 	current_line_blame_opts = {
-		delay = 1500, -- Retraso (ms) antes de mostrar el blame para evitar distracciones al moverse
+		delay = 1500, -- Espera (ms) antes de mostrar el blame virtual
+		ignore_whitespace = true, -- Ignora commits donde solo cambió el espaciado
+		virt_text_pos = "right_align", -- Texto virtual alineado a la derecha (default: "eol")
 	},
+	max_file_length = 10000, -- Evita gitsigns en archivos grandes
+	update_debounce = 300, -- Prioriza estabilidad sobre reacción inmediata
 })
 
 -- Color personalizado del signo untracked
