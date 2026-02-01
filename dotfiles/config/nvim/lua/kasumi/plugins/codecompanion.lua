@@ -1,7 +1,8 @@
 -- Ayuda: https://raw.githubusercontent.com/olimorris/codecompanion.nvim/refs/heads/main/doc/codecompanion.txt
+
 local ok, codecompanion = pcall(require, "codecompanion")
 if not ok then
-	vim.notify("codecompanion.nvim no encontrado. Verifica instalación manual.", vim.log.levels.ERROR)
+	vim.notify("codecompanion.nvim no encontrado. Verifica instalación.", vim.log.levels.ERROR)
 	return
 end
 
