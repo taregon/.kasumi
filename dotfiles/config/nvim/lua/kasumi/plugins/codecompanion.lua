@@ -8,24 +8,25 @@ end
 
 codecompanion.setup({
 	adapters = {
-		ollama = function()
-			return require("codecompanion.adapters").extend("ollama", {
-				schema = {
-                    -- stylua: ignore start
-					model       = { default = "gemma2:2b" },
-					num_ctx     = { default = 4096 },
-					temperature = { default = 0.35 },
-					top_p       = { default = 0.9 },
-					-- stylua: ignore end
-				},
-				env = { url = "http://127.0.0.1:11434" },
-			})
-		end,
-	},
-	strategies = {
-		chat = { adapter = "ollama" },
-		inline = { adapter = "ollama" },
-		agent = { adapter = "ollama" },
+		http = {
+			ollamaAnna = function()
+				return require("codecompanion.adapters").extend("ollama", {
+					name = "ollamaAnna",
+                    -- stylua: ignore
+					schema = {
+						model       = { default = "gemma2:2b" },
+						num_ctx     = { default = 4096 },
+						temperature = { default = 0.35 },
+						top_p       = { default = 0.9 },
+                        num_predict = { default = -1 },
+					},
+					env = { url = "http://127.0.0.1:11434" },
+					-- headers = { ["Content-Type"] = "application/json" },
+				})
+			end,
+			opts = { show_presets = false },
+			-- parameters = { sync = true },
+		},
 	},
 	display = {
 		chat = {
@@ -57,12 +58,11 @@ codecompanion.setup({
 			},
 		},
 	},
-	opts = {
-		log_level = "DEBUG",
-		system_prompt = function(adapter)
-			if adapter.name == "ollama" then
-				return [[
-Eres un experto en conventional commits. Siempre responde SOLO con el mensaje de commit exacto. Nunca agregues explicaciones, markdown, prefijos ni nada extra.
+	strategies = {
+		chat = { adapter = "ollamaAnna" },
+		inline = { adapter = "ollamaAnna" },
+		agent = { adapter = "ollamaAnna" },
+	},
 
 Reglas estrictas:
 - Formato: tipo(scope opcional): descripción corta en imperativo presente.
