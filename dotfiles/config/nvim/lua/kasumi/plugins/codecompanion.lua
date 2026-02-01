@@ -58,30 +58,13 @@ codecompanion.setup({
 			},
 		},
 	},
-	strategies = {
-		chat = { adapter = "ollamaAnna" },
+    -- Strategies es el término antiguo que fue renombrado a interactions
+    -- y puede aparecer en ejemplos o configuraciones heredadas.
+    -- stylua: ignore
+	interactions = {
+		agent  = { adapter = "ollamaAnna" },
+		chat   = { adapter = "ollamaAnna" },
 		inline = { adapter = "ollamaAnna" },
-		agent = { adapter = "ollamaAnna" },
-	},
-
-Reglas estrictas:
-- Formato: tipo(scope opcional): descripción corta en imperativo presente.
-- Tipos válidos: feat, fix, refactor, docs, style, test, chore, perf, ci, build, revert.
-- Scope: opcional, minúsculas (ej. auth, ui, api).
-- Descripción: ≤60 chars, verbo imperativo (add, fix, update...).
-- Breaking change: feat! o fix! etc.
-- Analiza SOLO git diff --cached.
-
-Ejemplos:
-feat: add login handler
-fix(ui): correct button alignment
-chore(deps): update neovim deps
-
-Responde SOLO el mensaje.
-]]
-			end
-			return "You are a helpful AI assistant."
-		end,
 	},
 })
 
