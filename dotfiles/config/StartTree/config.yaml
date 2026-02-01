@@ -54,6 +54,9 @@ tree_3:
     cron-descriptor: https://bradymholt.github.io/cron-expression-descriptor/
     cron-parser: https://elmah.io/tools/cron-parser/
     cyberchef: https://gchq.github.io/CyberChef/
+    github-download-directory: "https://download-directory.github.io/"
+    github-folder-downloader: "https://gitfolderdownloader.github.io/"
+    github-repo-downloader: "https://repo-downloader.pages.dev/"
     gpu-database: https://www.techpowerup.com/gpu-specs/
     image-to-braille: https://505e06b2.github.io/Image-to-Braille/
     iso-debian: https://www.debian.org/CD/http-ftp/
