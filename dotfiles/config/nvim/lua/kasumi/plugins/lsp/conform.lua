@@ -14,9 +14,11 @@
 --
 require("conform").setup({
 	formatters = {
+		-- ────────────────────────────────────────────────────────────
 		sql_formatter = {
 			args = { "--config", vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/sql-formatter.json") },
 		},
+		-- ────────────────────────────────────────────────────────────
 		yamlfix = {
 			env = {
 				YAMLFIX_SEQUENCE_STYLE = "block_style",
@@ -24,16 +26,26 @@ require("conform").setup({
 				YAMLFIX_LINE_LENGTH = "120",
 			}, -- Por defecto viene con: low-style list: [item, item]
 		},
+		-- ────────────────────────────────────────────────────────────
 		shfmt = { -- https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd
 			args = { "-i", "4", "-ci", "-bn", "-sr" },
 		},
+		-- ────────────────────────────────────────────────────────────
 		awk = {
 			args = { "-f", vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/format.awk") },
 		},
+		-- ────────────────────────────────────────────────────────────
 		deno_fmt = {
 			args = { "fmt", "--ext", "jsonc", "-" },
 			stdin = true,
 		},
+		-- ────────────────────────────────────────────────────────────
+		deno_fmt_markdown = {
+			command = "deno",
+			args = { "fmt", "--ext", "md", "-" },
+			stdin = true,
+		},
+		-- ────────────────────────────────────────────────────────────
 		ruff_fix = {
 			args = {
 				"check",
@@ -46,6 +58,7 @@ require("conform").setup({
 				"-",
 			},
 		},
+		-- ────────────────────────────────────────────────────────────
 		ruff_format = {
 			args = { "format", "-" },
 		},
@@ -61,7 +74,7 @@ require("conform").setup({
 		json5    = { "fixjson" },
 		jsonc    = { "deno_fmt" },
 		lua      = { "stylua" },
-		markdown = { "mdformat" },
+		markdown = { "deno_fmt_markdown" },
 		python   = { "ruff_fix", "ruff_format" },
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md

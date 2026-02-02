@@ -22,7 +22,7 @@ require("mason-tool-installer").setup({
 		"ruff",
 
 		-- ──────────────────────────< JSON >──────────────────────
-		"deno", -- Formateador: JSON, JSONC
+		"deno", -- Formateador: JSON, JSONC y MARKDOWN
 		"fixjson", -- Formateador para JSON5
 		"jsonlint", -- Linter para JSON
 
@@ -35,7 +35,6 @@ require("mason-tool-installer").setup({
 
 		-- ────────────────────────< Markdown >────────────────────
 		"markdownlint", -- Linter
-		"mdformat", -- Formateador
 
 		-- ───────────────────────────< SQL >──────────────────────
 		"sql-formatter", -- Formateador
