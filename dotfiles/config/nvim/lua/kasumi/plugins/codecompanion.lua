@@ -77,7 +77,7 @@ codecompanion.setup({
 
 	prompt_library = {
 		["Commit en Español"] = {
-			strategy = "chat",
+			interaction = "chat", -- Anteriormente: strategy
 			description = "Genera un mensaje de commit en español (Conventional Commits)",
 			opts = {
 				alias = "ce",
