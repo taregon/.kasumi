@@ -57,23 +57,12 @@ codecompanion.setup({
 			},
 		},
 	},
-	interactions = {
-		chat = {
-			tools = { enabled = false }, -- ligereza
-			slash_commands = {
-				["commit"] = true, -- /commit genera del staged diff
-				["buffer"] = true,
-			},
-		},
-	},
-    -- Strategies es el término antiguo que fue renombrado a interactions
-    -- y puede aparecer en ejemplos o configuraciones heredadas.
-    -- stylua: ignore
-	interactions = {
-		agent  = { adapter = "ollamaAnna" },
-		chat   = { adapter = "ollamaAnna" },
-		inline = { adapter = "ollamaAnna" },
-	},
+	opts = { log_level = "DEBUG" },
+	-- prompt_library = {
+	-- 	markdown = {
+	-- 		dirs = { vim.fn.stdpath("config") .. "/prompts" },
+	-- 	},
+	-- },
 
 	prompt_library = {
 		["Commit en Español"] = {
