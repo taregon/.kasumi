@@ -43,6 +43,26 @@ alias mem+="ps -eo pid,ppid,cmd,%mem --sort=-%mem | head"   # Processes consumin
 alias cpu+="ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head"   # Processes consuming most cpu
 alias lm='lsa -tA -1r'                                      # List files sorted by last modified
 alias ld="lsa -DT --show-symlinks --long --header"          # Lista solo carpetas
+alias lz="eza \
+--git \
+--git-repos \
+--group-directories-first \
+--header \
+--icons=always \
+--long \
+--smart-group \
+--total-size \
+"
+alias lzt="eza \
+--follow-symlinks \
+--header \
+--icons=never \
+--long \
+--mounts \
+--smart-group \
+--time-style=iso \
+--tree \
+"
 alias cuantos='find . -type f | wc -l'                      # Cantidad de archivos
 alias test-cursor="kitten mouse-demo"
 # alias lf="nvim $(fzf --preview='bat --color=always {}')"
