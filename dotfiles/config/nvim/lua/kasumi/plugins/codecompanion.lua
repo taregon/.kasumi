@@ -1,4 +1,12 @@
+-- ┌────────────────────────────────────────────────────┐
+-- │░█▀▀░█▀█░█▀▄░█▀▀░█▀▀░█▀█░█▄█░█▀█░█▀█░█▀█░▀█▀░█▀█░█▀█│
+-- │░█░░░█░█░█░█░█▀▀░█░░░█░█░█░█░█▀▀░█▀█░█░█░░█░░█░█░█░█│
+-- │░▀▀▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░░░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░▀│
+-- └────────────────────────────────────────────────────┘
 -- Ayuda: https://raw.githubusercontent.com/olimorris/codecompanion.nvim/refs/heads/main/doc/codecompanion.txt
+-- https://github.com/olimorris/codecompanion.nvim/blob/45537d82516c9a7bf4c15a5c9bbeb82fb60f415b/doc/configuration/system-prompt.md#L4
+-- De lo anterior puedes buscar: KEYMAPS
+-- https://github.com/olimorris/codecompanion.nvim/blob/main/doc/getting-started.md
 
 local ok, codecompanion = pcall(require, "codecompanion")
 if not ok then
@@ -14,11 +22,20 @@ codecompanion.setup({
 					name = "ollamaAnna",
                     -- stylua: ignore
 					schema = {
-						model       = { default = "gemma2:2b" },
-						num_ctx     = { default = 4096 },
-						temperature = { default = 0.35 },
-						top_p       = { default = 0.9 },
-                        num_predict = { default = -1 },
+						-- Elige el modelo de IA que se cargará al inicio
+						model          = { default = "gemma2:2b" },
+						-- Define cuánta memoria tiene la IA para recordar el chat y el código actual
+						num_ctx        = { default = 4096 },
+						-- Limita la longitud máxima de la respuesta para evitar textos infinitos
+                        -- Con -1, el modelo no para hasta que él mismo decide que ha terminado
+                        -- o hasta que se llena el contexto
+						num_predict    = { default = 1024 },
+						-- Evita que la IA se quede trabada repitiendo las mismas frases una y otra vez
+						repeat_penalty = { default = 1.1 },
+						-- Controla la "locura" de la IA: 0.1 es serio y preciso, 1.0 es creativo y variado
+						temperature    = { default = 0.1 },
+						-- Prioriza las palabras más lógicas para que la IA no pierda el hilo técnico
+						top_p          = { default = 0.4 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
 					-- headers = { ["Content-Type"] = "application/json" },
@@ -57,91 +74,14 @@ codecompanion.setup({
 			},
 		},
 	},
-	opts = { log_level = "DEBUG" },
-	-- prompt_library = {
-	-- 	markdown = {
-	-- 		dirs = { vim.fn.stdpath("config") .. "/prompts" },
-	-- 	},
-	-- },
-
+	opts = {
+		log_level = "DEBUG", -- Almacenado en: ~/.local/state/nvim/codecompanion.log
+		language = "Spanish (neutral, technical)",
+	},
 	prompt_library = {
-		["Commit en Español"] = {
-			interaction = "chat", -- Anteriormente: strategy
-			description = "Genera un mensaje de commit en español (Conventional Commits)",
-			opts = {
-				alias = "ce",
-				is_slash_cmd = true,
-				auto_submit = true,
-				contains_code = true,
-				ignore_system_prompt = true,
-			},
-			prompts = {
-				{
-					role = "system",
-					content = [[
-Eres un experto en Conventional Commits (especificación 1.0.0). Genera mensajes de commit profesionales en español.
-
-Estructura obligatoria:
-1. TÍTULO (primera línea):
-   - Formato: tipo[ámbito opcional]: descripción corta en imperativo español
-   - Tipos válidos: feat, fix, refactor, docs, style, test, chore, perf, ci, build, revert
-   - Descripción: verbo imperativo (agregar, corregir, actualizar, eliminar, refactorizar, documentar...)
-   - Máximo 60 caracteres aprox.
-   - Sin punto final
-   - Breaking change: usa ! después del tipo (ej. feat!: ...)
-
-2. Línea en blanco después del título
-
-3. CUERPO (explica qué cambió y por qué, envuelto a ~72 caracteres por línea)
-
-4. Línea en blanco (si hay footer)
-
-5. FOOTER opcional:
-   - BREAKING CHANGE: descripción
-   - Refs #123, Closes #456, etc. (si se infiere del diff o contexto)
-
-Reglas estrictas:
-- Todo el mensaje en español (excepto los tipos como feat/fix)
-- Responde SOLO con el mensaje de commit completo (sin texto adicional, sin markdown, sin "Aquí tienes", sin explicaciones)
-- No inventes nada que no esté en el diff
-- Si el cambio es trivial, el cuerpo puede ser breve o de 1-2 líneas
-]],
-				},
-				{
-					role = "user",
-					content = function()
-						-- Obtiene el root del repo automáticamente
-						local root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
-						if vim.v.shell_error ~= 0 or root == "" then
-							return "Error: No se detectó un repositorio Git válido. Asegúrate de estar dentro de un repo."
-						end
-
-						-- Ejecuta git diff desde el root
-						local diff_cmd = "cd " .. vim.fn.shellescape(root) .. " && git diff --cached --no-ext-diff"
-						local diff = vim.fn.system(diff_cmd)
-
-						if diff == "" then
-							return "No hay cambios staged (git add primero)."
-						end
-
-						return [[
-Genera UN mensaje de commit completo en español basado SOLO en estos cambios staged:
-```diff
-                        ]] .. diff .. [[
-```
-Responde SOLO con el mensaje (título + cuerpo + footer si aplica).
-Ejemplos válidos:
-feat: agregar validación de correo en formulario de registro
-Agrega chequeo de formato de email con regex antes de enviar al backend.
-Previene errores tempranos y mejora la experiencia del usuario.
-BREAKING CHANGE: el endpoint ahora rechaza correos inválidos con código 400
-fix(auth): corregir manejo de token expirado en middleware
-Revisa la expiración del JWT en cada request protegido.
-Retorna 401 si el token ha expirado.
-Anteriormente solo fallaba durante el refresh.
-                        ]]
-					end,
-				},
+		markdown = {
+			dirs = {
+				vim.fn.stdpath("config") .. "/lua/kasumi/plugins/prompts",
 			},
 		},
 	},
