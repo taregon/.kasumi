@@ -21,7 +21,9 @@
 # Host github.com
 #   IdentityFile ~/.ssh/id_ed25519_tartar
 #   AddKeysToAgent yes
-#
-# Host SWANX1
-#     HostName 192.168.20.57
-#     User cyg
+
+# ── ACCESOS RÁPIDOS ───────────────────────────────────────────
+# Equipo SWANX1
+Host SX1
+    HostName 192.168.20.57
+    User cyg
