@@ -35,7 +35,7 @@ Plug("lukas-reineke/indent-blankline.nvim") -- Lineas de identacion
 Plug("norcalli/nvim-colorizer.lua") -- Colorea los códigos RGB/HEX
 Plug("numToStr/Comment.nvim") -- Para comentar lineas o bloques  con F2 / F3
 Plug("nvim-lualine/lualine.nvim") -- Barra de estado
-Plug("nvim-treesitter/nvim-treesitter", { ["do"] = ":TSUpdate" }) -- Syntax Highlighting / colorea el código
+Plug("nvim-treesitter/nvim-treesitter") -- Syntax Highlighting / colorea el código
 Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
 Plug("petertriho/nvim-scrollbar") -- Barra de scroll
 

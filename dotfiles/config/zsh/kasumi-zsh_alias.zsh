@@ -66,6 +66,11 @@ alias lzt="eza \
 alias cuantos='find . -type f | wc -l'                      # Cantidad de archivos
 alias test-cursor="kitten mouse-demo"
 # alias lf="nvim $(fzf --preview='bat --color=always {}')"
+#
+alias less='TERM=xterm-256color less' # Fix para less roto con xterm-kitty
+alias man='TERM=xterm-256color man' # Fix para less roto con xterm-kitty
+# alias more='TERM=xterm-256color more' # Fix para less roto con xterm-kitty
+
 # Recuperación de autenticación sudo tras interrupciones de scripts
 # En algunos casos, abortar un script mientras sudo está activo deja
 # estados fallidos registrados por pam_faillock, haciendo que una

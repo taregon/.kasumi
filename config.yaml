@@ -130,6 +130,16 @@ dotfiles:
     dst: ~/.config/aria2
     link: absolute
     chmod: '700'
+  d_lnav:
+    src: config/lnav/configs/installed
+    dst: ~/.config/lnav/configs/installed
+    link: nolink
+    chmod: '750'
+  f_lnav:
+    src: config/lnav/config.json
+    dst: ~/.config/lnav/config.json
+    link: nolink
+    chmod: '600'
 profiles:
   kasumi:
     dotfiles:
@@ -154,8 +164,10 @@ profiles:
   kasumi_extras:
     dotfiles:
       - d_aria2
+      - d_lnav
       - d_neovim
       - d_zsh_functions
+      - f_lnav
       - f_ssh
       - f_starttree
       - f_zsh_alias
