@@ -66,6 +66,14 @@ alias lzt="eza \
 alias cuantos='find . -type f | wc -l'                      # Cantidad de archivos
 alias test-cursor="kitten mouse-demo"
 # alias lf="nvim $(fzf --preview='bat --color=always {}')"
+# Recuperación de autenticación sudo tras interrupciones de scripts
+# En algunos casos, abortar un script mientras sudo está activo deja
+# estados fallidos registrados por pam_faillock, haciendo que una
+# contraseña válida sea rechazada hasta limpiar dichos estados.
+# Referencia: https://bbs.archlinux.org/viewtopic.php?id=261481
+# Para inspeccionar intentos fallidos en tiempo real:
+alias F="faillock --reset"
+
 #    ___                     ____         __
 #   / _/_ ________ __ ______/ _(_)__  ___/ /__ ____
 #  / _/ // /_ /_ // // /___/ _/ / _ \/ _  / -_) __/
