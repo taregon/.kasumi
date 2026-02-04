@@ -1,9 +1,12 @@
+-- Obtiene un bloque de contexto del sistema usando fastfetch (--format json).
+-- El resultado se devuelve como texto plano, estructurado y estable,
+-- optimizado para ser inyectado como contexto en prompts de LLM
+-- Si fastfetch o algún campo no está disponible, se usa "unknown".
+
 local M = {}
 
--- Valor técnico neutro
 local UNKNOWN = "unknown"
 
--- Ejecuta fastfetch y devuelve JSON decodificado o nil
 local function run_fastfetch()
 	local output = vim.fn.systemlist({ "fastfetch", "--format", "json" })
 	if vim.v.shell_error ~= 0 or not output or #output == 0 then
@@ -18,7 +21,6 @@ local function run_fastfetch()
 	return data
 end
 
--- Busca un bloque por type
 local function find_block(data, block_type)
 	for _, item in ipairs(data) do
 		if item.type == block_type and item.result then
@@ -28,90 +30,75 @@ local function find_block(data, block_type)
 	return nil
 end
 
--- Formateo final del bloque
 function M.get_system_info_block()
 	local data = run_fastfetch()
-
 	if not data then
-		return [[
-System context:
-- OS: unknown
-- Distro: unknown
-- Kernel: unknown
-- Architecture: unknown
-
-Environment context:
-- Shell: unknown
-- Terminal: unknown
-- Window manager: unknown
-- Neovim: unknown
-
-Hardware context:
-- CPU cores: unknown
-- Memory: unknown
-- GPU: unknown
-]]
+		return "[System]\nOS=unknown"
 	end
+    -- stylua: ignore start
+	local base          = find_block(data, "OS") or {}
+	local kernel        = find_block(data, "Kernel") or {}
+	local wm            = find_block(data, "WM") or {}
+	local cpu           = find_block(data, "CPU") or {}
+	local mem           = find_block(data, "Memory") or {}
+	local gpus          = find_block(data, "GPU") or {}
 
-	local os = find_block(data, "OS") or {}
-	local kernel = find_block(data, "Kernel") or {}
-	local shell = find_block(data, "Shell") or {}
-	local wm = find_block(data, "WM") or {}
-	local cpu = find_block(data, "CPU") or {}
-	local memory = find_block(data, "Memory") or {}
-	local gpus = find_block(data, "GPU") or {}
+	local distro        = base.prettyName or UNKNOWN
+	local arch          = kernel.architecture or UNKNOWN
+	local kern          = kernel.release or UNKNOWN
 
-	local distro = os.id or UNKNOWN
-	local arch = kernel.architecture or UNKNOWN
-	local kernel_name = kernel.release or UNKNOWN
+	local wm_name       = wm.prettyName or UNKNOWN
+	local cores         = cpu.cores and cpu.cores.logical or UNKNOWN
+	-- stylua: ignore end
 
-	local shell_name = shell.exeName or UNKNOWN
-	local wm_name = wm.prettyName or UNKNOWN
-
-	local cores = cpu.cores and cpu.cores.logical or UNKNOWN
-
+	-- HACE LA CONVERSION A GB
 	local mem_gb = UNKNOWN
-	if memory.total then
-		mem_gb = math.floor(memory.total / 1024 / 1024 / 1024 + 0.5) .. " GB"
+	if mem.total then
+		mem_gb = math.floor(mem.total / 1024 / 1024 / 1024 + 0.5)
 	end
 
-	local gpu_name = UNKNOWN
-	if type(gpus) == "table" and gpus[1] and gpus[1].name then
-		gpu_name = gpus[1].name
+	-- LISTAS TODAS LAS GPUS
+	local gpu = UNKNOWN
+	if type(gpus) == "table" and #gpus > 0 then
+		local names = {}
+		for _, g in ipairs(gpus) do
+			if g.name then
+				if g.type then
+					table.insert(names, string.format("%s (%s)", g.name, g.type))
+				else
+					table.insert(names, g.name)
+				end
+			end
+		end
+		if #names > 0 then
+			gpu = table.concat(names, ", ")
+		end
 	end
 
-	local nvim_version = vim.version()
-	local nvim_str = string.format("%d.%d.%d", nvim_version.major, nvim_version.minor, nvim_version.patch)
+	-- ESTA FUNCIÓN SOLO IMPRIME LA PRIMERA GPU
+	-- local gpu = UNKNOWN
+	-- if type(gpus) == "table" and gpus[1] and gpus[1].name then
+	-- 	gpu = gpus[1].name
+	-- end
 
-	return string.format(
-		[[
-System context:
-- OS: Linux
-- Distro: Arch-family (%s)
-- Kernel: %s
-- Architecture: %s
+	local v = vim.version()
+	local nvim = string.format("%d.%d.%d", v.major, v.minor, v.patch)
 
-Environment context:
-- Shell: %s
-- Terminal: kitty
-- Window manager: %s
-- Neovim: %s
-
-Hardware context:
-- CPU cores: %s
-- Memory: %s
-- GPU: %s
-]],
-		distro,
-		kernel_name,
-		arch,
-		shell_name,
-		wm_name,
-		nvim_str,
-		cores,
-		mem_gb,
-		gpu_name
-	)
+	return table.concat({
+		"[System]",
+		"Distro=" .. distro,
+		"Kernel=" .. kern,
+		"Arch=" .. arch,
+		"",
+		"[Environment]",
+		"WM=" .. wm_name,
+		"Neovim=" .. nvim,
+		"",
+		"[Hardware]",
+		"CPU_Cores=" .. cores,
+		"RAM_GB=" .. mem_gb,
+		"GPU=" .. gpu,
+	}, "\n")
 end
 
 return M
