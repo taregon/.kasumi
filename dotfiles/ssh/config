@@ -3,27 +3,46 @@
 # │░▀▀█░▀▀█░█▀█░░░█░░░█░█░█░█░█▀▀░░█░░█░█│
 # │░▀▀▀░▀▀▀░▀░▀░░░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀│
 # └──────────────────────────────────────┘
-# Para verificar que solo hay una instancia en ejecución:
-# 1. Lista procesos del usuario relacionados con ssh-agent:
-#    ps -u "$USER" -o pid,comm | grep ssh-agent
-# 2. Lista las claves cargadas en el agente:
-#    ssh-add -l
+# Gestión actual (recomendada)
+# • KeePassXC
+#   Ruta: Configuración → Agente SSH
+#   Estado: Habilitado
+#   Función: Integración con el agente SSH
 #
-# En mi sesión de Sway, ya se carga el IdentityAgent,
-# que puedes verificar con: echo $SSH_AUTH_SOCK
-# Además, en KeePassXC → Configuración → Agente SSH,
-# habilitas: la integración con el agente SSH.
+# • Sesión Sway
+#   El IdentityAgent ya se carga en la sesión.
+#   Verificación:
+#     echo "$SSH_AUTH_SOCK"
 #
-# Configuración anterior para cargar automáticamente la clave SSH en el agente.
+# • Claves específicas
+#   Si se requiere forzar una clave concreta por host,
+#   utilizar la directiva IdentityFile en ~/.ssh/config
+#
+# Comandos útiles para diagnóstico
+#   echo "$SSH_AUTH_SOCK"                             # existencia del socket del agente
+#   ssh-add -l                                        # claves actualmente cargadas
+#   ssh-add -L                                        # claves públicas cargadas
+#   ps -u "$USER" -o pid,comm | grep -i ssh-agent     # agente SSH en ejecución
+# ────────────────────────────────────────────────────────────
+# AJUSTES PARA CARGAR AUTOMÁTICAMENTE LA CLAVE SSH EN EL AGENTE.
 # Actualmente, la gestión de claves se delega a KeePassXC,
 # por lo que esta sección queda deshabilitada.
 #
 # Host github.com
 #   IdentityFile ~/.ssh/id_ed25519_tartar
 #   AddKeysToAgent yes
+# ────────────────────────────────────────────────────────────
+# ▄▄▄
+# ▀▄  ███ █▀▀ █ █ ███ █▀▀ █▀▀
+# ▄▄█ █▄▄ █   ▀▄▀ █▄▄ █   ▄▄█
 
-# ── ACCESOS RÁPIDOS ───────────────────────────────────────────
+# ATAJOS PARA EQUIPOS
+# Propósito:
+#  - Todo en minúsculas para que sea fácil de tipear en la terminal
+#  - Configuraciones comunes (usuario, claves, puertos, etc.)
+#  - Evitar tener que escribir: ssh usuario@ip -p 22 -i clave.pem
+
 # Equipo SWANX1
-Host SX1
+Host sx1
     HostName 192.168.20.57
     User cyg
