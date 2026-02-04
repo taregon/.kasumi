@@ -33,7 +33,7 @@ codecompanion.setup({
 						-- Evita que la IA se quede trabada repitiendo las mismas frases una y otra vez
 						repeat_penalty = { default = 1.1 },
 						-- Controla la "locura" de la IA: 0.1 es serio y preciso, 1.0 es creativo y variado
-						temperature    = { default = 0.1 },
+						temperature    = { default = 0.3 },
 						-- Prioriza las palabras más lógicas para que la IA no pierda el hilo técnico
 						top_p          = { default = 0.4 },
 					},
@@ -45,7 +45,7 @@ codecompanion.setup({
 			-- parameters = { sync = true },
 		},
 	},
-    -- Strategies es el término antiguo que fue renombrado a interactions
+    -- WARN: Strategies es el término antiguo que fue renombrado a interactions
     -- y puede aparecer en ejemplos o configuraciones heredadas.
     -- stylua: ignore
 	interactions = {
@@ -81,7 +81,7 @@ codecompanion.setup({
 	prompt_library = {
 		markdown = {
 			dirs = {
-				vim.fn.stdpath("config") .. "/lua/kasumi/plugins/prompts",
+				vim.fn.stdpath("config") .. "/lua/kasumi/plugins/ai/prompts",
 			},
 		},
 	},

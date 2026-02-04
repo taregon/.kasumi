@@ -44,8 +44,8 @@ require("kasumi/plugins/treesitter")
 require("kasumi/plugins/which-key")
 require("kasumi/plugins/todo")
 -- require("kasumi/plugins/fzf")
-require("kasumi.plugins.bqf") -- Quickfix integrada con fzf
-require("kasumi.plugins.codecompanion")
+require("kasumi/plugins/bqf") -- Quickfix integrada con fzf
+require("kasumi/plugins/ai/codecompanion")
 
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                   Formatting & Linting                    │
