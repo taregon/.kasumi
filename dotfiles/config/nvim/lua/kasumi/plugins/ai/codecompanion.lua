@@ -23,7 +23,7 @@ codecompanion.setup({
                     -- stylua: ignore
 					schema = {
 						-- Elige el modelo de IA que se cargará al inicio
-						model          = { default = "gemma2:2b" },
+						model          = { default = "gemma3:4b-it-qat" },
 						-- Define cuánta memoria tiene la IA para recordar el chat y el código actual
 						num_ctx        = { default = 4096 },
 						-- Limita la longitud máxima de la respuesta para evitar textos infinitos
@@ -33,9 +33,9 @@ codecompanion.setup({
 						-- Evita que la IA se quede trabada repitiendo las mismas frases una y otra vez
 						repeat_penalty = { default = 1.1 },
 						-- Controla la "locura" de la IA: 0.1 es serio y preciso, 1.0 es creativo y variado
-						temperature    = { default = 0.3 },
+						temperature    = { default = 0.33 },
 						-- Prioriza las palabras más lógicas para que la IA no pierda el hilo técnico
-						top_p          = { default = 0.4 },
+						top_p          = { default = 0.5 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
 					-- headers = { ["Content-Type"] = "application/json" },
