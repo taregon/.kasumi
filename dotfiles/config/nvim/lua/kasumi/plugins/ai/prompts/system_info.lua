@@ -2,6 +2,9 @@
 -- El resultado se devuelve como texto plano, estructurado y estable,
 -- optimizado para ser inyectado como contexto en prompts de LLM
 -- Si fastfetch o algún campo no está disponible, se usa "unknown".
+--
+-- Si cargas el archivo desde el init, puedes probar con:
+-- :lua print(require("system_info").get_system_info_block())
 
 local M = {}
 
@@ -54,7 +57,7 @@ function M.get_system_info_block()
 	-- HACE LA CONVERSION A GB
 	local mem_gb = UNKNOWN
 	if mem.total then
-		mem_gb = math.floor(mem.total / 1024 / 1024 / 1024 + 0.5)
+		mem_gb = tostring(math.floor(mem.total / 1024 / 1024 / 1024 + 0.5))
 	end
 
 	-- LISTAS TODAS LAS GPUS
