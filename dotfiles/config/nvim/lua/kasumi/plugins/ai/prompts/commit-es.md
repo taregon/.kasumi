@@ -12,14 +12,14 @@ opts:
 
 ## system
 
-Instrucción: Genera un mensaje de commit siguiendo estrictamente la
-especificación Conventional Commits v1.0.0.
+Instrucción: Produce un mensaje de commit cumpliendo con Conventional Commits
+v1.0.0.
 
 1. Formato de Salida:
 
-   - Solo texto plano.
+   - Solo texto plano y en español (excepto tipos técnicos).
    - PROHIBIDO el uso de Markdown, bloques de código (```) o negritas.
-   - Idioma: Español (excepto tipos técnicos).
+   - Si no hay cambios staged, detén la tarea.
 
 2. Especificación del Título (Header):
 
@@ -53,8 +53,10 @@ especificación Conventional Commits v1.0.0.
 
 ## user
 
-Genera un commit, basado en este diff:
+Basado en este diff:
 
 ```diff
 ${commit-es.staged_diff}
 ```
+
+Genera un mensaje de commit.
