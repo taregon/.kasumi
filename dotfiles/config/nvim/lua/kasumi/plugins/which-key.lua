@@ -68,7 +68,7 @@ require("which-key").add({
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset selected hunk", mode = "v" },
 	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = "n" },
 	{ "<leader>gi", ":Gitsigns preview_hunk_inline<CR>", desc = "Inline hunk preview" },
-	{ "<leader>gc", ":Git commit<CR>", desc = "Create commit" },
+	{ "<leader>gc", ":Git commit %<CR>", desc = "Create commit" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  QuickFix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
