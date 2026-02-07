@@ -96,16 +96,23 @@ augroup("FormatOnSave", function(group)
 	})
 end)
 -- ────────────────────────────────────────────────────────────
--- Desactiva mini.indentscope en buffers donde no tiene sentido
-augroup("DisableIndentScopeForCertainTypes", function(group)
-	vim.api.nvim_create_autocmd("FileType", {
+-- Deshabilita mini.indentscope en buffers donde no aporta valor
+augroup("DisableMiniIndentScope", function(group)
+	aucmd("FileType", {
 		group = group,
-		pattern = { "help", "TelescopePrompt", "TelescopeResults", "conf" },
+		pattern = {
+			"TelescopePrompt",
+			"TelescopeResults",
+			"conf",
+			"help",
+			"markdown",
+		},
 		callback = function()
 			vim.b.miniindentscope_disable = true
 		end,
 	})
 end)
+
 -- ────────────────────────────────────────────────────────────
 -- ORDENA FUNCIONES EN BASH
 -- PEND: buscar un plug que haga esto para descartar este código
