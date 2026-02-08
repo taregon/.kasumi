@@ -131,6 +131,28 @@ require("catppuccin").setup({
 			Comment = {
 				fg = colors.overlay0,
 			},
+
+			-- Estos valores modifican a render-markdown
+			RenderMarkdownH1Bg = {
+				fg = colors.red,
+				bg = u.darken(colors.red, 0.1, colors.base),
+				bold = true,
+			},
+			RenderMarkdownH2Bg = {
+				fg = colors.peach,
+				bg = u.darken(colors.peach, 0.1, colors.base),
+				bold = true,
+			},
+			RenderMarkdownH3Bg = {
+				fg = colors.peach,
+				bg = u.darken(colors.peach, 0.1, colors.base),
+				-- nocombine = true,
+			},
+			-- Highlight for the heading and sign icons.
+			-- RenderMarkdownH2 = {
+			-- fg = u.darken(colors.red, 0.9, colors.base),
+			-- fg = colors.yellow,
+			-- },
 		}
 	end,
 })
