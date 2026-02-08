@@ -36,14 +36,14 @@ require("render-markdown").setup({
 	render_modes = { "n" },
 
 	bullet = bullet_config(), -- personaliza viñetas
-	checkbox = { enabled = true }, -- renderiza [ ] como casillas bonitas
+	checkbox = { left_pad = 4, unchecked = { icon = "󰄰 " }, checked = { icon = "󰄳 " } },
 	completions = { lsp = { enabled = true } },
 	dash = { icon = "🭹" },
-	file_types = { "markdown", "vimwiki" }, -- si usas vimwiki
-	paragraph = { left_margin = 2 },
-
 	debounce = 200, -- retraso en ms antes de actualizar render
+	file_types = { "markdown", "vimwiki" }, -- si usas vimwiki
 	max_file_size = 1.5, -- en MB. Evita render en archivos muy grandes
+	paragraph = { left_margin = 2 },
+	quote = { icon = "🮌" },
 
 	code = {
 		sign = false,
@@ -78,7 +78,7 @@ require("render-markdown").setup({
 				"🮌   ❱",
 				"  ",
 				" ",
-				"󰎲 ",
+				" ",
 				"󰎯 ",
 				"󰎴 ",
 			}
