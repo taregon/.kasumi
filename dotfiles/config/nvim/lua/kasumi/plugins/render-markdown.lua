@@ -33,40 +33,40 @@ local function bullet_config()
 end
 
 require("render-markdown").setup({
+	render_modes = { "n" },
+
 	bullet = bullet_config(), -- personaliza viñetas
 	checkbox = { enabled = true }, -- renderiza [ ] como casillas bonitas
 	completions = { lsp = { enabled = true } },
-	debounce = 200, -- retraso en ms antes de actualizar render
+	dash = { icon = "🭹" },
 	file_types = { "markdown", "vimwiki" }, -- si usas vimwiki
+	paragraph = { left_margin = 2 },
+
+	debounce = 200, -- retraso en ms antes de actualizar render
 	max_file_size = 1.5, -- en MB. Evita render en archivos muy grandes
-	render_modes = { "n" },
 
 	code = {
 		sign = false,
 		style = "full", -- full = bloque ancho con fondo
-		border = "thick",
+		border = "thin",
 		width = "block",
-		position = "right",
-		-- language_pad = 0.8, -- espacio al rededor del lenguaje
+		position = "center",
 		left_margin = 4, -- separación del bloque de código desde el lado inquiero
 		left_pad = 2, -- al interno del código
 		right_pad = 2, -- al interno del código
 		-- min_width = 0.6,
 		inline_pad = 1,
-		language_left = "◢██",
+		min_width = 60,
+		language_left = "██",
 		language_right = "██",
-		language_border = "╱",
-		-- highlight_border = false,
-	},
-	dash = {
-		icon = "🭹",
+		language_border = "🮒",
 	},
 	heading = {
 		signs = false,
 		width = "block",
 		border = true,
 		-- border_virtual = true,
-		below = "🮂",
+		below = "▀", -- 🮂🮂▀▀▀
 		above = "▂",
 		min_width = 82,
 		icons = function(ctx)
@@ -75,9 +75,9 @@ require("render-markdown").setup({
 			-- H1 y H2 quedan alineados, H3 tiene 2 espacios, H4 tiene 4, etc.
 			-- El icono cambia según el nivel y se separa del texto para mejor lectura.
 			local icons = {
-				" ",
-				" ",
-				"",
+				"🮌   ❱",
+				"  ",
+				" ",
 				"󰎲 ",
 				"󰎯 ",
 				"󰎴 ",
