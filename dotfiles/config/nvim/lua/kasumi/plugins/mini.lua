@@ -1,4 +1,4 @@
-require("mini.animate").setup() -- El efecto cuando haces scroll
+-- require("mini.animate").setup() -- El efecto cuando haces scroll
 
 -- DIVIDE LOS ARGUMENTOS SI ESTÁN EN UNA SOLA LÍNEA, DE LO CONTRARIO LOS UNE
 -- Atajo por defecto: gS
