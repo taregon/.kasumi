@@ -187,7 +187,15 @@ else
 fi
 
 # ── REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS ──────────
+# Btrfs divide el almacenamiento en chunks de metadatos y datos.
+# Con el tiempo, algunos chunks se llenan más que otros.
+# El balance permite mover datos de chunks parcialmente llenos
+# a otros chunks más libres, compactando el uso y liberando espacio
+# para mantener el rendimiento y prevenir errores de espacio.
+
 declare -A BTRFS_SEEN
+echo
+echo -e "${YELLOW}  REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS${NC}"
 
 findmnt -rn -t btrfs -o TARGET,UUID | while read -r BTRFS_MP BTRFS_UUID; do
     [[ -z "$BTRFS_UUID" ]] && continue
@@ -197,8 +205,7 @@ findmnt -rn -t btrfs -o TARGET,UUID | while read -r BTRFS_MP BTRFS_UUID; do
     BTRFS_SEEN[$BTRFS_UUID]=1
 
     echo
-    echo -e "${BLUE}=== BALANCE DE BTRFS ===${NC}"
-    echo "      UUID : $BTRFS_UUID"
+    echo -e "${BLUE}BALANCE DE BTRFS:${NC} $BTRFS_UUID (UUID)"
     echo -e "${YELLOW}Mountpoint : $BTRFS_MP${NC}"
     echo "    Estado :"
 
