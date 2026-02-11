@@ -38,7 +38,6 @@ TMP_DIR=$(mktemp -d) || {
 TMP_CONFIG="$TMP_DIR/btrfsmaintenance.tmp"
 
 # ────────────────────────────────────────────────────────────
-echo "${TMP_CONFIG}"
 echo -e "${BLUE}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS${NC}"
 echo -e "${BLUE}Evita bloqueos por falta de espacio${NC}"
 echo -e "${BLUE}para nuevos chunks de metadata${NC}"
@@ -52,13 +51,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # ── Dependencia ────────────────────────────────────────────
+echo
+echo "  Revisando si btrfsmaintenance está instalado"
+
 if ! pacman -Q btrfsmaintenance &> /dev/null; then
-    echo
-    echo "  btrfsmaintenance no está instalado. Instalando…"
+    echo "     No está instalado. Instalando..."
     pacman -S --needed --noconfirm btrfsmaintenance
 else
-    echo
-    echo "  btrfsmaintenance ya está instalado."
+    echo "     Ya está instalado."
 fi
 
 # ─[ AJUSTES BTRFSMAINTENANCE ]───────────────────────────────
@@ -183,7 +183,7 @@ if [ ${#orphans[@]} -gt 0 ]; then
     sudo pacman -Rns --quiet --noconfirm "${orphans[@]}"
 else
 
-    echo "No hay paquetes huérfanos..."
+    echo "     No hay paquetes huérfanos."
 fi
 
 # ── REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS ──────────
