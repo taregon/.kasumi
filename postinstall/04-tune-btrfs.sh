@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# https://blog.programster.org/btrfs-cheatsheet
 # Este script crea o reemplaza el archivo /etc/default/btrfsmaintenance con valores
 # optimizados para un sistema con particiones Btrfs separadas
 #
@@ -16,11 +17,9 @@
 #   - La selección de volúmenes ocurre en tiempo de ejecución según las variables *_MOUNTPOINTS.
 # - Después de crear/actualizar el archivo, refresca la configuración con:
 #   sudo /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh
-#
+#   ❯ btrfs device stats /
+#   ❯ btrfs device stats /home
 set -euo pipefail
-
-CONFIG_FILE="/etc/default/btrfsmaintenance"
-BACKUP_FILE="${CONFIG_FILE}-$(date +%Y%m%d-%H%M%S).bak"
 
 # ── Colores ────────────────────────────────────────────────
 BLUE="\033[0;34m"
@@ -28,11 +27,25 @@ GREEN="\033[0;32m"
 YELLOW="\033[0;33m"
 NC="\033[0m"
 
-echo -e "${BLUE}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS EN PARTICIÓN RAÍZ${NC}"
-echo -e "${BLUE}Evita bloqueos por falta de espacio para nuevos chunks de metadata${NC}"
+CONFIG_FILE="/etc/default/btrfsmaintenance"
+BACKUP_FILE="${CONFIG_FILE}-$(date +%Y%m%d-%H%M%S).bak"
+THRESHOLD=80
+
+TMP_DIR=$(mktemp -d) || {
+    echo "  Error creando directorio temporal"
+    exit 1
+}
+TMP_CONFIG="$TMP_DIR/btrfsmaintenance.tmp"
+
+# ────────────────────────────────────────────────────────────
+echo "${TMP_CONFIG}"
+echo -e "${BLUE}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS${NC}"
+echo -e "${BLUE}Evita bloqueos por falta de espacio${NC}"
+echo -e "${BLUE}para nuevos chunks de metadata${NC}"
 
 # ── Privilegios ────────────────────────────────────────────
 if [[ $EUID -ne 0 ]]; then
+    echo
     echo "  Este script debe ejecutarse como root."
     echo "Ejemplo: sudo $0"
     exit 1
@@ -48,22 +61,9 @@ else
     echo "  btrfsmaintenance ya está instalado."
 fi
 
-# ── Respaldo (si existe) ───────────────────────────────────
-if [[ -f "$CONFIG_FILE" ]]; then
-    echo
-    echo "  Creando copia de respaldo:"
-    cp "$CONFIG_FILE" "$BACKUP_FILE"
-    echo -e "   ${GREEN}$BACKUP_FILE${NC}"
-fi
-
-# ── Escritura de configuración ─────────────────────────────
-echo
-echo "  Aplicando configuración en:"
-echo -e "   ${GREEN}$CONFIG_FILE${NC}"
-
-cat << EOF > "$CONFIG_FILE"
+# ─[ AJUSTES BTRFSMAINTENANCE ]───────────────────────────────
+cat << EOF > "$TMP_CONFIG"
 # Configuración recomendada para root Btrfs en NVMe DRAM-less
-# Generado por script el $(date '+%Y-%m-%d %H:%M:%S')
 
 BTRFS_LOG_OUTPUT="journal"
 
@@ -96,16 +96,38 @@ BTRFS_DEFRAG_PERIOD="none"
 BTRFS_ALLOW_CONCURRENCY="false"
 EOF
 
+# ── BACKUP PREVIO ───────────────────────────────────────────
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo
+    echo "${YELLOW}  Creando archivo de configuración ${NC}"
+    mv "$TMP_CONFIG" "$CONFIG_FILE" || {
+        echo "Error moviendo temporal"
+        exit 1
+    }
+elif cmp -s "$CONFIG_FILE" "$TMP_CONFIG"; then
+    echo
+    echo "  Sin ajustes nuevos"
+    rm "$TMP_CONFIG"
+else
+    echo
+    echo "${YELLOW}  Cambios detectados.${NC} Creando respaldo..."
+    cp "$CONFIG_FILE" "$BACKUP_FILE"
+    mv "$TMP_CONFIG" "$CONFIG_FILE"
+fi
+
 # ── REFRESH ────────────────────────────────────────────────
 echo
 echo -e "${YELLOW}  Refrescando configuración de btrfsmaintenance…${NC}"
-/usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh 2> /dev/null || {
-    echo "Nota: el refresh no fue necesario en esta versión."
-}
+
+if [ -x /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh ]; then
+    /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh 2> /dev/null
+else
+    echo "Nota: esta versión no incluye refresh de cron."
+fi
 
 # ── TIMERS ─────────────────────────────────────────────────
 echo
-echo "  Verificando timers de mantenimiento:"
+echo "  Verificando timers de mantenimiento:"
 
 for timer in \
     btrfs-scrub.timer \
@@ -129,7 +151,75 @@ for timer in \
 done
 
 echo
-echo "  Resumen de estado:"
+echo -e "${YELLOW}  Próxima ejecución de mantenimiento Btrfs:${NC}"
 systemctl list-timers | grep btrfs || true
+
+# ─[ PURGAR CACHE ]───────────────────────────────────────────
+# Limpiar con paccache los paquetes que se almacena en /var/cache/pacman/pkg/
+#  r: Borra versiones antiguas de paquetes instalados
+#  u: Borra paquetes que ya no están instalados
+#  k: Mantiene solo las últimas N versiones de cada paquete instalado
+echo
+echo "  Limpiando caché pacman (manteniendo 2 versiones)"
+sudo paccache -ruk2
+
+# ─[ LIMPIAR LOGS DEL SISTEMA ]───────────────────────────────
+#  --vacuum-time=8weeks: Borra todos los logs más antiguos de 8 semanas (protege los recientes).
+#  --vacuum-size=200M: Limita el tamaño total del journal a un máximo de ~200 MiB.
+# Combinado: Si después de aplicar el tiempo aún excede 200 MiB,
+# borra logs más antiguos dentro de las 8 semanas.
+echo
+echo "  Limpiando journal antiguo"
+sudo journalctl --vacuum-time=8weeks --vacuum-size=200M
+
+# ─[ ELIMINAR HUÉRFANOS ]─────────────────────────────────────
+# Elimina paquetes huérfanos (instalados como dependencias y ya no requeridos).
+echo
+echo "  Eliminando paquetes huérfanos"
+
+mapfile -t orphans < <(pacman -Qtdq)
+
+if [ ${#orphans[@]} -gt 0 ]; then
+    sudo pacman -Rns --quiet --noconfirm "${orphans[@]}"
+else
+
+    echo "No hay paquetes huérfanos..."
+fi
+
+# ── REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS ──────────
+declare -A BTRFS_SEEN
+
+findmnt -rn -t btrfs -o TARGET,UUID | while read -r BTRFS_MP BTRFS_UUID; do
+    [[ -z "$BTRFS_UUID" ]] && continue
+
+    # Evitar procesar el mismo filesystem más de una vez
+    [[ -n "${BTRFS_SEEN[$BTRFS_UUID]+x}" ]] && continue
+    BTRFS_SEEN[$BTRFS_UUID]=1
+
+    echo
+    echo -e "${BLUE}=== BALANCE DE BTRFS ===${NC}"
+    echo "      UUID : $BTRFS_UUID"
+    echo -e "${YELLOW}Mountpoint : $BTRFS_MP${NC}"
+    echo "    Estado :"
+
+    printf '%b' "$BLUE"
+    df -h "$BTRFS_MP"
+    printf '%b' "$NC"
+
+    btrfs filesystem usage "$BTRFS_MP" | grep -E \
+        "Device allocated|Unallocated|Free \(statfs|Data.*Used|Metadata.*Used"
+
+    BTRFS_USE=$(df "$BTRFS_MP" | awk 'NR==2 {print $5}' | tr -d '%')
+
+    echo
+    if ((BTRFS_USE > THRESHOLD)); then
+        echo "${YELLOW}  Uso alto (${BTRFS_USE}%).${NC} Ejecutando balance suave…"
+        sudo btrfs balance start -musage=65 -dusage=65 "$BTRFS_MP"
+        echo "  Balance finalizado."
+    else
+        echo -e "${GREEN}  Uso bajo (${BTRFS_USE}%).${NC} No se ejecuta balance."
+    fi
+done
+
 echo
 echo "  Listo!"
