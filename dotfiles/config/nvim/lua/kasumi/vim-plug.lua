@@ -23,20 +23,22 @@ Plug("EdenEast/nightfox.nvim")
 -- ╒═════════════════════════════════════════════════════════╕
 -- │                         PLUGINS                         │
 -- ╘═════════════════════════════════════════════════════════╛
+
 -- Plug("nvim-neo-tree/neo-tree.nvim") -- Navegador de archivos
+-- Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
 Plug("akinsho/bufferline.nvim") -- Muestra los buffer en pestañas
 Plug("echasnovski/mini.nvim") -- Pack de módulos. Tengo varios en uso
 Plug("folke/todo-comments.nvim") -- Resalta las lineas con comentarios
 Plug("folke/which-key.nvim") -- Muestra atajos al comenzar a escribir
-Plug("iamcco/markdown-preview.nvim", { ["do"] = "cd app && npx --yes yarn install" }) -- Vista previa de markdown
 Plug("lewis6991/gitsigns.nvim") -- Resalta lineas con cambios git↲
 Plug("LudoPinelli/comment-box.nvim") -- Agrega cajas de texto / boxes
 Plug("lukas-reineke/indent-blankline.nvim") -- Lineas de identacion
+Plug("MeanderingProgrammer/render-markdown.nvim")
 Plug("norcalli/nvim-colorizer.lua") -- Colorea los códigos RGB/HEX
 Plug("numToStr/Comment.nvim") -- Para comentar lineas o bloques  con F2 / F3
 Plug("nvim-lualine/lualine.nvim") -- Barra de estado
 Plug("nvim-treesitter/nvim-treesitter") -- Syntax Highlighting / colorea el código
-Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
+Plug("olimorris/codecompanion.nvim")
 Plug("petertriho/nvim-scrollbar") -- Barra de scroll
 
 -- ────────────────────────────────────────────────────────────
@@ -46,7 +48,7 @@ Plug("ibhagwan/fzf-lua") -- Integración con FZF en Lua (requerido por nvim-bqf)
 Plug("kevinhwang91/nvim-bqf") -- Mejora la vista y navegación del quickfix list
 Plug("mechatroner/rainbow_csv") -- Colora archivos CSV
 Plug("mhinz/vim-startify") -- Dashboard
-Plug("nvim-lua/plenary.nvim") -- Depende: nvim-bqf
+Plug("nvim-lua/plenary.nvim") -- Depende: nvim-bqf, codecompanion
 Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
 Plug("sindrets/diffview.nvim") -- Ajustes en settins.lua  Presiona F5 (sin require)
 Plug("tpope/vim-fugitive") -- Habilita comandos de git
