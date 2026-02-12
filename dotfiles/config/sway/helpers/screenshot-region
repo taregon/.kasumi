@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# screenshot-region.sh
+# Captura región con grim + slurp → guarda en ~/Imágenes + copia al clipboard + notifica
+
+OUTPUT_DIR="$HOME/Imágenes"
+FILENAME="$OUTPUT_DIR/captura-$(date +%Y-%m-%d_%H-%M-%S).png"
+
+# Crea el directorio si no existe
+if [ ! -d "$OUTPUT_DIR" ]; then
+    mkdir -p "$OUTPUT_DIR"
+fi
+
+# Define el comando en una variable
+capture() {
+    grim -g "$(slurp)" - | tee "$FILENAME" | wl-copy
+}
+
+# Ejecuta el comando y notifica según resultado
+if capture; then
+    notify-send "Captura copiada y guardada" "$(basename "$FILENAME")"
+else
+    notify-send -u critical "Error en captura" "No se pudo capturar la región"
+fi
