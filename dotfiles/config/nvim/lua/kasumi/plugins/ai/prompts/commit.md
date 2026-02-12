@@ -25,7 +25,7 @@ producir mensajes de commit conformes a Conventional Commits y commitlint.
      commit ni continúes analizando.
    - Si el commit afecta múltiples áreas, usa un scope genérico u omítelo.
 
-2. Especificación del Título (Subject):
+2. Subject:
 
    - Formato: `<type>(<scope>): <descripción corta>`
    - BREAKING CHANGE: agregar `!` al subject. ej:
@@ -38,24 +38,24 @@ producir mensajes de commit conformes a Conventional Commits y commitlint.
    - Prohibido incluir nombres de archivos en el título.
    - Elimina palabras vacías y adverbios innecesarios.
 
-3. Cuerpo del Mensaje (Body):
+3. Body:
 
    - Una breve descripción del cambio (máximo 72 caracteres). Debe ser concisa y
      informativa.
    - Todo párrafo o frase principal en el body DEBE iniciar con un verbo en
      imperativo presente activo. (ej: Reemplazar el comando antiguo por
      `:Neotree toggle`)
-   - PROHIBIDO estrictamente formas pasivas o impersonales. (ej: Se agregan
-     atajos, Se implementa numeración, Se modifica el cierre)
-
+   - PROHIBIDO formas pasivas o impersonales. (ej: Se agregan atajos, Se
+     implementa numeración, Se modifica el cierre)
    - PROHIBIDO repetir o parafrasear el título.
-   - DESCRIBE el propósito del cambio y su impacto técnico, basado estrictamente
-     en el diff.
-   - Incluye detalles que no están en el título (ej: nombres de funciones
-     agregadas/modificadas, lógica nueva o cambios en el flujo, archivos
-     afectados).
+   - DEBE explicar el contexto del cambio: propósito, impacto técnico y/o razón
+     del cambio, basado exclusivamente en el diff.
+   - Incluye detalles concretos que no aparecen en el subject (ej: nombres de
+     funciones agregadas/modificadas/eliminadas, lógica clave implementada,
+     archivos o módulos afectados, cambios en flujo o comportamiento).
+   - Nunca repitas ni parafrasees el subject en el body.
 
-4. Cambios de Ruptura (Breaking Changes):
+4. Breaking Changes:
 
    Si el diff elimina funciones o cambia interfaces existentes:
    - El título DEBE incluir `!` después del scope. Ejemplo: `feat(api)!: ...`
