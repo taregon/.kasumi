@@ -28,6 +28,12 @@ function M.staged_diff()
 		"--show-toplevel",
 	}, { text = true }):wait()
 
+	local root_name = vim.system({
+		"git",
+		"diff",
+		"--name-only",
+	})
+
 	if root_res.code ~= 0 or not root_res.stdout or root_res.stdout == "" then
 		return "  No se detectó un repositorio Git válido."
 	end
@@ -43,6 +49,7 @@ function M.staged_diff()
 	-- 5. Obtener diff staged (crudo, sin color ni contexto)
 	local diff_res = vim.system({
 		"git",
+		"--no-pager",
 		"diff",
 		"--cached",
 		"--no-ext-diff",
@@ -73,8 +80,7 @@ function M.staged_diff()
 			table.insert(result, line)
 		elseif vim.startswith(line, " ") then
 			table.insert(result, line)
-			-- Si deseas que aparezcan los hunk header
-		elseif vim.startswith(line, "@@ ") then
+		elseif vim.startswith(line, "@@ ") then -- Si deseas que aparezcan los hunk header
 			table.insert(result, line)
 		end
 	end
