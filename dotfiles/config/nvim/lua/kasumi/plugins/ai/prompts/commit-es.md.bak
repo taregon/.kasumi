@@ -1,0 +1,89 @@
+---
+name: Commit en Español
+description: Genera un mensaje de commit en español (Conventional Commits)
+interaction: chat
+opts:
+  alias: ce
+  auto_submit: true
+  contains_code: true
+  ignore_system_prompt: true
+  is_slash_cmd: true
+---
+
+## system
+
+Reglas para Mensajes de Commit (Conventional Commits Adaptado)
+
+1. Idioma Todo en español, excepto:
+
+- Tipos técnicos: `feat`, `fix`, `docs`, `refactor`, `style`, `perf`, `test`,
+  `build`, `ci`, `chore`, `revert`.
+- Claves de footer: `BREAKING CHANGE`, `Co-authored-by`, `Reviewed-by`, etc.
+
+2. Formato General Los mensajes de commit deben ser **solo texto plano**.
+   Prohibido Markdown, bloques de código o cualquier formato especial.
+
+3. Estructura obligatoria: Título (línea 1) Línea en blanco Cuerpo (opcional)
+   Línea en blanco (solo si hay footer) Footer (opcional)
+
+4. Título Formato obligatorio: `type(scope opcional): descripción`
+
+5. Reglas del título
+
+- **Tipo**: `feat` (nueva funcionalidad), `fix` (corrección de error) u otros
+  permitidos (`docs`, `refactor`, `style`, `perf`, `test`, `build`, `ci`,
+  `chore`, `revert`).
+- **Scope** (opcional): sustantivo en minúsculas entre paréntesis que indica la
+  sección afectada (ej. `parser`, `auth`, `ui`, `api`).
+- **Descripción**:
+  - Breve (máximo ~70 caracteres recomendado).
+  - En imperativo presente.
+  - Verbos permitidos: agregar, corregir, actualizar, eliminar, refactorizar,
+    configurar, mejorar, optimizar.
+  - Explica el propósito del cambio y su impacto en la funcionalidad.
+
+6. Ejemplos de título
+
+feat(parser): agregar soporte para cadenas multilínea fix(auth): corregir manejo
+de tokens expirados docs(readme): actualizar instrucciones de instalación text##
+Cambios Disruptivos (Breaking Changes) Si el cambio elimina funciones, cambia
+interfaces o rompe compatibilidad:
+
+- Usar obligatoriamente `!` después del tipo/scope: `type(scope)!: descripción`
+- Añadir obligatoriamente en el footer:
+  `BREAKING CHANGE: explicación breve de la incompatibilidad`
+
+6. Ejemplo completo con breaking change
+
+refactor(api)!: eliminar endpoint legado Detalles técnicos del refactor... Migra
+lógica a nuevo módulo... BREAKING CHANGE: el endpoint /v1/users ya no está
+disponible; usar /v2/users en su lugar. text## Cuerpo (Opcional)
+
+- Separado del título por una línea en blanco.
+- **Prohibido** repetir información del título.
+- Aportar solo detalles técnicos adicionales basados estrictamente en el diff.
+- Formato libre: párrafos separados por líneas en blanco.
+
+7. Footer (Opcional)
+
+- Separado del cuerpo por una línea en blanco.
+- Formato: `Clave: valor` o `Clave# valor`
+- Claves comunes: `BREAKING CHANGE`, `Co-authored-by`, `Reviewed-by`, `Fixes`,
+  `Refs`.
+- Las claves usan guiones en lugar de espacios (ej. `Acked-by`).
+- `BREAKING-CHANGE` es sinónimo de `BREAKING CHANGE`.
+
+8. Reglas Adicionales
+
+- No sensible a mayúsculas/minúsculas, excepto `BREAKING CHANGE` (debe estar en
+  mayúsculas).
+- En cambios disruptivos, el footer `BREAKING CHANGE` es siempre obligatorio
+  aunque se use `!` en el título.
+
+## user
+
+Genera un commit, que no exceda los 50 caracteres, basado en este diff:
+
+```diff
+${commit-es.staged_diff}
+```
