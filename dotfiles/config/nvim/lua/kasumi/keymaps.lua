@@ -29,22 +29,27 @@ map("v", "<leader>n", function()
 		vim.api.nvim_buf_set_lines(0, i - 1, i, false, { num .. ". " .. line })
 	end
 end)
--- Muestra / oculta caracteres especiales
-map("n", "<Leader>i", ":set invlist<CR>")
 
+-- ────────────────────────────────────────────────────────────
 -- Muestra el panel de navegación
-map("n", "<leader>n", ":Neotree toggle reveal<CR>")
-map("n", "<leader>b", ":Neotree buffers<CR>")
+-- map("n", "<leader>n", ":Neotree toggle reveal<CR>")
+-- map("n", "<leader>b", ":Neotree buffers<CR>")
 
+-- Numerar líneas en un bloque visual con <leader>n
+-- map("v", "<leader>n", function()
+-- 	vim.cmd([[:'<,'>s/^/\=line('.')-line("'<")+1 . '. '/]])
+-- end)
+
+-- Dividir ventana
+-- map("n", "-", ":new<cr>")
+-- map("n", "|", ":vnew<cr>")
+
+-- ────────────────────────────────────────────────────────────
 -- Cierra el buffer actual .sin guardar!
-map("n", "<leader>d", ":bd<cr>")
+map("n", "<leader>x", ":bd<cr>", { desc = "Close Buffer" })
 
 -- Desactivar el resaltado de búsqueda actual.
 map("n", "<leader>/", ":nohl<cr>")
-
--- Dividir ventana
-map("n", "-", ":new<cr>")
-map("n", "|", ":vnew<cr>")
 
 -- Cambiar entre buffers
 map("n", "<Tab>", "<cmd>bnext<cr>")
@@ -56,20 +61,13 @@ map("n", "<C-j>", "<C-w>j") -- Abajo
 map("n", "<C-k>", "<C-w>k") -- Arriba
 map("n", "<C-l>", "<C-w>l") -- Derecha
 
--- quick fix
-map("n", "<leader>q", ":copen<cr>")
+-- Alterna el renderizado de Markdown (render-markdown.nvim)
+map("n", "<F6>", ":RenderMarkdown toggle<CR>")
 
--- Función para realizar la búsqueda y copiar el texto seleccionado
-map("x", "//", 'y/<C-R>"<cr>')
-
--- Vista previa de Markdown
-map("n", "<leader>md", ":MarkdownPreviewToggle<cr>", { desc = "Markdown Preview Toggle" })
-
--- ┌────────────────────────────────┐
--- │░█░█░█▀▀░█░█░█▀▀░█░█░█▀█░█▀▀░█▀▀│
--- │░█▀▄░█▀▀░░█░░█▀▀░█░█░█░█░█░░░▀▀█│
--- │░▀░▀░▀▀▀░░▀░░▀░░░▀▀▀░▀░▀░▀▀▀░▀▀▀│
--- └────────────────────────────────┘
+-- ────────────────────────────────────────────────────────────
+-- █  ▄▀ █▀▀▀▀ █   █ █▀▀▀▀ █   █ █▄  █ ▄▀▀▀▀ ▄▀▀▀▀
+-- █▀▀▄  █▀▀   ▀▀▀▀█ █▀▀   █   █ █ ▀▄█ █      ▀▀▀▄
+-- ▀   ▀ ▀▀▀▀▀ ▀▀▀▀▀ ▀      ▀▀▀  ▀   ▀  ▀▀▀▀ ▀▀▀▀
 -- Funciones auxiliares para atajos personalizados.
 -- Estas funciones son invocadas desde which-key
 
