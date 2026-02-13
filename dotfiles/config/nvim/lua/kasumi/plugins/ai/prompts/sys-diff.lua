@@ -82,7 +82,7 @@ function M.staged_diff()
 	end
 
 	-- 7. Mostrar nombre del repo antes del diff
-	local header = "Cambios staged en: " .. file_name .. "\n\n"
+	local header = " cambios staged en: " .. file_name .. "\n\n"
 	return #filtered > 0 and header .. table.concat(filtered, "\n") or "  No hay cambios staged en este archivo"
 end
 
