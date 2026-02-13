@@ -161,7 +161,25 @@ systemctl list-timers | grep btrfs || true
 #  k: Mantiene solo las últimas N versiones de cada paquete instalado
 echo
 echo "  Limpiando caché pacman (manteniendo 2 versiones)"
+
+CACHE_HUMAN() { du -sh /var/cache/pacman/pkg/ | awk '{print $1}'; }
+CACHE_BYTES() { du -sb /var/cache/pacman/pkg/ | awk '{print $1}'; }
+
+HUMAN_OLD=$(CACHE_HUMAN)
+BYTES_OLD=$(CACHE_BYTES)
+
 sudo paccache -ruk2
+
+HUMAN_NEW=$(CACHE_HUMAN)
+BYTES_NEW=$(CACHE_BYTES)
+
+if [ "$BYTES_OLD" -ne "$BYTES_NEW" ]; then
+    SAVED=$((BYTES_OLD - BYTES_NEW))
+    SAVED_HUMAN=$(numfmt --to=iec $SAVED)
+    echo "     Caché reducida: $HUMAN_OLD -> $HUMAN_NEW (-$SAVED_HUMAN)"
+else
+    echo "     Caché sin cambios: $HUMAN_NEW"
+fi
 
 # ─[ LIMPIAR LOGS DEL SISTEMA ]───────────────────────────────
 #  --vacuum-time=8weeks: Borra todos los logs más antiguos de 8 semanas (protege los recientes).
