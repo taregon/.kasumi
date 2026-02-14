@@ -1,44 +1,40 @@
 require("incline").setup({
+	highlight = {
+		groups = {
+			InclineNormal = "StatusLine", -- usa el mismo fondo que la barra de estado
+			InclineNormalNC = "StatusLineNC", --usa el fondo de la barra inactiva
+		},
+	},
+
 	render = function(props)
-		local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
-		if filename == "" then
-			filename = "[No Name]"
-		end
+		local buf = props.buf
+		local modified = vim.bo[buf].modified and "[+]" or ""
+		local readonly = vim.bo[buf].readonly and "[RO]" or ""
+		local path = vim.api.nvim_buf_get_name(buf)
+		local remote = path:match("^/mnt/sshfs/([^/]+)") or ""
 
-		-- Cambios de gitsigns
-		local signs = vim.b[props.buf].gitsigns_status_dict
-		local diff = {}
-		if signs then
-			if signs.added and signs.added > 0 then
-				table.insert(diff, { "󱐮 " .. signs.added .. " ", group = "DiffAdded" })
-			end
-			if signs.changed and signs.changed > 0 then
-				table.insert(diff, { "󱐯 " .. signs.changed .. " ", group = "WarningMsg" })
-			end
-			if signs.removed and signs.removed > 0 then
-				table.insert(diff, { "󱐰 " .. signs.removed .. " ", group = "DiffRemoved" })
-			end
-		end
+		-- Diagnósticos
+		local diagnostics = vim.diagnostic.get(buf)
+		local errors = #vim.tbl_filter(function(d)
+			return d.severity == vim.diagnostic.severity.ERROR
+		end, diagnostics)
+		local warnings = #vim.tbl_filter(function(d)
+			return d.severity == vim.diagnostic.severity.WARN
+		end, diagnostics)
+		local hints = #vim.tbl_filter(function(d)
+			return d.severity == vim.diagnostic.severity.HINT
+		end, diagnostics)
+		local info = #vim.tbl_filter(function(d)
+			return d.severity == vim.diagnostic.severity.INFO
+		end, diagnostics)
 
-		-- Diagnósticos de LSP
-		local function get_diagnostic_label()
-			local icons = { error = " ", warn = "󰗖 ", info = "󰋽 ", hint = "󰄰 " }
-			local label = {}
-			for severity, icon in pairs(icons) do
-				local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
-				if n > 0 then
-					table.insert(label, { icon .. n .. " ", group = "DiagnosticSign" .. severity })
-				end
-			end
-			return label
-		end
-
-		-- ────────────────────────────────────────────────────────────
 		return {
-			get_diagnostic_label(),
-			{ filename, gui = vim.bo[props.buf].modified and "bold,italic" or "bold" },
-			(#diff > 0) and { " / " } or nil, -- separador solo si hay diff
-			diff,
+			{ modified .. readonly },
+			{ remote ~= "" and (" | " .. remote) or "" },
+			errors > 0 and { " 󰇴 " .. errors, group = "DiagnosticError" } or "",
+			warnings > 0 and { " 󰇶 " .. warnings, group = "DiagnosticWarn" } or "",
+			hints > 0 and { "  " .. hints, hl = "DiagnosticHint" } or "",
+			info > 0 and { " 󰇵 " .. info, hl = "DiagnosticInfo" } or "",
 		}
 	end,
 })
