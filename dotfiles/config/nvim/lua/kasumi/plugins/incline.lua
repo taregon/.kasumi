@@ -1,27 +1,45 @@
+-- ┌────────────────────────────┐
+-- │░▀█▀░█▀█░█▀▀░█░░░▀█▀░█▀█░█▀▀│
+-- │░░█░░█░█░█░░░█░░░░█░░█░█░█▀▀│
+-- │░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀▀▀│
+-- └────────────────────────────┘
+--
 require("incline").setup({
 	render = function(props)
+		-- Buffer actual
 		local buf = props.buf
+
+		-- Estado de modificado del buffer
 		local modified = vim.bo[buf].modified
+
+		-- Ruta y nombre del archivo
 		local path = vim.api.nvim_buf_get_name(buf)
 		local filename = vim.fn.fnamemodify(path, ":t")
+
+		-- Detectar si el archivo proviene de un sistema remoto (ej. sshfs)
 		local remote = path:match("^/mnt/servers/([^/]+)") or ""
 
 		-- Detectar clientes LSP activos (Neovim 0.11.6 usa get_clients)
 		local lsp_clients = vim.lsp.get_clients({ bufnr = buf })
 		local lsp_active = #lsp_clients > 0
 
-		-- Rama de Git (si usas gitsigns)
+		-- NOTE: Muestra la rama de Git (si usas gitsigns.nvim)
 		local branch = vim.b.gitsigns_head or ""
 
+		-- Lista de segmentos que se mostrarán en la barra
 		local segments = {}
 
-		-- Nombre del archivo con ícono si está modificado
+		-- NOMBRE DEL ARCHIVO
+		-- Si está modificado, se antepone un ícono y se resalta con DiagnosticWarn
+		-- Si no, se muestra apagado con InclineNormalNC
 		table.insert(segments, {
-			(modified and "✎ " or "") .. (filename ~= "" and filename or "[No Name]"),
+			(modified and " " or "") .. (filename ~= "" and filename or "[No Name]"),
 			group = modified and "DiagnosticWarn" or "InclineNormalNC",
 		})
 
-		-- Remote
+		-- REMOTE
+		-- Se muestra solo si el archivo está en un host remoto
+		-- Color de DiagnosticInfo si la ventana está activa, InclineNormalNC si no
 		if remote ~= "" then
 			table.insert(segments, {
 				" | " .. remote,
@@ -29,7 +47,8 @@ require("incline").setup({
 			})
 		end
 
-		-- Icono de LSP activo
+		-- LSP ACTIVO
+		-- Si hay un cliente LSP conectado al buffer, muestra un ícono
 		if lsp_active then
 			table.insert(segments, {
 				"  ",
@@ -37,7 +56,8 @@ require("incline").setup({
 			})
 		end
 
-		-- Rama de Git
+		-- RAMA DE GIT
+		-- Si existe rama (detectada por gitsigns), se muestra con un icono
 		if branch ~= "" then
 			table.insert(segments, {
 				"  " .. branch,
@@ -45,6 +65,7 @@ require("incline").setup({
 			})
 		end
 
+		-- Retornar todos los segmentos para que incline los renderice
 		return segments
 	end,
 })
