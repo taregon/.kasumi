@@ -3,8 +3,16 @@
 -- │░░█░░█░█░█░░░█░░░░█░░█░█░█▀▀│
 -- │░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀▀▀│
 -- └────────────────────────────┘
---
+-- Barra flotante minimalista que muestra el nombre del buffer y su contexto en cada ventana.
+
 require("incline").setup({
+	highlight = {
+		groups = {
+			InclineNormal = "StatusLine", -- Mismo fondo que la barra de estado
+			InclineNormalNC = "Comment", -- Texto cuando esta inactivo
+			-- InclineRemote = "DiagnosticInfo", -- Personalizado. Aquí enlazas a un grupo ya existente
+		},
+	},
 	render = function(props)
 		-- Buffer actual
 		local buf = props.buf
@@ -37,22 +45,22 @@ require("incline").setup({
 			group = modified and "DiagnosticWarn" or "InclineNormalNC",
 		})
 
-		-- REMOTE
-		-- Se muestra solo si el archivo está en un host remoto
-		-- Color de DiagnosticInfo si la ventana está activa, InclineNormalNC si no
-		if remote ~= "" then
-			table.insert(segments, {
-				" | " .. remote,
-				group = props.focused and "DiagnosticInfo" or "InclineNormalNC",
-			})
-		end
-
 		-- LSP ACTIVO
 		-- Si hay un cliente LSP conectado al buffer, muestra un ícono
 		if lsp_active then
 			table.insert(segments, {
 				"  ",
 				group = props.focused and "DiagnosticInfo" or "InclineNormalNC",
+			})
+		end
+
+		-- REMOTE
+		-- Se muestra solo si el archivo está en un host remoto
+		-- Color de DiagnosticInfo si la ventana está activa, InclineNormalNC si no
+		if remote ~= "" then
+			table.insert(segments, {
+				" 󰌘 " .. remote,
+				group = props.focused and "Label" or "InclineNormalNC",
 			})
 		end
 
