@@ -47,12 +47,15 @@ require("bufferline").setup({
 		custom_filter = function(buf_number)
 			local buf_name = vim.fn.bufname(buf_number)
 
-			-- Excluir del buffer los archivos gestionados por gitsigns
+			-- ─[ EXCLUIR DEL BUFFER ]───────────────────────────────────
 			-- Para visualizar rutas completas, usa `:echo expand('%:p')`
 			if buf_name:match("^gitsigns://") then
 				return false
 			end
 
+			if buf_name:match("Grug FAR") then
+				return false
+			end
 			-- Mostrar todos los demás
 			return true
 		end,
