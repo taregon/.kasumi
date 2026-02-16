@@ -4,13 +4,22 @@
 -- │░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀▀▀│
 -- └────────────────────────────┘
 -- Barra flotante minimalista que muestra el nombre del buffer y su contexto en cada ventana.
+-- NOTE:  InclineNormalNC atenúa la información en ventanas no activas;
+-- únicamente la vista con foco mantiene el estilo destacado.
+
+-- Ejemplo de bloque para configurar colores personalizados
+vim.api.nvim_set_hl(0, "DI_NoItalic", {
+	link = nil,
+	fg = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" }).fg,
+	italic = false,
+})
 
 require("incline").setup({
+	window = { margin = { horizontal = 2 } },
 	highlight = {
 		groups = {
 			InclineNormal = "StatusLine", -- Mismo fondo que la barra de estado
 			InclineNormalNC = "Comment", -- Texto cuando esta inactivo
-			-- InclineRemote = "DiagnosticInfo", -- Personalizado. Aquí enlazas a un grupo ya existente
 		},
 	},
 	render = function(props)
@@ -38,8 +47,7 @@ require("incline").setup({
 		local segments = {}
 
 		-- NOMBRE DEL ARCHIVO
-		-- Si está modificado, se antepone un ícono y se resalta con DiagnosticWarn
-		-- Si no, se muestra apagado con InclineNormalNC
+		-- Si está modificado, se antepone un ícono y se resalta
 		table.insert(segments, {
 			(modified and " " or "") .. (filename ~= "" and filename or "[No Name]"),
 			group = modified and "DiagnosticWarn" or "InclineNormalNC",
@@ -50,13 +58,12 @@ require("incline").setup({
 		if lsp_active then
 			table.insert(segments, {
 				"  ",
-				group = props.focused and "DiagnosticInfo" or "InclineNormalNC",
+				group = props.focused and "DI_NoItalic" or "InclineNormalNC",
 			})
 		end
 
 		-- REMOTE
 		-- Se muestra solo si el archivo está en un host remoto
-		-- Color de DiagnosticInfo si la ventana está activa, InclineNormalNC si no
 		if remote ~= "" then
 			table.insert(segments, {
 				" 󰌘 " .. remote,
