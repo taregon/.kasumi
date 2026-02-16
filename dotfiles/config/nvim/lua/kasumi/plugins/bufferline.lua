@@ -44,9 +44,28 @@ require("bufferline").setup({
 	}),
 
 	options = {
+		custom_filter = function(buf_number)
+			local buf_name = vim.fn.bufname(buf_number)
+
+			-- Excluir del buffer los archivos gestionados por gitsigns
+			-- Para visualizar rutas completas, usa `:echo expand('%:p')`
+			if buf_name:match("^gitsigns://") then
+				return false
+			end
+
+			-- Mostrar todos los demás
+			return true
+		end,
+
 		separator_style = "slope",
-		diagnostics = "nvim_lsp",
-		modified_icon = "󰗐",
+
+		--[[ diagnostics = "nvim_lsp",
+		diagnostics_indicator = function(count, level)
+			local icon = level:match("error") and " " or " "
+			return " " .. icon .. count
+		end, ]]
+
+		modified_icon = " ",
 		show_close_icon = false,
 		show_buffer_close_icons = false,
 		color_icons = false, -- iconos mono cromáticos
