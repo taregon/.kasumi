@@ -4,6 +4,7 @@
 -- │░▀▀▀░▀▀░░▀▀▀░░░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀│
 -- └──────────────────────────────────────┘
 -- Lineas de sangría
+-- La animación la gestiona mini.indentscope
 
 require("ibl").setup({
 	indent = {
@@ -16,24 +17,20 @@ require("ibl").setup({
 	},
 	exclude = {
 		filetypes = {
-			"checkhealth",
-			"comment-box",
-			"dashboard",
-			"git",
-			"help",
-			"man",
-			"markdown",
-			"neo-tree",
-			"startify",
-			"terminal",
-			"text",
 			"conf",
+			"git",
+			"markdown",
+			"startify",
+			"text",
 		},
 		buftypes = {
+			"checkhealth",
+			"comment-box",
+			"grug-far",
+			"neo-tree",
 			"nofile",
-			"prompt",
 			"quickfix",
-			"terminal",
+			"codecompanion",
 		},
 	},
 })
