@@ -32,8 +32,8 @@
   exec --no-startup-id nm-applet
   exec mpDris2
   exec mpd
-  exec wl-paste --type images --watch cliphist store
-  exec wl-paste --type text --watch cliphist store
+# exec wl-paste --type images --watch cliphist store
+# exec wl-paste --type text --watch cliphist store
 # exec ~/.config/sway/scripts/bg_random_auto
 
 # ╒═════════════════════════════════════════════════════════════╕
@@ -70,7 +70,7 @@
   bindsym $mod+Print            exec ~/.config/sway/scripts/rofi_screenrecord
   bindsym $mod+Return           exec $term
   bindsym $mod+Shift+q          kill
-  bindsym $mod+c                exec $browser
+  # bindsym $mod+c                exec $browser
   bindsym $mod+grave            exec ~/.config/sway/scripts/keybind
 # REVISAR: atajo de música, pues llama rofi
   bindsym $mod+m                exec $music
@@ -78,14 +78,13 @@
   bindsym $mod+r                mode "resize"
   bindsym $mod+t                exec $filemanager
   bindsym $mod+n                exec $launcher
-  bindsym Print                 exec ~/.config/sway/scripts/rofi_screenshot
+  bindsym Print                 exec ~/.config/sway/helpers/screenshot-region
   bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
   bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
-
+  bindsym $mod+c                exec wl-copy < %f
 # Lock screen
 # bindsym $mod+l exec hyprlock
 # exec /usr/bin/lxpolkit
-# exec mako
 # exec nm-applet --indicator
 # nm-applet
 
