@@ -30,8 +30,10 @@ if [[ -z "$user" || -z "$host" ]]; then
 fi
 
 # Requiere privilegios de superusuario
+echo -e "${YELLOW}  Se requiere autenticación sudo para montar el recurso.${NC}"
+echo "  Por favor, introduce tu contraseña de administrador"
 if ! sudo -v > /dev/null 2>&1; then
-    echo -e "${YELLOW}  Se requiere autenticación sudo.${NC}"
+    echo -e "${YELLOW}  Falló la autenticación sudo.${NC}"
     return 1
 fi
 
@@ -122,4 +124,5 @@ else
     echo
     echo "  Error al montar $user@$host"
     # Eliminar la carpeta creada para no ensuciar /mnt
-    rmdir "$mount_point" 2> /dev/nui
+    rmdir "$mount_point" 2> /dev/null
+fi
