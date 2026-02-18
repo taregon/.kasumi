@@ -158,15 +158,16 @@ install_app_zathura() {
 install_misc_tools() {
     echo ">> Instalando herramientas varias"
     local pkgs=(
-        keepassxc     # Gestor de contraseñas local con cifrado fuerte
-        localsend-bin # Compartir archivos en red local
-        spek-x-git    # Analizador de espectro de audio
-        syncthing     # Sincroniza carpetas entre dispositivos de forma privada
+        keepassxc     # Gestor de contraseñas local con base de datos cifrada
+        localsend-bin # Compartir archivos en red local sin configuración compleja
+        spek-x-git    # Analizador visual de frecuencias en archivos de audio
+        syncthing     # Sincronización privada y cifrada entre dispositivos
+        upscayl-bin   # Mejora y reescalado de imágenes con IA
 
         # Editores
-        obsidian               # Editor de notas (AUR)
-        visual-studio-code-bin # IDE completo (AUR)
-        xed                    # Editor de texto simple (MATE)
+        obsidian               # Editor de notas en Markdown enfocado en conocimiento (AUR)
+        visual-studio-code-bin # Editor/IDE completo y extensible (AUR)
+        xed                    # Editor de texto simple y ligero (MATE)
     )
     instalar "${pkgs[@]}"
 
