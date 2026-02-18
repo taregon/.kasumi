@@ -1,7 +1,8 @@
 -- require("mini.animate").setup() -- El efecto cuando haces scroll
 
--- DIVIDE LOS ARGUMENTOS SI ESTÁN EN UNA SOLA LÍNEA, DE LO CONTRARIO LOS UNE
--- Atajo por defecto: gS
+-- ALTERNA EL FORMATO DE ARGUMENTOS
+-- si están en una sola línea los expande en varias,
+-- y si ya están divididos los compacta en una sola.
 require("mini.splitjoin").setup({
 	mappings = {
 		toggle = "<F4>", -- Atajo
@@ -10,24 +11,26 @@ require("mini.splitjoin").setup({
 
 -- MUEVE EL TEXTO (Atajos)
 require("mini.move").setup({
+    --stylua: ignore
 	mappings = {
-		left = "mh",
+		left  = "mh",
 		right = "ml",
-		down = "mj",
-		up = "mk",
-
-		line_left = "mh",
+		down  = "mj",
+		up    = "mk",
+		line_left  = "mh",
 		line_right = "ml",
-		line_down = "mj",
-		line_up = "mk",
+		line_down  = "mj",
+		line_up    = "mk",
 	},
 })
 
 -- SUBRAYA PALABRAS BAJO EL CURSOR
 require("mini.cursorword").setup()
 
--- Animación del indent scope
--- Las otras lineas verticales están en indent-blankline
+-- ANIMACIÓN DE LA INDENTACIÓN
+-- Las demás guías verticales las gestiona indent-blankline
+-- NOTE: Para desactivar en buffers específicos, ajusta la función en autocmd.lua
+--
 require("mini.indentscope").setup({
 	symbol = "┆",
 	draw = {
