@@ -103,6 +103,7 @@ augroup("DisableMiniIndentScope", function(group)
 		pattern = {
 			"TelescopePrompt",
 			"TelescopeResults",
+			"codecompanion",
 			"conf",
 			"help",
 			"markdown",
