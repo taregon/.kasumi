@@ -130,15 +130,16 @@ install_app_neovim() {
 install_app_ranger() {
     echo ">> Instalando ranger y complementos"
     local pkgs=(
-        atool               # Soporte para archivos comprimidos
-        imagemagick         # Conversión y vista previa de imágenes
+        atool               # Manejo de archivos comprimidos desde CLI
+        imagemagick         # Conversión y procesamiento de imágenes
         mediainfo           # Muestra metadatos de audio y video
-        perl-image-exiftool # Lee y extrae metadatos EXIF/IPTC/XMP.
-        poppler             # Vista previa y utilidades para PDF
+        perl-image-exiftool # Lectura y extracción de metadatos (EXIF/IPTC/XMP)
+        poppler             # Utilidades y herramientas para PDF
         python-chardet      # Detección de codificación de texto
-        python-pillow       # Librería para procesar imágenes (PIL)
-        ranger              # Gestor de archivos en terminal tipo VI
-        trash-cli           # Envío de archivos a la papelera desde CLI
+        python-pillow       # Procesamiento de imágenes en Python (PIL)
+        ranger              # Gestor de archivos en terminal (estilo VI)
+        transmission-cli    # Cliente BitTorrent en línea de comandos
+        trash-cli           # Envía archivos a la papelera desde CLI
     )
     instalar "${pkgs[@]}"
 }
@@ -226,11 +227,12 @@ install_sys_tools() {
     local pkgs=(
 
         # Monitoreo y sensores
-        btop       # Monitor de sistema interactivo
-        fastfetch  # Muestra información detallada del sistema con alto rendimiento
-        gotop      # Monitor moderno con interfaz TUI
-        lm_sensors # Lectura de sensores de hardware (CPU, GPU, etc.)
-        wluma      # Ajusta dinámicamente el brillo según la iluminación detectada
+        btop       # Monitor del sistema en tiempo real (TUI)
+        fastfetch  # Info del sistema, rápido y ligero
+        gotop      # Monitor del sistema en tiempo real (TUI)
+        lm_sensors # Lectura de sensores de hardware
+        nvtop      # Monitor de GPU en tiempo real (TUI)
+        wluma      # Ajuste automático de brillo según luz ambiental
 
         # Audio y visualización
         cava # Visualizador de espectro de audio en terminal
@@ -243,12 +245,13 @@ install_sys_tools() {
         polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
 
         # Entorno gráfico (Wayland)
-        grim       # Captura de pantalla para Wayland
-        hyprpicker # Selector de color para Wayland
-        mako       # Demonio de notificaciones Wayland
-        rofi
-        wl-clipboard # Herramienta de portapapeles para Wayland
-        wlogout      # Pantalla de cierre de sesión minimalista
+        grim         # Captura de pantalla en Wayland
+        slurp        # Selección de región en Wayland
+        hyprpicker   # Selector de color en Wayland
+        mako         # Demonio de notificaciones para Wayland
+        rofi         # Lanzador de aplicaciones y selector interactivo
+        wl-clipboard # Utilidades de portapapeles en Wayland
+        wlogout      # Menú minimalista de cierre de sesión
     )
     instalar "${pkgs[@]}"
 }
@@ -294,33 +297,33 @@ install_utils_file_management() {
 install_utils_terminal() {
     echo ">> Instalando utilidades de terminal"
     local pkgs=(
-        aria2              # Gestor de descargas (HTTP, FTP, torrents)
-        bat                # cat con resaltado de sintaxis y git
-        cdu                # Analizador interactivo de uso de disco (histograma)
-        dotdrop            # Gestor de dotfiles (perfiles, plantillas, git)
-        exa                # ls moderno con colores e iconos (obsoleto, mira lsd)
-        figlet             # Texto en ASCII art grande
-        figlet-fonts-extra # Fuentes extras para figlet
-        fzf                # Buscador fuzzy interactivo (Ctrl+R, etc.)
-        git-delta          # Visualizador de diffs en git (mejor que default)
-        grc                # Colores automáticos para comandos (ls, ping, etc.)
-        iputils            # ping, traceroute, ping6 y más
-        iw                 # Configuración inalámbrica (Wi-Fi avanzado)
-        jq                 # Procesador de JSON desde terminal
-        kitty              # Terminal rápida con GPU y ligatures
-        less               # Paginador de texto (mejor con source-highlight)
-        lnav               # Visor avanzado de logs (tail + search + filters)
-        lsd                # ls con iconos y colores (recomendado sobre exa)
-        openssh            # Cliente y servidor SSH + agente
-        pacman-contrib     # extras pacman (pactree, pkgdelta, updpkgsums, etc.)
-        python-pip         # Gestor de paquetes Python (pip)
-        ripgrep            # Búsqueda recursiva ultrarrápida (rg)
-        source-highlight   # Resaltado sintaxis en less y más
-        sshfs              # Montar directorios remotos vía SSH como si fueran locales
-        toilet             # Texto ASCII con estilos y filtros
-        zoxide             # cd inteligente (recuerda directorios frecuentes)
-        zsh                # Shell interactivo moderno (mejor que bash)
-        zsh-completions    # Autocompletado mejorado para zsh
+        aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
+        bat                # Visor tipo cat con resaltado y soporte Git
+        cdu                # Analizador interactivo de uso de disco (TUI)
+        dotdrop            # Gestor de dotfiles con perfiles y plantillas
+        exa                # ls moderno con colores e iconos (obsoleto, reemplazado por lsd)
+        figlet             # Generador de texto en ASCII art
+        figlet-fonts-extra # Fuentes adicionales para figlet
+        fzf                # Buscador fuzzy interactivo
+        git-delta          # Mejorador de diffs para Git
+        grc                # Colorea automáticamente la salida de comandos
+        iputils            # Herramientas de red (ping, traceroute, etc.)
+        iw                 # Configuración avanzada de Wi-Fi
+        jq                 # Procesador de JSON en CLI
+        kitty              # Emulador de terminal acelerado por GPU
+        less               # Paginador de texto para terminal
+        lnav               # Visor avanzado de logs (TUI)
+        lsd                # ls con iconos y colores
+        openssh            # Cliente y servidor SSH
+        pacman-contrib     # Utilidades adicionales para pacman
+        python-pip         # Gestor de paquetes Python
+        ripgrep            # Búsqueda recursiva rápida (rg)
+        source-highlight   # Resaltado de sintaxis para less y otros
+        sshfs              # Montaje de sistemas remotos vía SSH
+        toilet             # Generador de texto ASCII estilizado
+        zoxide             # Navegación inteligente entre directorios
+        zsh                # Shell interactivo avanzada
+        zsh-completions    # Autocompletado adicional para zsh
     )
     instalar "${pkgs[@]}"
 
