@@ -10,7 +10,7 @@ local lualine = require("lualine")
 local catppuccin = require("catppuccin.palettes").get_palette()
 local u = require("catppuccin.utils.colors")
 
--- Función global para obtener el color basado en el modo actual de nvim
+-- Función que devuelve el color según el modo actual de Neovim
 local function get_mode_color()
 	local mode_color = {
 		n = u.darken(catppuccin.blue, 0.5, catppuccin.base), -- Normal mode
@@ -34,6 +34,29 @@ local function diff_source()
 			modified = gitsigns.changed,
 			removed = gitsigns.removed,
 		}
+	end
+end
+
+-- ─[ FILE SIZE ]────────────────────────────────────────────
+-- Devuelve el tamaño de un archivo expresado en bytes, kilobytes (KB),
+-- megabytes (MB) o gigabytes (GB), según corresponda.
+local function filesize()
+	local file = vim.fn.expand("%:p")
+	if file == "" then
+		return ""
+	end
+	local size = vim.fn.getfsize(file)
+	if size < 0 then
+		return ""
+	end
+	if size < 1024 then
+		return size .. "B"
+	elseif size < 1024 * 1024 then
+		return string.format("%.1fKB", size / 1024)
+	elseif size < 1024 * 1024 * 1024 then
+		return string.format("%.1fMB", size / (1024 * 1024))
+	else
+		return string.format("%.1fGB", size / (1024 * 1024 * 1024))
 	end
 end
 
@@ -79,7 +102,6 @@ end
 -- ╘═══════════════════════════════════════════════════════════╛
 lualine.setup({
 	options = {
-		-- theme = "catppuccin",
 		component_separators = { left = "›", right = "" },
 		section_separators = { left = "", right = "" },
 		globalstatus = true, -- Una barra para cuando hay mas ventanas
@@ -87,16 +109,14 @@ lualine.setup({
 	disabled_filetypes = {
 		statusline = {
 			-- "neo-tree", -- Quite el plug
-			"undotree",
+			-- "undotree",
 		},
 		winbar = {
 			-- "neo-tree", -- Quite el plug
-			"undotree",
+			-- "undotree",
 		},
 	},
-	winbar = {
-		lualine_c = { "navic" },
-	},
+	-- winbar = { lualine_c = { "navic" } },
 	sections = {
 		lualine_b = {
 			"branch",
@@ -105,18 +125,21 @@ lualine.setup({
 				source = diff_source,
 				symbols = { added = "󱐮 ", modified = "󱐯 ", removed = "󱐰 " },
 			},
-			-- "diagnostics",
 		},
 		lualine_c = {
 			{
 				-- "filename",  -- Si un día la función falla, solo descomenta
+				-- shorting_target = 24,
 				file_status_name,
 				path = 4, -- Carpeta principal y nombre
-				shorting_target = 24,
-				symbols = { modified = "", readonly = "󰞀", newfile = "󰽃" },
+				symbols = { modified = "", readonly = "󰞀", unnamed = "󰔦" },
 			},
 		},
 		lualine_x = {
+			{
+				filesize,
+				color = get_mode_color,
+			},
 			{
 				"fileformat",
 				symbols = { unix = "󰻀", dos = "󰍲", mac = "" },
