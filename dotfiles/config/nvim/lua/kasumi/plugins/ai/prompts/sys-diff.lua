@@ -1,8 +1,10 @@
 -- Helper para el prompt "Commit en Español"
 -- Expone staged_diff(), que obtiene el diff staged del archivo actual
--- y lo reduce al delta puro (+ / -), sin cabeceras, rutas, contexto ni color.
+-- y descarta metadatos previos (diff, index, rutas, etc.) comenzando
+-- a procesar desde el primer encabezado de hunk (@@).
+-- A partir de ese punto conserva únicamente el contenido real del cambio.
 -- Comportamiento equivalente (aplicado a un solo archivo) a:
--- git diff --cached --no-ext-diff --no-prefix --unified=0 --color=never | sed -n '/^@@ /,$p' | sed '1d'
+-- git diff --cached --no-ext-diff --no-prefix --unified=0 --color=never
 
 local M = {}
 
@@ -68,17 +70,14 @@ function M.staged_diff()
 	-- 6. Filtrar líneas relevantes
 	local lines = vim.split(diff_out, "\n", { plain = true })
 	local filtered = {}
-	local START = 5 -- saltar primeras 4 líneas
+	local start_processing = false
 
-	for i = START, #lines do
-		local line = lines[i]
+	for _, line in ipairs(lines) do
+		if not start_processing and line:match("^@@ ") then
+			start_processing = true
+		end
 
-		if
-			vim.startswith(line, "+")
-			or vim.startswith(line, "-")
-			or vim.startswith(line, " ")
-			or vim.startswith(line, "@@ ")
-		then
+		if start_processing then
 			table.insert(filtered, line)
 		end
 	end
