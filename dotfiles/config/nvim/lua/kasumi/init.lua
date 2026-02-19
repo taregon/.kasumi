@@ -23,7 +23,6 @@ require("kasumi/plugins/catppuccin") -- No mover
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                           PLUGS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
--- require("kasumi/plugins/dressing") -- Lo archivaron
 -- require("kasumi/plugins/lsp/nvim-navbuddy")
 -- require("kasumi/plugins/lsp/nvim-supermaven") -- se me acabo el demo
 -- require("kasumi/plugins/nvim-web-devicons") -- Esta de mas por que no tengo ajustes
@@ -46,7 +45,8 @@ require("kasumi/plugins/todo")
 -- require("kasumi/plugins/fzf")
 require("kasumi/plugins/bqf") -- Quickfix integrada con fzf
 require("kasumi/plugins/ai/codecompanion")
-
+require("kasumi/plugins/render-markdown")
+-- require("kasumi/plugins/spectre")
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                   Formatting & Linting                    │
 -- ╘═══════════════════════════════════════════════════════════╛
@@ -69,3 +69,4 @@ require("kasumi/plugins/lsp/conform") -- Formateador
 -- │                          WIN BAR                          │
 -- ╘═══════════════════════════════════════════════════════════╛
 require("kasumi/plugins/lsp/nvim-navic")
+require("kasumi/plugins/incline")
