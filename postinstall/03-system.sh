@@ -268,6 +268,7 @@ install_utils_compression() {
         # Otros
         jpegoptim     # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
         libwebp-utils # Utilidades CLI de WebP (incluye dwebp, cwebp, gif2webp)
+        oxipng        # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
     )
     instalar "${pkgs[@]}"
 }
