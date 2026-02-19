@@ -107,10 +107,21 @@ augroup("DisableMiniIndentScope", function(group)
 			"conf",
 			"help",
 			"markdown",
+			"text",
 		},
 		callback = function()
 			vim.b.miniindentscope_disable = true
 		end,
+	})
+end)
+
+-- ────────────────────────────────────────────────────────────
+-- DESACTIVAR SPELL / CORRECTOR ORTOGRÁFICO
+augroup("NoSpell", function(group)
+	aucmd({ "BufRead", "BufNewFile", "BufEnter", "BufWinEnter", "FileType" }, {
+		group = group,
+		pattern = { "*.log", "*.txt", "codecompanion" },
+		command = "setlocal nospell",
 	})
 end)
 
