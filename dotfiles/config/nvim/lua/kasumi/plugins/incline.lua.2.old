@@ -1,0 +1,66 @@
+-- Función para quitar cursiva sin perder color
+local function remove_italic(group)
+	local current = vim.api.nvim_get_hl(0, { name = group })
+	current.italic = false
+	vim.api.nvim_set_hl(0, group, current)
+end
+
+-- Aplicar a los grupos que quieras
+remove_italic("DiagnosticError")
+remove_italic("DiagnosticWarn")
+remove_italic("DiagnosticHint")
+remove_italic("DiagnosticInfo")
+remove_italic("InclineNormal")
+remove_italic("InclineNormalNC")
+
+require("incline").setup({
+	highlight = {
+		groups = {
+			InclineNormal = "StatusLine", -- usa el mismo fondo que la barra de estado
+			InclineNormalNC = "StatusLineNC", --usa el fondo de la barra inactiva
+		},
+	},
+
+	render = function(props)
+		local buf = props.buf
+		local path = vim.api.nvim_buf_get_name(buf)
+		local remote = path:match("^/mnt/servers/([^/]+)") or ""
+		local modified = vim.bo[buf].modified
+		local diagnostics = vim.diagnostic.get(buf)
+		local segments = {}
+
+		-- Definir severidades y grupos
+		local severities = {
+			{ name = "Error", severity = vim.diagnostic.severity.ERROR, icon = " 󰇴 ", group = "DiagnosticError" },
+			{ name = "Warn", severity = vim.diagnostic.severity.WARN, icon = "  ", group = "DiagnosticWarn" },
+			{ name = "Hint", severity = vim.diagnostic.severity.HINT, icon = " 󰱹 ", group = "DiagnosticHint" },
+			{ name = "Info", severity = vim.diagnostic.severity.INFO, icon = "  ", group = "DiagnosticInfo" },
+		}
+
+		-- Remote: resalta si existe, se apaga si no
+		if remote ~= "" then
+			table.insert(segments, {
+				"󰢹 " .. remote,
+				group = props.focused and "DiagnosticHint" or "InclineNormalNC",
+			})
+		end
+
+		-- Indicador de modificado: resalta si está modificado, se apaga si no
+		table.insert(segments, {
+			modified and " [+]" or "",
+			group = modified and "DiagnosticWarn" or "InclineNormalNC",
+		})
+
+		-- Ciclar severidades
+		for _, s in ipairs(severities) do
+			local count = #vim.tbl_filter(function(d)
+				return d.severity == s.severity
+			end, diagnostics)
+			if count > 0 then
+				table.insert(segments, { s.icon .. count, group = props.focused and s.group or "InclineNormalNC" })
+			end
+		end
+
+		return segments
+	end,
+})
