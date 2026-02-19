@@ -68,15 +68,17 @@ function M.staged_diff()
 	-- 6. Filtrar líneas relevantes
 	local lines = vim.split(diff_out, "\n", { plain = true })
 	local filtered = {}
+	local START = 5 -- saltar primeras 4 líneas
 
-	for _, line in ipairs(lines) do
-		if vim.startswith(line, "+") and not vim.startswith(line, "+++") then
-			table.insert(filtered, line)
-		elseif vim.startswith(line, "-") and not vim.startswith(line, "---") then
-			table.insert(filtered, line)
-		elseif vim.startswith(line, " ") then
-			table.insert(filtered, line)
-		elseif vim.startswith(line, "@@ ") then -- incluir encabezados de hunk
+	for i = START, #lines do
+		local line = lines[i]
+
+		if
+			vim.startswith(line, "+")
+			or vim.startswith(line, "-")
+			or vim.startswith(line, " ")
+			or vim.startswith(line, "@@ ")
+		then
 			table.insert(filtered, line)
 		end
 	end
