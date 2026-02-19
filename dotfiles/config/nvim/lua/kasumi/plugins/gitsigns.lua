@@ -51,8 +51,8 @@ require("gitsigns").setup({
 	},
 })
 
--- Color personalizado del signo untracked
--- basado en catppuccin
+-- Define el color del indicador "untracked"
+-- tomando como referencia la paleta Catppuccin ^. .^₎⟆
 local catppuccin = require("catppuccin.palettes").get_palette()
 
 vim.api.nvim_set_hl(0, "GitSignsUntracked", { fg = catppuccin.overlay0, bg = "NONE" })
