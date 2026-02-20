@@ -7,6 +7,7 @@
 -- La primera ves hay que instalar el gestor de plugins *vim-plug
 -- Instalación: https://stsewd.dev/es/posts/neovim-plugins
 -- Revisar dependencias: nvim +checkhealth
+-- Lazy-loading: ['for'] define los filetypes que activan el plugin.
 
 local vim = vim -- REVISAR: esta linea la veo innecesaria
 local Plug = vim.fn["plug#"]
@@ -23,30 +24,32 @@ Plug("EdenEast/nightfox.nvim")
 -- ╒═════════════════════════════════════════════════════════╕
 -- │                         PLUGINS                         │
 -- ╘═════════════════════════════════════════════════════════╛
-
 -- Plug("nvim-neo-tree/neo-tree.nvim") -- Navegador de archivos
 -- Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
-Plug("akinsho/bufferline.nvim") -- Muestra los buffer en pestañas
-Plug("echasnovski/mini.nvim") -- Pack de módulos. Tengo varios en uso
-Plug("folke/todo-comments.nvim") -- Resalta las lineas con comentarios
-Plug("folke/which-key.nvim") -- Muestra atajos al comenzar a escribir
-Plug("lewis6991/gitsigns.nvim") -- Resalta lineas con cambios git↲
-Plug("LudoPinelli/comment-box.nvim") -- Agrega cajas de texto / boxes
-Plug("lukas-reineke/indent-blankline.nvim") -- Lineas de identacion
-Plug("MeanderingProgrammer/render-markdown.nvim")
-Plug("norcalli/nvim-colorizer.lua") -- Colorea los códigos RGB/HEX
-Plug("numToStr/Comment.nvim") -- Para comentar lineas o bloques  con F2 / F3
-Plug("nvim-lualine/lualine.nvim") -- Barra de estado
-Plug("nvim-treesitter/nvim-treesitter") -- Syntax Highlighting / colorea el código
-Plug("olimorris/codecompanion.nvim")
-Plug("petertriho/nvim-scrollbar") -- Barra de scroll
+Plug("akinsho/bufferline.nvim") -- Lista buffers en formato de pestañas con soporte LSP y diagnósticos
+Plug("b0o/incline.nvim") -- Barra flotante por ventana con nombre de buffer y estado contextual
+Plug("echasnovski/mini.nvim") -- Colección modular de utilidades ligeras (indent, surround, splitjoin, etc.)
+Plug("folke/todo-comments.nvim") -- Detecta y resalta TODO/FIX/NOTE con integración en búsqueda
+Plug("folke/which-key.nvim") -- Muestra combinaciones de teclas disponibles en tiempo real
+Plug("lewis6991/gitsigns.nvim") -- Indicadores Git en el gutter con acciones por hunk y blame
+Plug("LudoPinelli/comment-box.nvim") -- Genera cajas y separadores decorativos en comentarios
+Plug("lukas-reineke/indent-blankline.nvim") -- Guías visuales de indentación y alcance de bloques
+Plug("MagicDuck/grug-far.nvim") -- Interfaz interactiva para búsqueda y reemplazo masivo (ripgrep)
+Plug("MeanderingProgrammer/render-markdown.nvim") -- Renderiza Markdown con estilos e iconos en el buffer
+Plug("norcalli/nvim-colorizer.lua") -- Previsualiza colores HEX/RGB directamente en el buffer
+Plug("numToStr/Comment.nvim") -- Comentado rápido de líneas y bloques con operadores
+Plug("nvim-lualine/lualine.nvim") -- Barra de estado configurable y ligera
+Plug("nvim-treesitter/nvim-treesitter") -- Resaltado y parsing sintáctico basado en Treesitter
+Plug("olimorris/codecompanion.nvim") -- Integración de asistentes IA dentro de Neovim
+Plug("petertriho/nvim-scrollbar") -- Barra de desplazamiento con marcas de diagnóstico y Git
+Plug("rmagatti/alternate-toggler") -- Alterna pares de valores opuestos bajo el cursor
 
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS que no requieren "require" obligatoriamente
 -- ────────────────────────────────────────────────────────────
 Plug("ibhagwan/fzf-lua") -- Integración con FZF en Lua (requerido por nvim-bqf)
 Plug("kevinhwang91/nvim-bqf") -- Mejora la vista y navegación del quickfix list
-Plug("mechatroner/rainbow_csv") -- Colora archivos CSV
+Plug("mechatroner/rainbow_csv", { ["for"] = { "csv", "tsv" } }) -- Colora archivos CSV
 Plug("mhinz/vim-startify") -- Dashboard
 Plug("nvim-lua/plenary.nvim") -- Depende: nvim-bqf, codecompanion
 Plug("nvim-tree/nvim-web-devicons") -- Iconos para LUA/Nvim
@@ -92,6 +95,8 @@ Plug("saadparwaiz1/cmp_luasnip") -- Así los snippets aparecen en las sugerencia
 -- Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se) y ya pa que, lo archivaron
 -- Plug("supermaven-inc/supermaven-nvim")
 -- Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
+-- Plug("nvimdev/lspsaga.nvim") -- Tiene una barra como navic, hay que colocar un require vació.
+-- Plug("nvim-pack/nvim-spectre")
 -- ────────────────────────────────────────────────────────────
 -- FIN
 vim.call("plug#end")
