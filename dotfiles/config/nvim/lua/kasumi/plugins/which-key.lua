@@ -75,10 +75,12 @@ require("which-key").add({
 	-- ya no se muestran así que se activan por atajos
 	{ "<leader>t", group = "󰂖  Diagnostic", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
-	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
+	{ "<leader>ta", ":ToggleAlternate<CR>", desc = "Toggle Boolean" },
+	{ "<leader>tc", ":ConformInfo<CR>", desc = "Toggle ConformInfo" },
 	{ "<leader>ti", ":set invlist! | Gitsigns toggle_signs<CR>", desc = "Toggle Special Chars" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
+	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
+	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
