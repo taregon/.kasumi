@@ -31,6 +31,29 @@ local toggle_virtual_text = function()
 	end
 end
 
+-- ────────────────────────────────────────────────────────────
+-- FUNCIONES GRUG-FAR (PARA BÚSQUEDA Y REEMPLAZO)
+local grug_file = function()
+	require("grug-far").open({
+		prefills = { paths = vim.fn.expand("%") },
+	})
+end
+
+local grug_file_cursor = function()
+	require("grug-far").open({
+		prefills = {
+			search = vim.fn.expand("<cword>"),
+			paths = vim.fn.expand("%"),
+		},
+	})
+end
+
+local grug_file_visual = function()
+	require("grug-far").with_visual_selection({
+		prefills = { paths = vim.fn.expand("%") },
+	})
+end
+
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                          ATAJOS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
