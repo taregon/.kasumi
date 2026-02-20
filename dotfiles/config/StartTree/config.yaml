@@ -54,9 +54,9 @@ tree_3:
     cron-descriptor: https://bradymholt.github.io/cron-expression-descriptor/
     cron-parser: https://elmah.io/tools/cron-parser/
     cyberchef: https://gchq.github.io/CyberChef/
-    github-download-directory: "https://download-directory.github.io/"
-    github-folder-downloader: "https://gitfolderdownloader.github.io/"
-    github-repo-downloader: "https://repo-downloader.pages.dev/"
+    github-download-directory: https://download-directory.github.io/
+    github-folder-downloader: https://gitfolderdownloader.github.io/
+    github-repo-downloader: https://repo-downloader.pages.dev/
     gpu-database: https://www.techpowerup.com/gpu-specs/
     image-to-braille: https://505e06b2.github.io/Image-to-Braille/
     iso-debian: https://www.debian.org/CD/http-ftp/
@@ -65,7 +65,7 @@ tree_3:
     postimages: https://postimages.org/
     psucalculator: https://outervision.com/power-supply-calculator
     quiteaplaylist: https://quiteaplaylist.com/
-    revistas 🔖: "https://freemagazines.top/computers-hardwares-softwares"
+    revistas 🔖: https://freemagazines.top/computers-hardwares-softwares
     speedometer: https://browserbench.org/Speedometer2.0/
     suite-tools: https://browserleaks.com/ip
     translate-images: https://translate.yandex.com/es/ocr
@@ -89,6 +89,8 @@ tree_3:
     stable-diffusion: https://huggingface.co/spaces/stabilityai/stable-diffusion
     vocalremover: https://vocalremover.org/
     waifu2x: http://waifu2x.udp.jp/
+  Google:
+    activity: https://myactivity.google.com/product/gemini
 tree_4:
   StableDiffusion:
     Anime AI Prompts: https://aituts.com/anime-artists-ai-prompts/
