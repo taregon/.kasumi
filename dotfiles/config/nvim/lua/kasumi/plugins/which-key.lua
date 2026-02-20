@@ -88,8 +88,8 @@ require("which-key").add({
 	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
 	{ "<leader>gp", ":Gitsigns preview_hunk<CR>", desc = "Preview hunk" },
 	{ "<leader>gi", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = "v" },
-	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = "v" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = { "n", "v" } },
+	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = { "n", "v" } },
 	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk", mode = "v" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  QuickFix", mode = { "n", "v" } },
