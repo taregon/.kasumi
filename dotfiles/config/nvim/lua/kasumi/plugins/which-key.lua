@@ -60,15 +60,14 @@ require("which-key").add({
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "h", ":Gitsigns next_hunk<CR>", desc = "Next hunk" }, -- Experimental
-	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
-	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
-	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk" },
-	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = "v" },
 	{ "<leader>gb", ":Gitsigns stage_buffer<CR>", desc = "Stage entire buffer" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset selected hunk", mode = "v" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = "n" },
-	{ "<leader>gi", ":Gitsigns preview_hunk_inline<CR>", desc = "Inline hunk preview" },
-	{ "<leader>gc", ":Git commit %<CR>", desc = "Create commit" },
+	{ "<leader>gc", ":Git commit<CR>", desc = "Create commit" },
+	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
+	{ "<leader>gp", ":Gitsigns preview_hunk<CR>", desc = "Preview hunk" },
+	{ "<leader>gi", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = "v" },
+	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = "v" },
+	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk", mode = "v" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  QuickFix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
