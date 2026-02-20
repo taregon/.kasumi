@@ -100,6 +100,12 @@ require("which-key").add({
 	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes" },
 	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes" },
 	-- ────────────────────────────────────────────────────────────
+	{ "<leader>s", group = "  Search", mode = { "n", "v" } },
+	-- ────────────────────────────────────────────────────────────
+	{ "<leader>ss", grug_file, desc = "GrugFar: current file" },
+	{ "<leader>sw", grug_file_cursor, desc = "GrugFar: current file + <cword>" },
+	{ "<leader>sv", grug_file_visual, desc = "GrugFar: current file + visual selection", mode = "v" },
+	-- ────────────────────────────────────────────────────────────
 	{ "m", group = "  Move text", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	-- Solo documentación para which-key; los mappings reales los define mini.move
