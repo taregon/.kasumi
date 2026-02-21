@@ -1,3 +1,5 @@
-# Define la variable de entorno SSH_AUTH_SOCK para que apunte
-# al socket del agente SSH en el directorio XDG_RUNTIME_DIR
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+# ─[ SSH AGENT ]──────────────────────────────────────────────
+# Permite usar claves SSH sin pedir passphrase cada vez
+# El socket se crea automáticamente en $XDG_RUNTIME_DIR/ssh-agent.socket
+# Requisito: systemctl --user enable --now ssh-agent
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
