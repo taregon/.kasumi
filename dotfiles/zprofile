@@ -4,18 +4,12 @@
 # - Se lanza Sway con 'exec sway' desde ese mismo shell
 # - exec sway hereda el entorno completo al compositor y a todas las aplicaciones hijas
 
-#          █   █
-# █▄█ ▀▀█  █   █  █▀█ ▀▀█ █▀█ ███ █▀▀
-# ███ ███  █▄  █▄ █▄█ ███ █▄█ █▄▄ █
-#                 █       █
+# ─[ WALLPAPER ]──────────────────────────────────────────────
 # Directorio estándar en $HOME para almacenar los
 # fondos de pantalla gestionados por el dotfile kasumi
 export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
 
-#      ▄       █▀  ▀
-# █▀█ ▀█▀     ▀█▀  █  ▀▄▀ ███ █▀▀
-# █▄█  █▄      █   █  ▄▀▄ █▄▄ ▄▄█
-#   █
+# ─[ QT FIXES ]───────────────────────────────────────────────
 # Forzar backend XCB ->mejor compatibilidad y Auto-Type en Wayland
 # DPI lógico para fuentes más legibles sin escalado extremo
 export QT_QPA_PLATFORM=xcb
