@@ -1,8 +1,22 @@
-# ┌────────────────────────────────────────┐
-# │░█░█░█▀█░█░░░█░░░█▀█░█▀▀░█▀█░█▀▀░█▀▄░█▀▀│
-# │░█▄█░█▀█░█░░░█░░░█▀▀░█▀▀░█▀▀░█▀▀░█▀▄░▀▀█│
-# │░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀▀▀░▀░░░▀▀▀░▀░▀░▀▀▀│
-# └────────────────────────────────────────┘
+# Estas variables se definen en .zprofile porque:
+# - Se inicia sesión en TTY -> zsh se ejecuta como login shell
+# - .zprofile se carga exclusivamente en shells de login
+# - Se lanza Sway con 'exec sway' desde ese mismo shell
+# - exec sway hereda el entorno completo al compositor y a todas las aplicaciones hijas
+
+#          █   █
+# █▄█ ▀▀█  █   █  █▀█ ▀▀█ █▀█ ███ █▀▀
+# ███ ███  █▄  █▄ █▄█ ███ █▄█ █▄▄ █
+#                 █       █
 # Directorio estándar en $HOME para almacenar los
 # fondos de pantalla gestionados por el dotfile kasumi
 export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
+
+#      ▄       █▀  ▀
+# █▀█ ▀█▀     ▀█▀  █  ▀▄▀ ███ █▀▀
+# █▄█  █▄      █   █  ▄▀▄ █▄▄ ▄▄█
+#   █
+# Forzar backend XCB ->mejor compatibilidad y Auto-Type en Wayland
+# DPI lógico para fuentes más legibles sin escalado extremo
+export QT_QPA_PLATFORM=xcb
+export QT_FONT_DPI=120
