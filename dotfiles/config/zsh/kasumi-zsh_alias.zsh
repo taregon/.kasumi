@@ -1,12 +1,8 @@
 # Ruta .config/zsh/zalias
 # Para revertir los alias (o sea ver como estan compuestos)
 # utilizar el comando type <alias>, ejemplo: type exa.
-#        __         _
-#  ___ _/ /____ _  (_)__  ___
-# / _ `/ __/ _ `/ / / _ \(_-<
-# \_,_/\__/\_,_/_/ /\___/___/
-#             |___/
-#
+
+# ── POWER USER V2 ───────────────────────────────────────────
 alias a_miniscula="tr '[:upper:]' '[:lower:]'"
 alias chao="reboot -h now"
 alias clima='curl wttr.in'
@@ -79,19 +75,10 @@ alias man='TERM=xterm-256color man' # Fix para less roto con xterm-kitty
 # Para inspeccionar intentos fallidos en tiempo real:
 alias F="faillock --reset"
 
-#    ___                     ____         __
-#   / _/_ ________ __ ______/ _(_)__  ___/ /__ ____
-#  / _/ // /_ /_ // // /___/ _/ / _ \/ _  / -_) __/
-# /_/ \_,_//__/__/\_, /   /_//_/_//_/\_,_/\__/_/
-#                /___/
-#
+# ── FZF ─────────────────────────────────────────────────────
 alias fh="history | fzf +s --tac"
-#
-#    ___  ___ _    _____ __________ _____ ___ ____
-#   / _ \/ _ \ |/|/ / -_) __/___/ // (_-</ -_) __/
-#  / .__/\___/__,__/\__/_/      \_,_/___/\__/_/
-# /_/
-#
+
+# ── POWER USER ──────────────────────────────────────────────
 alias dmesg="dmesg --ctime --follow"
 alias exa="exa --icons --group-directories-first --sort=newest --git --links --header -aglmr"
 alias figlet="figlet -f smshadow"
@@ -104,36 +91,38 @@ alias rm='nocorrect rm -Iv'
 # alias ssh="TERM=xterm kitty +kitten ssh"
 alias stat-date="stat --printf '%w\t%n\n'"
 alias unimatrix="unimatrix -c yellow -l ns -af"
+alias ka-df="df -hT -x tmpfs -x devtmpfs -x efivarfs"
+alias ka-bench-nvim="nvim --startuptime /tmp/nvim.log +q && tail -n 20 /tmp/nvim.log | bat --paging=never -l log"
 
-alias wg3t='wget \
-    --progress=bar:force \
-    --rejected-log=wget.log \
-    --random-wait \
-    --retry-connrefused \
-    --timeout=30 \
-    --tries=5 \
-    --user-agent="$IXOS_USER_AGENT" \
-    --waitretry=5 \
-    -c \
-'
-alias wget-beta='wget \
-    --content-disposition \
-    --ignore-length \
-    --no-check-certificate \
-    --no-verbose \
-    --output-file=wget.log \
-    --progress=bar:force \
-    --random-wait \
-    --retry-connrefused \
-    --show-progress \
-    --timeout=30 \
-    --tries=5 \
-    --trust-server-names \
-    --user-agent="$IXOS_USER_AGENT" \
-    --waitretry=5 \
-    -c \
-    -w 8 \
-'
+alias wg3t="wget \
+--progress=bar:force \
+--rejected-log=wget.log \
+--random-wait \
+--retry-connrefused \
+--timeout=30 \
+--tries=5 \
+--user-agent="$IXOS_USER_AGENT" \
+--waitretry=5 \
+-c \
+"
+alias wget-beta="wget \
+--content-disposition \
+--ignore-length \
+--no-check-certificate \
+--no-verbose \
+--output-file=wget.log \
+--progress=bar:force \
+--random-wait \
+--retry-connrefused \
+--show-progress \
+--timeout=30 \
+--tries=5 \
+--trust-server-names \
+--user-agent="$IXOS_USER_AGENT" \
+--waitretry=5 \
+-c \
+-w 8 \
+"
 
 alias statf='stat --printf "  Fichero: %n
 E/S: %o\t%F
@@ -146,15 +135,11 @@ Modificación: %y
 
 alias mako-restore="for i in {1..20}; do makoctl restore; done"
 
-#               __                    _      __
-#    ___  __ __/ /_____ ___________ _(_)__  / /  ___ _    _____
-#   / _ \/ // /  '_/ -_)___/ __/ _ `/ / _ \/ _ \/ _ \ |/|/ / _ \
-    #  / .__/\_,_/_/\_\\__/   /_/  \_,_/_/_//_/_.__/\___/__,__/_//_/
-# /_/
-#
+# ── PUKE RAINBOW ────────────────────────────────────────────
 #alias df="grc df -H --total --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs"
 alias bat="bat --color=always --italic-text=always --style=plain --paging=never"
 alias cdu="cdu -rsi -dh"
+alias df="df -hT -x tmpfs -x devtmpfs -x efivarfs"
 alias df="grc df -H --total --exclude-type=devtmpfs --exclude-type=squashfs"
 alias dfc="dfc -T -dw -t -squashfs -q mount"
 alias dig="grc dig"
@@ -166,18 +151,15 @@ alias last="grc last -12axw"
 alias lsblk="grc lsblk -o NAME,TYPE,MODEL,SIZE,FSTYPE,PARTTYPENAME,MOUNTPOINTS,LABEL -e 7"
 alias netstat="grc netstat"
 alias ping="grc ping"
+alias ports="netstat -tunalp"
 alias ps="grc ps"
 alias sensors="grc sensors"
 alias stat="grc stat"
 alias tail="grc tail"
 alias w="grc w --ip-addr"
 alias whois="grc whois"
-alias ports="netstat -tunalp"
-#            __             __          __
-#  _______  / /__  ________/ /____ ___ / /_
-# / __/ _ \/ / _ \/ __/___/ __/ -_|_-</ __/
-# \__/\___/_/\___/_/      \__/\__/___/\__/
-#
+
+# ── COLOR TEST ──────────────────────────────────────────────
 alias colortest-0="curl -sL https://tinyurl.com/3dhra5dr -o - | sh"
 alias colortest-1="curl -s https://raw.githubusercontent.com/stark/Color-Scripts/master/color-scripts/colortest -o - | sh"
 alias colortest-2="curl -s https://raw.githubusercontent.com/stark/Color-Scripts/master/color-scripts/colorview -o - | sh"
@@ -190,22 +172,15 @@ alias colortest-panes="curl -s https://raw.githubusercontent.com/stark/Color-Scr
 alias colortest-skull="curl -s https://raw.githubusercontent.com/stark/Color-Scripts/master/color-scripts/pukeskull -o - | sh"
 alias colortest-space="curl -s https://raw.githubusercontent.com/stark/Color-Scripts/master/color-scripts/space-invaders -o - | sh"
 alias colortest-unowns="curl -s https://raw.githubusercontent.com/stark/Color-Scripts/master/color-scripts/unowns.py -o - | python"
-#       _                         __    __  __
-#      (_)__  __ _________  ___ _/ /___/ /_/ /
-#     / / _ \/ // / __/ _ \/ _ `/ / __/ __/ /
-#  __/ /\___/\_,_/_/ /_//_/\_,_/_/\__/\__/_/
-# |___/
-#
+
+# ── JOURNAL ─────────────────────────────────────────────────
 alias journalctl-fail="journalctl --no-pager --since "yesterday" --until "today" -p 3 -o json | jq '._EXE' | sort | uniq -c | sort -rn"
 alias journalctl-kernel="journalctl -f -k -o cat"
 alias journalctl-lastboot="journalctl -b -1 -p 0..3"
 alias journalctl-ssh="journalctl -f _COMM=sshd"
 alias journalctl="grc journalctl -f"
-#             __                          __
-#  _  _____  / /______ ___  __ _____  ___/ /
-# | |/ / _ \/ /___(_-</ _ \/ // / _ \/ _  /
-# |___/\___/_/   /___/\___/\_,_/_//_/\_,_/
-#
+
+# ── VOLUMEN ─────────────────────────────────────────────────
 alias v-='amixer -q set Master 1%-'
 alias v+='amixer -q set Master 1%+'
 alias v--='amixer -q set Master 15%-'
@@ -222,12 +197,8 @@ alias v7='amixer -q set Master 70%'
 alias v8='amixer -q set Master 80%'
 alias v9='amixer -q set Master 90%'
 alias vmax='amixer -q set master 100%'
-#         __         ____
-#   __ __/ /________/ / /__
-#  / // / __/___/ _  / / _ \
-    #  \_, /\__/    \_,_/_/ .__/
-# /___/              /_/
-#
+
+# ── YT-DLP ──────────────────────────────────────────────────
 alias yt-720='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-filenames 125 -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s" -f "bv[height=720][ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias yt-1080='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-filenames 125 -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s" -f "bv[height=1080][ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias yt-dlp='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-filenames 125 -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s"'
