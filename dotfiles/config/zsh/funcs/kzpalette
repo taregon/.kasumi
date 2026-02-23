@@ -1,0 +1,12 @@
+# vim: filetype=zsh
+
+kitty @ get-colors | awk '
+  /^color[0-9]+/ {
+    idx = substr($1,6)
+    hex = $2
+    gsub("#","",hex)
+    r = strtonum("0x" substr(hex,1,2))
+    g = strtonum("0x" substr(hex,3,2))
+    b = strtonum("0x" substr(hex,5,2))
+    printf "\033[48;2;%d;%d;%dm %3s \033[0m  color%-3s  #%s\n", r,g,b, idx, idx, hex
+  }'
