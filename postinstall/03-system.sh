@@ -126,7 +126,7 @@ install_app_docs() {
 }
 
 install_app_editor() {
-    echo ">> Instalando editor de texto"
+    echo ">> Instalando editores de texto"
     local pkgs=(
         luarocks        # Gestor de paquetes para Lua (plugins de nvim)
         neovim          # Editor de texto/IDE ligero
@@ -134,6 +134,11 @@ install_app_editor() {
         nodejs          # Requerido por VSCode y plugins de nvim
         npm             # Gestor de paquetes para Node.js
         tree-sitter-cli # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
+
+        # Editores adicionales
+        obsidian               # Editor de notas en Markdown enfocado en conocimiento (AUR)
+        visual-studio-code-bin # Editor/IDE completo y extensible (AUR)
+        xed                    # Editor de texto simple y ligero (MATE)
     )
     instalar "${pkgs[@]}"
 }
@@ -174,11 +179,6 @@ install_app_general() {
         spek-x-git    # Analizador visual de frecuencias en archivos de audio
         syncthing     # Sincronización privada y cifrada entre dispositivos
         upscayl-bin   # Mejora y reescalado de imágenes con IA
-
-        # Editores
-        obsidian               # Editor de notas en Markdown enfocado en conocimiento (AUR)
-        visual-studio-code-bin # Editor/IDE completo y extensible (AUR)
-        xed                    # Editor de texto simple y ligero (MATE)
     )
     instalar "${pkgs[@]}"
 
@@ -377,11 +377,11 @@ mostrar_menu() {
     echo -e "\e[36m = = = Instalador de Paquetes (con paru) = = =\e[0m"
     # Opciones en amarillo + texto normal
     echo -e "\e[33m1)\e[0m Preparar sistema (\e[31mObligatorio\e[0m)"
-    echo -e "\e[33m2)\e[0m Herramientas del sistema y utilidades Wayland"
-    echo -e "\e[33m3)\e[0m Editores y herramientas de desarrollo"
-    echo -e "\e[33m4)\e[0m Administración de archivos y multimedia"
+    echo -e "\e[33m2)\e[0m Utilidades del sistema y Wayland"
+    echo -e "\e[33m3)\e[0m Editores de texto"
+    echo -e "\e[33m4)\e[0m Navegador, archivos y multimedia"
     echo -e "\e[33m5)\e[0m Fuentes y temas"
-    echo -e "\e[33m6)\e[0m Herramientas de red e Internet"
+    echo -e "\e[33m6)\e[0m Redes e Internet"
     echo -e "\e[33m7)\e[0m Terminal y documentación"
     echo -e "\e[33m8)\e[0m INSTALAR TODO"
     echo -e "\e[33m0)\e[0m Salir"
