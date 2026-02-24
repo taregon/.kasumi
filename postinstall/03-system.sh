@@ -12,6 +12,12 @@ set -e          # Detiene el script si ocurre un error
 set -u          # Error si se usa una variable no declarada
 set -o pipefail # Propaga errores en tuberías
 
+# Determina el usuario real que ejecuta el script:
+# - Usa SUDO_USER si se invocó con sudo
+# - Si no, recurre a logname (usuario de sesión)
+# - Como último recurso, toma la variable $USER
+REAL_USER="${SUDO_USER:-$(logname 2> /dev/null || echo "$USER")}"
+
 # Elevación automática de privilegios:
 # relanza con sudo si no es root
 if [[ $EUID -ne 0 ]]; then
@@ -19,13 +25,18 @@ if [[ $EUID -ne 0 ]]; then
     exec sudo -- "$0" "$@"
 fi
 
-# PEND: Mantener viva la sesión sudo mientras el script corre
-# (while true; do
-#     sudo -v
-#     sleep 60
-# done) 2> /dev/null &
-# SUDO_KEEPALIVE_PID=$!
-# trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
+# Mantiene activa la sesión sudo mientras el script se ejecuta:
+# - Lanza un proceso en segundo plano que renueva sudo cada 60s
+# - Guarda el PID del proceso auxiliar
+# - Al salir del script, mata el proceso para limpiar correctamente
+(
+    while true; do
+        sudo -v
+        sleep 60
+    done
+) 2> /dev/null &
+SUDO_KEEPALIVE_PID=$!
+trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
 
 # Confirmación interactiva antes de aplicar cambios en el sistema
 confirmar() {
