@@ -60,8 +60,8 @@ instalar() {
 # ╘════════════════════════════════════════════════════════════╛
 update_mirror() {
     echo ">> Estableciendo los 20 mirrors más rápidos"
-    sudo pacman -S --needed reflector
-    sudo reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+    pacman -S --needed reflector
+    reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
     echo ">> ACTUALIZACIÓN DE MIRRORS COMPLETADA"
 }
 
@@ -79,7 +79,7 @@ prepare_system() {
     fi
 
     echo ">> Actualizando el sistema"
-    sudo pacman -Syu
+    pacman -Syu
 
     echo ">> Verificando configuración de idioma y teclado"
     localectl status
