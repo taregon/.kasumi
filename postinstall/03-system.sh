@@ -70,32 +70,32 @@ update_mirror() {
 # ╘════════════════════════════════════════════════════════════╛
 # Verificación del entorno y condiciones previas de instalación
 prepare_system() {
-    echo ">> Comprobando conexión a Internet"
+    echo "  Comprobando conexión a Internet"
     if ping -c 1 archlinux.org &> /dev/null; then
-        echo "✅ Conexión activa"
+        echo "  Conexión activa"
     else
-        echo "⚠️ No hay conexión a Internet. Revisa tu red antes de continuar."
+        echo "  No hay conexión a Internet. Revisa tu red antes de continuar."
         return 1
     fi
 
-    echo ">> Actualizando el sistema"
+    echo "  Actualizando el sistema"
     pacman -Syu
 
-    echo ">> Verificando configuración de idioma y teclado"
+    echo "  Verificando configuración de idioma y teclado"
     localectl status
 
-    echo ">> Verificando disponibilidad de paru"
+    echo "  Verificando disponibilidad de paru"
     if ! command -v paru &> /dev/null; then
-        echo "⚠️ Paru no está instalado. Se recomienda instalarlo antes de continuar."
+        echo "  Paru no está instalado. Se recomienda instalarlo antes de continuar."
         return 1
     fi
 
-    echo ">> Comprobando sincronización de reloj"
+    echo "  Comprobando sincronización de reloj"
     timedatectl show | grep "NTPSynchronized=yes" &> /dev/null || {
-        echo "⚠️ NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true"
+        echo "  NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true"
     }
 
-    echo ">> VERIFICACIÓN DEL SISTEMA COMPLETADA"
+    echo "  VERIFICACIÓN DEL SISTEMA COMPLETADA"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -188,26 +188,26 @@ install_app_general() {
 install_sys_fonts() {
     echo ">> Instalando fuentes y tipografías"
     local pkgs=(
-        noto-fonts
-        noto-fonts-cjk
-        noto-fonts-emoji
-        ttf-iosevka-nerd
-        ttf-jetbrains-mono-nerd
-        ttf-recursive-nerd
-        ttf-ubuntusans-nerd
-        ttf-ibm-plex
+        noto-fonts              # Fuentes noto (sans, serif, mono)
+        noto-fonts-cjk          # Fuentes noto para chino, japonés, coreano
+        noto-fonts-emoji        # Fuentes noto con emojis
+        ttf-iosevka-nerd        # Fuente monoespaciada con ligaduras (Iosevka)
+        ttf-jetbrains-mono-nerd # Fuente JetBrains Mono
+        ttf-recursive-nerd      # Fuente Recursive (variable)
+        ttf-ubuntusans-nerd     # Fuente Ubuntu Sans
+        ttf-ibm-plex            # Fuente IBM Plex (sans, mono, serif)
 
         # Fuentes de Windows
         # Este entra en conflicto con ttf-ms-fonts,
         # que a su vez es más básico (menos fuentes).
-        ttf-ms-win10-auto
+        ttf-ms-win10-auto # Fuentes de Windows 10
 
         # Fuentes opcionales
-        fontforge
-        ttf-alegreya-sans
-        ttf-pragmasevka-nerd-font
-        ttf-signika
-        ttf-sofia-sans
+        fontforge                 # Editor de fuentes abierto
+        ttf-alegreya-sans         # Fuente Alegreya Sans
+        ttf-pragmasevka-nerd-font # Fuente Pragmasevka
+        ttf-signika               # Fuente Signika
+        ttf-sofia-sans            # Fuente Sofia Sans
     )
     instalar "${pkgs[@]}"
 }
@@ -227,23 +227,23 @@ install_sys_network() {
 install_sys_theme() {
     echo ">> Instalando temas y elementos de estética"
     local pkgs=(
-        qt5-wayland # depende keepassxc
-        xdg-desktop-portal
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-wlr
-        gsettings-desktop-schemas
-        gtk-engine-murrine # Motor de temas GTK clásico
-        gtk-engines        # Motores de temas GTK adicionales
-        nwg-look           # Gestor de temas e iconos NWG
-        matcha-gtk-theme   # Tema GTK Matcha
-        arc-gtk-theme      # Tema GTK Arc
-        zukitwo-themes-git # Temas GTK Zukitwo (AUR)
+        arc-gtk-theme             # Tema GTK Arc
+        gsettings-desktop-schemas # Esquemas GSettings para escritorio
+        gtk-engine-murrine        # Motor de temas GTK clásico
+        gtk-engines               # Motores de temas GTK adicionales
+        matcha-gtk-theme          # Tema GTK Matcha
+        nwg-look                  # Gestor de temas e iconos NWG
+        qt5-wayland               # Bibliotecas Qt5 para Wayland
+        xdg-desktop-portal        # Portal de escritorio (interfaz de especificaciones)
+        xdg-desktop-portal-gtk    # Portal GTK
+        xdg-desktop-portal-wlr    # Portal parawlr (sway, river)
+        zukitwo-themes-git        # Temas GTK Zukitwo (AUR)
     )
     instalar "${pkgs[@]}"
 }
 
 install_sys_wayland() {
-    echo ">> Instalando herramientas del sistema y utilidades Wayland"
+    echo ">> Instalando herramientas del sistema"
     local pkgs=(
 
         # Monitoreo y sensores
@@ -259,17 +259,17 @@ install_sys_wayland() {
 
         # Conectividad y Bluetooth
         # blueman # Gestor gráfico de Bluetooth
-        blueberry
+        blueberry # Gestor de Bluetooth para XFCE
 
         # Seguridad y permisos
         polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
 
         # Entorno gráfico (Wayland)
         grim         # Captura de pantalla en Wayland
-        slurp        # Selección de región en Wayland
         hyprpicker   # Selector de color en Wayland
         mako         # Demonio de notificaciones para Wayland
         rofi         # Lanzador de aplicaciones y selector interactivo
+        slurp        # Selección de región en Wayland
         wl-clipboard # Utilidades de portapapeles en Wayland
         wlogout      # Menú minimalista de cierre de sesión
     )
@@ -322,7 +322,7 @@ install_utils_terminal() {
         bat                # Visor tipo cat con resaltado y soporte Git
         cdu                # Analizador interactivo de uso de disco (TUI)
         dotdrop            # Gestor de dotfiles con perfiles y plantillas
-        exa                # ls moderno con colores e iconos (obsoleto, reemplazado por lsd)
+        eza                # ls moderno con colores e iconos (reemplazo de exa)
         figlet             # Generador de texto en ASCII art
         figlet-fonts-extra # Fuentes adicionales para figlet
         fzf                # Buscador fuzzy interactivo
@@ -377,7 +377,7 @@ mostrar_menu() {
     echo -e "\e[36m = = = Instalador de Paquetes (con paru) = = =\e[0m"
     # Opciones en amarillo + texto normal
     echo -e "\e[33m1)\e[0m Preparar sistema (\e[31mObligatorio\e[0m)"
-    echo -e "\e[33m2)\e[0m Utilidades del sistema y Wayland"
+    echo -e "\e[33m2)\e[0m Utilidades del sistema"
     echo -e "\e[33m3)\e[0m Editores de texto"
     echo -e "\e[33m4)\e[0m Navegador, archivos y multimedia"
     echo -e "\e[33m5)\e[0m Fuentes y temas"
