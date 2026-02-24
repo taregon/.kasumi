@@ -188,11 +188,14 @@ install_misc_tools() {
 install_sys_fonts() {
     echo ">> Instalando fuentes y tipografías"
     local pkgs=(
+        noto-fonts
         noto-fonts-cjk
         noto-fonts-emoji
         ttf-iosevka-nerd
         ttf-jetbrains-mono-nerd
         ttf-recursive-nerd
+        ttf-ubuntusans-nerd
+        ttf-ibm-plex
 
         # Fuentes de Windows
         # Este entra en conflicto con ttf-ms-fonts,
@@ -224,6 +227,11 @@ install_sys_network_manager() {
 install_sys_theme() {
     echo ">> Instalando temas y elementos de estética"
     local pkgs=(
+        qt5-wayland # depende keepassxc
+        xdg-desktop-portal
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-wlr
+        gsettings-desktop-schemas
         gtk-engine-murrine # Motor de temas GTK clásico
         gtk-engines        # Motores de temas GTK adicionales
         nwg-look           # Gestor de temas e iconos NWG
