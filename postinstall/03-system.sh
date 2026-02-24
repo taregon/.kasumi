@@ -182,7 +182,7 @@ install_misc_tools() {
     )
     instalar "${pkgs[@]}"
 
-    systemctl --user enable --now syncthing.service
+    sudo -u "$REAL_USER" systemctl --user enable --now syncthing.service
 }
 
 install_sys_fonts() {
@@ -221,7 +221,7 @@ install_sys_network_manager() {
     )
     instalar "${pkgs[@]}"
 
-    sudo systemctl enable --now NetworkManager
+    systemctl enable --now NetworkManager
 }
 
 install_sys_theme() {
@@ -348,7 +348,7 @@ install_utils_terminal() {
     )
     instalar "${pkgs[@]}"
 
-    systemctl --user enable --now ssh-agent.service
+    sudo -u "$REAL_USER" systemctl --user enable --now ssh-agent.service
 
     echo "  Cambiando shell predeterminada a zsh..."
     chsh -s "$(which zsh)" "$REAL_USER"
