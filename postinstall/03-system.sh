@@ -343,18 +343,18 @@ install_utils_terminal() {
     systemctl --user enable --now ssh-agent.service
 
     echo "  Cambiando shell predeterminada a zsh..."
-    chsh -s "$(which zsh)"
+    chsh -s "$(which zsh)" "$REAL_USER"
 
-    echo "  Usuario $USER agregado al grupo input" # requerido para módulos de waybar
-    sudo usermod -aG input "$USER"
+    echo "  Usuario $REAL_USER agregado al grupo input" # requerido para módulos de waybar
+    usermod -aG input "$REAL_USER"
 
     # Verificar que el grupo fuse exista
     if ! getent group fuse > /dev/null; then
-        sudo groupadd fuse
+        groupadd fuse
     fi
 
-    echo "  Usuario $USER agregado al grupo fuse" # requerido para módulos de waybar
-    sudo usermod -a -G fuse "$USER"
+    echo "  Usuario $REAL_USER agregado al grupo fuse" # requerido para módulos de waybar
+    usermod -aG fuse "$REAL_USER"
 
     echo "  Reinicia la sesión para aplicar el cambio de shell"
 }
