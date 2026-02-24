@@ -101,8 +101,8 @@ prepare_system() {
 # ╒════════════════════════════════════════════════════════════╕
 # │                    FUNCIONES POR ÁREAS                     │
 # ╘════════════════════════════════════════════════════════════╛
-install_app_luakit() {
-    echo ">> Instalando Luakit y complementos multimedia"
+install_app_browser() {
+    echo ">> Instalando navegador y complementos multimedia"
     local pkgs=(
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
         gst-plugins-bad  # Plugins GStreamer menos comunes, algunos experimentales
@@ -115,7 +115,7 @@ install_app_luakit() {
     instalar "${pkgs[@]}"
 }
 
-install_app_man() {
+install_app_docs() {
     echo ">> Instalando documentación y manuales"
     local pkgs=(
         man          # Comando man
@@ -125,8 +125,8 @@ install_app_man() {
     instalar "${pkgs[@]}"
 }
 
-install_app_neovim() {
-    echo ">> Instalando editor nvim"
+install_app_editor() {
+    echo ">> Instalando editor de texto"
     local pkgs=(
         luarocks        # Gestor de paquetes para Lua (plugins de nvim)
         neovim          # Editor de texto/IDE ligero
@@ -138,8 +138,8 @@ install_app_neovim() {
     instalar "${pkgs[@]}"
 }
 
-install_app_ranger() {
-    echo ">> Instalando ranger y complementos"
+install_app_cli_fm() {
+    echo ">> Instalando gestor de archivos CLI"
     local pkgs=(
         atool               # Manejo de archivos comprimidos desde CLI
         imagemagick         # Conversión y procesamiento de imágenes
@@ -155,7 +155,7 @@ install_app_ranger() {
     instalar "${pkgs[@]}"
 }
 
-install_app_zathura() {
+install_app_pdf() {
     echo ">> Instalando visor PDF y complementos OCR"
     local pkgs=(
         zathura            # Visor de documentos ligero
@@ -166,8 +166,8 @@ install_app_zathura() {
     instalar "${pkgs[@]}"
 }
 
-install_misc_tools() {
-    echo ">> Instalando herramientas varias"
+install_app_general() {
+    echo ">> Instalando aplicaciones generales"
     local pkgs=(
         keepassxc     # Gestor de contraseñas local con base de datos cifrada
         localsend-bin # Compartir archivos en red local sin configuración compleja
@@ -212,7 +212,7 @@ install_sys_fonts() {
     instalar "${pkgs[@]}"
 }
 
-install_sys_network_manager() {
+install_sys_network() {
     echo ">> Instalando NetworkManager y complementos"
     local pkgs=(
         networkmanager         # Servicio principal para gestionar redes
@@ -242,7 +242,7 @@ install_sys_theme() {
     instalar "${pkgs[@]}"
 }
 
-install_sys_tools() {
+install_sys_wayland() {
     echo ">> Instalando herramientas del sistema y utilidades Wayland"
     local pkgs=(
 
@@ -276,8 +276,8 @@ install_sys_tools() {
     instalar "${pkgs[@]}"
 }
 
-install_utils_compression() {
-    echo ">> Instalando herramientas de compresión más comunes"
+install_utils_compress() {
+    echo ">> Instalando herramientas de compresión"
     local pkgs=(
         engrampa # GUI MATE para archivos comprimidos
         p7zip    # .7z
@@ -292,7 +292,7 @@ install_utils_compression() {
     instalar "${pkgs[@]}"
 }
 
-install_utils_file_management() {
+install_utils_files() {
     echo ">> Instalando herramientas de archivos y multimedia"
     local pkgs=(
         exfatprogs    # Herramientas para exFAT (moderno)
@@ -399,19 +399,20 @@ main() {
             ;;
         2)
             confirmar
-            install_misc_tools
-            install_sys_tools
+            install_app_general
+            install_sys_wayland
             ;;
         3)
             confirmar
-            install_app_neovim
+            install_app_editor
             ;;
         4)
             confirmar
-            install_app_luakit
-            install_app_ranger
-            install_app_zathura
-            install_utils_file_management
+            install_app_browser
+            install_app_cli_fm
+            install_app_pdf
+            install_utils_files
+            install_utils_compress
             ;;
         5)
             confirmar
@@ -420,28 +421,29 @@ main() {
             ;;
         6)
             confirmar
-            install_sys_network_manager
+            install_sys_network
             ;;
         7)
             confirmar
-            install_app_man
+            install_app_docs
             install_utils_terminal
             ;;
         8)
             confirmar
             prepare_system
             update_mirror
-            install_app_luakit
-            install_app_man
-            install_app_neovim
-            install_app_ranger
-            install_app_zathura
-            install_misc_tools
+            install_app_browser
+            install_app_docs
+            install_app_editor
+            install_app_cli_fm
+            install_app_pdf
+            install_app_general
             install_sys_fonts
-            install_sys_network_manager
+            install_sys_network
             install_sys_theme
-            install_sys_tools
-            install_utils_file_management
+            install_sys_wayland
+            install_utils_compress
+            install_utils_files
             install_utils_terminal
             ;;
         0)
