@@ -204,3 +204,8 @@ alias yt-1080='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-f
 alias yt-dlp='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-filenames 125 -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s"'
 alias yt-mp3='yt-dlp -f ba -x --audio-format mp3'
 alias yt-update="python3 -m pip install -U yt-dlp"
+# ────────────────────────────────────────────────────────────
+alias lsd="eza --group-directories-first --icons=auto"
+alias lsD="eza -al --follow-symlinks --git --mounts --header --group-directories-first --sort=type --icons=auto"
+alias lst="eza --tree -l --follow-symlinks --mounts --header --smart-group --group-directories-first --icons=never --no-user --no-permissions --no-time --no-filesize"
+alias lsT="eza --tree -l --follow-symlinks --mounts --header --smart-group --icons=auto --sort=extension --no-permissions --no-time --git"

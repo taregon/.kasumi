@@ -4,6 +4,7 @@
 # ╚════██║██║███╗██║██╔══██║  ╚██╔╝
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
+# Los atajos de teclado se encuentran en sway.d/
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │         NOTA: SINCRONIZACIÓN DE VARIABLES DE ENTORNO        │
@@ -36,9 +37,9 @@
 # exec wl-paste --type text --watch cliphist store
 # exec ~/.config/sway/scripts/bg_random_auto
 
-# ╒═════════════════════════════════════════════════════════════╕
-# │                          VARIABLES                          │
-# ╘═════════════════════════════════════════════════════════════╛
+# ── VARIABLES ─────────────────────────────────────────────────
+  floating_modifier $mod
+
   set $mod   Mod4
 
   set $left  h
@@ -46,72 +47,31 @@
   set $up    k
   set $right l
 
-  set $launcher rofi -show drun
-  set $term kitty
-  set $music ~/.config/sway/scripts/rofi_music
-  set $colorpicker hyprpicker --autocopy
   set $browser firefox
+  set $colorpicker hyprpicker --autocopy
   set $filemanager thunar
+  set $launcher rofi -show drun
+  set $music ~/.config/sway/scripts/rofi_music
+  set $term kitty
 
-  floating_modifier $mod
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │                      ATAJOS DE TECLADO                      │
-# ╘═════════════════════════════════════════════════════════════╛
-#bindsym XF86AudioLowerVolume exec ~/.config/sway/scripts/volume --dec
-#bindsym XF86AudioMute exec ~/.config/sway/scripts/volume --toggle
-#bindsym XF86AudioNext exec playerctl next
-#bindsym XF86AudioPlay exec playerctl play-pause
-#bindsym XF86AudioPrev exec playerctl previous
-#bindsym XF86AudioRaiseVolume exec ~/.config/sway/scripts/volume --inc
-#bindsym XF86AudioStop exec playerctl stop
-  bindsym $mod+Alt+e            exec ~/.config/sway/scripts/rofi_powermenu
-  bindsym $mod+Alt+r            reload
-  bindsym $mod+Print            exec ~/.config/sway/scripts/rofi_screenrecord
-  bindsym $mod+Return           exec $term
-  bindsym $mod+Shift+q          kill
-  # bindsym $mod+c                exec $browser
-  bindsym $mod+grave            exec ~/.config/sway/scripts/keybind
-# REVISAR: atajo de música, pues llama rofi
-  bindsym $mod+m                exec $music
-  bindsym $mod+p                exec $colorpicker
-  bindsym $mod+r                mode "resize"
-  bindsym $mod+t                exec $filemanager
-  bindsym $mod+n                exec $launcher
-  bindsym Print                 exec ~/.config/sway/helpers/screenshot-region
-  bindsym XF86MonBrightnessDown exec ~/.config/sway/scripts/backlight --dec
-  bindsym XF86MonBrightnessUp   exec ~/.config/sway/scripts/backlight --inc
-  bindsym $mod+c                exec wl-copy < %f
-# Lock screen
-# bindsym $mod+l exec hyprlock
-# exec /usr/bin/lxpolkit
-# exec nm-applet --indicator
-# nm-applet
-
-# ╒═════════════════════════════════════════════════════════════╕
-# │                       Barra de estado                       │
-# ╘═════════════════════════════════════════════════════════════╛
+# ── BARRA DE ESTADO ───────────────────────────────────────────
   bar {
-  swaybar_command waybar
+      swaybar_command waybar
   }
 
-# ╒═════════════════════════════════════════════════════════════╕
-# │                   Distribución de Teclado                   │
-# ╘═════════════════════════════════════════════════════════════╛
+# ── DISTRIBUCIÓN DE TECLADO ───────────────────────────────────
   input type:keyboard {
-  xkb_layout  latam,us
-  xkb_options grp:alt_shift_toggle
+      xkb_layout  latam,us
+      xkb_options grp:alt_shift_toggle
   }
 
-# ╒═════════════════════════════════════════════════════════════╕
-# │                 Configuraciones Adicionales                 │
-# ╘═════════════════════════════════════════════════════════════╛
+# ── CONFIGURACIONES ADICIONALES ───────────────────────────────
 # No muevas esta sección o sino cuando cargue la configuración,
 # no sabrán que teclas asignaste
 #
   include ~/.config/sway/sway.d/appearance.conf
   include ~/.config/sway/sway.d/autostart.conf
-  include ~/.config/sway/sway.d/keybinds-navigation.conf
-  include ~/.config/sway/sway.d/keybinds-resize.conf
-  include ~/.config/sway/sway.d/windows-floating.conf
-  include ~/.config/sway/sway.d/workspaces.conf
+  include ~/.config/sway/sway.d/keybinds.conf
+  include ~/.config/sway/sway.d/keybinds-apps.conf
+  include ~/.config/sway/sway.d/keybinds-system.conf
+  include ~/.config/sway/sway.d/window-rules.conf
