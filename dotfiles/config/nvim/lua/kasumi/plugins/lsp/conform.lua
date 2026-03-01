@@ -62,10 +62,15 @@ require("conform").setup({
 		ruff_format = {
 			args = { "format", "-" },
 		},
+		-- ────────────────────────────────────────────────────────────
+		xmlformatter = {
+			command = "xmlformat",
+			args = { "--indent", "4", "-" },
+		},
 	},
+	-- stylua: ignore
 	formatters_by_ft = {
-		-- stylua: ignore start
-		["*"]    = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
+		["*"] = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
 		conf     = { "awk" },
 		css      = { "prettierd" },
 		graphql  = { "prettierd" },
@@ -79,9 +84,9 @@ require("conform").setup({
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
 		toml     = { "taplo" },
+		xml      = { "xmlformatter" },
 		yaml     = { "yamlfix" }, -- yamlfix preserva los comentarios
 		zsh      = { "beautysh" }, --
-		-- stylua: ignore end
 	},
 	default_format_opts = {
 		lsp_format = "fallback",
