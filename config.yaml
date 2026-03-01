@@ -133,18 +133,27 @@ dotfiles:
   d_lnav:
     src: config/lnav/configs/installed
     dst: ~/.config/lnav/configs/installed
-    link: nolink
+    link: absolute
     chmod: '750'
   f_lnav:
     src: config/lnav/config.json
     dst: ~/.config/lnav/config.json
-    link: nolink
+    link: absolute
     chmod: '600'
+  f_fonts:
+    src: config/fontconfig/
+    dst: ~/.config/fontconfig/
+    link: absolute
+  d_lf:
+    src: config/lf
+    dst: ~/.config/lf
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
       - d_git
       - d_gotop
+      - d_lf
       - d_mako
       - d_rofi
       - d_vivid
@@ -167,6 +176,7 @@ profiles:
       - d_lnav
       - d_neovim
       - d_zsh_functions
+      - f_fonts
       - f_lnav
       - f_ssh
       - f_starttree
