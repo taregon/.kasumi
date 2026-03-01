@@ -45,7 +45,7 @@ codecompanion.setup({
 			-- parameters = { sync = true },
 		},
 	},
-    -- WARN: Strategies es el término antiguo que fue renombrado a interactions
+    -- NOTA: El término "strategies" (que seguirás viendo en ayudas) fue renombrado a "interactions"
     -- y puede aparecer en ejemplos o configuraciones heredadas.
     -- stylua: ignore
 	interactions = {
