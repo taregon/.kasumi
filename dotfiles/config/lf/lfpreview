@@ -1,52 +1,65 @@
 #!/bin/sh
 
+# Argumentos recibidos de lf: archivo, ancho, alto, posición x, posición y
 file="$1"
 w="$2"
 h="$3"
 x="$4"
 y="$5"
 
+# DIBUJAR IMÁGENES USANDO EL PROTOCOLO KITTY
 draw() {
     kitty +kitten icat --silent --stdin no --transfer-mode memory \
         --place "${w}x${h}@${x}x${y}" "$1" < /dev/null > /dev/tty
 }
 
+# Obtiene el tipo MIME del archivo
+# --mime-type para contenido real,
+# -L para seguir symlinks,
+# -b para output breve
 mime=$(file -Lb --mime-type "$file")
 
+# Selecciona el método de previsualización según el tipo de archivo
 case "$mime" in
+    # ────────────────────────< Imágenes: >──────────────────────
+    # muestra directamente
     image/*)
         draw "$file"
         ;;
+    # ───────────────────────────< PDFs >───────────────────────────
+    # Convierte la primera página a JPEG (cache para evitar reconversión)
     application/pdf)
-        # Primera página como JPEG (mejor que PPM para calidad/tamaño)
         cache="/tmp/lf-pdf-$(stat -c '%i' "$file").jpg"
         [ ! -f "$cache" ] && pdftoppm -jpeg -f 1 -singlefile "$file" "${cache%.jpg}"
         draw "$cache"
         ;;
+    # ──────────────────────────< Videos >──────────────────────────
+    # Genera un thumbnail estático (cache para evitar reprocesamiento)
     video/*)
         thumb="/tmp/lf-thumb-$(stat -c '%i' "$file").jpg"
 
-        if [ ! -f "$thumb" ]; then
-            generate_thumb() {
-                ffmpeg -y -ss "$1" -i "$file" -vframes 1 -q:v 2 "$thumb" > /dev/null 2>&1
-            }
+        # Genera thumbnail desde un frame específico
+        generate_thumb() {
+            ffmpeg -y -ss "$1" -i "$file" -vf "thumbnail=n=310,scale=800:-1" -frames:v 1 -q:v 2 -update 1 "$thumb" > /dev/null 2>&1
+        }
 
-            duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file" 2>/dev/null)
+        # Obtiene la duración del video
+        duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file" 2> /dev/null)
 
-            if [ -n "$duration" ] && [ "$(echo "$duration > 20" | bc)" -eq 1 ]; then
-                remaining=$(echo "$duration - 10" | bc)
-                mid=$(echo "$remaining / 2 + 10" | bc)
-                generate_thumb "$mid"
-            fi
-
-            [ ! -s "$thumb" ] && generate_thumb 10
+        # Videos largos (>20s): toma el frame del medio
+        if [ -n "$duration" ] && [ "$(echo "$duration > 20" | bc)" -eq 1 ]; then
+            remaining=$(echo "$duration / 2 - 10" | bc)
+            generate_thumb "$remaining"
         fi
+
+        # Si falla o el video es corto, usar el frame en el segundo 10
+        [ ! -s "$thumb" ] && generate_thumb 10
 
         [ -f "$thumb" ] && draw "$thumb"
         ;;
-
+    # ────────────────────< ARCHIVOS DE TEXTO: >────────────────────
+    # usa bat con sintaxis coloreada, fallback a cat
     *)
-        # Fallback a texto coloreado (mejor que less puro)
         bat --color=always --style=plain --paging=never "$file" 2> /dev/null || cat "$file"
         ;;
 esac
