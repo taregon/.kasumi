@@ -4,7 +4,7 @@
 # Uso: videosprite nombre_video.ext
 # Salida automática: nombre_video_sprite.png
 if [[ $# -ne 1 ]]; then
-    echo "Uso: videosprite <archivo_video>"
+    echo "Uso: kzvid-sprite <archivo_video>"
     echo "     Genera <nombre>_sprite.png con 25 miniaturas (5×5)"
     return 1
 fi
@@ -13,12 +13,12 @@ local input="$1"
 local output="${input:r}_sprite.png"
 
 if [[ ! -f "$input" ]]; then
-    echo "Error: El archivo '$input' no existe."
+    echo "  El archivo '$input' no existe."
     return 1
 fi
 
 if ! command -v ffmpeg >/dev/null 2>&1; then
-    echo "Error: ffmpeg no está instalado o no se encuentra en PATH."
+    echo "  ffmpeg no está instalado o no se encuentra en PATH."
     return 1
 fi
 
@@ -36,7 +36,7 @@ duration=$(ffprobe -v error -show_entries format=duration \
     -of default=noprint_wrappers=1:nokey=1 "$input" 2>/dev/null)
 
 if [[ -z "$duration" || ! "$duration" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-    echo "Error: No se pudo obtener la duración del video."
+    echo "  No se pudo obtener la duración del video."
     return 1
 fi
 
@@ -49,8 +49,9 @@ if (( $(echo "$interval < 1" | bc -l) )); then
     interval=1
 fi
 
-echo "Procesando '$input' → '$output'"
-echo "Duración detectada: ${duration}s | Intervalo: ~${interval}s | Miniaturas: ${total_thumbs}"
+echo
+echo "  Procesando '$input' → '$output'"
+echo "   Duración detectada: ${duration}s | Intervalo: ~${interval}s | Miniaturas: ${total_thumbs}"
 
 ffmpeg -i "$input" \
 -vf "fps=1/${interval}, \
@@ -64,8 +65,10 @@ ffmpeg -i "$input" \
     "$output"
 
 if [[ $? -eq 0 ]]; then
-    echo "Sprite sheet generado correctamente: $output"
+    echo
+    echo "  Sprite sheet generado correctamente: $output"
 else
-    echo "Error durante la ejecución de ffmpeg."
+    echo
+    echo "  Error durante la ejecución de ffmpeg."
     return 1
 fi
