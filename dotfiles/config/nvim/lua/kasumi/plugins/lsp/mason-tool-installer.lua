@@ -32,7 +32,7 @@ require("mason-tool-installer").setup({
 		-- Lua
 		"luacheck", -- Linter
 		"stylua", -- Formateador
-
+		"xmlformatter",
 		-- ────────────────────────< Markdown >────────────────────
 		"markdownlint", -- Linter
 
