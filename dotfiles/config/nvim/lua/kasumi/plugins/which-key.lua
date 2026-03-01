@@ -44,6 +44,7 @@ local grug_file_cursor = function()
 		prefills = {
 			search = vim.fn.expand("<cword>"),
 			paths = vim.fn.expand("%"),
+			flags = "--fixed-strings --word-regexp", -- activa coincidencia exacta
 		},
 	})
 end
