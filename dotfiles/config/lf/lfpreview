@@ -40,11 +40,19 @@ case "$mime" in
 
         # Genera thumbnail desde un frame específico
         generate_thumb() {
-            ffmpeg -y -ss "$1" -i "$file" -vf "thumbnail=n=310,scale=800:-1" -frames:v 1 -q:v 2 -update 1 "$thumb" > /dev/null 2>&1
+            ffmpeg -y -ss "$1" -i "$file" \
+                -vf "thumbnail=n=400,scale=800:-1" \
+                -frames:v 1 -q:v 2 -update 1 \
+                "$thumb" > /dev/null 2>&1
         }
 
         # Obtiene la duración del video
-        duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file" 2> /dev/null)
+        duration=$(
+            ffprobe -v error \
+                -show_entries format=duration \
+                -of default=noprint_wrappers=1:nokey=1 \
+                "$file" 2> /dev/null
+        )
 
         # Videos largos (>20s): toma el frame del medio
         if [ -n "$duration" ] && [ "$(echo "$duration > 20" | bc)" -eq 1 ]; then
