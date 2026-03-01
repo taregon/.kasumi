@@ -81,6 +81,7 @@ local function bullet_config()
 end
 
 require("render-markdown").setup({
+	enabled = true, -- Permite desactivar globalmente el plugin desde esta aquí
 	render_modes = { "n" },
 
 	bullet = bullet_config(), -- personaliza viñetas
