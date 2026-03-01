@@ -1,0 +1,71 @@
+# vim: filetype=zsh
+
+# Genera sprite sheet 5×5 a partir de un video
+# Uso: videosprite nombre_video.ext
+# Salida automática: nombre_video_sprite.png
+if [[ $# -ne 1 ]]; then
+    echo "Uso: videosprite <archivo_video>"
+    echo "     Genera <nombre>_sprite.png con 25 miniaturas (5×5)"
+    return 1
+fi
+
+local input="$1"
+local output="${input:r}_sprite.png"
+
+if [[ ! -f "$input" ]]; then
+    echo "Error: El archivo '$input' no existe."
+    return 1
+fi
+
+if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "Error: ffmpeg no está instalado o no se encuentra en PATH."
+    return 1
+fi
+
+# Parámetros fijos (estables y recomendados)
+local cols=5
+local rows=5
+local total_thumbs=$((cols * rows))          # 25
+local thumb_width=160
+local thumb_height=90
+local quality=3                              # q:v 3 → buena calidad PNG
+
+# Obtener duración en segundos con ffprobe (viene con ffmpeg)
+local duration
+duration=$(ffprobe -v error -show_entries format=duration \
+    -of default=noprint_wrappers=1:nokey=1 "$input" 2>/dev/null)
+
+if [[ -z "$duration" || ! "$duration" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Error: No se pudo obtener la duración del video."
+    return 1
+fi
+
+# Intervalo: duración total / (número de thumbs + 1) → evita último frame vacío
+# Aproximadamente uniforme, redondeado a 1 decimal
+local interval
+interval=$(awk "BEGIN {printf \"%.1f\", $duration / ($total_thumbs + 1)}")
+
+if (( $(echo "$interval < 1" | bc -l) )); then
+    interval=1
+fi
+
+echo "Procesando '$input' → '$output'"
+echo "Duración detectada: ${duration}s | Intervalo: ~${interval}s | Miniaturas: ${total_thumbs}"
+
+ffmpeg -i "$input" \
+-vf "fps=1/${interval}, \
+             scale=${thumb_width}:${thumb_height}:force_original_aspect_ratio=decrease, \
+             pad=${thumb_width}:${thumb_height}:(ow-iw)/2:(oh-ih)/2:black, \
+             setsar=1, \
+             tile=${cols}x${rows}" \
+    -frames:v 1 \
+    -update 1 \
+    -q:v ${quality} \
+    "$output"
+
+if [[ $? -eq 0 ]]; then
+    echo "Sprite sheet generado correctamente: $output"
+else
+    echo "Error durante la ejecución de ffmpeg."
+    return 1
+fi
