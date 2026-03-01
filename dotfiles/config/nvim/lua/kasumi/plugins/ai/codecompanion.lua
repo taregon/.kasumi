@@ -23,7 +23,7 @@ codecompanion.setup({
                     -- stylua: ignore
 					schema = {
 						-- Elige el modelo de IA que se cargará al inicio
-						model          = { default = "gemma3:4b-it-qat" },
+						model          = { default = "ministral-3:3b" },
 						-- Define cuánta memoria tiene la IA para recordar el chat y el código actual
 						num_ctx        = { default = 4096 },
 						-- Limita la longitud máxima de la respuesta para evitar textos infinitos
