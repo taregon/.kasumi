@@ -38,8 +38,6 @@
 # exec ~/.config/sway/scripts/bg_random_auto
 
 # ── VARIABLES ─────────────────────────────────────────────────
-  floating_modifier $mod
-
   set $mod   Mod4
 
   set $left  h
@@ -53,6 +51,8 @@
   set $launcher rofi -show drun
   set $music ~/.config/sway/scripts/rofi_music
   set $term kitty
+
+  floating_modifier $mod
 
 # ── BARRA DE ESTADO ───────────────────────────────────────────
   bar {
