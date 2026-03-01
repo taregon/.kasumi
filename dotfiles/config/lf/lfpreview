@@ -1,0 +1,54 @@
+#!/bin/sh
+
+file="$1"
+w="$2"
+h="$3"
+x="$4"
+y="$5"
+
+draw() {
+    kitty +kitten icat --silent --stdin no --transfer-mode memory \
+        --place "${w}x${h}@${x}x${y}" "$1" < /dev/null > /dev/tty
+}
+
+mime=$(file -Lb --mime-type "$file")
+
+case "$mime" in
+    image/*)
+        draw "$file"
+        ;;
+    application/pdf)
+        # Primera página como JPEG (mejor que PPM para calidad/tamaño)
+        cache="/tmp/lf-pdf-$(stat -c '%i' "$file").jpg"
+        [ ! -f "$cache" ] && pdftoppm -jpeg -f 1 -singlefile "$file" "${cache%.jpg}"
+        draw "$cache"
+        ;;
+    video/*)
+        thumb="/tmp/lf-thumb-$(stat -c '%i' "$file").jpg"
+
+        if [ ! -f "$thumb" ]; then
+            generate_thumb() {
+                ffmpeg -y -ss "$1" -i "$file" -vframes 1 -q:v 2 "$thumb" > /dev/null 2>&1
+            }
+
+            duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file" 2>/dev/null)
+
+            if [ -n "$duration" ] && [ "$(echo "$duration > 20" | bc)" -eq 1 ]; then
+                remaining=$(echo "$duration - 10" | bc)
+                mid=$(echo "$remaining / 2 + 10" | bc)
+                generate_thumb "$mid"
+            fi
+
+            [ ! -s "$thumb" ] && generate_thumb 10
+        fi
+
+        [ -f "$thumb" ] && draw "$thumb"
+        ;;
+
+    *)
+        # Fallback a texto coloreado (mejor que less puro)
+        bat --color=always --style=plain --paging=never "$file" 2> /dev/null || cat "$file"
+        ;;
+esac
+
+exit 1 # Impide el caché → redraw limpio en cada cambio

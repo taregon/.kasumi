@@ -1,0 +1,22 @@
+# Habilitar la columna de previsualización
+#set preview true
+
+# Usar ctpv como previewer
+#set previewer ctpv
+
+# Limpiar la previsualización al cambiar de archivo o salir
+#set cleaner ctpvclear
+
+# Opcional: ejecutar ctpv en segundo plano (mejora rendimiento)
+# &ctpv -s $id
+
+# Habilitar la columna de previsualización
+set preview true
+
+# Previewer (sin caché para evitar artefactos en tmux)
+set previewer ~/.config/lf/lfpreview
+
+# Forzar redraw completo tras cada selección (crucial en tmux)
+cmd on-select %{{
+    exec lf -remote "send $id redraw"
+}}
