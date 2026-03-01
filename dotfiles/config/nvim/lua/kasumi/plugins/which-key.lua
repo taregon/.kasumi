@@ -76,7 +76,7 @@ require("which-key").add({
 	-- ya no se muestran así que se activan por atajos
 	{ "<leader>t", group = "󰂖  Diagnostic", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "<leader>ta", ":ToggleAlternate<CR>", desc = "Toggle Boolean" },
+	{ "<leader>tb", ":ToggleAlternate<CR>", desc = "Toggle Boolean" },
 	{ "<leader>tc", ":ConformInfo<CR>", desc = "Toggle ConformInfo" },
 	{ "<leader>ti", ":set invlist! | Gitsigns toggle_signs<CR>", desc = "Toggle Special Chars" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
