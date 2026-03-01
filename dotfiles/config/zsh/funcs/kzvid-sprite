@@ -10,7 +10,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 local input="$1"
-local output="${input:r}_sprite.png"
+local output="${input:r}-sprite.png"
 
 if [[ ! -f "$input" ]]; then
     echo "  El archivo '$input' no existe."
