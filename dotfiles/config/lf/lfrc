@@ -1,15 +1,8 @@
-# Habilitar la columna de previsualización
-#set preview true
-
-# Usar ctpv como previewer
-#set previewer ctpv
-
-# Limpiar la previsualización al cambiar de archivo o salir
-#set cleaner ctpvclear
-
-# Opcional: ejecutar ctpv en segundo plano (mejora rendimiento)
-# &ctpv -s $id
-
+# ┌────────┐
+# │░█░░░█▀▀│
+# │░█░░░█▀▀│
+# │░▀▀▀░▀░░│
+# └────────┘
 # Habilitar la columna de previsualización
 set preview true
 
