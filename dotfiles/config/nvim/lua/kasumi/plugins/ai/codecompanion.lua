@@ -25,7 +25,7 @@ codecompanion.setup({
 						-- Elige el modelo de IA que se cargará al inicio
 						model          = { default = "ministral-3:3b" },
 						-- Define cuánta memoria tiene la IA para recordar el chat y el código actual
-						num_ctx        = { default = 4096 },
+						num_ctx        = { default = 8192 },
 						-- Limita la longitud máxima de la respuesta para evitar textos infinitos
                         -- Con -1, el modelo no para hasta que él mismo decide que ha terminado
                         -- o hasta que se llena el contexto

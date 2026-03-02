@@ -61,8 +61,17 @@ map("n", "<C-j>", "<C-w>j") -- Abajo
 map("n", "<C-k>", "<C-w>k") -- Arriba
 map("n", "<C-l>", "<C-w>l") -- Derecha
 
--- Alterna el renderizado de Markdown (render-markdown.nvim)
-map("n", "<F6>", ":RenderMarkdown toggle<CR>")
+-- Alterna la visualización de render-markdown.
+local function toggle_render_markdown()
+	vim.cmd("RenderMarkdown toggle")
+	vim.cmd("Gitsigns toggle_signs")
+	vim.cmd("set cursorline!")
+	vim.cmd("set invlist!")
+	vim.cmd("set invrelativenumber!")
+	vim.cmd("set invnumber!")
+end
+
+map("n", "<F6>", toggle_render_markdown)
 
 -- ────────────────────────────────────────────────────────────
 -- █  ▄▀ █▀▀▀▀ █   █ █▀▀▀▀ █   █ █▄  █ ▄▀▀▀▀ ▄▀▀▀▀
