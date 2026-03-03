@@ -55,7 +55,7 @@ local function bullet_config()
 
 		-- Bullet según nivel
 		icons = function(ctx)
-			local icons = { "♢", "🟆 ", " ", "", "" }
+			local icons = { " ", "", "", "󱘹", "" }
 			return icons[((ctx.level - 1) % #icons) + 1]
 		end,
 
@@ -66,11 +66,14 @@ local function bullet_config()
 		-- 	return string.format("%d.", num or ctx.index)
 		-- end,
 
-		-- Padding progresivo según nivel
+		-- A partir del segundo nivel, el padding crece de forma lineal: nivel + 1
 		left_pad = function(ctx)
-			return math.max(ctx.level + 1, 2)
+			if ctx.level == 1 then
+				return 2
+			else
+				return 2 + (ctx.level - 1) * 2
+			end
 		end,
-
 		right_pad = 1,
 
 		-- Solo el icono tiene highlight
@@ -81,7 +84,7 @@ local function bullet_config()
 end
 
 require("render-markdown").setup({
-	enabled = true, -- Permite desactivar globalmente el plugin desde esta aquí
+	enabled = false, -- Permite desactivar globalmente el plugin desde esta aquí
 	render_modes = { "n" },
 
 	bullet = bullet_config(), -- personaliza viñetas
@@ -104,6 +107,13 @@ require("render-markdown").setup({
 	max_file_size = 1.5, -- en MB. Evita render en archivos muy grandes
 	paragraph = { left_margin = 2 },
 	quote = { icon = "🮌" },
+
+	pipe_table = {
+		-- cell = "trimmed",
+		row = "Comment",
+		head = "Comment",
+		border_virtual = true,
+	},
 	-- indent = { enabled = true, skip_heading = true, icon = "" },
 
 	code = {
@@ -121,15 +131,20 @@ require("render-markdown").setup({
 		language_left = "██",
 		language_right = "██",
 		language_border = "🮒",
+		disable_background = {},
+		highlight_language = "Comment",
 	},
 	heading = {
 		signs = false,
-		width = "block",
+		-- width = "block",
+		width = { "full", "full", "block" },
 		border = true,
-		-- border_virtual = true,
-		below = "▀", -- 🮂🮂▀▀▀
-		above = "▂",
-		min_width = 82,
+		-- position = "inline",
+		-- below = "▀", -- 🮂🮂▀▀▀
+		-- above = "▂",
+		min_width = 44,
+		-- left_margin = 1,
+		left_pad = 1,
 		icons = function(ctx)
 			-- Muestra iconos en los encabezados ocultando los `#`.
 			-- La sangría comienza desde el tercer nivel y crece de dos en dos:
@@ -137,7 +152,7 @@ require("render-markdown").setup({
 			-- El icono cambia según el nivel y se separa del texto para mejor lectura.
 			local icons = {
 				"❰   ❱",
-				"  ",
+				" ",
 				" ",
 				" ",
 				"󰎯 ",
@@ -158,10 +173,11 @@ require("render-markdown").setup({
 		caution   = { rendered = "  Caution" },
 	},
 	link = {
-		image = "󰋵  ",
 		email = "󰇯  ",
-		hyperlink = "  ",
 		footnote = { icon = "󱝂 " },
+		hyperlink = "  ",
+		image = "󰋵  ",
+		wiki = { icon = "󰌱  " },
         -- stylua: ignore
 		custom = {
 			arxiv         = { pattern = "arxiv%.org", icon         = "  " }, -- Papers ML/AI
@@ -181,5 +197,3 @@ require("render-markdown").setup({
 		},
 	},
 })
-
--- {"󰭄 ", "󰚟", "󰵲 ", "󰻴 ", "󰙴 ", "󰅴 ", "󰗢 ", " ", " ", " ", "◆ ", " ", "󰡕 ", "◇", "󰲌 ", "󰐾 ", " ", "󰣉 ",}
