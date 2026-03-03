@@ -85,7 +85,18 @@ require("render-markdown").setup({
 	render_modes = { "n" },
 
 	bullet = bullet_config(), -- personaliza viñetas
-	checkbox = { left_pad = 4, unchecked = { icon = "󰄰 " }, checked = { icon = "󰄳 " } },
+	checkbox = {
+		left_pad = 4,
+		unchecked = {
+			icon = " ",
+			highlight = "Comment",
+		},
+		checked = {
+			icon = " ",
+			highlight = "RenderMarkdownChecked",
+			scope_highlight = "RenderMarkdownChecked",
+		},
+	},
 	completions = { lsp = { enabled = true } },
 	dash = { icon = "🭹" },
 	debounce = 200, -- retraso en ms antes de actualizar render
