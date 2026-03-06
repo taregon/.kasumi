@@ -39,9 +39,9 @@ Un mensaje de commit se estructura en tres partes principales:
   - Formato: <type>(<scope>): <descripción breve>
   - Breaking: Añade `!` tras el scope (ej.
     `docs(config)!: eliminar sección obsoleta de configuración`).
-  - Minúsculas inicial. Sin punto final.
-  - Tipo: Elige exclusivamente uno: [chore, ci, docs, feat, fix, perf, refactor,
-    revert style, test test].
+  - Minúsculas inicial. Sin punto final. Verbo infinitivo.
+  - Elije exclusivamente un tipo [chore, ci, docs, feat, fix, perf, refactor,
+    revert style, test test] según el cambio.
   - Scope: Palabra clave única que identifique el código o módulo afectado (ej.
     `security(ssh)`, `fix(backup)`).
   - Prohibido incluir nombres de archivos.
