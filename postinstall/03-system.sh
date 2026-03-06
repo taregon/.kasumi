@@ -320,6 +320,7 @@ install_utils_terminal() {
     local pkgs=(
         aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
         bat                # Visor tipo cat con resaltado y soporte Git
+        bc                 # Calculadora CLI con soporte para decimales de alta precisión
         cdu                # Analizador interactivo de uso de disco (TUI)
         dotdrop            # Gestor de dotfiles con perfiles y plantillas
         eza                # ls moderno con colores e iconos (reemplazo de exa)
