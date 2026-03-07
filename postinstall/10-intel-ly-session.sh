@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Script que crea una sesión Sway configurada para usar GPU Intel como primaria,
-# con soporte opcional para NVIDIA.
+# Detecta GPU Intel, crea una sesión Sway para el display manager ly,
+# configura las variables de entorno (GLX_VENDOR, WLR_DRM_DEVICES) para usar Intel como primaria.
 
 set -euo pipefail
 
 echo "=== Generando sesión Sway con video Intel ==="
+echo
+echo "=> Instalando drivers Vulkan y VA-API para Intel..."
+sudo pacman -S --noconfirm mesa vulkan-intel libva-intel-driver libva-utils intel-media-driver
 
 get_driver_card() {
     local vendor="$1"
@@ -26,18 +29,27 @@ INTEL_CARD=$(get_driver_card "Intel") || {
     echo "  GPU Intel no encontrada"
     exit 1
 }
-NVIDIA_CARD=$(get_driver_card "NVIDIA") || true
 
 SESSION_FILE="/etc/ly/custom-sessions/sway-intel.desktop"
 sudo mkdir -p "$(dirname "$SESSION_FILE")"
 
+# Para indicar varios GPU
+# NVIDIA_CARD=$(get_driver_card "NVIDIA") || true
+# WLR_DRM_DEVICES=$INTEL_CARD${NVIDIA_CARD:+:$NVIDIA_CARD}
+#
 sudo tee "$SESSION_FILE" > /dev/null << EOF
 [Desktop Entry]
 Name=Sway (Intel GPU)
-Exec=/usr/bin/env WLR_DRM_DEVICES=$INTEL_CARD${NVIDIA_CARD:+:$NVIDIA_CARD} sway
+Exec=/usr/bin/env \
+__GLX_VENDOR_LIBRARY_NAME=mesa \
+WLR_DRM_DEVICES=$INTEL_CARD \
+sway
 Type=Application
 DesktopNames=sway-intel
+Terminal=false
 EOF
 
 echo
 echo "  Sesión creada en $SESSION_FILE"
+echo "Verifica:"
+echo "  glxinfo | grep 'OpenGL renderer'"
