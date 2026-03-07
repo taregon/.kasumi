@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
+# Script que crea una sesión Sway configurada para usar GPU Intel como primaria,
+# con soporte opcional para NVIDIA.
 
 set -euo pipefail
 
 echo "=== Generando sesión Sway con video Intel ==="
 
-get_dri_card() {
+get_driver_card() {
     local vendor="$1"
     local pci card
-    pci=$(lspci -D -d ::03xx | grep -i "$vendor" | grep -oE '^[0-9a-f:]+:[0-9a-f:.]+' | head -1 || true)
+    # Busca dispositivos PCI de clase video (03xx),
+    # filtra por vendor, extrae el ID PCI (ej: 0000:00:02.0)
+    pci=$(lspci -D -d ::03xx | grep -i "$vendor" | grep -oE '^[0-9a-f:]+:[0-9a-f:.]+' || true)
 
     if [[ -z "$pci" ]]; then
         return 1
@@ -17,12 +21,12 @@ get_dri_card() {
     echo "/dev/dri/$card"
 }
 
-INTEL_CARD=$(get_dri_card "Intel") || {
+INTEL_CARD=$(get_driver_card "Intel") || {
     echo
     echo "  GPU Intel no encontrada"
     exit 1
 }
-NVIDIA_CARD=$(get_dri_card "NVIDIA") || true
+NVIDIA_CARD=$(get_driver_card "NVIDIA") || true
 
 SESSION_FILE="/etc/ly/custom-sessions/sway-intel.desktop"
 sudo mkdir -p "$(dirname "$SESSION_FILE")"
