@@ -4,8 +4,8 @@
 # ╚════██║██║███╗██║██╔══██║  ╚██╔╝
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
-# Los atajos de teclado se encuentran en sway.d/
-
+# Los atajos de teclado se encuentran en modules/
+# PEND: https://swaywm.com/sway_wiki/
 # ╒═════════════════════════════════════════════════════════════╕
 # │         NOTA: SINCRONIZACIÓN DE VARIABLES DE ENTORNO        │
 # ╘═════════════════════════════════════════════════════════════╛
@@ -46,10 +46,11 @@
   set $right l
 
   set $browser firefox
+  set $keepass keepassxc
   set $colorpicker hyprpicker --autocopy
   set $filemanager thunar
   set $launcher rofi -show drun
-  set $music ~/.config/sway/scripts/rofi_music
+  set $music ~/.config/sway/scripts-legacy/rofi_music
   set $term kitty
 
   floating_modifier $mod
@@ -69,9 +70,9 @@
 # No muevas esta sección o sino cuando cargue la configuración,
 # no sabrán que teclas asignaste
 #
-  include ~/.config/sway/sway.d/appearance.conf
-  include ~/.config/sway/sway.d/autostart.conf
-  include ~/.config/sway/sway.d/keybinds.conf
-  include ~/.config/sway/sway.d/keybinds-apps.conf
-  include ~/.config/sway/sway.d/keybinds-system.conf
-  include ~/.config/sway/sway.d/window-rules.conf
+  include ~/.config/sway/modules/appearance.conf
+  include ~/.config/sway/modules/autostart.conf
+  include ~/.config/sway/modules/keybinds.conf
+  include ~/.config/sway/modules/keybinds-apps.conf
+  include ~/.config/sway/modules/keybinds-system.conf
+  include ~/.config/sway/modules/window-rules.conf

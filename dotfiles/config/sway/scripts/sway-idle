@@ -2,7 +2,7 @@
 # Gestiona bloqueo automático, apagado de pantalla y suspensión bajo Sway.
 
 # Ruta al script de bloqueo personalizado
-LOCK_SCRIPT="$HOME/.config/sway/helpers/sway-lock"
+LOCK_SCRIPT="$HOME/.config/sway/scripts/sway-lock"
 
 # Inicia swayidle con distintos temporizadores y acciones
 # 1. Bloquea la sesión tras 5 min de inactividad
