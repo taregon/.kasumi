@@ -73,6 +73,5 @@
   include ~/.config/sway/modules/appearance.conf
   include ~/.config/sway/modules/autostart.conf
   include ~/.config/sway/modules/keybinds.conf
-  include ~/.config/sway/modules/keybinds-apps.conf
-  include ~/.config/sway/modules/keybinds-system.conf
+  include ~/.config/sway/modules/shortcuts.conf
   include ~/.config/sway/modules/window-rules.conf
