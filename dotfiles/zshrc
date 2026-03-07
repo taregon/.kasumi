@@ -37,12 +37,16 @@ source $ZSH_CONF/kasumi-zsh_alias.zsh
 # source $ZSH_CONF/funcs/kasumi-zsh_functions.zsh
 
 # DIRECTORIOS DE FUNCIONES (AUTOLOAD)
-# Directorio donde Zsh localiza funciones y las carga bajo demanda.
+# Agrega el directorio al inicio de fpath y carga las funciones
 fpath=(
     $ZSH_CONF/funcs
-    $fpath
+    ${fpath[@]}
 )
-autoload -Uz $ZSH_CONF/funcs/*(.N:t)
+
+# Verifica que el directorio exista y tenga archivos antes de autoload
+if [[ -d "$ZSH_CONF/funcs" ]]; then
+    autoload -Uz $ZSH_CONF/funcs/*(.N:t)
+fi
 
 # ────────────────────────────────────────────────────────────
 # AUTO COMPLETADO
