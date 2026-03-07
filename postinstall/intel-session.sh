@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+echo "=== Generando sesión Sway con video Intel ==="
+
 get_dri_card() {
     local vendor="$1"
     local pci card
@@ -16,27 +18,22 @@ get_dri_card() {
 }
 
 INTEL_CARD=$(get_dri_card "Intel") || {
-    echo "ERROR: GPU Intel no encontrada"
+    echo
+    echo "  GPU Intel no encontrada"
     exit 1
 }
 NVIDIA_CARD=$(get_dri_card "NVIDIA") || true
 
-for card in "$INTEL_CARD" ${NVIDIA_CARD:+"$NVIDIA_CARD"}; do
-    [[ ! -e "$card" ]] && {
-        echo "ERROR: Dispositivo no encontrado: $card"
-        ls -l /dev/dri/
-        exit 1
-    }
-done
-
-SESSION_FILE="/etc/ly/custom-sessions/sway-prime.desktop"
+SESSION_FILE="/etc/ly/custom-sessions/sway-intel.desktop"
 sudo mkdir -p "$(dirname "$SESSION_FILE")"
 
 sudo tee "$SESSION_FILE" > /dev/null << EOF
 [Desktop Entry]
 Name=Sway (Intel Fist)
-#Exec=/usr/bin/env WLR_DRM_DEVICES=$INTEL_CARD${NVIDIA_CARD:+:$NVIDIA_CARD} sway
-Exec=/usr/bin/env WLR_DRM_DEVICES=$INTEL_CARD sway
+Exec=/usr/bin/env WLR_DRM_DEVICES=$INTEL_CARD${NVIDIA_CARD:+:$NVIDIA_CARD} sway
 Type=Application
-DesktopNames=sway-prime
+DesktopNames=sway-intel
 EOF
+
+echo
+echo "  Sesión creada en $SESSION_FILE"
