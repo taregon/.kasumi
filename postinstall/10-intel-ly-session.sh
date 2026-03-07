@@ -33,7 +33,7 @@ sudo mkdir -p "$(dirname "$SESSION_FILE")"
 
 sudo tee "$SESSION_FILE" > /dev/null << EOF
 [Desktop Entry]
-Name=Sway (Intel Fist)
+Name=Sway (Intel GPU)
 Exec=/usr/bin/env WLR_DRM_DEVICES=$INTEL_CARD${NVIDIA_CARD:+:$NVIDIA_CARD} sway
 Type=Application
 DesktopNames=sway-intel
