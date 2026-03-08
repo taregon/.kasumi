@@ -148,6 +148,10 @@ dotfiles:
     src: config/lf
     dst: ~/.config/lf
     link: absolute
+  d_opencode_theme:
+    src: config/opencode/themes
+    dst: ~/.config/opencode/themes
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -175,6 +179,7 @@ profiles:
       - d_aria2
       - d_lnav
       - d_neovim
+      - d_opencode_theme
       - d_zsh_functions
       - f_fonts
       - f_lnav
