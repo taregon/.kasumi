@@ -28,8 +28,9 @@ tree_2:
   Unicode:
     emoji-charts: https://www.unicode.org/emoji/charts/full-emoji-list.html
     emoji-table: https://unicode-table.com/es/emoji/
-    rozen-maiden-ascii: https://4-ch.net/ascii/kareha.pl/1143036729
+    graphemica: https://graphemica.com/%F0%9F%AE%91
     punycode: https://www.punycoder.com/
+    rozen-maiden-ascii: https://4-ch.net/ascii/kareha.pl/1143036729
   Otros Utiles:
     aprende-vim 1: https://victorhck.gitbook.io/aprende-vim/
     aprende-vim 2: https://vimaroo.vercel.app/
@@ -89,6 +90,7 @@ tree_3:
     stable-diffusion: https://huggingface.co/spaces/stabilityai/stable-diffusion
     vocalremover: https://vocalremover.org/
     waifu2x: http://waifu2x.udp.jp/
+    xenova-tokenizers: https://huggingface.co/spaces/Xenova/the-tokenizer-playground
   Google:
     activity: https://myactivity.google.com/product/gemini
 tree_4:
