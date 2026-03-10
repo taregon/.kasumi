@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Captura de área: región con slurp o ventana seleccionada → guarda en ~/Imágenes + copia al clipboard + notifica
-
 OUTPUT_DIR="$HOME/Imágenes/Screenshots/"
 FILENAME="$OUTPUT_DIR/captura-$(date +%Y-%m-%d_%H-%M-%S).png"
 
@@ -22,20 +20,27 @@ MODE="${1:-region}"
 capture() {
     case "$MODE" in
         window)
-            GEOMETRIA=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h') # Aquí usas el default de -f para grim
+            GEOMETRIA=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h')
+            [ -z "$GEOMETRIA" ] && return 1
             grim -g "$GEOMETRIA" - | tee "$FILENAME" | wl-copy
             ;;
-        swappy | edit)
-            grim -g "$(slurp "${KASUMI_SLURP_ARGS[@]}")" - | tee >(wl-copy) | swappy -f -
+        swappy)
+            GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
+            [ -z "$GEOMETRY" ] && return 1
+            grim -g "$GEOMETRY" - | swappy -f -
             ;;
         region | *)
-            grim -g "$(slurp "${KASUMI_SLURP_ARGS[@]}")" - | tee "$FILENAME" | wl-copy
+            GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
+            [ -z "$GEOMETRY" ] && return 1
+            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
             ;;
     esac
 }
 
 if capture; then
-    notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
+    if [ "$MODE" != "swappy" ]; then
+        notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
+    fi
 else
     notify-send -u critical "Error en captura" "No se pudo capturar la región"
 fi
