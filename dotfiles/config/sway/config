@@ -31,8 +31,8 @@
 # ────────────────────────────────────────────────────────────
 # PEND: debes mover estos exec al archivo autostart
   exec --no-startup-id nm-applet
-  exec mpDris2
-  exec mpd
+# exec mpDris2
+# exec mpd
 # exec wl-paste --type images --watch cliphist store
 # exec wl-paste --type text --watch cliphist store
 # exec ~/.config/sway/scripts/bg_random_auto
@@ -57,13 +57,13 @@
 
 # ── BARRA DE ESTADO ───────────────────────────────────────────
   bar {
-      swaybar_command waybar
+  swaybar_command waybar
   }
 
 # ── DISTRIBUCIÓN DE TECLADO ───────────────────────────────────
   input type:keyboard {
-      xkb_layout  latam,us
-      xkb_options grp:alt_shift_toggle
+  xkb_layout  latam,us
+  xkb_options grp:alt_shift_toggle
   }
 
 # ── CONFIGURACIONES ADICIONALES ───────────────────────────────
