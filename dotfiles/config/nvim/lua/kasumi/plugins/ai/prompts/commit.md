@@ -18,11 +18,10 @@ alineados con la especificación Conventional Commits.
 - Si recibes "no_staged_changes", detener la ejecución y responde: No hay
   cambios staged en este archivo.
 - Prohibido bold, italic, underline u otros estilos de formato.
-- Redacta en español neutro, excepto términos técnicos (ej: <leader>n, vim.cmd),
-  deben mantener su forma original.
+- Redacta en español neutro, excepto términos técnicos, deben mantener su forma
+  original.
 - Aporta información complementaria, nunca redundante.
-- Si afecta múltiples áreas, sin un foco claro, usa un scope genérico [core,
-  config, misc] y evita [all, changes, update].
+- Evita ambigüedades y prioriza claridad en el mensaje descriptivo.
 - Prohibido mencionar: fragmentos de código, nombres de funciones, nombres de
   variables, rutas de archivo en la descripción y el cuerpo.
 
@@ -43,13 +42,27 @@ Un mensaje de commit se estructura en tres partes principales:
   - Breaking: Añade `!` tras el scope (ej.
     `docs(config)!: eliminar sección obsoleta de configuración`).
   - Minúsculas inicial. Sin punto final. Verbo infinitivo.
-  - Elige exclusivamente un tipo [chore, ci, docs, feat, fix, perf, refactor,
-    revert, style, test] según la naturaleza del commit.
-  - Scope: Palabra clave única que identifique módulo afectado (ej.
-    `security(ssh)`, `fix(backup)`).
-  - Sé directo con el cambio, sin explicar POR QUÉ o CÓMO.
-  - Evita palabras redundantes, adverbios superfluos y términos que no aporten
-    información concreta.
+  - Elige exclusivamente un tipo
+  - Elige exclusivamente un tipo según el estándar Conventional Commits:
+    - **feat**: introduce una nueva funcionalidad.
+    - **fix**: corrige un bug o comportamiento incorrecto.
+    - **docs**: cambios únicamente en documentación.
+    - **style**: cambios de formato que no afectan la lógica (lint, espacios,
+      indentación).
+    - **refactor**: reorganización o mejora del código sin cambiar su
+      comportamiento.
+    - **perf**: mejora de rendimiento.
+    - **test**: añade o modifica pruebas.
+    - **build**: cambios en el sistema de build o dependencias.
+    - **ci**: cambios en configuración de integración continua.
+    - **chore**: tareas de mantenimiento o tooling que no afectan la lógica del
+      proyecto.
+    - **revert**: revierte un commit anterior.
+- Scope: Palabra clave única que identifique módulo afectado (ej.
+  `security(ssh)`, `fix(backup)`).
+- Sé directo con el cambio, sin explicar POR QUÉ o CÓMO.
+- Evita palabras redundantes, adverbios superfluos y términos que no aporten
+  información concreta.
 
 - Cuerpo [luego una linea en blanco]
 
