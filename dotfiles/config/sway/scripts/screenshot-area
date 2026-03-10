@@ -45,23 +45,28 @@ capture() {
     case "$MODE" in
         window)
             GEOMETRY=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h')
-            [ -z "$GEOMETRY" ] && return 1
+            ;;
+        *)
+            GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
+            ;;
+    esac
+
+    [ -z "$GEOMETRY" ] && return 1
+
+    case "$MODE" in
+        window)
             grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
             ;;
         swappy)
-            GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
-            [ -z "$GEOMETRY" ] && return 1
             grim -g "$GEOMETRY" - | swappy -f -
             ;;
-        region | *)
-            GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
-            [ -z "$GEOMETRY" ] && return 1
+        *)
             grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
             ;;
     esac
 }
 
-#  Notificaciones
+# Notificaciones
 if capture; then
     # swappy maneja su propia notificación interna
     if [ "$MODE" != "swappy" ]; then
