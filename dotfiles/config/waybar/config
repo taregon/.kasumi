@@ -139,7 +139,7 @@
   },
   "custom/cava-internal": {
     "format": "{}",
-    "exec": "~/.config/sway/helpers/cava-bar",
+    "exec": "~/.config/sway/scripts/cava-bar",
     "on-click": "swaymsg reload & pkill waybar & waybar"
   },
 
@@ -258,7 +258,7 @@
   "custom/pacman": {
     "format": " {}",
     "interval": 300,
-    "exec": "~/.config/sway/helpers/check-updates",
+    "exec": "~/.config/sway/scripts/check-updates",
     "on-click": "kitty -e paru -Syu",
     "signal": 8
   },
