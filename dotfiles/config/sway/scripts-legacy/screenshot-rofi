@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# Directorio y nombre base
+OUTPUT_DIR="$HOME/Imágenes"
+mkdir -p "$OUTPUT_DIR"
+TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+FILENAME="$OUTPUT_DIR/captura-$TIMESTAMP.png"
+EDITED_FILENAME="$OUTPUT_DIR/captura-editada-$TIMESTAMP.png"
+
+# Archivo temporal para la captura cruda
+TMPFILE=$(mktemp /tmp/screenshot-area.XXXXXX.png)
+trap 'rm -f "$TMPFILE"' EXIT # Limpieza automática al salir
+
+# Función para notificar (opcional, requiere libnotify)
+notify() {
+    if command -v notify-send > /dev/null; then
+        notify-send "$@"
+    fi
+}
+
+# Captura del área seleccionada
+grim -g "$(slurp)" "$TMPFILE" || {
+    notify "Captura cancelada" "No se seleccionó área" -i dialog-warning
+    exit 1
+}
+
+# Menú con rofi (elige una opción)
+choice=$(echo -e "1. Editar con Swappy (y guardar editada)\n2. Solo guardar original\n3. Copiar al portapapeles\n4. Editar y copiar editada\n5. Cancelar" \
+    | rofi -dmenu -i -p "Captura de área tomada! ¿Qué hacer?" \
+        -theme-str 'window {width: 40%;} listview {lines: 6;}')
+
+case "$choice" in
+    "1."*"Editar con Swappy"*)
+        # Edita y guarda la versión editada con nombre personalizado
+        swappy -f "$TMPFILE" -o "$EDITED_FILENAME"
+        if [ -f "$EDITED_FILENAME" ]; then
+            notify "Captura editada guardada" "$EDITED_FILENAME" -i camera-photo
+        else
+            notify "Edición cancelada" "No se guardó nada" -i dialog-information
+        fi
+        ;;
+
+    "2."*"Solo guardar original")
+        mv "$TMPFILE" "$FILENAME"
+        notify "Captura guardada" "$FILENAME" -i camera-photo
+        ;;
+
+    "3."*"Copiar al portapapeles")
+        wl-copy < "$TMPFILE" -t image/png
+        notify "Copiada al portapapeles" "Puedes pegar con Ctrl+V" -i edit-paste
+        ;;
+
+    "4."*"Editar y copiar editada")
+        # Edita, guarda temporalmente la editada y copia al clipboard
+        swappy -f "$TMPFILE" -o - | tee "$EDITED_FILENAME" | wl-copy -t image/png
+        if [ -f "$EDITED_FILENAME" ]; then
+            notify "Editada y copiada" "$EDITED_FILENAME también guardada" -i camera-photo
+        else
+            notify "Edición cancelada" -i dialog-information
+        fi
+        ;;
+
+    *Cancelar* | "")
+        notify "Operación cancelada" -i dialog-warning
+        exit 0
+        ;;
+
+    *)
+        notify "Opción desconocida" -i dialog-error
+        ;;
+esac

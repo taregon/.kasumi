@@ -2,9 +2,17 @@
 
 # screenshot-region.sh
 # Captura región con grim + slurp → guarda en ~/Imágenes + copia al clipboard + notifica
+# NOTE: mantén pulsado <Espacio> mientras arrastras para mover la selección sin cambiar tamaño
 
-OUTPUT_DIR="$HOME/Imágenes"
+OUTPUT_DIR="$HOME/Imágenes/Screenshots/"
 FILENAME="$OUTPUT_DIR/captura-$(date +%Y-%m-%d_%H-%M-%S).png"
+KASUMI_SLURP_ARGS=(
+    -b '#2410144D'
+    -c '#F86E88F0'
+    -w 2
+    -F 'monospace'
+    -d
+)
 
 # Crea el directorio si no existe
 if [ ! -d "$OUTPUT_DIR" ]; then
@@ -13,12 +21,12 @@ fi
 
 # Define el comando en una variable
 capture() {
-    grim -g "$(slurp)" - | tee "$FILENAME" | wl-copy
+    grim -g "$(slurp "${KASUMI_SLURP_ARGS[@]}")" - | tee "$FILENAME" | wl-copy
 }
 
 # Ejecuta el comando y notifica según resultado
 if capture; then
-    notify-send "Captura copiada y guardada" "$(basename "$FILENAME")"
+    notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
 else
     notify-send -u critical "Error en captura" "No se pudo capturar la región"
 fi

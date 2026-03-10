@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Puedes ampliar los ajusten en: ~/.config/swappy/config
+#
+# Captura el área → guarda la original inmediatamente → pasa a swappy para editar
+# Si editas y guardas en swappy, se guardará en la carpeta que tengas en config (p.ej. ~/Imágenes/Capturas)
+# grim -g "$(slurp)" - | tee "$FILENAME" | swappy -f -
+grim -g "$(slurp)" - | tee >(wl-copy) | swappy -f -
+
+# Opcional: notificación rápida
+notify-send "󰹗 Captura copiada"
