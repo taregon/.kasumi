@@ -9,4 +9,5 @@ kitty @ get-colors | awk '
     g = strtonum("0x" substr(hex,3,2))
     b = strtonum("0x" substr(hex,5,2))
     printf "\033[48;2;%d;%d;%dm %3s \033[0m  color%-3s  #%s\n", r,g,b, idx, idx, hex
-  }'
+  }
+'
