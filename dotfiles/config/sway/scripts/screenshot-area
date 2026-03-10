@@ -2,7 +2,6 @@
 
 OUTPUT_DIR="$HOME/Imágenes/Screenshots/"
 FILENAME="$OUTPUT_DIR/captura-$(date +%Y-%m-%d_%H-%M-%S).png"
-
 KASUMI_SLURP_ARGS=(
     -b '#2810145d'
     -c '#F86E88'
@@ -17,12 +16,14 @@ fi
 
 MODE="${1:-region}"
 
+# Obtiene selección del usuario con slurp,
+# verifica que no esté vacía y captura con grim
 capture() {
     case "$MODE" in
         window)
-            GEOMETRIA=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h')
-            [ -z "$GEOMETRIA" ] && return 1
-            grim -g "$GEOMETRIA" - | tee "$FILENAME" | wl-copy
+            GEOMETRY=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h')
+            [ -z "$GEOMETRY" ] && return 1
+            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
             ;;
         swappy)
             GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
