@@ -1,23 +1,46 @@
 #!/usr/bin/env bash
+# Captura de pantalla con slurp para Sway
+# Uso: screenshot-area [region|window|swappy]
+#   region  (default) - selecciona área, guarda y copia al clipboard
+#   window            - selecciona ventana, guarda y copia
+#   swappy            - selecciona área y abre swappy para editar antes de guardar
+# Cancela con ESC. No guarda nada si no hay selección
 
-OUTPUT_DIR="$HOME/Imágenes/Screenshots/"
-FILENAME="$OUTPUT_DIR/captura-$(date +%Y-%m-%d_%H-%M-%S).png"
-KASUMI_SLURP_ARGS=(
-    -b '#2810145d'
-    -c '#F86E88'
-    -w 2
-    -F 'monospace'
-    -d
-)
+# Variables
+OUTPUT_DIR="$HOME/Imágenes/Screenshots/" # Directorio donde se guardan las capturas
+DATE=$(date +%Y%m%d)                     # Fecha actual en formato YYYYMMDD
 
+# Crear directorio si no existe
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir -p "$OUTPUT_DIR"
 fi
 
-MODE="${1:-region}"
+# Numeración automática
+# Busca el mayor número de archivo del día (formato: YYYYMMDD-NNN.png)
+LAST_NUM=0
+for file in "$OUTPUT_DIR"/"${DATE}"-[0-9][0-9][0-9].png; do
+    num=${file##*-} # extrae "NNN.png"
+    num=${num%.png} # quita extensión
+    ((10#$num > LAST_NUM)) && LAST_NUM=$((10#$num))
+done
 
-# Obtiene selección del usuario con slurp,
-# verifica que no esté vacía y captura con grim
+NEXT_NUM=$((LAST_NUM + 1))
+FILENAME="$OUTPUT_DIR/${DATE}-$(printf "%03d" $NEXT_NUM).png" # YYYYMMDD-001.png
+
+# Argumentos para slurp (estilo visual)
+KASUMI_SLURP_ARGS=(
+    -b '#2810145d' # color de fondo (transparente)
+    -c '#F86E88'   # color del borde
+    -w 2           # ancho del borde
+    -F 'monospace' # fuente
+    -d             # muestra dimensiones en tiempo real
+)
+
+MODE="${1:-region}" # Primer argumento: region (default)
+
+# Función de captura
+# Flujo: slurp (selección) -> grim (captura) -> salida (guarda/copia/swappy)
+# Retorna 1 si el usuario cancela (sin selección)
 capture() {
     case "$MODE" in
         window)
@@ -38,7 +61,9 @@ capture() {
     esac
 }
 
+#  Notificaciones
 if capture; then
+    # swappy maneja su propia notificación interna
     if [ "$MODE" != "swappy" ]; then
         notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
     fi
