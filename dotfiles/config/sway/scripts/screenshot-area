@@ -9,6 +9,7 @@
 # Variables
 OUTPUT_DIR="$HOME/Imágenes/Screenshots/" # Directorio donde se guardan las capturas
 DATE=$(date +%Y%m%d)                     # Fecha actual en formato YYYYMMDD
+FILE_PREFIX="shot"                       # Prefijo de archivos (cambiar si se desea)
 
 # Crear directorio si no existe
 if [ ! -d "$OUTPUT_DIR" ]; then
@@ -16,16 +17,16 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 # Numeración automática
-# Busca el mayor número de archivo del día (formato: YYYYMMDD-NNN.png)
+# Busca el mayor número de archivo del día (formato: prefix-YYYYMMDD-NNN.png)
 LAST_NUM=0
-for file in "$OUTPUT_DIR"/"${DATE}"-[0-9][0-9][0-9].png; do
+for file in "$OUTPUT_DIR"/"${FILE_PREFIX}-${DATE}"-[0-9][0-9][0-9].png; do
     num=${file##*-} # extrae "NNN.png"
     num=${num%.png} # quita extensión
     ((10#$num > LAST_NUM)) && LAST_NUM=$((10#$num))
 done
 
 NEXT_NUM=$((LAST_NUM + 1))
-FILENAME="$OUTPUT_DIR/${DATE}-$(printf "%03d" $NEXT_NUM).png" # YYYYMMDD-001.png
+FILENAME="$OUTPUT_DIR/${FILE_PREFIX}-${DATE}-$(printf "%03d" $NEXT_NUM).png"
 
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
