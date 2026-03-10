@@ -270,6 +270,7 @@ install_sys_wayland() {
         mako         # Demonio de notificaciones para Wayland
         rofi         # Lanzador de aplicaciones y selector interactivo
         slurp        # Selección de región en Wayland
+        swappy       # Editor interactivo para capturas de pantalla en Wayland
         wl-clipboard # Utilidades de portapapeles en Wayland
         wlogout      # Menú minimalista de cierre de sesión
     )
