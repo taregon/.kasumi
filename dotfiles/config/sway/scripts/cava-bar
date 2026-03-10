@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pkill -f "cava -p" 2> /dev/null
+
 bar="▁▂▃▄▅▆▇█"
 dict="s/;//g;"
 
@@ -25,5 +27,5 @@ ascii_max_range = 7
 
 # read stdout from cava
 cava -p $config_file | while read -r line; do
-    echo $line | sed $dict
+    echo "$line" | sed "$dict"
 done
