@@ -13,3 +13,6 @@ set previewer ~/.config/lf/lfpreview
 cmd on-select %{{
     exec lf -remote "send $id redraw"
 }}
+# Copia la ruta del archivo
+map c %echo -n "$f" | wl-copy
+
