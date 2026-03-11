@@ -75,7 +75,7 @@ codecompanion.setup({
 		},
 	},
 	opts = {
-		log_level = "DEBUG", -- Almacenado en: ~/.local/state/nvim/codecompanion.log
+		log_level = "TRACE", -- Almacenado en: ~/.local/state/nvim/codecompanion.log
 		language = "Spanish (neutral, technical)",
 	},
 	prompt_library = {
