@@ -2,146 +2,11 @@
 # Para revertir los alias (o sea ver como estan compuestos)
 # utilizar el comando type <alias>, ejemplo: type exa.
 
-# ── POWER USER V2 ───────────────────────────────────────────
-alias a_miniscula="tr '[:upper:]' '[:lower:]'"
-alias chao="reboot -h now"
-alias clima='curl wttr.in'
-alias climat='curl "wttr.in?format=3"'
-alias lugar='/usr/lib/geoclue-2.0/demos/where-am-i'
-alias fecha="date +'%Y%m%d-%H%M'"
-alias pantalla='grep -i "monitor name" /var/log/Xorg.0.log'
-alias h="history"
-alias info-eth="mii-tool -v eno1"
-# alias ip-lan="ip add | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
-alias ip-wan="dig @resolver1.opendns.com myip.opendns.com +short"
-alias lorem_bacon="curl 'https://baconipsum.com/api/?start-with-lorem=1&type=meat-and-filler&format=text&paras=30'"
-alias lorem_dinos="curl 'https://dinoipsum.com/api?format=text&paragraphs=30'"
-alias neovim-update="pip install --upgrade neovim"
-alias pac-autoremove="pacman -Q -dt -q | sudo pacman -Rn -"
-alias pac-cleancache="cdu -B /var/cache/pacman/pkg && paccache -r -k 1 && cdu /var/cache/pacman/pkg"
-alias q="exit"
-alias qr-leer="zbarimg -q --raw -S disable -S qrcode.enable"
-alias recien="find . -mindepth 1 -mtime 0 -printf '%Tc %p\n' | sort -n"
-alias rld-t="tmux source ~/.tmux.conf"
-alias rld-z="source ~/.zshrc"
-alias servicios="systemctl list-units --type=service --all"
-alias wifi="nmcli dev wifi list --rescan yes"
-alias fuentes="kitty +list-fonts --psnames"
-alias optimize_png="pngquant --quality=75-90 --verbose --floyd=0.7 --ext _optimized.png"
-alias optimize_jpg="zfun_jpegoptim"
-alias findnot="find -not -path '*/.*' -iname"
-# De pruebas
-alias yeyo="yay -Suy --noconfirm"
-alias pf="fzf --preview='less {}' --bind shift-up:preview-page-up,shift-down:preview-page-down"
-alias lsa="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
-alias cheat='curl cheat.sh/'
-alias mem+="ps -eo pid,ppid,cmd,%mem --sort=-%mem | head"   # Processes consuming most mem
-alias cpu+="ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head"   # Processes consuming most cpu
-alias lm='lsa -tA -1r'                                      # List files sorted by last modified
-alias ld="lsa -DT --show-symlinks --long --header"          # Lista solo carpetas
-alias lz="eza \
---git \
---git-repos \
---group-directories-first \
---header \
---icons=always \
---long \
---smart-group \
---total-size \
-"
-alias lzt="eza \
---follow-symlinks \
---header \
---icons=never \
---long \
---mounts \
---smart-group \
---time-style=iso \
---tree \
-"
-alias cuantos='find . -type f | wc -l'                      # Cantidad de archivos
-alias test-cursor="kitten mouse-demo"
-# alias lf="nvim $(fzf --preview='bat --color=always {}')"
-#
-alias less='TERM=xterm-256color less' # Fix para less roto con xterm-kitty
-alias man='TERM=xterm-256color man' # Fix para less roto con xterm-kitty
-# alias more='TERM=xterm-256color more' # Fix para less roto con xterm-kitty
-
-# Recuperación de autenticación sudo tras interrupciones de scripts
-# En algunos casos, abortar un script mientras sudo está activo deja
-# estados fallidos registrados por pam_faillock, haciendo que una
-# contraseña válida sea rechazada hasta limpiar dichos estados.
-# Referencia: https://bbs.archlinux.org/viewtopic.php?id=261481
-# Para inspeccionar intentos fallidos en tiempo real:
-alias F="faillock --reset"
-
 # ── FZF ─────────────────────────────────────────────────────
 alias fh="history | fzf +s --tac"
 
-# ── POWER USER ──────────────────────────────────────────────
-alias dmesg="dmesg --ctime --follow"
-alias exa="exa --icons --group-directories-first --sort=newest --git --links --header -aglmr"
-alias figlet="figlet -f smshadow"
-alias icat="kitty +kitten icat"
-alias lt="lsd --tree --blocks=name,size --total-size -v"
-alias lsd="lsd --group-directories-first"
-alias history="history 0"
-alias neofetch="neofetch --size 220px --kitty --source ~/Dropbox/profile_pics/"
-alias rm='nocorrect rm -Iv'
-# alias ssh="TERM=xterm kitty +kitten ssh"
-alias stat-date="stat --printf '%w\t%n\n'"
-alias unimatrix="unimatrix -c yellow -l ns -af"
-alias ka-df="df -hT -x tmpfs -x devtmpfs -x efivarfs"
-alias ka-bench-nvim="nvim --startuptime /tmp/nvim.log +q && tail -n 20 /tmp/nvim.log | bat --paging=never -l log"
-
-alias wg3t="wget \
---progress=bar:force \
---rejected-log=wget.log \
---random-wait \
---retry-connrefused \
---timeout=30 \
---tries=5 \
---user-agent="$IXOS_USER_AGENT" \
---waitretry=5 \
--c \
-"
-alias wget-beta="wget \
---content-disposition \
---ignore-length \
---no-check-certificate \
---no-verbose \
---output-file=wget.log \
---progress=bar:force \
---random-wait \
---retry-connrefused \
---show-progress \
---timeout=30 \
---tries=5 \
---trust-server-names \
---user-agent="$IXOS_USER_AGENT" \
---waitretry=5 \
--c \
--w 8 \
-"
-
-alias statf='stat --printf "  Fichero: %n
-E/S: %o\t%F
-Links: %h ModoHEX: %f  SELinux: %C
-Acceso: (%a/%t)  Uid: (%u/%U)\tGid: (%g/%G)
-      Acceso: %x
-Modificación: %y
-      Cambio: %z
-    Creación: %w"'
-
-alias mako-restore="for i in {1..20}; do makoctl restore; done"
-
 # ── PUKE RAINBOW ────────────────────────────────────────────
-#alias df="grc df -H --total --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs"
-alias bat="bat --color=always --italic-text=always --style=plain --paging=never"
-alias cdu="cdu -rsi -dh"
-alias df="df -hT -x tmpfs -x devtmpfs -x efivarfs"
-alias df="grc df -H --total --exclude-type=devtmpfs --exclude-type=squashfs"
-alias dfc="dfc -T -dw -t -squashfs -q mount"
+alias df="grc df -hT --total -x tmpfs -x devtmpfs -x efivarfs -x squashfs"
 alias dig="grc dig"
 alias du="grc du -h"
 alias free="grc free -m"
@@ -204,8 +69,110 @@ alias yt-1080='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-f
 alias yt-dlp='yt-dlp --windows-filenames --write-url-link --geo-bypass --trim-filenames 125 -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s"'
 alias yt-mp3='yt-dlp -f ba -x --audio-format mp3'
 alias yt-update="python3 -m pip install -U yt-dlp"
+
+# ╒════════════════════════════════════════════════════════════╕
+# │                         POWER USER                         │
+# ╘════════════════════════════════════════════════════════════╛
+
+# ── TRIVIAL ─────────────────────────────────────────────────
+alias cavak="cava -p ~/.config/cava/kasumi-cava.conf"
+alias a_miniscula="tr '[:upper:]' '[:lower:]'"
+alias chao="reboot -h now"
+alias clima='curl wttr.in'
+alias climat='curl "wttr.in?format=3"'
+alias lugar='/usr/lib/geoclue-2.0/demos/where-am-i'
+alias fecha="date +'%Y%m%d-%H%M'"
+alias pantalla='grep -i "monitor name" /var/log/Xorg.0.log'
+alias h="history"
+alias q="exit"
+alias qr-leer="zbarimg -q --raw -S disable -S qrcode.enable"
+alias rld-t="tmux source ~/.tmux.conf"
+alias rld-z="source ~/.zshrc"
+alias fuentes="kitty +list-fonts --psnames"
+alias optimize_png="pngquant --quality=75-90 --verbose --floyd=0.7 --ext _optimized.png"
+alias optimize_jpg="zfun_jpegoptim"
+alias pf="fzf --preview='less {}' --bind shift-up:preview-page-up,shift-down:preview-page-down"
+alias cheat='curl cheat.sh/'
+alias test-cursor="kitten mouse-demo"
+alias less='TERM=xterm-256color less'
+alias man='TERM=xterm-256color man'
+alias figlet="figlet -f smshadow"
+alias icat="kitty +kitten icat"
+alias unimatrix="unimatrix -c yellow -l ns -af"
+alias ka-bench-nvim="nvim --startuptime /tmp/nvim.log +q && tail -n 20 /tmp/nvim.log | bat --paging=never -l log"
+alias wg3t="wget \
+    --progress=bar:force \
+    --rejected-log=wget.log \
+    --random-wait \
+    --retry-connrefused \
+    --timeout=30 \
+    --tries=5 \
+    --user-agent="$IXOS_USER_AGENT" \
+    --waitretry=5 \
+    -c \
+"
+alias wget-beta="wget \
+    --content-disposition \
+    --ignore-length \
+    --no-check-certificate \
+    --no-verbose \
+    --output-file=wget.log \
+    --progress=bar:force \
+    --random-wait \
+    --retry-connrefused \
+    --show-progress \
+    --timeout=30 \
+    --tries=5 \
+    --trust-server-names \
+    --user-agent="$IXOS_USER_AGENT" \
+    --waitretry=5 \
+    -c \
+    -w 8 \
+"
+alias lorem_bacon="curl 'https://baconipsum.com/api/?start-with-lorem=1&type=meat-and-filler&format=text&paras=30'"
+alias lorem_dinos="curl 'https://dinoipsum.com/api?format=text&paragraphs=30'"
+
+# ── SYSADMIN ─────────────────────────────────────────────────
+alias info-eth="mii-tool -v eno1"
+alias ip-wan="dig @resolver1.opendns.com myip.opendns.com +short"
+alias neovim-update="pip install --upgrade neovim"
+alias pac-autoremove="pacman -Q -dt -q | sudo pacman -Rn -"
+alias pac-cleancache="cdu -B /var/cache/pacman/pkg && paccache -r -k 1 && cdu /var/cache/pacman/pkg"
+alias servicios="systemctl list-units --type=service --all"
+alias wifi="nmcli dev wifi list --rescan yes"
+alias yeyo="yay -Suy --noconfirm"
+alias F="faillock --reset"
+alias mako-restore="for i in {1..20}; do makoctl restore; done"
+
+# ── ARCHIVOS ─────────────────────────────────────────────────
+alias bat="bat --color=always --italic-text=always --style=plain --paging=never"
+alias cdu="cdu -rsi -dh"
+alias dfc="dfc -T -dw -t -squashfs -q mount"
+alias lsa="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+# alias lt="lsd --tree --blocks=name,size --total-size -v"
+alias cuantoscount='find . -type f | wc -l'
+alias recien="find . -mindepth 1 -mtime 0 -printf '%Tc %p\n' | sort -n"
+alias findnot="find -not -path '*/.*' -iname"
+alias statf='stat --printf "  Fichero: %n
+E/S: %o\t%F
+Links: %h ModoHEX: %f  SELinux: %C
+Acceso: (%a/%t)  Uid: (%u/%U)\tGid: (%g/%G)
+Acceso: %x
+Modificación: %y
+Cambio: %z
+Creación: %w"'
+alias stat-date="stat --printf '%w\t%n\n'"
+alias rm='nocorrect rm -Iv'
+alias history="history 0"
 # ────────────────────────────────────────────────────────────
 alias lsd="eza --group-directories-first --icons=auto"
 alias lsD="eza -al --follow-symlinks --git --mounts --header --group-directories-first --sort=type --icons=auto"
 alias lst="eza --tree -l --follow-symlinks --mounts --header --smart-group --group-directories-first --icons=never --no-user --no-permissions --no-time --no-filesize"
-alias lsT="eza --tree -l --follow-symlinks --mounts --header --smart-group --icons=auto --sort=extension --no-permissions --no-time --git"
+alias lsT="eza --tree -l --follow-symlinks --mounts --header --smart-group --group-directories-first --icons=auto --sort=name --sort=extension --no-permissions --no-time --git"
+
+# ── MONITOREO ─────────────────────────────────────────────────
+alias neofetch="neofetch --size 220px --kitty --source ~/Dropbox/profile_pics/"
+alias ka-df="df -hT -x tmpfs -x devtmpfs -x efivarfs"
+alias mem+="ps -eo pid,ppid,cmd,%mem --sort=-%mem | head"
+alias cpu+="ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head"
+alias dmesg="dmesg --ctime --follow"
