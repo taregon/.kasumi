@@ -7,14 +7,14 @@
 # Cancela con ESC. No guarda nada si no hay selección
 
 # Variables
-OUTPUT_DIR="$HOME/Imágenes/Screenshots/" # Directorio donde se guardan las capturas
-DATE=$(date +%Y%m%d)                     # Fecha actual en formato YYYYMMDD
-FILE_PREFIX="shot"                       # Prefijo de archivos (cambiar si se desea)
+OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}" # Directorio donde se guardan las capturas
+DATE=$(date +%Y%m%d)                         # Fecha actual en formato YYYYMMDD
+FILE_PREFIX="shot"                           # Prefijo de archivos (cambiar si se desea)
 
-# Crear directorio si no existe
-if [ ! -d "$OUTPUT_DIR" ]; then
-    mkdir -p "$OUTPUT_DIR"
-fi
+# # Crear directorio si no existe
+# if [ ! -d "$OUTPUT_DIR" ]; then
+#     mkdir -p "$OUTPUT_DIR"
+# fi
 
 # Numeración automática
 # Busca el mayor número de archivo del día (formato: prefix-YYYYMMDD-NNN.png)
@@ -30,7 +30,7 @@ FILENAME="$OUTPUT_DIR/${FILE_PREFIX}-${DATE}-$(printf "%03d" $NEXT_NUM).png"
 
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
-    -b '#2810145d' # color de fondo (transparente)
+    -b '#65001e60' # color de fondo (transparente)
     -c '#F86E88'   # color del borde
     -w 2           # ancho del borde
     -F 'monospace' # fuente
