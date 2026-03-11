@@ -64,7 +64,7 @@ function M.staged_diff()
 
 	local diff_out = diff_res.stdout or ""
 	if diff_out == "" then
-		return "no_staged_changes"
+		return "  No hay cambios staged en este archivo."
 	end
 
 	-- 6. Filtrar líneas relevantes
