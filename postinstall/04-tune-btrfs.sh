@@ -168,7 +168,7 @@ CACHE_BYTES() { du -sb /var/cache/pacman/pkg/ | awk '{print $1}'; }
 HUMAN_OLD=$(CACHE_HUMAN)
 BYTES_OLD=$(CACHE_BYTES)
 
-sudo paccache -ruk2
+paccache -ruk2
 
 HUMAN_NEW=$(CACHE_HUMAN)
 BYTES_NEW=$(CACHE_BYTES)
@@ -188,7 +188,7 @@ fi
 # borra logs más antiguos dentro de las 8 semanas.
 echo
 echo "  Limpiando journal antiguo"
-sudo journalctl --vacuum-time=8weeks --vacuum-size=200M
+journalctl --vacuum-time=8weeks --vacuum-size=200M
 
 # ─[ ELIMINAR HUÉRFANOS ]─────────────────────────────────────
 # Elimina paquetes huérfanos (instalados como dependencias y ya no requeridos).
@@ -198,7 +198,7 @@ echo "  Eliminando paquetes huérfanos"
 mapfile -t orphans < <(pacman -Qtdq)
 
 if [ ${#orphans[@]} -gt 0 ]; then
-    sudo pacman -Rns --quiet --noconfirm "${orphans[@]}"
+    pacman -Rns --noconfirm "${orphans[@]}"
 else
 
     echo "     No hay paquetes huérfanos."
