@@ -32,11 +32,11 @@ BACKUP_FILE="${CONFIG_FILE}-$(date +%Y%m%d-%H%M%S).bak"
 THRESHOLD=80
 BTRFS_MOUNTPOINTS=("/" "/home")
 
-TMP_DIR=$(mktemp -d) || {
+TEMP_DIR=$(mktemp -d) || {
     echo "  Error creando directorio temporal"
     exit 1
 }
-TMP_CONFIG="$TMP_DIR/btrfsmaintenance.tmp"
+TEMP_CONFIG_FILE="$TEMP_DIR/btrfsmaintenance.tmp"
 
 # ────────────────────────────────────────────────────────────
 echo -e "${BLUE}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS${NC}"
@@ -63,7 +63,7 @@ else
 fi
 
 # ─[ AJUSTES BTRFSMAINTENANCE ]───────────────────────────────
-cat << EOF > "$TMP_CONFIG"
+cat << EOF > "$TEMP_CONFIG_FILE"
 # Configuración recomendada para root Btrfs en NVMe DRAM-less
 
 BTRFS_LOG_OUTPUT="journal"
@@ -101,19 +101,19 @@ EOF
 if [[ ! -f "$CONFIG_FILE" ]]; then
     echo
     echo "${YELLOW}  Creando archivo de configuración ${NC}"
-    mv "$TMP_CONFIG" "$CONFIG_FILE" || {
+    mv "$TEMP_CONFIG_FILE" "$CONFIG_FILE" || {
         echo "Error moviendo temporal"
         exit 1
     }
-elif cmp -s "$CONFIG_FILE" "$TMP_CONFIG"; then
+elif cmp -s "$CONFIG_FILE" "$TEMP_CONFIG_FILE"; then
     echo
     echo "  Sin ajustes nuevos"
-    rm "$TMP_CONFIG"
+    rm "$TEMP_CONFIG_FILE"
 else
     echo
     echo "${YELLOW}  Cambios detectados.${NC} Creando respaldo..."
     cp "$CONFIG_FILE" "$BACKUP_FILE"
-    mv "$TMP_CONFIG" "$CONFIG_FILE"
+    mv "$TEMP_CONFIG_FILE" "$CONFIG_FILE"
 fi
 
 # ── REFRESH ────────────────────────────────────────────────
@@ -166,20 +166,20 @@ echo "  Limpiando caché pacman (manteniendo 2 versiones)"
 CACHE_HUMAN() { du -sh /var/cache/pacman/pkg/ | awk '{print $1}'; }
 CACHE_BYTES() { du -sb /var/cache/pacman/pkg/ | awk '{print $1}'; }
 
-HUMAN_OLD=$(CACHE_HUMAN)
-BYTES_OLD=$(CACHE_BYTES)
+CACHE_SIZE_OLD=$(CACHE_HUMAN)
+CACHE_BYTES_OLD=$(CACHE_BYTES)
 
 paccache -ruk2
 
-HUMAN_NEW=$(CACHE_HUMAN)
-BYTES_NEW=$(CACHE_BYTES)
+CACHE_SIZE_NEW=$(CACHE_HUMAN)
+CACHE_BYTES_NEW=$(CACHE_BYTES)
 
-if [ "$BYTES_OLD" -ne "$BYTES_NEW" ]; then
-    SAVED=$((BYTES_OLD - BYTES_NEW))
-    SAVED_HUMAN=$(numfmt --to=iec $SAVED)
-    echo "     Caché reducida: $HUMAN_OLD -> $HUMAN_NEW (-$SAVED_HUMAN)"
+if [ "$CACHE_BYTES_OLD" -ne "$CACHE_BYTES_NEW" ]; then
+    SAVED=$((CACHE_BYTES_OLD - CACHE_BYTES_NEW))
+    SAVED_SIZE=$(numfmt --to=iec $SAVED)
+    echo "     Caché reducida: $CACHE_SIZE_OLD -> $CACHE_SIZE_NEW (-$SAVED_SIZE)"
 else
-    echo "     Caché sin cambios: $HUMAN_NEW"
+    echo "     Caché sin cambios: $CACHE_SIZE_NEW"
 fi
 
 # ─[ LIMPIAR LOGS DEL SISTEMA ]───────────────────────────────
@@ -212,39 +212,39 @@ fi
 # a otros chunks más libres, compactando el uso y liberando espacio
 # para mantener el rendimiento y prevenir errores de espacio.
 
-declare -A BTRFS_SEEN
+declare -A PROCESSED_UUIDS
 echo
 echo -e "${YELLOW}  REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS${NC}"
 
-while read -r BTRFS_MP BTRFS_UUID; do
+while read -r MOUNTPOINT BTRFS_UUID; do
     [[ -z "$BTRFS_UUID" ]] && continue
 
-    [[ " ${BTRFS_MOUNTPOINTS[*]} " =~ ${BTRFS_MP} ]] || continue
+    [[ " ${BTRFS_MOUNTPOINTS[*]} " =~ ${MOUNTPOINT} ]] || continue
 
-    [[ -n "${BTRFS_SEEN[$BTRFS_UUID]+x}" ]] && continue
-    BTRFS_SEEN[$BTRFS_UUID]=1
+    [[ -n "${PROCESSED_UUIDS[$BTRFS_UUID]+x}" ]] && continue
+    PROCESSED_UUIDS[$BTRFS_UUID]=1
 
     echo
     echo -e "${BLUE}BALANCE DE BTRFS:${NC} $BTRFS_UUID (UUID)"
-    echo -e "${YELLOW}Mountpoint : $BTRFS_MP${NC}"
+    echo -e "${YELLOW}Mountpoint : $MOUNTPOINT${NC}"
     echo "    Estado :"
 
     printf '%b' "$BLUE"
-    df -h "$BTRFS_MP"
+    df -h "$MOUNTPOINT"
     printf '%b' "$NC"
 
-    btrfs filesystem usage "$BTRFS_MP" | grep -E \
+    btrfs filesystem usage "$MOUNTPOINT" | grep -E \
         "Device allocated|Unallocated|Free \(statfs|Data.*Used|Metadata.*Used"
 
-    BTRFS_USE=$(df "$BTRFS_MP" | awk 'NR==2 {print $5}' | tr -d '%')
+    USAGE_PERCENT=$(df "$MOUNTPOINT" | awk 'NR==2 {print $5}' | tr -d '%')
 
     echo
-    if ((BTRFS_USE > THRESHOLD)); then
-        echo "${YELLOW}  Uso alto (${BTRFS_USE}%).${NC} Ejecutando balance suave…"
-        btrfs balance start -musage=65 -dusage=65 "$BTRFS_MP"
+    if ((USAGE_PERCENT > THRESHOLD)); then
+        echo "${YELLOW}  Uso alto (${USAGE_PERCENT}%).${NC} Ejecutando balance suave…"
+        btrfs balance start -musage=65 -dusage=65 "$MOUNTPOINT"
         echo "  Balance finalizado."
     else
-        echo -e "${GREEN}  Uso bajo (${BTRFS_USE}%).${NC} No se ejecuta balance."
+        echo -e "${GREEN}  Uso bajo (${USAGE_PERCENT}%).${NC} No se ejecuta balance."
     fi
 done < <(findmnt -rn -t btrfs -o TARGET,UUID | sort -u)
 
