@@ -215,10 +215,9 @@ declare -A BTRFS_SEEN
 echo
 echo -e "${YELLOW}  REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS${NC}"
 
-findmnt -rn -t btrfs -o TARGET,UUID | while read -r BTRFS_MP BTRFS_UUID; do
+while read -r BTRFS_MP BTRFS_UUID; do
     [[ -z "$BTRFS_UUID" ]] && continue
 
-    # Evitar procesar el mismo filesystem más de una vez
     [[ -n "${BTRFS_SEEN[$BTRFS_UUID]+x}" ]] && continue
     BTRFS_SEEN[$BTRFS_UUID]=1
 
@@ -244,7 +243,7 @@ findmnt -rn -t btrfs -o TARGET,UUID | while read -r BTRFS_MP BTRFS_UUID; do
     else
         echo -e "${GREEN}  Uso bajo (${BTRFS_USE}%).${NC} No se ejecuta balance."
     fi
-done
+done < <(findmnt -rn -t btrfs -o TARGET,UUID | sort -u)
 
 echo
 echo "  Listo!"
