@@ -44,6 +44,8 @@ TEMP_DIR=$(mktemp -d) || {
 }
 TEMP_CONFIG_FILE="$TEMP_DIR/btrfsmaintenance.tmp"
 
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
 # ────────────────────────────────────────────────────────────
 echo -e "${BLUE}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS${NC}"
 echo -e "${BLUE}Evita bloqueos por falta de espacio${NC}"
@@ -162,7 +164,7 @@ echo -e "${YELLOW}  Próxima ejecución de mantenimiento Btrfs:${NC}"
 systemctl list-timers | grep btrfs || true
 
 # ─[ PURGAR CACHE ]───────────────────────────────────────────
-# Limpiar con paccache los paquetes que se almacena en /var/cache/pacman/pkg/
+# Limpiar con paccache los paquetes que se almacenan en /var/cache/pacman/pkg/
 #  r: Borra versiones antiguas de paquetes instalados
 #  u: Borra paquetes que ya no están instalados
 #  k: Mantiene solo las últimas N versiones de cada paquete instalado
