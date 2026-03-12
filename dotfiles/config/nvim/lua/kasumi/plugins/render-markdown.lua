@@ -55,7 +55,7 @@ local function bullet_config()
 
 		-- Bullet según nivel
 		icons = function(ctx)
-			local icons = { " ", "", "", "󱘹", "" }
+			local icons = { " ", "", "", "󱘹", "⬬ ", "󰞇 ", " " }
 			return icons[((ctx.level - 1) % #icons) + 1]
 		end,
 
@@ -100,8 +100,9 @@ require("render-markdown").setup({
 			scope_highlight = "RenderMarkdownChecked",
 		},
 	},
+	anti_conceal = { enabled = false },
 	completions = { lsp = { enabled = true } },
-	dash = { icon = "🭹" },
+	dash = { icon = "🮏" }, -- "🭹"
 	debounce = 200, -- retraso en ms antes de actualizar render
 	file_types = { "markdown", "vimwiki" }, -- si usas vimwiki
 	max_file_size = 1.5, -- en MB. Evita render en archivos muy grandes
@@ -109,7 +110,7 @@ require("render-markdown").setup({
 	quote = { icon = "🮌" },
 
 	pipe_table = {
-		-- cell = "trimmed",
+		cell = "trimmed",
 		row = "Comment",
 		head = "Comment",
 		border_virtual = true,
@@ -136,28 +137,25 @@ require("render-markdown").setup({
 	},
 	heading = {
 		signs = false,
-		-- width = "block",
 		width = { "full", "full", "block" },
 		border = true,
+		border_virtual = true,
 		-- position = "inline",
 		-- below = "▀", -- 🮂🮂▀▀▀
 		-- above = "▂",
+		-- below = "🮎", --
+		-- below = "🮑",
+		-- above = "🮏",
 		min_width = 44,
-		-- left_margin = 1,
+		left_margin = 1,
 		left_pad = 1,
+		right_pad = 2,
 		icons = function(ctx)
 			-- Muestra iconos en los encabezados ocultando los `#`.
 			-- La sangría comienza desde el tercer nivel y crece de dos en dos:
 			-- H1 y H2 quedan alineados, H3 tiene 2 espacios, H4 tiene 4, etc.
 			-- El icono cambia según el nivel y se separa del texto para mejor lectura.
-			local icons = {
-				"❰   ❱",
-				" ",
-				" ",
-				" ",
-				"󰎯 ",
-				"󰎴 ",
-			}
+			local icons = { "❰   ❱", " ", "", " ", "󰎯 ", "󰎴 " }
 			local icon = icons[ctx.level] or icons[#icons]
 			local spaces = math.max((ctx.level - 2) * 2, 0)
 			local pad = string.rep(" ", spaces)
