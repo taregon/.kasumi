@@ -1,24 +1,30 @@
 #!/usr/bin/env bash
 # https://blog.programster.org/btrfs-cheatsheet
-# Este script crea o reemplaza el archivo /etc/default/btrfsmaintenance con valores
-# optimizados para un sistema con particiones Btrfs separadas
+# Este script configura y ejecuta mantenimiento para Btrfs:
 #
-# - Realiza un respaldo automático del archivo existente (si lo hay) antes de sobrescribir.
-# - Genera un archivo nuevo con configuración explícita y limpia (sin depender de parsing complejo).
-# - Ajusta tareas de mantenimiento para ser conservadoras pero efectivas:
-#   - Scrub mensual en root y /home (chequeo de integridad con reparación automática).
-#   - Balance mensual suave (umbrales 65–85 para reclaim de chunks sin sobrecarga IO).
-#   - TRIM semanal en root y /home (crucial para rendimiento y longevidad del NVMe).
-#   - Defrag desactivado (no recomendado en SSD).
-# - Los timers generados por btrfsmaintenance (btrfs-scrub.timer, btrfs-balance.timer, btrfs-trim.timer)
-#   son no-templados (sin @) y aplican globalmente a los mountpoints listados en el archivo.
-# - El alcance y comportamiento se definen 100% en /etc/default/btrfsmaintenance:
-#   - No se necesita especificar mountpoints en el nombre del timer.
-#   - La selección de volúmenes ocurre en tiempo de ejecución según las variables *_MOUNTPOINTS.
-# - Después de crear/actualizar el archivo, refresca la configuración con:
-#   sudo /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh
-#   ❯ btrfs device stats /
-#   ❯ btrfs device stats /home
+# 1. CONFIGURACIÓN:
+#    - Crea o reemplaza /etc/default/btrfsmaintenance con valores optimizados
+#      para un sistema con particiones Btrfs separadas en NVMe DRAM-less.
+#    - Los timers generados (btrfs-scrub.timer, btrfs-balance.timer, btrfs-trim.timer)
+#      son no-templados (sin @) y aplican globalmente a los mountpoints listados.
+#    - El alcance y comportamiento se definen 100% en /etc/default/btrfsmaintenance.
+#
+# 2. MANTENIMIENTO PROGRAMADO:
+#    - Scrub mensual en root y /home (chequeo de integridad con reparación automática).
+#    - Balance mensual suave (umbrales 65-85 para reclaim de chunks sin sobrecarga IO).
+#    - TRIM semanal en root y /home (crucial para rendimiento y longevidad del NVMe).
+#    - Defrag desactivado (no recomendado en SSD).
+#
+# 3. MANTENIMIENTO INMEDIATO:
+#    - Limpia caché de pacman (mantiene 2 versiones).
+#    - Limpia journal antiguo (8 semanas, max 200MB).
+#    - Elimina paquetes huérfanos.
+#    - Ejecuta balance manual si el uso supera el 80%.
+#
+# Después de actualizar la configuración, refresca con:
+#   /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh
+#   btrfs device stats /
+#   btrfs device stats /home
 set -euo pipefail
 
 # ── Colores ────────────────────────────────────────────────
