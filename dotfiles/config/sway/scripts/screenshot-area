@@ -30,8 +30,8 @@ FILENAME="$OUTPUT_DIR/${FILE_PREFIX}-${DATE}-$(printf "%03d" $NEXT_NUM).png"
 
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
-    -b '#65001e60' # color de fondo (transparente)
-    -c '#F86E88'   # color del borde
+    -b '#a4084c4d' # color de fondo (transparente)
+    -c '#fc697c'   # color del borde
     -w 2           # ancho del borde
     -F 'monospace' # fuente
     -d             # muestra dimensiones en tiempo real
