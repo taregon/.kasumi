@@ -133,7 +133,7 @@ for timer in \
     btrfs-scrub.timer \
     btrfs-trim.timer \
     btrfs-balance.timer; do
-    if systemctl list-unit-files --type=timer | awk '{print $1}' | grep -qx "$timer"; then
+    if systemctl list-unit-files --type=timer --all | grep -qx "$timer"; then
         if systemctl is-enabled --quiet "$timer"; then
             if systemctl is-active --quiet "$timer"; then
                 echo -e "   ${GREEN} ${NC} $timer activo"
