@@ -30,6 +30,7 @@ NC="\033[0m"
 CONFIG_FILE="/etc/default/btrfsmaintenance"
 BACKUP_FILE="${CONFIG_FILE}-$(date +%Y%m%d-%H%M%S).bak"
 THRESHOLD=80
+BTRFS_MOUNTPOINTS=("/" "/home")
 
 TMP_DIR=$(mktemp -d) || {
     echo "  Error creando directorio temporal"
@@ -218,6 +219,8 @@ echo -e "${YELLOW}  REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS${NC}"
 while read -r BTRFS_MP BTRFS_UUID; do
     [[ -z "$BTRFS_UUID" ]] && continue
 
+    [[ " ${BTRFS_MOUNTPOINTS[*]} " =~ ${BTRFS_MP} ]] || continue
+
     [[ -n "${BTRFS_SEEN[$BTRFS_UUID]+x}" ]] && continue
     BTRFS_SEEN[$BTRFS_UUID]=1
 
@@ -238,7 +241,7 @@ while read -r BTRFS_MP BTRFS_UUID; do
     echo
     if ((BTRFS_USE > THRESHOLD)); then
         echo "${YELLOW}  Uso alto (${BTRFS_USE}%).${NC} Ejecutando balance suave…"
-        sudo btrfs balance start -musage=65 -dusage=65 "$BTRFS_MP"
+        btrfs balance start -musage=65 -dusage=65 "$BTRFS_MP"
         echo "  Balance finalizado."
     else
         echo -e "${GREEN}  Uso bajo (${BTRFS_USE}%).${NC} No se ejecuta balance."
