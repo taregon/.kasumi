@@ -207,7 +207,9 @@ echo "  Eliminando paquetes huérfanos"
 mapfile -t orphans < <(pacman -Qtdq)
 
 if [ ${#orphans[@]} -gt 0 ]; then
-    pacman -Rns --noconfirm "${orphans[@]}"
+    for pkg in "${orphans[@]}"; do
+        pacman -Rns --noconfirm "$pkg"
+    done
 else
 
     echo "     No hay paquetes huérfanos."
