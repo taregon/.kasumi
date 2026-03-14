@@ -102,7 +102,7 @@ require("render-markdown").setup({
 	},
 	anti_conceal = { enabled = false },
 	completions = { lsp = { enabled = true } },
-	dash = { icon = "🮏" }, -- "🭹"
+	dash = { icon = "🯛" }, -- "🭹"
 	debounce = 200, -- retraso en ms antes de actualizar render
 	file_types = { "markdown", "vimwiki" }, -- si usas vimwiki
 	max_file_size = 1.5, -- en MB. Evita render en archivos muy grandes
@@ -139,7 +139,7 @@ require("render-markdown").setup({
 		signs = false,
 		width = { "full", "full", "block" },
 		border = true,
-		border_virtual = true,
+		-- border_virtual = true,
 		-- position = "inline",
 		-- below = "▀", -- 🮂🮂▀▀▀
 		-- above = "▂",
