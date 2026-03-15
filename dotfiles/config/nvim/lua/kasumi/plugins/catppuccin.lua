@@ -19,34 +19,38 @@ require("catppuccin").setup({
 	flavour = "macchiato",
 	-- background = { dark = "macchiato" },
 	color_overrides = {
+		-- stylua: ignore
 		macchiato = {
-			-- stylua: ignore start
-			rosewater = "#6f808a", -- Links
-			flamingo  = "#9DB2B2", -- "{" en lua, texto en wich_key
-			red       = "#f86e88", -- ALERTA #f17b8b #f86c86
-			pink      = "#8d9fc9", -- Tono Rosado | #fa9e9e $ \n { ┊
+			-- ÁREA 1: Colores principales del tema (orden cromático por hue)
+			sky       = "#f8a984", -- < =  > >> is not or
 			mauve     = "#ff9dcd", -- Barra (visual) | Comando (set, remap), loading [=== ].
 			peach     = "#ffcf94", -- Barra (comando) | Valores
 			yellow    = "#f8e084", -- ALERTA Warning
 			green     = "#80c8a1", -- Barra (insert) | ALERTA | STRINGS
-			teal      = "#89DCEB", -- (plug)
-			sky       = "#f8a984", -- < =  > >> is not or
 			maroon    = "#b3a7e5", -- Opciones en scripts
 			sapphire  = "#bef7df", -- 'EOF' - Esta bonito
 			blue      = "#a7d6fa", -- Barra lados, setup
+			teal      = "#89DCEB", -- (plug)
 			lavender  = "#eabdf6", -- Texto en los conf | Nro linea actual
+			pink      = "#8d9fc9", -- Tono Rosado | #fa9e9e $ \n { ┊
+			flamingo  = "#9DB2B2", -- "{" en lua, texto en wich_key
+			rosewater = "#6f808a", -- Links
+			red       = "#f86e88", -- ALERTA #f17b8b #f86c86
+
+			-- ÁREA 2: Colores de texto
 			text      = "#c0cdd3", -- Texto de la Barra y texto
+			overlay0  = "#5d6c74", -- Comentarios
+			overlay1  = "#9eb7c6", -- Fondo de los 'folds'
+			overlay2  = "#8598b2", -- . , [] () : { y Letras menu desplegable
 			subtext0  = "#f2f4fb", -- variables en python
 			subtext1  = "#cbe79f", -- TEXTO / STRING
-			overlay2  = "#8598b2", -- . , [] () : { y Letras menu desplegable
-			overlay1  = "#9eb7c6", -- Fondo de los 'folds'
-			overlay0  = "#5d6c74", -- Comentarios
-			surface1  = "#4a585f", -- Numero de linea, resaltado linea horizontal, (end-of-line)
+
+			-- ÁREA 3: Colores de fondo
 			surface0  = "#414e55", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
+			surface1  = "#4a585f", -- Numero de linea, resaltado linea horizontal, (end-of-line)
 			base      = "#2e383d", -- A. Fondo
 			mantle    = "#343e43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualine de los extremos, fondo menu
 			crust     = "#49575e", -- C. Divisor de paneles, fondo pestañas,
-			-- stylua: ignore end
 		},
 	},
 
