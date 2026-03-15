@@ -27,17 +27,17 @@ Estructura obligatoria:
   - Sin formato: Prohibido bloques (``), negritas (**), cursivas (__)
   - Redacta en español neutro, excepto términos técnicos, conservan su forma
     original.
-  - Responde solo con el tipo de commit más adecuado.
-  - Evita palabras redundantes, adverbios superfluos y términos que no aporten
-    información concreta.
+  - Usa SOLO uno de estos tipos oficiales: feat, fix, docs, style, refactor,
+    perf, test, build, ci, chore, revert.
+  - No divagues ni agregues contexto irrelevante.
   - Prohibido mencionar nombres de funciones, variables, rutas de archivo o
-    código (ej. Aumenta conjunto de iconos)
+    código.
 
 - Reglas para el encabezado
   - Sé directo con el cambio, sin explicar POR QUÉ o CÓMO.
   - Si BREAKING CHANGE, entonces añade `!` en el type (ej.
     `docs(!config): eliminar sección obsoleta de configuración`).
-  - Verbo infinitivo, minúscula inicial. Sin punto final.
+  - Utiliza verbos en infinitivo, minúscula inicial. Sin punto final.
   - Scope: Palabra clave única, en kebab-case, que identifique módulo afectado
 
 - Reglas para el cuerpo
