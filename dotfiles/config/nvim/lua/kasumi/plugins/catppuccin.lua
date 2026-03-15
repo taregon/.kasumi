@@ -21,36 +21,36 @@ require("catppuccin").setup({
 	color_overrides = {
 		-- stylua: ignore
 		macchiato = {
-			-- ÁREA 1: Colores principales del tema (orden cromático por hue)
-			sky       = "#f8a984", -- < =  > >> is not or
-			mauve     = "#ff9dcd", -- Barra (visual) | Comando (set, remap), loading [=== ].
-			peach     = "#ffcf94", -- Barra (comando) | Valores
-			yellow    = "#f8e084", -- ALERTA Warning
-			green     = "#80c8a1", -- Barra (insert) | ALERTA | STRINGS
-			maroon    = "#b3a7e5", -- Opciones en scripts
-			sapphire  = "#bef7df", -- 'EOF' - Esta bonito
-			blue      = "#a7d6fa", -- Barra lados, setup
-			teal      = "#89DCEB", -- (plug)
-			lavender  = "#eabdf6", -- Texto en los conf | Nro linea actual
-			pink      = "#8d9fc9", -- Tono Rosado | #fa9e9e $ \n { ┊
+			-- ÁREA 1: Colores principales del tema (orden numérico por hex)
+			rosewater = "#6F808A", -- Links
 			flamingo  = "#9DB2B2", -- "{" en lua, texto en wich_key
-			rosewater = "#6f808a", -- Links
-			red       = "#f86e88", -- ALERTA #f17b8b #f86c86
+			green     = "#80C8A1", -- Barra (insert) | ALERTA | STRINGS
+			teal      = "#89DCEB", -- (plug)
+			pink      = "#8D9FC9", -- Tono Rosado | #fa9e9e $ \n { ┊
+			blue      = "#A7D6FA", -- Barra lados, setup
+			maroon    = "#B3A7E5", -- Opciones en scripts
+			sapphire  = "#BEF7DF", -- 'EOF' - Esta bonito
+			lavender  = "#EABDF6", -- Texto en los conf | Nro linea actual
+			sky       = "#F8A984", -- < =  > >> is not or
+			yellow    = "#F8E084", -- ALERTA Warning
+			red       = "#F86E88", -- ALERTA #f17b8b #f86c86
+			mauve     = "#FF9DCD", -- Barra (visual) | Comando (set, remap), loading [=== ].
+			peach     = "#FFCF94", -- Barra (comando) | Valores
 
 			-- ÁREA 2: Colores de texto
-			text      = "#c0cdd3", -- Texto de la Barra y texto
-			overlay0  = "#5d6c74", -- Comentarios
-			overlay1  = "#9eb7c6", -- Fondo de los 'folds'
-			overlay2  = "#8598b2", -- . , [] () : { y Letras menu desplegable
-			subtext0  = "#f2f4fb", -- variables en python
-			subtext1  = "#cbe79f", -- TEXTO / STRING
+			text      = "#C0CDD3", -- Texto de la Barra y texto
+			overlay0  = "#5D6C74", -- Comentarios
+			overlay1  = "#9EB7C6", -- Fondo de los 'folds'
+			overlay2  = "#8598B2", -- . , [] () : { y Letras menu desplegable
+			subtext0  = "#F2F4FB", -- variables en python
+			subtext1  = "#CBE79F", -- TEXTO / STRING
 
 			-- ÁREA 3: Colores de fondo
-			surface0  = "#414e55", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
-			surface1  = "#4a585f", -- Numero de linea, resaltado linea horizontal, (end-of-line)
-			base      = "#2e383d", -- A. Fondo
-			mantle    = "#343e43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualine de los extremos, fondo menu
-			crust     = "#49575e", -- C. Divisor de paneles, fondo pestañas,
+			surface0  = "#414E55", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
+			surface1  = "#4A585F", -- Numero de linea, resaltado linea horizontal, (end-of-line)
+			base      = "#2E383D", -- A. Fondo
+			mantle    = "#343E43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualine de los extremos, fondo menu
+			crust     = "#49575E", -- C. Divisor de paneles, fondo pestañas,
 		},
 	},
 
