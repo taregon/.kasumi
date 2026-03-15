@@ -44,7 +44,7 @@ require("catppuccin").setup({
 			surface1  = "#4a585f", -- Numero de linea, resaltado linea horizontal, (end-of-line)
 			surface0  = "#414e55", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
 			base      = "#2e383d", -- A. Fondo
-			mantle    = "#343e43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualaine de los extremos, fondo menu
+			mantle    = "#343e43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualine de los extremos, fondo menu
 			crust     = "#49575e", -- C. Divisor de paneles, fondo pestañas,
 			-- stylua: ignore end
 		},
@@ -54,6 +54,7 @@ require("catppuccin").setup({
 		diffview = true,
 		fidget = true,
 		gitsigns = true,
+		render_markdown = true,
 		mini = {
 			enabled = true,
 			indentscope_color = "pink",
