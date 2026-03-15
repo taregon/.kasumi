@@ -8,8 +8,8 @@
 -- La escala de colores las genero en https://components.ai/color-scale
 -- Opciones: HSV y Natural / RGB y Lineal
 -- Comandos útiles para revisar colores
--- :InspectTree y
--- Coloca el cursor sobre el texto que te interesa :Inspect
+--   :InspectTree para ver grupos de highlight
+--   :Inspect para ver el highlight bajo el cursor
 -- Colores extras: #f5c2e7
 
 -- Importa el módulo de utilidades de colores desde el tema Catppuccin.
