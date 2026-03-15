@@ -6,7 +6,11 @@
 --  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝      ╚═════╝  ╚═════╝ ╚═════╝╚═╝╚═╝  ╚═══╝
 
 -- La escala de colores las genero en https://components.ai/color-scale
--- Opciones: HSV y Natural / RGV y Lineal
+-- Opciones: HSV y Natural / RGB y Lineal
+-- Comandos útiles para revisar colores
+-- :InspectTree y
+-- Coloca el cursor sobre el texto que te interesa :Inspect
+-- Colores extras: #f5c2e7
 
 -- Importa el módulo de utilidades de colores desde el tema Catppuccin.
 local u = require("catppuccin.utils.colors")
@@ -45,6 +49,7 @@ require("catppuccin").setup({
 			-- stylua: ignore end
 		},
 	},
+
 	integrations = { -- Extiende los colores a los plug soportados
 		diffview = true,
 		fidget = true,
@@ -60,6 +65,7 @@ require("catppuccin").setup({
 		neotree = true,
 		which_key = false, -- Considero que mejor desactivado
 	},
+
 	styles = { -- Sino sabes que cambia, coloca: standout
     -- stylua: ignore start
 		booleans     = { "underdotted" },
@@ -78,14 +84,10 @@ require("catppuccin").setup({
 	},
 
 	-- ╒═══════════════════════════════════════════════════════════╕
-	-- │                Mas Colores Personalizados                 │
+	-- │                  COLORES PERSONALIZADOS                   │
 	-- ╘═══════════════════════════════════════════════════════════╛
 	custom_highlights = function(colors)
-		return {
-			--  Con esto separo el color de lualine de las variables de python
-			["@variable"] = {
-				fg = colors.subtext0,
-			},
+		local kasumi_colors = {
 			DiffDelete = {
 				fg = u.darken(colors.red, 0.6, colors.base),
 				bg = u.darken(colors.red, 0.1, colors.base),
@@ -179,8 +181,7 @@ require("catppuccin").setup({
 	end,
 })
 
--- ╒═══════════════════════════════════════════════════════════╕
--- │                EL TEMA SE CARGA DESDE AQUÍ                │
--- ╘═══════════════════════════════════════════════════════════╛
+-- ────────────────────────────────────────────────────────────
+-- EL TEMA SE CARGA DESDE AQU
 -- https://github.com/catppuccin/nvim?tab=readme-ov-file#configuration
 vim.cmd.colorscheme("catppuccin")
