@@ -1,3 +1,5 @@
+local handlers = require("scrollbar.handlers")
+
 require("scrollbar").setup({
 	handle = {
 		blend = 40,
@@ -14,25 +16,23 @@ require("scrollbar").setup({
 			highlight = "CursorLineNr",
 		},
 		Hint = {
-			text = { "▭", "▭" },
+			text = { "╍", "╍" },
 			highlight = "ScrollbarHint",
 		},
 		Warn = {
-			text = { "▭", "▭" },
+			text = { "╍", "╍" },
 			highlight = "ScrollbarWarn",
 		},
 		Info = {
-			text = { "▭", "▭" },
+			text = { "†", "†" },
 			highlight = "ScrollbarInfo",
 		},
 		Error = {
-			text = { "◃", "◃" },
+			text = { "╍", "╍" },
 			highlight = "ScrollbarError",
 		},
 	},
 })
-
-local handlers = require("scrollbar.handlers")
 
 -- Palabras clave a buscar y su tipo de marca asociada
 local keywords = {
@@ -87,6 +87,13 @@ vim.api.nvim_create_autocmd({
 }, {
 	callback = function(args)
 		scan_buffer(args.buf)
+	end,
+})
+
+-- Limpia el cache cuando se elimina un buffer
+vim.api.nvim_create_autocmd("BufDelete", {
+	callback = function(args)
+		todo_cache[args.buf] = nil
 	end,
 })
 
