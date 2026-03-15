@@ -13,7 +13,7 @@
 -- Colores extras: #f5c2e7
 
 -- Importa el módulo de utilidades de colores desde el tema Catppuccin.
-local u = require("catppuccin.utils.colors")
+local kas = require("catppuccin.utils.colors")
 
 require("catppuccin").setup({
 	flavour = "macchiato",
@@ -62,11 +62,11 @@ require("catppuccin").setup({
 			enabled = true,
 			-- custom_bg = require("catppuccin.palettes").get_palette("macchiato").surface1, -- "lualine" will set background to mantle
 		},
-		neotree = true,
+		neo_tree = true,
 		which_key = false, -- Considero que mejor desactivado
 	},
 
-	styles = { -- Sino sabes que cambia, coloca: standout
+	styles = { -- NOTE: Sino sabes que cambia, coloca: standout
     -- stylua: ignore start
 		booleans     = { "underdotted" },
 		comments     = {}, -- Aquí desactivas globalmente el italic de los comentarios
@@ -89,39 +89,39 @@ require("catppuccin").setup({
 	custom_highlights = function(colors)
 		local kasumi_colors = {
 			DiffDelete = {
-				fg = u.darken(colors.red, 0.6, colors.base),
-				bg = u.darken(colors.red, 0.1, colors.base),
+				fg = kas.darken(colors.red, 0.6, colors.base),
+				bg = kas.darken(colors.red, 0.1, colors.base),
 			},
 			DiffAdd = {
-				fg = u.darken(colors.green, 0.9, colors.base),
-				bg = u.darken(colors.green, 0.1, colors.base),
+				fg = kas.darken(colors.green, 0.9, colors.base),
+				bg = kas.darken(colors.green, 0.1, colors.base),
 			},
 			DiffChange = {
-				fg = u.darken(colors.yellow, 0.4, colors.base), -- Texto inactivo
-				bg = u.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffText
+				fg = kas.darken(colors.yellow, 0.4, colors.base), -- Texto inactivo
+				bg = kas.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffText
 			},
 			DiffText = {
-				fg = u.darken(colors.yellow, 0.85, colors.base), -- Texto modificado
-				bg = u.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffChange
+				fg = kas.darken(colors.yellow, 0.85, colors.base), -- Texto modificado
+				bg = kas.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffChange
 			},
 			MsgArea = {
-				fg = u.darken(colors.text, 0.8, colors.base), -- Area de comandos
+				fg = kas.darken(colors.text, 0.8, colors.base), -- Area de comandos
 			},
 			Pmenu = {
 				-- fg = colors.overlay2,
 				bg = colors.mantle, -- Cambia el fondo del menú
 			},
 			Folded = {
-				fg = u.darken(colors.overlay1, 0.7, colors.base), -- Líneas plegadas
-				bg = u.darken(colors.overlay0, 0.1, colors.base), -- Lineas plegadas
+				fg = kas.darken(colors.overlay1, 0.7, colors.base), -- Líneas plegadas
+				bg = kas.darken(colors.overlay0, 0.1, colors.base), -- Lineas plegadas
 				style = { "bold" },
 			},
 			-- https://github.com/catppuccin/nvim/discussions/448#discussioncomment-5560230
 			CursorLine = {
-				bg = u.darken(colors.crust, 0.35, colors.base), -- Igual a CursorLineNr
+				bg = kas.darken(colors.crust, 0.35, colors.base), -- Igual a CursorLineNr
 			},
 			CursorLineNr = {
-				bg = u.darken(colors.crust, 0.50, colors.base), -- Igual a CursorLine
+				bg = kas.darken(colors.crust, 0.50, colors.base), -- Igual a CursorLine
 				fg = colors.subtext0,
 			},
 			NonText = {
@@ -136,24 +136,24 @@ require("catppuccin").setup({
 
 			-- ─────────────────< COLORES RENDER MARKDOWN >──────────────
 			RenderMarkdownCode = {
-				bg = u.darken(colors.mantle, 0.8, colors.base),
+				bg = kas.darken(colors.mantle, 0.8, colors.base),
 			},
 			RenderMarkdownCodeInline = {
 				bg = colors.mantle,
 			},
 			RenderMarkdownH1Bg = {
 				fg = colors.red,
-				bg = u.darken(colors.red, 0.1, colors.base),
+				bg = kas.darken(colors.red, 0.1, colors.base),
 				bold = true,
 			},
 			RenderMarkdownH2Bg = {
 				fg = colors.peach,
-				bg = u.darken(colors.peach, 0.1, colors.base),
+				bg = kas.darken(colors.peach, 0.1, colors.base),
 				bold = true,
 			},
 			RenderMarkdownH3Bg = {
 				fg = colors.peach,
-				bg = u.darken(colors.peach, 0.1, colors.base),
+				bg = kas.darken(colors.peach, 0.1, colors.base),
 				-- nocombine = true,
 			},
 
@@ -182,6 +182,6 @@ require("catppuccin").setup({
 })
 
 -- ────────────────────────────────────────────────────────────
--- EL TEMA SE CARGA DESDE AQU
+-- EL TEMA SE CARGA DESDE AQUÍ
 -- https://github.com/catppuccin/nvim?tab=readme-ov-file#configuration
 vim.cmd.colorscheme("catppuccin")
