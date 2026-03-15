@@ -132,7 +132,13 @@ require("catppuccin").setup({
 				fg = colors.overlay0,
 			},
 
-			-- Estos valores modifican a render-markdown
+			-- ─────────────────< COLORES RENDER MARKDOWN >──────────────
+			RenderMarkdownCode = {
+				bg = u.darken(colors.mantle, 0.8, colors.base),
+			},
+			RenderMarkdownCodeInline = {
+				bg = colors.mantle,
+			},
 			RenderMarkdownH1Bg = {
 				fg = colors.red,
 				bg = u.darken(colors.red, 0.1, colors.base),
@@ -148,12 +154,28 @@ require("catppuccin").setup({
 				bg = u.darken(colors.peach, 0.1, colors.base),
 				-- nocombine = true,
 			},
-			-- Highlight for the heading and sign icons.
-			-- RenderMarkdownH2 = {
-			-- fg = u.darken(colors.red, 0.9, colors.base),
-			-- fg = colors.yellow,
-			-- },
+
+			-- ─────────────────< COLORES NVIM SCROLLBAR >──────────────
+			ScrollbarError = {
+				fg = colors.red,
+			},
+			ScrollbarWarn = {
+				fg = colors.yellow,
+			},
+			ScrollbarInfo = {
+				fg = colors.sky,
+			},
+			ScrollbarHint = {
+				fg = colors.teal,
+			},
 		}
+
+		--  Con esto separo el color de lualine de las variables de python
+		kasumi_colors["@variable"] = {
+			fg = colors.subtext0,
+		}
+
+		return kasumi_colors
 	end,
 })
 
