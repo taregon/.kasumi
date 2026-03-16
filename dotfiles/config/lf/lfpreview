@@ -47,35 +47,9 @@ case "$mime" in
         tar tf "$file"
         ;;
     # ──────────────────────────< Videos >──────────────────────────
-    # Genera un thumbnail estático (cache para evitar reprocesamiento)
     video/*)
         thumb="/tmp/lf-thumb-$(stat -c '%i' "$file").jpg"
-
-        # Genera thumbnail desde un frame específico
-        generate_thumb() {
-            ffmpeg -y -ss "$1" -i "$file" -an \
-                -vf "thumbnail=n=100,scale=800:-1" \
-                -frames:v 1 -q:v 2 -update 1 \
-                -pix_fmt yuv420p -f image2 "$thumb" > /dev/null 2>&1
-        }
-
-        # Obtiene la duración del video
-        duration=$(
-            ffprobe -v error \
-                -show_entries format=duration \
-                -of default=noprint_wrappers=1:nokey=1 \
-                "$file" 2> /dev/null
-        )
-
-        # Videos largos (>20s): toma el frame del medio
-        if [ -n "$duration" ] && [ "$(echo "$duration > 20" | bc)" -eq 1 ]; then
-            remaining=$(echo "$duration / 2 - 10" | bc)
-            generate_thumb "$remaining"
-        fi
-
-        # Si falla o el video es corto, usar el frame en el segundo 10
-        [ ! -s "$thumb" ] && generate_thumb 10
-
+        [ ! -f "$thumb" ] && ffmpegthumbnailer -i "$file" -o "$thumb" -s 800 -t 16% -q 8 -c jpeg
         [ -f "$thumb" ] && draw "$thumb"
         ;;
     # ────────────────────< ARCHIVOS DE TEXTO: >────────────────────
