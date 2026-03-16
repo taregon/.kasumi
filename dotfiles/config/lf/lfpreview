@@ -7,6 +7,14 @@ h="$3"
 x="$4"
 y="$5"
 
+# Cache basado en metadatos del archivo
+create_cache() {
+    mkdir -p "${XDG_CACHE_HOME:-"$HOME/.cache"}/lf"
+    CACHE="${XDG_CACHE_HOME:-"$HOME/.cache"}/lf/thumb-$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' \
+        -- "$(readlink -f "$1" || realpath "$1")" \
+        | xxhsum -q | cut -d' ' -f1)"
+}
+
 # DIBUJAR IMÁGENES USANDO EL PROTOCOLO KITTY
 draw() {
     kitty +kitten icat --silent --stdin no --transfer-mode memory \
@@ -14,24 +22,19 @@ draw() {
 }
 
 # Obtiene el tipo MIME del archivo
-# --mime-type para contenido real,
-# -L para seguir symlinks,
-# -b para output breve
 mime=$(file -Lb --mime-type "$file")
 
 # Selecciona el método de previsualización según el tipo de archivo
 case "$mime" in
     # ────────────────────────< Imágenes: >──────────────────────
-    # muestra directamente
     image/*)
         draw "$file"
         ;;
     # ───────────────────────────< PDFs >───────────────────────────
-    # Convierte la primera página a JPEG (cache para evitar reconversión)
     application/pdf)
-        cache="/tmp/lf-pdf-$(stat -c '%i' "$file").jpg"
-        [ ! -f "$cache" ] && pdftoppm -jpeg -f 1 -singlefile "$file" "${cache%.jpg}"
-        draw "$cache"
+        create_cache "$file"
+        [ -f "${CACHE}.jpg" ] || pdftoppm -jpeg -f 1 -singlefile "$file" "$CACHE"
+        draw "${CACHE}.jpg"
         ;;
     # ─────────────────────< Archivos comprimidos >────────────────────
     application/zip)
@@ -48,15 +51,14 @@ case "$mime" in
         ;;
     # ──────────────────────────< Videos >──────────────────────────
     video/*)
-        thumb="/tmp/lf-thumb-$(stat -c '%i' "$file").jpg"
-        [ ! -f "$thumb" ] && ffmpegthumbnailer -i "$file" -o "$thumb" -s 800 -t 16% -q 8 -c jpeg
-        [ -f "$thumb" ] && draw "$thumb"
+        create_cache "$file"
+        [ -f "${CACHE}.jpg" ] || ffmpegthumbnailer -i "$file" -o "${CACHE}.jpg" -s 0 -c jpeg
+        draw "${CACHE}.jpg"
         ;;
     # ────────────────────< ARCHIVOS DE TEXTO: >────────────────────
-    # usa bat con sintaxis coloreada, fallback a cat
     *)
         bat --color=always --style=plain --paging=never "$file" 2> /dev/null || cat "$file"
         ;;
 esac
 
-exit 1 # Impide el caché → redraw limpio en cada cambio
+exit 1
