@@ -33,6 +33,19 @@ case "$mime" in
         [ ! -f "$cache" ] && pdftoppm -jpeg -f 1 -singlefile "$file" "${cache%.jpg}"
         draw "$cache"
         ;;
+    # ─────────────────────< Archivos comprimidos >────────────────────
+    application/zip)
+        unzip -l "$file"
+        ;;
+    application/x-rar)
+        unrar l "$file"
+        ;;
+    application/x-7z-compressed)
+        7z l "$file"
+        ;;
+    application/x-tar | application/gzip)
+        tar tf "$file"
+        ;;
     # ──────────────────────────< Videos >──────────────────────────
     # Genera un thumbnail estático (cache para evitar reprocesamiento)
     video/*)
