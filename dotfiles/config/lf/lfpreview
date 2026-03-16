@@ -8,10 +8,20 @@ x="$4"
 y="$5"
 
 # Cache basado en metadatos del archivo
+# Genera un hash único basado en: nombre, inode, tipo, tamaño y timestamps
+# Esto invalida el cache si el archivo cambia (renombrado, movido, modificado)
 create_cache() {
+    # Crea el directorio de cache si no existe
     mkdir -p "${XDG_CACHE_HOME:-"$HOME/.cache"}/lf"
+
+    # Resuelve symlinks recursivamente para obtener el archivo real
+    # Fallback a realpath si readlink falla
+    realfile="$(readlink -f "$1" || realpath "$1")"
+
+    # Genera hash con metadatos: nombre(%n), inode(%i), tipo(%F), tamaño(%s), timestamps(%W,%Y)
+    # Usa xxhsum (más rápido que sha256sum)
     CACHE="${XDG_CACHE_HOME:-"$HOME/.cache"}/lf/thumb-$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' \
-        -- "$(readlink -f "$1" || realpath "$1")" \
+        -- "$realfile" \
         | xxhsum -q | cut -d' ' -f1)"
 }
 
