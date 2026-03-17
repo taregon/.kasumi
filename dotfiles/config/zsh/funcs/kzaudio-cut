@@ -17,6 +17,8 @@ fi
 # Archivo temporal para descargar el mejor audio
 local tmpfile="/tmp/kzaud-$RANDOM-$(date +%s).tmp"
 
+trap 'rm -f "$tmpfile"' EXIT INT TERM
+
 echo "[1/2] Descargando mejor audio disponible (ordenado por calidad)..."
 yt-dlp -f bestaudio --format-sort "acodec:opus,abr" --force-overwrites -o "$tmpfile" "$url" || {
     echo "Error: no se pudo descargar el audio. Revisa el URL o formatos disponibles con 'yt-dlp -F $url'"
@@ -25,7 +27,6 @@ yt-dlp -f bestaudio --format-sort "acodec:opus,abr" --force-overwrites -o "$tmpf
 
 if [[ ! -s "$tmpfile" ]]; then
     echo "Error: archivo descargado vacío"
-    rm -f "$tmpfile"
     return 1
 fi
 
@@ -36,9 +37,7 @@ ffmpeg -hide_banner -loglevel info \
     -c:a aac -q:a 0 \
     "$outfile" || {
     echo "Error: ffmpeg falló durante el corte/recodificación"
-    rm -f "$tmpfile"
     return 1
 }
 
-rm -f "$tmpfile"
 echo "✅ Clip generado: $outfile"
