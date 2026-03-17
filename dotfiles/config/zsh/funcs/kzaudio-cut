@@ -7,7 +7,7 @@
 local url="$1"
 local start="$2"
 local end="$3"
-local outfile="${4:-output_${start}-${end}.m4a}"
+local outfile="${4:-yt_audiocut-${start}-${end}.m4a}"
 
 if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
     echo "Uso: kzaud-cut <url> <inicio> <fin> [archivo_salida]"
@@ -21,12 +21,13 @@ trap 'rm -f "$tmpfile"' EXIT INT TERM
 
 echo "[1/2] Descargando mejor audio disponible (ordenado por calidad)..."
 yt-dlp -f bestaudio --format-sort "acodec:opus,abr" --force-overwrites -o "$tmpfile" "$url" || {
-    echo "Error: no se pudo descargar el audio. Revisa el URL o formatos disponibles con 'yt-dlp -F $url'"
+    echo "  No se pudo descargar el audio. "
+    echo "   Revisa el URL o formatos disponibles con 'yt-dlp -F $url'"
     return 1
 }
 
 if [[ ! -s "$tmpfile" ]]; then
-    echo "Error: archivo descargado vacío"
+    echo "  Archivo descargado vacío"
     return 1
 fi
 
@@ -36,8 +37,8 @@ ffmpeg -hide_banner -loglevel info \
     -i "$tmpfile" \
     -c:a aac -q:a 0 \
     "$outfile" || {
-    echo "Error: ffmpeg falló durante el corte/recodificación"
+    echo "  ffmpeg falló durante el corte/recodificación"
     return 1
 }
 
-echo "✅ Clip generado: $outfile"
+echo "  Clip generado: $outfile"
