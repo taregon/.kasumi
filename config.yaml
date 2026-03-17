@@ -2,6 +2,12 @@
 config:
   create: true
   dotpath: dotfiles
+  impignore:
+    - '*.wants'
+    - '*.socket'
+  upignore:
+    - '*.wants'
+    - '*.socket'
   link_dotfile_default: absolute
   import_actions:
     - actions.d/nano.yaml
@@ -148,9 +154,18 @@ dotfiles:
     src: config/opencode/themes
     dst: ~/.config/opencode/themes
     link: absolute
+  d_gammastep:
+    src: config/gammastep
+    dst: ~/.config/gammastep
+    link: absolute
+  d_systemd_user:
+    src: config/systemd/user
+    dst: ~/.config/systemd/user
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
+      - d_gammastep
       - d_git
       - d_gotop
       - d_kitty
@@ -175,6 +190,7 @@ profiles:
       - d_lnav
       - d_neovim
       - d_opencode_theme
+      - d_systemd_user
       - d_zsh_functions
       - f_fonts
       - f_lnav
