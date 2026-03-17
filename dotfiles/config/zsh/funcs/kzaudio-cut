@@ -11,7 +11,7 @@
 local url="$1"
 local start="$2"
 local end="$3"
-local outfile="${4:-yt_audiocut-${start}-${end}.m4a}"
+local outfile="${4:-yt_audiocut-${start//:/-}-${end//:/-}.m4a}"
 
 if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
     echo "Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]"
