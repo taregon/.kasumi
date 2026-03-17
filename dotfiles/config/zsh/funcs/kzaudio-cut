@@ -17,8 +17,8 @@ fi
 # Archivo temporal para descargar el mejor audio
 local tmpfile="/tmp/kzaud-$RANDOM-$(date +%s).tmp"
 
-echo "[1/2] Descargando mejor audio disponible..."
-yt-dlp -f bestaudio --force-overwrites -o "$tmpfile" "$url" || {
+echo "[1/2] Descargando mejor audio disponible (ordenado por calidad)..."
+yt-dlp -f bestaudio --format-sort "acodec:opus,abr" --force-overwrites -o "$tmpfile" "$url" || {
     echo "Error: no se pudo descargar el audio. Revisa el URL o formatos disponibles con 'yt-dlp -F $url'"
     return 1
 }
@@ -29,11 +29,11 @@ if [[ ! -s "$tmpfile" ]]; then
     return 1
 fi
 
-echo "[2/2] Cortando y recodificando a AAC/M4A (máxima calidad)..."
+echo "[2/2] Cortando audio (preservando calidad)..."
 ffmpeg -hide_banner -loglevel info \
     -ss "$start" -to "$end" \
     -i "$tmpfile" \
-    -c:a aac -b:a 320k \
+    -c:a aac -q:a 0 \
     "$outfile" || {
     echo "Error: ffmpeg falló durante el corte/recodificación"
     rm -f "$tmpfile"
