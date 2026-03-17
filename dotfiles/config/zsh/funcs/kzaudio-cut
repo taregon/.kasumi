@@ -33,12 +33,17 @@ fi
 
 echo "[2/2] Cortando audio (preservando calidad)..."
 ffmpeg -hide_banner -loglevel info \
-    -ss "$start" -to "$end" \
     -i "$tmpfile" \
+    -ss "$start" -to "$end" \
     -c:a aac -q:a 0 \
     "$outfile" || {
     echo "  ffmpeg falló durante el corte/recodificación"
     return 1
 }
 
-echo "  Clip generado: $outfile"
+if [[ -s "$outfile" ]]; then
+    echo "  Clip generado: $outfile"
+else
+    echo "  No se generó el archivo de salida"
+    return 1
+fi
