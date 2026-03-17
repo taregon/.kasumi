@@ -11,11 +11,21 @@
 local url="$1"
 local start="$2"
 local end="$3"
-local outfile="${4:-yt_audiocut-${start//:/-}-${end//:/-}.m4a}"
+local outfile
 
 if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
     echo "Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]"
     return 1
+fi
+
+if [[ -z "$4" ]]; then
+    local title
+    title=$(yt-dlp --print "%(title)s" -s "$url" 2>/dev/null)
+    title=${title//[^a-zA-Z0-9_-]/}
+    title=${title:0:40}
+    outfile="yt_audiocut-${title}-${start//:/-}-${end//:/-}.m4a"
+else
+    outfile="$4"
 fi
 
 if [[ -s "$outfile" ]]; then
