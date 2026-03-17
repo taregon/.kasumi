@@ -1,0 +1,44 @@
+# vim: filetype=zsh
+# Uso:
+# kzaud-cut <url> <inicio> <fin> [archivo_salida]
+# Ejemplo:
+# kzaud-cut "https://www.youtube.com/watch?v=ID" 00:48:20 00:51:13 mi_clip.m4a
+
+local url="$1"
+local start="$2"
+local end="$3"
+local outfile="${4:-output_${start}-${end}.m4a}"
+
+if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
+    echo "Uso: kzaud-cut <url> <inicio> <fin> [archivo_salida]"
+    return 1
+fi
+
+# Archivo temporal para descargar el mejor audio
+local tmpfile="/tmp/kzaud-$RANDOM-$(date +%s).tmp"
+
+echo "[1/2] Descargando mejor audio disponible..."
+yt-dlp -f bestaudio --force-overwrites -o "$tmpfile" "$url" || {
+    echo "Error: no se pudo descargar el audio. Revisa el URL o formatos disponibles con 'yt-dlp -F $url'"
+    return 1
+}
+
+if [[ ! -s "$tmpfile" ]]; then
+    echo "Error: archivo descargado vacío"
+    rm -f "$tmpfile"
+    return 1
+fi
+
+echo "[2/2] Cortando y recodificando a AAC/M4A (máxima calidad)..."
+ffmpeg -hide_banner -loglevel info \
+    -ss "$start" -to "$end" \
+    -i "$tmpfile" \
+    -c:a aac -b:a 320k \
+    "$outfile" || {
+    echo "Error: ffmpeg falló durante el corte/recodificación"
+    rm -f "$tmpfile"
+    return 1
+}
+
+rm -f "$tmpfile"
+echo "✅ Clip generado: $outfile"
