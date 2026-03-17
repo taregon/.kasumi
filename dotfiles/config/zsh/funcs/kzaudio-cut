@@ -14,6 +14,11 @@ if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
     return 1
 fi
 
+if [[ -s "$outfile" ]]; then
+    echo "  El archivo ya existe: $outfile"
+    return 0
+fi
+
 # Archivo temporal para descargar el mejor audio
 local tmpfile="/tmp/kzaud-$RANDOM-$(date +%s).tmp"
 
