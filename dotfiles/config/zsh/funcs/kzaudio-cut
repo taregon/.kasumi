@@ -1,8 +1,12 @@
 # vim: filetype=zsh
-# Uso:
-# kzaud-cut <url> <inicio> <fin> [archivo_salida]
-# Ejemplo:
-# kzaud-cut "https://www.youtube.com/watch?v=ID" 00:48:20 00:51:13 mi_clip.m4a
+# Descarga y corta audio de videos de YouTube
+#
+# Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]
+# Ejemplo: kzaudio-cut "https://youtube.com/watch?v=ID" 00:48:20 00:51:13 mi_clip.m4a
+#
+# Descarga el mejor audio disponible (ordenado por códec opus y bitrate),
+# lo corta con ffmpeg usando seek preciso, y lo guarda en M4A/AAC.
+# Si el archivo de salida ya existe, se salta la descarga.
 
 local url="$1"
 local start="$2"
@@ -10,7 +14,7 @@ local end="$3"
 local outfile="${4:-yt_audiocut-${start}-${end}.m4a}"
 
 if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
-    echo "Uso: kzaud-cut <url> <inicio> <fin> [archivo_salida]"
+    echo "Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]"
     return 1
 fi
 
