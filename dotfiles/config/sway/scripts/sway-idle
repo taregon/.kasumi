@@ -23,11 +23,22 @@ case "$1" in
         lock_screen
         ;;
     *)
-        swayidle -w \
-            timeout $TIMEOUT_LOCK "$LOCK_SCRIPT lock" \
-            timeout $TIMEOUT_DPMS_OFF 'swaymsg "output * dpms off"' \
-            resume 'swaymsg "output * dpms on"' \
-            timeout $TIMEOUT_SUSPEND 'systemctl suspend' \
-            before-sleep "$LOCK_SCRIPT lock"
+        # Ejecuta swayidle en modo bloqueante (espera a que cada acción termine)
+        swayidle -w
+
+        # Tras un periodo de inactividad, bloquea la sesión
+        timeout $TIMEOUT_LOCK "$LOCK_SCRIPT lock"
+
+        # Tras más inactividad, apaga todas las pantallas (DPMS off)
+        timeout $TIMEOUT_DPMS_OFF 'swaymsg "output * dpms off"'
+
+        # Al detectar actividad, enciende nuevamente las pantallas
+        resume 'swaymsg "output * dpms on"'
+
+        # Tras inactividad prolongada, suspende el sistema
+        timeout $TIMEOUT_SUSPEND 'systemctl suspend'
+
+        # Antes de suspender, asegura que la sesión esté bloqueada
+        before-sleep "$LOCK_SCRIPT lock"
         ;;
 esac
