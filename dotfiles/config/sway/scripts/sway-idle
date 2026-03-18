@@ -1,19 +1,28 @@
 #!/bin/bash
 # Gestiona bloqueo automático, apagado de pantalla y suspensión bajo Sway.
 
-# Ruta al script de bloqueo personalizado
-LOCK_SCRIPT="$HOME/.config/sway/scripts/sway-lock"
+LOCK_SCRIPT="$0"
 
-# Inicia swayidle con distintos temporizadores y acciones
-# 1. Bloquea la sesión tras 5 min de inactividad
-# 2. Apaga pantallas a los 10 min
-# 3. Enciende pantallas al reanudar actividad
-# 4. Suspende el sistema a los 15 min
-# 5. Bloquea antes de suspender (manual o automático)
+lock_screen() {
+    pidof swaylock > /dev/null && exit 0
 
-swayidle -w \
-    timeout 300 "$LOCK_SCRIPT" \
-    timeout 600 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    timeout 900 'systemctl suspend' \
-    before-sleep "$LOCK_SCRIPT"
+    BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
+    RANDOM_BG=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
+
+    playerctl pause 2> /dev/null
+    swaylock -f -i "$RANDOM_BG"
+}
+
+case "$1" in
+    lock|lock-now)
+        lock_screen
+        ;;
+    *)
+        swayidle -w \
+            timeout 300 "$LOCK_SCRIPT lock" \
+            timeout 600 'swaymsg "output * dpms off"' \
+            resume 'swaymsg "output * dpms on"' \
+            timeout 900 'systemctl suspend' \
+            before-sleep "$LOCK_SCRIPT lock"
+        ;;
+esac
