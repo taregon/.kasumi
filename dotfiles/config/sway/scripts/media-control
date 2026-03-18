@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+STEP=5
+
+notify() {
+    local msg="$1"
+    local value="$2"
+    local channel="$3"
+
+    notify-send \
+        -h string:x-canonical-private-synchronous:"$channel" \
+        -h int:value:"${value:-0}" \
+        -u low \
+        -a "media-control" \
+        "$msg"
+}
+
+case "$1" in
+    volume_up)
+        pamixer -i "$STEP"
+        VOLUME=$(pamixer --get-volume)
+        notify "Volumen: ${VOLUME}%" "$VOLUME" "volume"
+        ;;
+
+    volume_down)
+        pamixer -d "$STEP"
+        VOLUME=$(pamixer --get-volume)
+        notify "Volumen: ${VOLUME}%" "$VOLUME" "volume"
+        ;;
+
+    mute)
+        pamixer -t
+        if pamixer --get-mute | grep -q true; then
+            notify "Audio: mute" 0 "volume"
+        else
+            VOLUME=$(pamixer --get-volume)
+            notify "Volumen: ${VOLUME}%" "$VOLUME" "volume"
+        fi
+        ;;
+
+    play_pause)
+        playerctl play-pause
+        STATUS=$(playerctl status 2> /dev/null)
+
+        case "$STATUS" in
+            Playing) notify "Reproduciendo" 0 "media" ;;
+            Paused) notify "Pausado" 0 "media" ;;
+            *) notify "Sin reproducción activa" 0 "media" ;;
+        esac
+        ;;
+
+    next)
+        playerctl next
+        notify "Siguiente pista" 0 "media"
+        ;;
+
+    prev)
+        playerctl previous
+        notify "Pista anterior" 0 "media"
+        ;;
+
+    *)
+        echo "Uso: $0 {volume_up|volume_down|mute|play_pause|next|prev}"
+        exit 1
+        ;;
+esac
