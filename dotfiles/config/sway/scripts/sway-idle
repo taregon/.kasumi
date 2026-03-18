@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Gestiona bloqueo automático, apagado de pantalla y suspensión bajo Sway.
 # before-sleep: lock antes de suspender/sleep
 
@@ -9,7 +9,7 @@ TIMEOUT_DPMS_OFF=600 # segundos totales para dpms off (10 min)
 TIMEOUT_SUSPEND=900  # segundos totales para suspend (15 min)
 
 lock_screen() {
-    pidof swaylock > /dev/null && exit 0
+    pidof swaylock > /dev/null && return
 
     BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
     RANDOM_BG=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
@@ -18,27 +18,23 @@ lock_screen() {
     swaylock -f -i "$RANDOM_BG"
 }
 
+# Ejecuta swayidle en modo bloqueante (espera a que cada acción termine)
+#   1. Tras un periodo de inactividad, bloquea la sesión
+#   2. Tras más inactividad, apaga todas las pantallas (DPMS off)
+#   3. Al detectar actividad, enciende nuevamente las pantallas
+#   4. Tras inactividad prolongada, suspende el sistema
+#   5. Antes de suspender, asegura que la sesión esté bloqueada
+
 case "$1" in
     lock)
         lock_screen
         ;;
     *)
-        # Ejecuta swayidle en modo bloqueante (espera a que cada acción termine)
-        swayidle -w
-
-        # Tras un periodo de inactividad, bloquea la sesión
-        timeout $TIMEOUT_LOCK "$LOCK_SCRIPT lock"
-
-        # Tras más inactividad, apaga todas las pantallas (DPMS off)
-        timeout $TIMEOUT_DPMS_OFF 'swaymsg "output * dpms off"'
-
-        # Al detectar actividad, enciende nuevamente las pantallas
-        resume 'swaymsg "output * dpms on"'
-
-        # Tras inactividad prolongada, suspende el sistema
-        timeout $TIMEOUT_SUSPEND 'systemctl suspend'
-
-        # Antes de suspender, asegura que la sesión esté bloqueada
-        before-sleep "$LOCK_SCRIPT lock"
+        swayidle -w \
+            timeout $TIMEOUT_LOCK "$LOCK_SCRIPT lock" \
+            timeout $TIMEOUT_DPMS_OFF 'swaymsg "output * dpms off"' \
+            resume 'swaymsg "output * dpms on"' \
+            timeout $TIMEOUT_SUSPEND 'systemctl suspend' \
+            before-sleep "$LOCK_SCRIPT lock"
         ;;
 esac
