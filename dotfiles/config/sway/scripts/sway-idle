@@ -3,6 +3,10 @@
 
 LOCK_SCRIPT="$0"
 
+TIMEOUT_LOCK=300     # segundos de inactividad para lock (5 min)
+TIMEOUT_DPMS_OFF=600 # segundos totales para dpms off (10 min)
+TIMEOUT_SUSPEND=900  # segundos totales para suspend (15 min)
+
 lock_screen() {
     pidof swaylock > /dev/null && exit 0
 
@@ -14,15 +18,15 @@ lock_screen() {
 }
 
 case "$1" in
-    lock|lock-now)
+    lock)
         lock_screen
         ;;
     *)
         swayidle -w \
-            timeout 300 "$LOCK_SCRIPT lock" \
-            timeout 600 'swaymsg "output * dpms off"' \
+            timeout $TIMEOUT_LOCK "$LOCK_SCRIPT lock" \
+            timeout $TIMEOUT_DPMS_OFF 'swaymsg "output * dpms off"' \
             resume 'swaymsg "output * dpms on"' \
-            timeout 900 'systemctl suspend' \
+            timeout $TIMEOUT_SUSPEND 'systemctl suspend' \
             before-sleep "$LOCK_SCRIPT lock"
         ;;
 esac
