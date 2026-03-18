@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gestiona bloqueo automático, apagado de pantalla y suspensión bajo Sway.
+# before-sleep: lock antes de suspender/sleep
 
 LOCK_SCRIPT="$0"
 
