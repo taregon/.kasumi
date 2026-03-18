@@ -158,10 +158,6 @@ dotfiles:
     src: config/gammastep
     dst: ~/.config/gammastep
     link: absolute
-  d_systemd_user:
-    src: config/systemd/user
-    dst: ~/.config/systemd/user
-    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -190,7 +186,6 @@ profiles:
       - d_lnav
       - d_neovim
       - d_opencode_theme
-      - d_systemd_user
       - d_zsh_functions
       - f_fonts
       - f_lnav
