@@ -14,8 +14,14 @@ lock_screen() {
     BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
     RANDOM_BG=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
 
+    # Pausa reproducción multimedia
     playerctl pause 2> /dev/null
-    swaylock -f -i "$RANDOM_BG"
+
+    if [ -n "$RANDOM_BG" ]; then
+        swaylock -f -i "$RANDOM_BG"
+    else
+        swaylock -f
+    fi
 }
 
 # Ejecuta swayidle en modo bloqueante (espera a que cada acción termine)
