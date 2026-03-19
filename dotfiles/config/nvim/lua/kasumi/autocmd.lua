@@ -6,7 +6,7 @@
 -- ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝  ╚═════╝╚═╝     ╚═╝╚═════╝
 
 -- ╒═══════════════════════════════════════════════════════════╕
--- │                         METADATA                          │
+-- │                        AUTO_GROUPS                        │
 -- ╘═══════════════════════════════════════════════════════════╛
 
 -- Simplifica la llamada al método de creación de auto comandos
@@ -20,12 +20,24 @@ local function augroup(name, fn)
 	fn(group)
 end
 
+-- SEMÁNTICA DE NOMBRES
+-- ────────────────────────────────────────────────────────────
+-- Formato: PascalSnake_Case
+-- Separadores por contexto:
+--   ft_*     -> filetypes (ft_Ini_Syntax, ft_Csv_Filetypes)
+--   cursor_* -> cursor (Cursor_Restore)
+--   num_*    -> números (Num_Rel_Toggle)
+--   *_*      -> acciones (Awk_Indent_Save, Lint_Auto, Fmt_On_Save)
+--   *_Off    -> desactivación (Indent_Mini_Off, Spell_Off)
+--   ts_*     -> treesitter (Ts_Start)
+--   bash_*   -> bash (SortBashFunctions)
+
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                         FILETYPES                         │
 -- ╘═══════════════════════════════════════════════════════════╛
 
--- Configuración de archivos INI
-augroup("Ini_Files", function(group)
+-- Asigna sintaxis dosini a archivos conf e ini
+augroup("Ft_Ini_Syntax", function(group)
 	aucmd("BufReadPost", {
 		group = group,
 		pattern = { "*.conf", "*.ini" },
@@ -33,9 +45,8 @@ augroup("Ini_Files", function(group)
 	})
 end)
 
--- Configuración de archivos CSV y DAT
-augroup("CsvFileTypes", function(group)
-	-- Manejo de archivos CSV
+-- Asigna filetypes a CSV y DAT
+augroup("Ft_Csv_Filetypes", function(group)
 	aucmd({ "BufNewFile", "BufRead" }, {
 		group = group,
 		pattern = "*.csv",
@@ -50,7 +61,7 @@ augroup("CsvFileTypes", function(group)
 	})
 end)
 
--- Registro estático de filetypes personalizados
+-- Registra filetypes para archivos todo
 vim.filetype.add({
 	extension = { ["todo.txt"] = "todotxt" },
 	filename = {
@@ -65,7 +76,7 @@ vim.filetype.add({
 -- ╘═══════════════════════════════════════════════════════════╛
 
 -- Recuerda la última posición del cursor
-augroup("RestoreCursor", function(group)
+augroup("Cursor_Restore", function(group)
 	aucmd("BufReadPost", {
 		group = group,
 		pattern = "*",
@@ -78,10 +89,8 @@ augroup("RestoreCursor", function(group)
 	})
 end)
 
--- Alterna números relativos según el modo
--- Números relativos activados en Normal, desactivados en Insert y Visual
-augroup("ToggleRelativeNumber", function(group)
-	-- Al abrir un buffer, activar números relativos por defecto
+-- Números relativos en modo Normal, desactivados en Insert y Visual
+augroup("Num_Rel_Toggle", function(group)
 	aucmd({ "BufEnter", "BufWinEnter" }, {
 		group = group,
 		callback = function()
@@ -129,7 +138,7 @@ augroup("ToggleRelativeNumber", function(group)
 end)
 
 -- Auto-indentación y limpieza de archivos AWK al guardar
-augroup("AwkIndent", function(group)
+augroup("Awk_Indent_Save", function(group)
 	aucmd("BufWritePre", {
 		group = group,
 		pattern = "*.awk",
@@ -144,8 +153,7 @@ end)
 -- ╘═══════════════════════════════════════════════════════════╛
 
 -- Ejecuta linters automáticamente
-augroup("NvimLint", function(group)
-	-- Eventos optimizados para el linter
+augroup("Lint_Auto", function(group)
 	aucmd({ "BufEnter", "BufWritePost", "TextChanged" }, {
 		group = group,
 		callback = function()
@@ -154,8 +162,8 @@ augroup("NvimLint", function(group)
 	})
 end)
 
--- Ejecutar automáticamente los formatters configurados al guardar
-augroup("FormatOnSave", function(group)
+-- Formatea con conform al guardar
+augroup("Fmt_On_Save", function(group)
 	aucmd("BufWritePre", {
 		group = group,
 		pattern = "*",
@@ -170,7 +178,7 @@ end)
 -- ╘═══════════════════════════════════════════════════════════╛
 
 -- Deshabilita mini.indentscope en buffers donde no aporta valor
-augroup("DisableMiniIndentScope", function(group)
+augroup("Indent_Mini_Off", function(group)
 	aucmd("FileType", {
 		group = group,
 		pattern = {
@@ -188,8 +196,8 @@ augroup("DisableMiniIndentScope", function(group)
 	})
 end)
 
--- Desactivar spell / corrector ortográfico
-augroup("NoSpell", function(group)
+-- Desactiva spell en logs, txt y codecompanion
+augroup("Spell_Off", function(group)
 	aucmd({ "BufRead", "BufNewFile", "BufEnter", "BufWinEnter", "FileType" }, {
 		group = group,
 		pattern = { "*.log", "*.txt", "codecompanion" },
@@ -201,8 +209,8 @@ end)
 -- │                           TOOLS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
 
--- Activa Tree-sitter en buffers abiertos
-augroup("TreesitterStart", function(group)
+-- Inicia Tree-sitter en cada buffer
+augroup("Ts_Start", function(group)
 	aucmd("FileType", {
 		group = group,
 		callback = function(args)
@@ -219,7 +227,9 @@ augroup("TreesitterStart", function(group)
 	})
 end)
 
--- Ordena funciones en Bash alfabéticamente
+-- ────────────────────────────────────────────────────────────
+-- USER COMMAND: SortBashFunctions
+-- Ordena funciones Bash alfabéticamente
 local function get_bash_func_name(func_text)
 	local name = func_text:match("^%s*function%s+([%w_]+)")
 	if name then
@@ -253,8 +263,7 @@ vim.api.nvim_create_user_command("SortBashFunctions", function(opts)
 		elseif i - 1 > end_line then
 			break
 		else
-			local is_func_start = line:match("^%s*function%s+%w+")
-				or line:match("^%s*([%w_]+)%s*%(%s*%)%s*{")
+			local is_func_start = line:match("^%s*function%s+%w+") or line:match("^%s*([%w_]+)%s*%(%s*%)%s*{")
 
 			if is_func_start then
 				if inside_func then
