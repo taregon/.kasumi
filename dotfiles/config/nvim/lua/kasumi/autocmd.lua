@@ -82,6 +82,18 @@ augroup("AwkIndent", function(group)
 		end,
 	})
 end)
+
+-- ────────────────────────────────────────────────────────────
+-- Registro estático de filetypes personalizados.
+vim.filetype.add({
+	extension = { ["todo.txt"] = "todotxt" },
+	filename = {
+		["todo.txt"] = "todotxt",
+		["done.txt"] = "todotxt",
+		["report.txt"] = "todotxt", -- si usas variaciones
+	},
+})
+
 -- ────────────────────────────────────────────────────────────
 -- Ejecutar automáticamente los formatters configurados al guardar.
 local conform = require("conform")
