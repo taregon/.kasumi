@@ -98,7 +98,7 @@ augroup("Num_Rel_Toggle", function(group)
 		end,
 	})
 
-	-- Insertar modo → desactivar números relativos
+	-- Insertar modo -> desactivar números relativos
 	aucmd("InsertEnter", {
 		group = group,
 		callback = function()
@@ -106,7 +106,7 @@ augroup("Num_Rel_Toggle", function(group)
 		end,
 	})
 
-	-- Salir de Insert → activar números relativos
+	-- Salir de Insert -> activar números relativos
 	aucmd("InsertLeave", {
 		group = group,
 		callback = function()
@@ -114,7 +114,7 @@ augroup("Num_Rel_Toggle", function(group)
 		end,
 	})
 
-	-- Entrar en modos Visual → desactivar números relativos
+	-- Entrar en modos Visual -> desactivar números relativos
 	aucmd("ModeChanged", {
 		group = group,
 		pattern = "*:[vV\x16]*",
@@ -123,7 +123,7 @@ augroup("Num_Rel_Toggle", function(group)
 		end,
 	})
 
-	-- Salir de modos Visual → activar números relativos si no está en Insert
+	-- Salir de modos Visual -> activar números relativos si no está en Insert
 	aucmd("ModeChanged", {
 		group = group,
 		pattern = "[vV\x16]*:*",
