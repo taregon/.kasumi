@@ -53,7 +53,6 @@ augroup("Ft_Csv_Filetypes", function(group)
 		command = "set filetype=rfc_csv",
 	})
 
-	-- Manejo de archivos DAT
 	aucmd({ "BufNewFile", "BufRead" }, {
 		group = group,
 		pattern = "*.dat",
@@ -137,7 +136,7 @@ augroup("Num_Rel_Toggle", function(group)
 	})
 end)
 
--- Auto-indentación y limpieza de archivos AWK al guardar
+-- Indenta archivos AWK al guardar
 augroup("Awk_Indent_Save", function(group)
 	aucmd("BufWritePre", {
 		group = group,
@@ -256,11 +255,13 @@ vim.api.nvim_create_user_command("SortBashFunctions", function(opts)
 	local funcs = {}
 	local current_func = {}
 	local inside_func = false
+	local idx = 0
 
-	for i, line in ipairs(all_lines) do
-		if i - 1 < start_line then
+	for line in pairs(all_lines) do
+		idx = idx + 1
+		if idx - 1 < start_line then
 			table.insert(preamble, line)
-		elseif i - 1 > end_line then
+		elseif idx - 1 > end_line then
 			break
 		else
 			local is_func_start = line:match("^%s*function%s+%w+") or line:match("^%s*([%w_]+)%s*%(%s*%)%s*{")
