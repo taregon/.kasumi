@@ -59,8 +59,21 @@ case "$1" in
         notify "Pista anterior" 0 "media"
         ;;
 
+    l-up)
+        brightnessctl set +"$STEP_BRT"%
+        LEVEL_BRT=$(brightnessctl get)
+        MAX_BRT=$(brightnessctl max)
+        notify "Brillo: $((LEVEL_BRT * 100 / MAX_BRT))%" "$((LEVEL_BRT * 100 / MAX_BRT))" "brightness"
+        ;;
+
+    l-down)
+        brightnessctl set "$STEP_BRT"%-
+        LEVEL_BRT=$(brightnessctl get)
+        MAX_BRT=$(brightnessctl max)
+        notify "Brillo: $((LEVEL_BRT * 100 / MAX_BRT))%" "$((LEVEL_BRT * 100 / MAX_BRT))" "brightness"
+        ;;
+
     *)
-        echo "Uso: $0 {volume_up|volume_down|mute|play_pause|next|prev}"
         exit 1
         ;;
 esac
