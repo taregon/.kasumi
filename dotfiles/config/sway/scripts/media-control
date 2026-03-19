@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-STEP=5
+# Pasos de ajuste
+STEP_VOL=5
+STEP_BRT=2
 
+# Funcion para enviar notificaciones con barra de progreso
 notify() {
     local msg="$1"
     local value="$2"
@@ -17,35 +20,39 @@ notify() {
 
 case "$1" in
     volume_up)
-        pamixer -i "$STEP"
-        VOLUME=$(pamixer --get-volume)
-        notify "Volumen: ${VOLUME}%" "$VOLUME" "volume"
+        # Aumenta volumen y notifica
+        pamixer -i "$STEP_VOL"
+        LEVEL_VOL=$(pamixer --get-volume)
+        notify "Volumen: ${LEVEL_VOL}%" "$LEVEL_VOL" "volume"
         ;;
 
     volume_down)
-        pamixer -d "$STEP"
-        VOLUME=$(pamixer --get-volume)
-        notify "Volumen: ${VOLUME}%" "$VOLUME" "volume"
+        # Disminuye volumen y notifica
+        pamixer -d "$STEP_VOL"
+        LEVEL_VOL=$(pamixer --get-volume)
+        notify "Volumen: ${LEVEL_VOL}%" "$LEVEL_VOL" "volume"
         ;;
 
     mute)
+        # Alterna silencio
         pamixer -t
         if pamixer --get-mute | grep -q true; then
             notify "Audio: mute" 0 "volume"
         else
-            VOLUME=$(pamixer --get-volume)
-            notify "Volumen: ${VOLUME}%" "$VOLUME" "volume"
+            LEVEL_VOL=$(pamixer --get-volume)
+            notify "Volumen: ${LEVEL_VOL}%" "$LEVEL_VOL" "volume"
         fi
         ;;
 
     play_pause)
+        # Alterna reproduccion y muestra estado
         playerctl play-pause
-        STATUS=$(playerctl status 2> /dev/null)
+        MEDIA_STATUS=$(playerctl status 2> /dev/null)
 
-        case "$STATUS" in
+        case "$MEDIA_STATUS" in
             Playing) notify "Reproduciendo" 0 "media" ;;
             Paused) notify "Pausado" 0 "media" ;;
-            *) notify "Sin reproducción activa" 0 "media" ;;
+            *) notify "Sin reproduccion activa" 0 "media" ;;
         esac
         ;;
 
@@ -60,17 +67,21 @@ case "$1" in
         ;;
 
     l-up)
+        # Aumenta brillo: ajusta, obtiene nivel absoluto, convierte a porcentaje
         brightnessctl set +"$STEP_BRT"%
         LEVEL_BRT=$(brightnessctl get)
         MAX_BRT=$(brightnessctl max)
-        notify "Brillo: $((LEVEL_BRT * 100 / MAX_BRT))%" "$((LEVEL_BRT * 100 / MAX_BRT))" "brightness"
+        PERCENT_BRT=$((LEVEL_BRT * 100 / MAX_BRT))
+        notify "Brillo: ${PERCENT_BRT}%" "$PERCENT_BRT" "brightness"
         ;;
 
     l-down)
+        # Disminuye brillo: ajusta, obtiene nivel absoluto, convierte a porcentaje
         brightnessctl set "$STEP_BRT"%-
         LEVEL_BRT=$(brightnessctl get)
         MAX_BRT=$(brightnessctl max)
-        notify "Brillo: $((LEVEL_BRT * 100 / MAX_BRT))%" "$((LEVEL_BRT * 100 / MAX_BRT))" "brightness"
+        PERCENT_BRT=$((LEVEL_BRT * 100 / MAX_BRT))
+        notify "Brillo: ${PERCENT_BRT}%" "$PERCENT_BRT" "brightness"
         ;;
 
     *)
