@@ -220,75 +220,75 @@ augroup("TreesitterStart", function(group)
 end)
 
 -- Ordena funciones en Bash alfabéticamente
-augroup("BashSortF", function(group)
-	aucmd("FileType", {
-		group = group,
-		pattern = { "sh", "bash" },
-		callback = function()
-			vim.api.nvim_create_user_command("SortBashFunctions", function(opts)
-				local start_line, end_line
-				local bufnr = vim.api.nvim_get_current_buf()
-				if opts.range and opts.range ~= 0 then
-					start_line = opts.line1 - 1
-					end_line = opts.line2
-				else
-					start_line = 0
-					end_line = vim.api.nvim_buf_line_count(bufnr)
-				end
+local function get_bash_func_name(func_text)
+	local name = func_text:match("^%s*function%s+([%w_]+)")
+	if name then
+		return name
+	end
+	name = func_text:match("^%s*([%w_]+)%s*%(%s*%)")
+	return name
+end
 
-				local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
+vim.api.nvim_create_user_command("SortBashFunctions", function(opts)
+	local bufnr = vim.api.nvim_get_current_buf()
+	local all_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
-				local funcs = {}
-				local current_func = {}
-				local inside_func = false
+	local start_line, end_line
+	if opts.range and opts.range ~= 0 then
+		start_line = opts.line1 - 1
+		end_line = opts.line2
+	else
+		start_line = 0
+		end_line = #all_lines - 1
+	end
 
-				for i, line in ipairs(lines) do
-					if line:match("^%s*function%s+%w+") or line:match("^%s*[%w_]+%s*%(%s*%)%s*{") then
-						if inside_func then
-							table.insert(funcs, table.concat(current_func, "\n"))
-							current_func = {}
-						end
-						inside_func = true
-					end
+	local preamble = {}
+	local funcs = {}
+	local current_func = {}
+	local inside_func = false
 
-					if inside_func then
-						table.insert(current_func, line)
-					end
-				end
+	for i, line in ipairs(all_lines) do
+		if i - 1 < start_line then
+			table.insert(preamble, line)
+		elseif i - 1 > end_line then
+			break
+		else
+			local is_func_start = line:match("^%s*function%s+%w+")
+				or line:match("^%s*([%w_]+)%s*%(%s*%)%s*{")
 
-				if #current_func > 0 then
+			if is_func_start then
+				if inside_func then
 					table.insert(funcs, table.concat(current_func, "\n"))
+					current_func = {}
 				end
+				inside_func = true
+			end
 
-				if #funcs == 0 then
-					vim.notify("No se detectaron funciones Bash en el rango seleccionado", vim.log.levels.WARN)
-					return
-				end
+			if inside_func then
+				table.insert(current_func, line)
+			end
+		end
+	end
 
-				table.sort(funcs, function(a, b)
-					local name_a = a:match("^%s*function%s+([%w_]+)")
-					if not name_a then
-						name_a = a:match("^%s*([%w_]+)%s*%(%s*%)")
-					end
-					local name_b = b:match("^%s*function%s+([%w_]+)")
-					if not name_b then
-						name_b = b:match("^%s*([%w_]+)%s*%(%s*%)")
-					end
-					return (name_a or ""):lower() < (name_b or ""):lower()
-				end)
+	if #current_func > 0 then
+		table.insert(funcs, table.concat(current_func, "\n"))
+	end
 
-				local new_lines = {}
-				for _, f in ipairs(funcs) do
-					local func_lines = vim.split(f, "\n")
-					for _, l in ipairs(func_lines) do
-						table.insert(new_lines, l)
-					end
-					table.insert(new_lines, "")
-				end
+	if #funcs == 0 then
+		vim.notify("No se detectaron funciones Bash en el rango seleccionado", vim.log.levels.WARN)
+		return
+	end
 
-				vim.api.nvim_buf_set_lines(bufnr, start_line, end_line, false, new_lines)
-				vim.notify("Funciones Bash ordenadas correctamente", vim.log.levels.INFO)
-			end, { range = true })
-		end,
-	})
-end)
+	table.sort(funcs, function(a, b)
+		return (get_bash_func_name(a) or ""):lower() < (get_bash_func_name(b) or ""):lower()
+	end)
+
+	local sorted_lines = vim.split(table.concat(funcs, "\n") .. "\n", "\n")
+	local new_lines = preamble
+	for _, l in ipairs(sorted_lines) do
+		table.insert(new_lines, l)
+	end
+
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, new_lines)
+	vim.notify("Funciones Bash ordenadas correctamente", vim.log.levels.INFO)
+end, { range = true })
