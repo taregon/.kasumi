@@ -24,19 +24,17 @@ Estructura obligatoria:
 [<optional BREAKING CHANGE>]
 
 - REGLAS GENERALES
-  - Sin formato: Prohibido bloques (``), negritas (**), cursivas (__)
+  - En texto plano. Prohibido bloques (``), negritas (**), cursivas (__)
   - Redacta en español neutro, excepto términos técnicos, conservan su forma
     original.
-  - Usa SOLO uno de estos tipos oficiales: feat, fix, docs, style, refactor,
-    perf, test, build, ci, chore, revert.
+  - Utiliza SOLO un tipo adecuado: [feat, fix, docs, style, refactor, perf,
+    test, build, ci, chore, revert]
   - No divagues ni agregues contexto irrelevante.
   - Prohibido mencionar nombres de funciones, variables, rutas de archivo o
     código.
 
 - Reglas para el encabezado
-  - Sé directo con el cambio, sin explicar POR QUÉ o CÓMO.
-  - Si BREAKING CHANGE, entonces añade `!` en el type (ej.
-    `docs(!config): eliminar sección obsoleta de configuración`).
+  - Sé breve y directo con el cambio, sin explicar POR QUÉ o CÓMO.
   - Utiliza verbos en infinitivo, minúscula inicial. Sin punto final.
   - Scope: Palabra clave única, en kebab-case, que identifique módulo afectado
 
@@ -47,6 +45,9 @@ Estructura obligatoria:
   - Empieza con verbos en imperativo presente (ej. Añade, Corrige, Elimina).
   - PROHIBIDO formas pasivas o impersonales. (ej. Se agregan atajos, Se modifica
     el cierre).
+
+- Si BREAKING CHANGE, entonces añade `!` en el type (ej.
+  `docs(!config): eliminar sección obsoleta de configuración`).
 
 ## user
 
