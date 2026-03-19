@@ -111,6 +111,7 @@ install_app_browser() {
         hunspell         # Corrector ortográfico
         hunspell-es_pa   # Diccionario español (Panamá) para Hunspell
         luakit           # Navegador web minimalista basado en WebKit
+        libwebp          # Biblioteca WebP (formato de imagen moderno)
     )
     instalar "${pkgs[@]}"
 }
@@ -163,10 +164,10 @@ install_app_cli_fm() {
 install_app_pdf() {
     echo ">> Instalando visor PDF y complementos OCR"
     local pkgs=(
-        zathura            # Visor de documentos ligero
-        zathura-pdf-mupdf  # Backend para abrir archivos PDF en Zathura
         tesseract-data-eng # Datos de reconocimiento OCR en inglés
         tesseract-data-spa # Datos de reconocimiento OCR en español
+        zathura            # Visor de documentos ligero
+        zathura-pdf-mupdf  # Backend para abrir archivos PDF en Zathura
     )
     instalar "${pkgs[@]}"
 }
@@ -188,14 +189,15 @@ install_app_general() {
 install_sys_fonts() {
     echo ">> Instalando fuentes y tipografías"
     local pkgs=(
-        noto-fonts              # Fuentes noto (sans, serif, mono)
-        noto-fonts-cjk          # Fuentes noto para chino, japonés, coreano
-        noto-fonts-emoji        # Fuentes noto con emojis
-        ttf-iosevka-nerd        # Fuente monoespaciada con ligaduras (Iosevka)
-        ttf-jetbrains-mono-nerd # Fuente JetBrains Mono
-        ttf-recursive-nerd      # Fuente Recursive (variable)
-        ttf-ubuntusans-nerd     # Fuente Ubuntu Sans
-        ttf-ibm-plex            # Fuente IBM Plex (sans, mono, serif)
+        noto-fonts                  # Fuentes noto (sans, serif, mono)
+        noto-fonts-cjk              # Fuentes noto para chino, japonés, coreano
+        noto-fonts-emoji            # Fuentes noto con emojis
+        ttf-ibm-plex                # Fuente IBM Plex (sans, mono, serif)
+        ttf-iosevka-nerd            # Fuente monoespaciada con ligaduras (Iosevka)
+        ttf-jetbrains-mono-nerd     # Fuente JetBrains Mono
+        ttf-nerd-fonts-symbols-mono # Símbolos Nerd Fonts monoespaciados
+        ttf-recursive-nerd          # Fuente Recursive (variable)
+        ttf-ubuntusans-nerd         # Fuente Ubuntu Sans
 
         # Fuentes de Windows
         # Este entra en conflicto con ttf-ms-fonts,
@@ -204,6 +206,7 @@ install_sys_fonts() {
 
         # Fuentes opcionales
         fontforge                 # Editor de fuentes abierto
+        fontpreview               # Previsualizador de fuentes desde terminal
         ttf-alegreya-sans         # Fuente Alegreya Sans
         ttf-pragmasevka-nerd-font # Fuente Pragmasevka
         ttf-signika               # Fuente Signika
@@ -271,6 +274,7 @@ install_sys_wayland() {
         rofi         # Lanzador de aplicaciones y selector interactivo
         slurp        # Selección de región en Wayland
         swappy       # Editor interactivo para capturas de pantalla en Wayland
+        swaylock     # Pantalla de bloqueo para Sway/Wayland
         wl-clipboard # Utilidades de portapapeles en Wayland
         wlogout      # Menú minimalista de cierre de sesión
     )
@@ -296,22 +300,23 @@ install_utils_compress() {
 install_utils_files() {
     echo ">> Instalando herramientas de archivos y multimedia"
     local pkgs=(
-        exfatprogs    # Herramientas para exFAT (moderno)
-        f2fs-tools    # Herramientas para F2FS
-        gvfs          # Sistema virtual de archivos (GVFS)
-        gvfs-gphoto2  # Soporte cámaras PTP
-        gvfs-mtp      # Soporte MTP (Android, etc.)
-        imv           # Visor de imágenes ligero
-        mpv           # Reproductor multimedia
-        mtools        # Manipular discos MS-DOS/FAT
-        mtpfs         # Montaje MTP vía FUSE
-        nilfs-utils   # Herramientas para NILFS2
-        ntfs-3g       # Soporte lectura/escritura NTFS
-        thunar        # Explorador de archivos GTK
-        thunar-volman # Gestión volúmenes en Thunar
-        tumbler       # Generador de miniaturas
-        udisks2       # Gestión discos y montaje automático
-        xorg-xhost    # Control acceso servidor X (X11)
+        exfatprogs        # Herramientas para exFAT (moderno)
+        f2fs-tools        # Herramientas para F2FS
+        ffmpegthumbnailer # Generador de miniaturas de video con FFmpeg
+        gvfs              # Sistema virtual de archivos (GVFS)
+        gvfs-gphoto2      # Soporte cámaras PTP
+        gvfs-mtp          # Soporte MTP (Android, etc.)
+        imv               # Visor de imágenes ligero
+        mpv               # Reproductor multimedia
+        mtools            # Manipular discos MS-DOS/FAT
+        mtpfs             # Montaje MTP vía FUSE
+        nilfs-utils       # Herramientas para NILFS2
+        ntfs-3g           # Soporte lectura/escritura NTFS
+        thunar            # Explorador de archivos GTK
+        thunar-volman     # Gestión volúmenes en Thunar
+        tumbler           # Generador de miniaturas
+        udisks2           # Gestión discos y montaje automático
+        xorg-xhost        # Control acceso servidor X (X11)
     )
     instalar "${pkgs[@]}"
 }
@@ -322,6 +327,7 @@ install_utils_terminal() {
         aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
         bat                # Visor tipo cat con resaltado y soporte Git
         bc                 # Calculadora CLI con soporte para decimales de alta precisión
+        brightnessctl      # Control de brillo de pantalla desde terminal
         cdu                # Analizador interactivo de uso de disco (TUI)
         dotdrop            # Gestor de dotfiles con perfiles y plantillas
         eza                # ls moderno con colores e iconos (reemplazo de exa)
@@ -337,13 +343,20 @@ install_utils_terminal() {
         less               # Paginador de texto para terminal
         lnav               # Visor avanzado de logs (TUI)
         lsd                # ls con iconos y colores
+        mlr                # Procesador de datos estilo awk (Miller)
         openssh            # Cliente y servidor SSH
         pacman-contrib     # Utilidades adicionales para pacman
+        pamixer            # Control de volumen para PulseAudio en terminal
+        pandoc             # Conversor de documentos markup entre formatos
+        playerctl          # Control de reproductores multimedia desde CLI
+        poppler            # Utilidades y herramientas para PDF
         python-pip         # Gestor de paquetes Python
         ripgrep            # Búsqueda recursiva rápida (rg)
         source-highlight   # Resaltado de sintaxis para less y otros
         sshfs              # Montaje de sistemas remotos vía SSH
         toilet             # Generador de texto ASCII estilizado
+        wev                # Visor de eventos de entrada en Wayland
+        xan                # Gestor de ventanas X/Wayland (fork de xadrezsuico)
         zoxide             # Navegación inteligente entre directorios
         zsh                # Shell interactivo avanzada
         zsh-completions    # Autocompletado adicional para zsh
