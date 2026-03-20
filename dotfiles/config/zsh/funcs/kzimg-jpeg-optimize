@@ -10,21 +10,25 @@
 #   - Modo progresivo: activado
 #   - Optimización: activada
 
-local in="$1"
-local tmp="/tmp/cjpeg_tmp_$$"
-local out="${in%.*}-hq444.jpg"
+local source_jpeg="$1"
+local temp_ppm="/tmp/cjpeg_tmp_$$"
+local output_jpeg="${source_jpeg%.*}-hq444.jpg"
 
-# Decodificar a PPM
-djpeg "$in" > "$tmp"
+trap "rm -f '$temp_ppm'" EXIT INT TERM
 
-# Re-encodear en 4:4:4 con calidad alta
+[[ -z "$source_jpeg" ]] && { echo "Uso: $0 <archivo.jpg>"; return 1; }
+[[ ! -f "$source_jpeg" ]] && { echo "  Error: '$source_jpeg' no existe"; return 1; }
+[[ "$(file -b --mime-type "$source_jpeg")" != "image/jpeg" ]] && { echo "  Error: '$source_jpeg' no es un JPEG"; return 1; }
+[[ -f "$output_jpeg" ]] && { echo "  Info: '$output_jpeg' ya existe"; return 1; }
+
+djpeg "$source_jpeg" > "$temp_ppm" || { echo "  Error: Fallo djpeg"; return 1; }
+
 cjpeg \
     -quality 94 \
     -sample 1x1 \
     -progressive \
     -optimize \
-    -outfile "$out" \
-    "$tmp"
+    -outfile "$output_jpeg" \
+    "$temp_ppm" || { echo "  Error: Fallo cjpeg"; return 1; }
 
-rm "$tmp"
-echo "  Archivo generado: $out"
+echo "  Archivo generado: $output_jpeg"
