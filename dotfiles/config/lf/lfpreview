@@ -17,8 +17,8 @@ create_cache() {
 }
 
 draw_img() {
-    kitty +kitten icat --silent --stdin no --transfer-mode memory \
-        --place "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}@${PREVIEW_X}x${PREVIEW_Y}" "$1" < /dev/null > /dev/tty
+    kitty +kitten icat --silent --stdin no --transfer-mode file \
+        --place "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}@${PREVIEW_X}x${PREVIEW_Y}" "$FILE_PATH" < /dev/null > /dev/tty
 }
 
 MIMETYPE="$(file -L --brief --mime-type "$FILE_PATH")"
@@ -37,9 +37,7 @@ case "$MIMETYPE" in
         djvutxt "$FILE_PATH" | fmt -w "$PREVIEW_WIDTH"
         ;;
     image/*)
-        create_cache "$FILE_PATH"
-        [ -f "${CACHE}.png" ] || convert "$FILE_PATH" "${CACHE}.png" 2> /dev/null
-        draw_img "${CACHE}.png"
+        draw_img "$FILE_PATH"
         ;;
     video/*)
         create_cache "$FILE_PATH"
