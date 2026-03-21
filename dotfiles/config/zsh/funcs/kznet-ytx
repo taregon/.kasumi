@@ -1,0 +1,17 @@
+# vim: filetype=zsh
+# Función para yt-dlp enfocada en X/Twitter (incluye privados vía cookies)
+# Prioriza: estabilidad, flags oficiales, compatibilidad Windows/Linux, MP4 merge
+# Navegador por default para cookies (cámbialo aquí si usas otro)
+local browser="firefox"   # Opciones: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
+
+yt-dlp \
+    --cookies-from-browser "$browser" \
+    --embed-metadata \
+    --embed-thumbnail \
+    --windows-filenames \
+    --trim-filenames 125 \
+    --write-desktop-link \
+    --xff default \
+    -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
+    -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s" \
+    "$@"

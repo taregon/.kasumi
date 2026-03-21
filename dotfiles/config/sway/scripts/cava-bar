@@ -2,30 +2,39 @@
 
 pkill -f "cava -p" 2> /dev/null
 
-bar="▁▂▃▄▅▆▇█"
-dict="s/;//g;"
+bar_symbol="▁▂▃▄▅▆▇█"
+char_map="s/;//g;"
 
-# creating "dictionary" to replace char with bar
-i=0
-while [ $i -lt ${#bar} ]; do
-    dict="${dict}s/$i/${bar:$i:1}/g;"
-    i=$((i = i + 1))
-done
-
-# write cava config
-config_file=~/.config/cava/cava-waybar.conf
-echo "
+config_file=$HOME/.config/cava/cava-waybar.conf
+cat > "$config_file" << 'EOF'
 [general]
-bars = 18
+bars = 12
+framerate = 60
+sensitivity = 250
+
+[smoothing]
+monstercat = 0
+gravity = 200
+noise_reduction = 0.3
 
 [output]
 method = raw
 raw_target = /dev/stdout
 data_format = ascii
 ascii_max_range = 7
-" > $config_file
+EOF
 
-# read stdout from cava
-cava -p $config_file | while read -r line; do
-    echo "$line" | sed "$dict"
+# Crear char_map para reemplazar numeros con simbolos de barra
+idx=0
+while [ $idx -lt ${#bar_symbol} ]; do
+    char_map="${char_map}s/$idx/${bar_symbol:$idx:1}/g;"
+    ((idx++))
+done
+
+# Agregar espacio después de cada caracter
+char_map="${char_map}s/./& /g;"
+
+# Transformar salida de cava usando char_map y mostrar resultado
+cava -p "$config_file" | while read -r line; do
+    echo "$line" | sed "$char_map"
 done
