@@ -13,7 +13,7 @@ mkdir -p "$CACHE_DIR"
 
 create_cache() {
     realfile="$(readlink -f "$FILE_PATH" || realpath "$FILE_PATH")"
-    CACHE="${CACHE_DIR}/thumb-$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' "$realfile" | xxhsum -q | cut -d' ' -f1)"
+    CACHE="${CACHE_DIR}/thumb-$(stat --printf '%i\0%s\0%Y' "$realfile" | xxhsum -q | cut -d' ' -f1)"
 }
 
 draw_img() {
