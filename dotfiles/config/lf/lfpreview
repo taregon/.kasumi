@@ -7,7 +7,7 @@ PREVIEW_WIDTH="$2"
 PREVIEW_HEIGHT="$3"
 PREVIEW_X="$4"
 PREVIEW_Y="$5"
-
+THUMB_SIZE=1200
 CACHE_DIR="${XDG_CACHE_HOME:-"$HOME/.cache"}/lf"
 mkdir -p "$CACHE_DIR"
 
@@ -16,9 +16,32 @@ create_cache() {
     CACHE="${CACHE_DIR}/thumb-$(stat --printf '%i\0%s\0%Y' "$realfile" | xxhsum -q | cut -d' ' -f1)"
 }
 
-draw_img() {
+create_thumb() {
+    magick "$FILE_PATH" \
+        -auto-orient \
+        -define jpeg:extent=250KB \
+        -sampling-factor 4:2:0 \
+        -thumbnail "${THUMB_SIZE}x${THUMB_SIZE}>" \
+        "${CACHE}.jpg" 2> /dev/null
+}
+
+draw_ascii() {
+    chafa \
+        -s "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}" \
+        --animate off \
+        --colors 240 \
+        --work 4 \
+        --fg-only \
+        --format symbols \
+        --polite off \
+        --symbols ascii \
+        "$FILE_PATH"
+}
+
+draw_kitty() {
+    local img="${1:-$FILE_PATH}"
     kitty +kitten icat --silent --stdin no --transfer-mode memory \
-        --place "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}@${PREVIEW_X}x${PREVIEW_Y}" "$FILE_PATH" < /dev/null > /dev/tty
+        --place "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}@${PREVIEW_X}x${PREVIEW_Y}" "$img" < /dev/null > /dev/tty
 }
 
 MIMETYPE="$(file -L --brief --mime-type "$FILE_PATH")"
@@ -37,12 +60,14 @@ case "$MIMETYPE" in
         djvutxt "$FILE_PATH" | fmt -w "$PREVIEW_WIDTH"
         ;;
     image/*)
-        draw_img "$FILE_PATH"
+        create_cache
+        [ -f "${CACHE}.jpg" ] || create_thumb
+        draw_kitty "${CACHE}.jpg" || draw_ascii
         ;;
     video/*)
-        create_cache "$FILE_PATH"
+        create_cache
         [ -f "${CACHE}.jpg" ] || ffmpegthumbnailer -i "$FILE_PATH" -o "${CACHE}.jpg" -s 0 -c jpeg
-        draw_img "${CACHE}.jpg"
+        draw_kitty "${CACHE}.jpg"
         ;;
     audio/*)
         mediainfo "$FILE_PATH"
@@ -50,9 +75,9 @@ case "$MIMETYPE" in
     application/zip | application/x-7z-compressed | application/x-rar | application/x-tar | application/gzip | application/x-bzip2 | application/x-xz | application/x-rpm | application/java-archive)
         7z l "$FILE_PATH"
         ;;
-    *)
-        lesspipe.sh "$FILE_PATH" # Preprocesa archivos para `less` como complemento (no independiente), permitiendo ver contenido (comprimidos, binarios, etc.) como texto plano.
-        ;;
+        # *)
+        #     lesspipe.sh "$FILE_PATH" # Preprocesa archivos para `less` como complemento (no independiente), permitiendo ver contenido (comprimidos, binarios, etc.) como texto plano.
+        #     ;;
 esac
 
 exit 1
