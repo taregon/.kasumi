@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+INPUT=$(
+    sed -E $'s/\x1B\\[[0-9;]*[[:alpha:]]//g' \
+        | awk 'NF' \
+        | fzf --tac --exact
+) || exit 0
+
+printf "%s" "$INPUT" | kitty @ send-text --match recent:1 --stdin
