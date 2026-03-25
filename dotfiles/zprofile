@@ -3,22 +3,31 @@
 # │░▄▀░░█▀▀░█▀▄░█░█░█▀▀░░█░░█░░░█▀▀│
 # │░▀▀▀░▀░░░▀░▀░▀▀▀░▀░░░▀▀▀░▀▀▀░▀▀▀│
 # └────────────────────────────────┘
-# Estas variables se definen en .zprofile porque:
-# - Se inicia sesión en TTY -> zsh se ejecuta como login shell
-# - .zprofile se carga exclusivamente en shells de login
-# - Se lanza Sway con 'exec sway' desde ese mismo shell
-# - exec sway hereda el entorno completo al compositor y a todas las aplicaciones hijas
+# Variables de entorno definidas en ~/.zprofile porque:
+# - Ly ejecuta /etc/ly/setup.sh y carga explícitamente este archivo al usar
+# zsh (vía source), emulando parcialmente un login shell
+
+# - Esto asegura que las variables estén definidas antes de iniciar Sway
+#   (verificable con: systemctl --user show-environment)
+
+# - Sway hereda ese entorno, haciéndolo disponible globalmente:
+#   • Terminales
+#   • Aplicaciones (binds, wmenu/wofi, systemd --user, etc.)
+
+# WARN: Comportamiento específico de ly + zsh.
+# Cambiar de display manager o shell puede requerir otros métodos
+# (ej: environment.d, configuración de sesión, etc.)
 
 # ─[ WALLPAPER ]──────────────────────────────────────────────
 # Directorio estándar en $HOME para almacenar los
 # fondos de pantalla gestionados por el dotfile kasumi
-export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
+  export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
 
 # ─[ SCREENSHOTS ]────────────────────────────────────────────
-export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots/"
+  export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots/"
 
 # ─[ QT FIXES ]───────────────────────────────────────────────
 # Forzar backend XCB -> mejor compatibilidad y Auto-Type en Wayland
 # Ajustar el DPI de las fuentes para que se vean mejor sin necesidad de escalar demasiado
-export QT_QPA_PLATFORM=xcb
-export QT_FONT_DPI=120
+  export QT_QPA_PLATFORM=xcb
+  export QT_FONT_DPI=120
