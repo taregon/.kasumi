@@ -41,7 +41,6 @@ sudo tee "$SESSION_FILE" > /dev/null << EOF
 [Desktop Entry]
 Name=Sway (Intel GPU)
 Exec=/usr/bin/env \
-__GLX_VENDOR_LIBRARY_NAME=mesa \
 WLR_DRM_DEVICES=$INTEL_CARD \
 sway
 Type=Application
