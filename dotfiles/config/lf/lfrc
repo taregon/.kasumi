@@ -3,16 +3,37 @@
 # │░█░░░█▀▀│
 # │░▀▀▀░▀░░│
 # └────────┘
-# Habilitar la columna de previsualización
-set preview true
+# https://man.archlinux.org/man/lf.1.en
+# ────────────────────────────────────────────────────────────
+  set preview true
+  set drawbox
+  set period 3
+  set info size
+  set dircounts
+  set scrolloff 10
+  set incsearch true
+  set previewer ~/.config/lf/lfpreview
 
-# Previewer (sin caché para evitar artefactos en tmux)
-set previewer ~/.config/lf/lfpreview
+  map <delete> delete
+  map <enter> open
+  map X %trash-put  $fx
+  map a push :mkdir<space>
 
-# Forzar redraw completo tras cada selección (crucial en tmux)
-cmd on-select %{{
-    exec lf -remote "send $id redraw"
-}}
 # Copia la ruta del archivo
-map c %echo -n "$f" | wl-copy
+  map C %echo -n "$f" | wl-copy
+  map o %ripdrag -W 400 -H 200 -s 195 -bx "$f"
 
+# map C $cat "$fx" | wl-copy
+# map O $xdg-open "$f"
+# ────────────────────────────────────────────────────────────
+# Comandos por defecto
+#   🟆  copy          'y'     🟆  rename        'r'
+#   🟆  cut           'd'     🟆  run           '$'
+#   🟆  paste         'p'     🟆  sort          's'
+#   🟆  clear         'c'     🟆  shell         'w'
+#   🟆  toggle hidden 'zh'
+# ────────────────────────────────────────────────────────────
+# Forzar redraw completo tras cada selección (crucial en tmux)
+  cmd on-select &{{
+  lf -remote "send $id redraw"
+  }}
