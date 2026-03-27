@@ -5,17 +5,25 @@
 # └────────┘
 # https://man.archlinux.org/man/lf.1.en
 # ────────────────────────────────────────────────────────────
-  set preview true
-  set drawbox
-  set period 3
-  set info size
   set dircounts
-  set scrolloff 10
+  set drawbox
+  set ignoredia
   set incsearch true
+  set period 3
+  set preview true
+  set scrolloff 10
+  set sortby ctime
+
   set previewer ~/.config/lf/lfpreview
+  set ratios 1:2:2
+  set info ctime:size
+
+  set infotimefmtnew "Jan _2 2006"
+  set infotimefmtold "Jan _2 2006"
 
   map <delete> delete
   map <enter> open
+
   map X %trash-put  $fx
   map a push :mkdir<space>
 
@@ -31,7 +39,8 @@
 #   🟆  cut           'd'     🟆  run           '$'
 #   🟆  paste         'p'     🟆  sort          's'
 #   🟆  clear         'c'     🟆  shell         'w'
-#   🟆  toggle hidden 'zh'
+#   🟆  invert        'v      🟆  toggle hidden 'zh''
+#   🟆  unselect      'u'
 # ────────────────────────────────────────────────────────────
 # Forzar redraw completo tras cada selección (crucial en tmux)
   cmd on-select &{{
