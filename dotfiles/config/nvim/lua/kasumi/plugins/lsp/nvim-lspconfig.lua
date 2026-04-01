@@ -75,3 +75,28 @@ vim.lsp.config["lua_ls"] = {
 	},
 }
 vim.lsp.enable("lua_ls")
+
+-- ────────────────────────────────────────────────────────────
+-- ast-grep es principalmente CLI; el editor solo lo integra
+-- El LSP añade diagnósticos y fixes si hay reglas definidas
+-- Sin sgconfig.yml, su uso práctico se limita al CLI
+
+vim.lsp.config["ast_grep"] = {
+	cmd = { "ast-grep", "lsp" },
+	filetypes = {
+		"bash",
+		"css",
+		"go",
+		"html",
+		"java",
+		"javascript",
+		"json",
+		"lua",
+		"python",
+		"rust",
+		"typescript",
+		"yaml",
+	},
+	root_markers = { "sgconfig.yaml", "sgconfig.yml" },
+}
+vim.lsp.enable("ast_grep")
