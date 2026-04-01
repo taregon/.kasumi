@@ -8,27 +8,23 @@ local function get_sizes(buffer)
 	return width, textoff
 end
 
-require("markview").setup({
+-- Genera una lista de highlights tipo gradiente (1→9),
+-- repitiendo cada nivel 2 veces para crear una transición
+-- visual más suave sin hardcodear valores.
+local function gradient_colors()
+	local colors = {}
 
-	--[[ yaml = {
-        -- https://github.com/OXY2DEV/markview.nvim/wiki/YAML
-		enabled = true,
+	local steps = 9
+	local repeat_each = 3
 
-		properties = {
-			enable = true, -- ← Activa los iconos y decoraciones en las claves
+	for i = 1, steps do
+		for _ = 1, repeat_each do
+			colors[#colors + 1] = "MarkviewGradient" .. i
+		end
+	end
 
-			-- Tipos de datos con iconos por defecto
-			data_types = {
-				["text"] = { text = "󰗊 ", hl = "MarkviewIcon4" },
-				["list"] = { text = "󰝖 ", hl = "MarkviewIcon5" },
-				["number"] = { text = " ", hl = "MarkviewIcon6" },
-				["checkbox"] = {
-					text = function(_, item)
-						return item.value == "true" and "󰄲 " or "󰄱 "
-					end,
-					hl = "MarkviewIcon6",
-				},
-			},
+	return colors
+end
 
 			-- Propiedades especiales (las más usadas en frontmatter)
 			["^tags$"] = { text = "󰓹 ", hl = "MarkviewIcon0" },
@@ -171,32 +167,13 @@ require("markview").setup({
 						local width, textoff = get_sizes(buffer)
 						return math.floor((width - textoff - 3) / 2)
 					end,
-					text = "━",
-					hl = {
-						"MarkviewGradient1",
-						"MarkviewGradient1",
-						"MarkviewGradient2",
-						"MarkviewGradient2",
-						"MarkviewGradient3",
-						"MarkviewGradient3",
-						"MarkviewGradient4",
-						"MarkviewGradient4",
-						"MarkviewGradient5",
-						"MarkviewGradient5",
-						"MarkviewGradient6",
-						"MarkviewGradient6",
-						"MarkviewGradient7",
-						"MarkviewGradient7",
-						"MarkviewGradient8",
-						"MarkviewGradient8",
-						"MarkviewGradient9",
-						"MarkviewGradient9",
-					},
+					text = "🭹", --"❬"
+					hl = gradient_colors(),
 				},
 				{
 					type = "text",
-					text = "   ",
-					hl = "LineNr",
+					text = "   ",
+					hl = "Comment",
 				},
 				{
 					type = "repeating",
@@ -205,27 +182,8 @@ require("markview").setup({
 						local width, textoff = get_sizes(buffer)
 						return math.ceil((width - textoff - 3) / 2)
 					end,
-					text = "━",
-					hl = {
-						"MarkviewGradient1",
-						"MarkviewGradient1",
-						"MarkviewGradient2",
-						"MarkviewGradient2",
-						"MarkviewGradient3",
-						"MarkviewGradient3",
-						"MarkviewGradient4",
-						"MarkviewGradient4",
-						"MarkviewGradient5",
-						"MarkviewGradient5",
-						"MarkviewGradient6",
-						"MarkviewGradient6",
-						"MarkviewGradient7",
-						"MarkviewGradient7",
-						"MarkviewGradient8",
-						"MarkviewGradient8",
-						"MarkviewGradient9",
-						"MarkviewGradient9",
-					},
+					text = "🭹", -- "❭"
+					hl = gradient_colors(),
 				},
 			},
 		},
