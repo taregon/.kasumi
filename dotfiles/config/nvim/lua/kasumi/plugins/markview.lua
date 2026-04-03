@@ -9,7 +9,7 @@ local function get_sizes(buffer)
 end
 
 -- Genera una lista de highlights tipo gradiente (1→9),
--- repitiendo cada nivel 2 veces para crear una transición
+-- repitiendo cada nivel N veces para crear una transición
 -- visual más suave sin hardcodear valores.
 local function gradient_colors()
 	local colors = {}
@@ -26,14 +26,7 @@ local function gradient_colors()
 	return colors
 end
 
-			-- Propiedades especiales (las más usadas en frontmatter)
-			["^tags$"] = { text = "󰓹 ", hl = "MarkviewIcon0" },
-			["^aliases$"] = { text = "󱞫 ", hl = "MarkviewIcon2" },
-			["^description$"] = { text = "󰋼 ", hl = "MarkviewIcon0" },
-			["^image$"] = { text = "󰋫 ", hl = "MarkviewIcon4" },
-			-- Agrega aquí las que uses
-		},
-	}, ]]
+require("markview").setup({
 
 	markdown = {
 		enable = true,
@@ -77,31 +70,6 @@ end
 			-- stylua: ignore end
 		},
 
-		hyperlinks = {
-			enable = true,
-
-			default = {
-				icon = " ",
-				hl = "MarkviewHyperlink",
-			},
-            -- stylua: ignore start
-			["^http"]              = { icon = "󰈹 ", hl = "MarkviewHyperlink" },
-			["^https?://doi%.org"] = { icon = " ", hl = "MarkviewPalette1Fg" },
-			["arxiv%.org"]         = { icon = " ", hl = "MarkviewPalette1Fg" },
-			["discord%.com"]       = { icon = " ", hl = "MarkviewPalette2Fg" },
-			["github%.com"]        = { icon = " ", hl = "MarkviewPalette0Fg" },
-			["google%.com"]        = { icon = " ", hl = "MarkviewPalette5Fg" },
-			["linkedin%.com"]      = { icon = " ", hl = "MarkviewPalette5Fg" },
-			["pypi%.org"]          = { icon = " ", hl = "MarkviewPalette0Fg" },
-			["reddit%.com"]        = { icon = " ", hl = "MarkviewPalette2Fg" },
-			["twitter%.com"]       = { icon = " ", hl = "MarkviewPalette0Fg" },
-			["wikipedia%.org"]     = { icon = "󰖬 ", hl = "MarkviewPalette5Fg" },
-			["x%.com"]             = { icon = " ", hl = "MarkviewPalette0Fg" },
-			["youtu%.be"]          = { icon = " ", hl = "MarkviewPalette1Fg" },
-			["youtube[^.]*%.com"]  = { icon = " ", hl = "MarkviewPalette1Fg" },
-			-- stylua: ignore end
-		},
-
 		code_blocks = { -- ────────────────────────────────────────────────────────────
 			enable = true,
 			style = "block",
@@ -129,28 +97,52 @@ end
 				padding_left = " ❰ ",
 				padding_right = " ❱ ",
 				icon = "  ",
-				-- sign = "🮐",
+				sign = "",
 				hl = "MarkviewHeading1",
 			},
-			-- stylua: ignore start
 			heading_2 = {
-			    style = "icon",
-			    icon = "  ",
-                sign = "🮐",
-			    hl = "MarkviewHeading2"
+				style = "icon",
+				icon = "  ",
+				sign = "",
+				hl = "MarkviewHeading2",
 			},
+
+			-- heading_2 = {
+			--     style = "label",
+			--              align = "center",
+			--     icon = "",
+			--              sign = "",
+			--              padding_left = " ",
+			--              padding_right = " ",
+			--     hl = "MarkviewHeading2"
+			-- },
 			heading_3 = {
+				style = "icon",
+				-- border = "-",
+				icon = "󰫣  ",
+				sign = "",
+				hl = "MarkviewHeading2",
+			},
+			--[[ heading_3 = {
 				style = "label",
-				corner_left = "🭘",
-				corner_right = "🭈",
+				-- corner_left = "⎸", --  "🭘"
+				-- corner_right = "⎹", --  "🭈"
 				padding_left = " ",
 				padding_right = " ",
 				icon = "",
                 -- sign = "🭬",
                 sign_hl = "Comment",
 				hl = "MarkviewHeading2"
+			}, ]]
+			heading_4 = {
+				style = "label",
+				padding_left = "  ",
+				padding_right = "  ",
+				corner_left = "⎣",
+				corner_right = "⎦",
+				icon = "  ",
+				hl = "MarkviewHeading4",
 			},
-			heading_4 = { style = "icon", icon = "  ", hl = "MarkviewHeading4" },
 			heading_5 = { style = "icon", icon = "󰎯  ", hl = "MarkviewHeading5" },
 			heading_6 = { style = "icon", icon = "󰎴  ", hl = "MarkviewHeading6" },
 			-- stylua: ignore end
@@ -173,7 +165,7 @@ end
 				{
 					type = "text",
 					text = "   ",
-					hl = "Comment",
+					hl = "MarkviewGradient9",
 				},
 				{
 					type = "repeating",
@@ -189,16 +181,34 @@ end
 		},
 
 		list_items = { -- ────────────────────────────────────────────────────────────
+			-- PEND:
 			enable = true,
 			wrap = true,
 			indent_size = 4,
 			shift_width = 4,
+			-- shift_width = function(_, item)
+			-- 	local level = math.max(1, item.indent)
+			-- 	local max_level = 6
+			-- 	local max_value = 4
+
+			-- 	return ((level - 1) / (max_level - 1)) * max_value
+			-- end,
+
+			-- marker_minus = {
+			-- 	add_padding = function(_, item)
+			-- 		local level = math.max(1, math.min(item.indent, 6))
+			-- 		local max_level = 6
+			-- 		local max_padding = 4
+
+			-- 		return ((level - 1) / (max_level - 1)) * max_padding
+			-- 	end,
+			-- },
 
 			marker_minus = {
 				enable = true,
 				add_padding = true,
 				conceal_on_checkboxes = true,
-				text = "▭",
+				text = "▱",
 				hl = "MarkviewListItemMinus",
 			},
 			marker_plus = { enable = false },
@@ -216,19 +226,32 @@ end
 				hl = "@markup.list.markdown",
 			},
 		},
-
-		tables = {
+		tables = { -- ────────────────────────────────────────────────────────────
 			enable = true,
 			block_decorator = true,
 			use_virt_lines = true,
+
+			parts = {
+				top = { "┌", "─", "┐", "┬" },
+				header = { "│", "│", "│" },
+				separator = { "├", "─", "┤", "┼" },
+				row = { "│", "│", "│" },
+				bottom = { "└", "─", "┘", "┴" },
+				overlap = { "┝", "━", "┥", "┿" },
+				align_left = "╼",
+				align_right = "╾",
+				align_center = { "╴", "╶" },
+			},
 		},
 
-		metadata_minus = {
+		--[[ metadata_minus = {
 			enable = true,
+			border_botton = "🮏",
 		},
 		metadata_plus = {
 			enable = true,
-		},
+			border_botton = "🮏",
+		}, ]]
 
 		reference_definitions = {
 			enable = true,
@@ -243,28 +266,41 @@ end
 	markdown_inline = {
 		enable = true,
 
+		hyperlinks = {
+			default = { icon = " ", hl = "MarkviewHyperlink" },
+
+            -- stylua: ignore start
+			["^http"]              = { icon = "󰈹 ", hl = "MarkviewHyperlink" },
+			["^https?://doi%.org"] = { icon = " ", hl = "MarkviewPalette1Fg" },
+			["arxiv%.org"]         = { icon = " ", hl = "MarkviewPalette1Fg" },
+			["discord%.com"]       = { icon = " ", hl = "MarkviewPalette2Fg" },
+			["github%.com"]        = { icon = " ", hl = "MarkviewPalette0Fg" },
+			["google%.com"]        = { icon = " ", hl = "MarkviewPalette5Fg" },
+			["linkedin%.com"]      = { icon = " ", hl = "MarkviewPalette5Fg" },
+			["pypi%.org"]          = { icon = " ", hl = "MarkviewPalette0Fg" },
+			["reddit%.com"]        = { icon = " ", hl = "MarkviewPalette2Fg" },
+			["twitter%.com"]       = { icon = " ", hl = "MarkviewPalette0Fg" },
+			["wikipedia%.org"]     = { icon = "󰖬 ", hl = "MarkviewPalette5Fg" },
+			["x%.com"]             = { icon = " ", hl = "MarkviewPalette0Fg" },
+			["youtu%.be"]          = { icon = " ", hl = "MarkviewPalette1Fg" },
+			["youtube[^.]*%.com"]  = { icon = " ", hl = "MarkviewPalette1Fg" },
+			-- stylua: ignore end
+		},
+
 		checkboxes = {
 			enable = true,
-
-			checked = {
-				text = " ",
-				hl = "MarkviewCheckboxChecked",
-				scope_hl = "MarkviewCheckboxChecked",
-			},
-			unchecked = {
-				text = " ",
-				hl = "MarkviewCheckboxUnchecked",
-				scope_hl = "MarkviewCheckboxUnchecked",
-			},
+			checked = { text = " ", hl = "MarkviewCheckboxChecked", scope_hl = "MarkviewCheckboxChecked" },
+			unchecked = { text = " ", hl = "Comment", scope_hl = "MarkviewCheckboxUnchecked" },
 		},
 
 		images = {
-			enable = true,
+			default = { icon = "󰋵 ", hl = "MarkviewImage" },
 
-			default = {
-				icon = "󰋵 ",
-				hl = "MarkviewImage",
-			},
+			["%.svg$"] = { icon = "󰜡 " },
+			["%.png$"] = { icon = "󰸭 " },
+			["%.jpg$"] = { icon = "󰈥 " },
+			["%.gif$"] = { icon = "󰵸 " },
+			["%.pdf$"] = { icon = " " },
 		},
 
 		inline_codes = {
@@ -275,31 +311,12 @@ end
 		},
 
 		footnotes = {
-			enable = true,
-
-			default = {
-				icon = "󱝂 ",
-				hl = "MarkviewHyperlink",
-			},
+			default = { icon = "󱝂 ", hl = "MarkviewHyperlink" },
+			-- Numbered footnotes.
+			["^%d+$"] = { icon = "󱝂 ", hl = "MarkviewPalette4Fg" },
 		},
 
-		emails = {
-			enable = true,
-
-			default = {
-				icon = "󰇯 ",
-				hl = "MarkviewEmail",
-			},
-		},
-
-		uri_autolinks = {
-			enable = true,
-
-			default = {
-				icon = "󰌹 ",
-				hl = "MarkviewEmail",
-			},
-		},
+		uri_autolinks = { default = { icon = "󰌹 ", hl = "MarkviewEmail" } },
 
 		block_references = {
 			enable = true,
@@ -311,17 +328,8 @@ end
 			},
 		},
 
-		internal_links = {
-			enable = true,
-
-			default = {
-				icon = "󰌱 ",
-				hl = "MarkviewPalette7Fg",
-			},
-		},
-
+		-- Configuration for Obsidian-style highlighted texts.
 		highlights = {
-			enable = true,
 
 			default = {
 				padding_left = " ",
@@ -330,17 +338,118 @@ end
 			},
 		},
 
-		emoji_shorthands = {
-			enable = true,
-		},
+		emails = { default = { icon = "󰇯 ", hl = "MarkviewEmail" } },
 
-		entities = {
-			enable = true,
-			hl = "Special",
-		},
+		-- Configuration for Github-styled emoji shorthands.
+		emoji_shorthands = { enable = true },
+		-- Configuration for HTML entities.
+		entities = { enable = true, hl = "Special" },
+		-- Configuration for escaped characters.
+		escapes = { enable = true },
+		-- Configuration for obsidian's internal links.
+		internal_links = { default = { icon = "󰌱 ", hl = "MarkviewPalette7Fg" } },
+		-- Configuration for obsidian's embed files.
+		embed_files = { default = { icon = "󰠮 ", hl = "MarkviewPalette7Fg" } },
+	},
 
-		escapes = {
+	yaml = {
+		properties = {
 			enable = true,
+
+            -- stylua: ignore
+			data_types = {
+				["date"]        = { text = "󰃭 ", hl = "MarkviewIcon2" },
+				["date_&_time"] = { text = "󰥔 ", hl = "MarkviewIcon3" },
+				["list"]        = { text = "󰝖 ", hl = "MarkviewIcon5" },
+				["number"]      = { text = " ", hl = "MarkviewIcon6" },
+				["text"]        = { text = "󱞏 ", hl = "MarkviewIcon4" },
+				["checkbox"] = {
+					text = function(_, item)
+						return item.value == "true" and "󰄯 " or "󰄰 "
+					end,
+					hl = "MarkviewIcon6",
+				},
+			},
+
+			["^tags$"] = {
+				use_types = false,
+
+				text = "󰓹 ",
+				hl = "MarkviewIcon0",
+			},
+			["^aliases$"] = {
+				match_string = "^aliases$",
+				use_types = false,
+
+				text = "󱞫 ",
+				hl = "MarkviewIcon2",
+			},
+			["^cssclasses$"] = {
+				match_string = "^cssclasses$",
+				use_types = false,
+
+				text = " ",
+				hl = "MarkviewIcon3",
+			},
+
+			["^publish$"] = {
+				match_string = "^publish$",
+				use_types = false,
+
+				text = "󰅧 ",
+				hl = "MarkviewIcon5",
+			},
+			["^permalink$"] = {
+				match_string = "^permalink$",
+				use_types = false,
+
+				text = " ",
+				hl = "MarkviewIcon2",
+			},
+			["^description$"] = { text = "󱍦 ", hl = "MarkviewIcon4" },
+			["^image$"] = {
+				match_string = "^image$",
+				use_types = false,
+
+				text = "󰋫 ",
+				hl = "MarkviewIcon4",
+			},
+			["^cover$"] = {
+				match_string = "^cover$",
+				use_types = false,
+
+				text = "󰹉 ",
+				hl = "MarkviewIcon2",
+			},
 		},
 	},
+
+	--[[ yaml = {
+		-- https://github.com/OXY2DEV/markview.nvim/wiki/YAML
+		enable = true,
+
+		properties = {
+			enable = true, -- ← Activa los iconos y decoraciones en las claves
+
+			-- Tipos de datos con iconos por defecto
+			data_types = {
+				["text"] = { text = "󰗊 ", hl = "MarkviewIcon4" },
+				["list"] = { text = "󰝖 ", hl = "MarkviewIcon5" },
+				["number"] = { text = " ", hl = "MarkviewIcon6" },
+				["checkbox"] = {
+					text = function(_, item)
+						return item.value == "true" and "󱍨  " or "󱍯  "
+					end,
+					hl = "MarkviewIcon0",
+				},
+			},
+
+			-- Propiedades especiales (las más usadas en frontmatter)
+			["^tags$"] = { text = "󰓹 ", hl = "MarkviewIcon0" },
+			["^aliases$"] = { text = "󱞫 ", hl = "MarkviewIcon2" },
+			["^description$"] = { text = "󱍦  ", hl = "MarkviewIcon0" },
+			["^image$"] = { text = "󰋫 ", hl = "MarkviewIcon4" },
+			-- Agrega aquí las que uses
+		},
+	}, ]]
 })
