@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# NOTA: Puedes revisar su funcionamiento con: ❯ swww query
-# también con:  pgrep -af "swww"
+# NOTA: Puedes revisar su funcionamiento con: ❯ awww query
+# también con:  pgrep -af "awww"
 #
 # Ruta donde están los fondos de pantalla
 BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
@@ -17,7 +17,7 @@ set_random_wallpaper() {
     local random_image
     random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
 
-    swww img "$random_image" \
+    awww img "$random_image" \
         --transition-type $TYPE \
         --transition-duration $DURATION \
         --transition-fps $FPS
