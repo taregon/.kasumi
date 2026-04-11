@@ -158,6 +158,10 @@ dotfiles:
     src: config/gammastep
     dst: ~/.config/gammastep
     link: absolute
+  d_mpd:
+    src: config/mpd
+    dst: ~/.config/mpd
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -184,6 +188,7 @@ profiles:
     dotfiles:
       - d_aria2
       - d_lnav
+      - d_mpd
       - d_neovim
       - d_opencode_theme
       - d_zsh_functions
