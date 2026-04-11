@@ -40,7 +40,7 @@ end
 augroup("Ft_Ini_Syntax", function(group)
 	aucmd("BufReadPost", {
 		group = group,
-		pattern = { "*.conf", "*.ini" },
+		pattern = { "*.ini" },
 		command = "set syntax=dosini",
 	})
 end)
