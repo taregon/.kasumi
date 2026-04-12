@@ -1,21 +1,29 @@
+# ███╗   ███╗ █████╗ ██╗  ██╗ ██████╗
+# ████╗ ████║██╔══██╗██║ ██╔╝██╔═══██╗
+# ██╔████╔██║███████║█████╔╝ ██║   ██║
+# ██║╚██╔╝██║██╔══██║██╔═██╗ ██║   ██║
+# ██║ ╚═╝ ██║██║  ██║██║  ██╗╚██████╔╝
+# ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝
 # ── Comandos Útiles ─────────────────────────────────────────
-# Recargar configuración              : makoctl reload
-# Cerrar notificaciones visibles      : makoctl dismiss --all
-# Listar notificaciones activas       : makoctl list
-# Listar notificaciones del historial : makoctl history
+# NOTE: Recargar configuración           makoctl reload
+# Cerrar notificaciones visibles         makoctl dismiss --all
+# Listar notificaciones activas          makoctl list
+# Listar notificaciones del historial    makoctl history
+
+# ── Global ──────────────────────────────────────────────────
+  max-history=20
 
 # ── Binding ─────────────────────────────────────────────────
   on-button-left=invoke-default-action
   on-button-right=dismiss-group
 
-# ── General ─────────────────────────────────────────────────
+# ── Style ───────────────────────────────────────────────────
   font=JetbrainsMono Nerd Font 10
-  default-timeout=25000
+  default-timeout=6000
   margin=18
   padding=6
   group-by=summary,desktop-entry
   history=1
-  max-history=20
 
 # ── Colors ──────────────────────────────────────────────────
   background-color=#22282c
@@ -24,16 +32,37 @@
   progress-color=over #376078
   format=<span foreground="#7dc4e47a">󰂟 %a</span>\n<b>%s</b>\n%b
 
+[grouped]
+  format=<span foreground="#7dc4e4">󰂟 %a</span> <span foreground="#7dc4e47a">(×%g)</span>\n<b>%s</b>\n%b
+
 # ────────────────────────────────────────────────────────────
 [urgency=high]
   default-timeout=0
-  border-color=#f5a97f
+  border-color=#fc697c
 
+[category=mpd]
+  border-color=#f5c2e7
+  default-timeout=2500
+  group-by=category
+
+# media-control es el nombre de script para los atajos de brillo
+[app-name=media-control]
+  default-timeout=1500
+  progress-color=over #dbb77dbf
+  background-color=#2c2b28
+  border-color=#FFCE80
+  text-color=#ffeed3
+  format=<b>%s</b>\n%b
+# format=<span foreground="#ffeed3"><b>%s</b></span>\n<span foreground="#ffeed3">%b</span>
+
+# ────────────────────────────────────────────────────────────
+# Sección de pruebas. Aplica un estilo específico cuando
+# la notificación viene de notify-send
+# Comando de prueba
+#    notify-send -u normal "Título" "Mensaje" --hint int:value:50
+#
 # [app-name=notify-send]
 #   progress-color=over #dbb77dbf
 #   background-color=#2c2b28
 #   border-color=#FFCE80
 #   text-color=#ffeed3
-
-[grouped]
-  format=<span foreground="#7dc4e4">󰂟 %a</span> <span foreground="#7dc4e47a">(×%g)</span>\n<b>%s</b>\n%b
