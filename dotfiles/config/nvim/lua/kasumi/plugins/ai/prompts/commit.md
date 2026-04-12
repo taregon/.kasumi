@@ -27,8 +27,7 @@ Estructura obligatoria:
   - En texto plano. Prohibido bloques (``), negritas (**), cursivas (__)
   - Redacta en español neutro, excepto términos técnicos, conservan su forma
     original.
-  - Utiliza SOLO un tipo adecuado: [feat, fix, docs, style, refactor, perf,
-    test, build, ci, chore, revert]
+  - Utiliza SOLO un tipo adecuado: feat, fix, chore, docs, refactor.
   - No divagues ni agregues contexto irrelevante.
   - Prohibido mencionar nombres de funciones, variables, rutas de archivo o
     código.
