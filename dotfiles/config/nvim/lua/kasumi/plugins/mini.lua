@@ -3,11 +3,11 @@
 -- ALTERNA EL FORMATO DE ARGUMENTOS
 -- si están en una sola línea los expande en varias,
 -- y si ya están divididos los compacta en una sola.
-require("mini.splitjoin").setup({
+--[[ require("mini.splitjoin").setup({
 	mappings = {
 		toggle = "<F4>", -- Atajo
 	},
-})
+}) ]]
 
 -- MUEVE EL TEXTO (Atajos)
 require("mini.move").setup({
