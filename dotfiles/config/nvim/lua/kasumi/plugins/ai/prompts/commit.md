@@ -36,7 +36,8 @@ Estructura obligatoria:
 - Reglas para el encabezado
   - Sé breve y directo con el cambio, sin explicar POR QUÉ o CÓMO.
   - Utiliza verbos en infinitivo, minúscula inicial. Sin punto final.
-  - Scope: Palabra clave única, en kebab-case, que identifique módulo afectado
+  - Scope: Palabra clave única (si aplica, en kebab-case) que identifique módulo
+    afectado.
 
 - Reglas para el cuerpo
   - No repitas ni parafrasees el encabezado.
