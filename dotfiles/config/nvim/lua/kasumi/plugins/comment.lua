@@ -11,8 +11,9 @@ require("Comment").setup({
 		line = "<F2>",
 		block = "<F3>",
 	},
-	-- Deshabilito atajos extras
+	-- Desactiva los mappings por defecto del plugin
 	mappings = {
+		basic = true,
 		extra = false,
 	},
 })
