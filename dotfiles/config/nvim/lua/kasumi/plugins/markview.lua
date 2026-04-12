@@ -65,7 +65,7 @@ require("markview").setup({
 			["SUMMARY"]   = { hl = "MarkviewBlockQuoteNote", preview    = "󰨸  Summary", title   = true, icon = "󰨸 " },
 			["TIP"]       = { hl = "MarkviewBlockQuoteOk", preview      = "󰡕  Tip", title       = true, icon = "󰡕 " },
 			["TLDR"]      = { hl = "MarkviewBlockQuoteNote", preview    = "󰨸  Tldr", title      = true, icon = "󰨸 " },
-			["TODO"]      = { hl = "MarkviewBlockQuoteNote", preview    = "󰗡  Todo", title      = true, icon = "󰗡 " },
+			["TODO"]      = { hl = "MarkviewBlockQuoteNote", preview    = "󰸟  Todo", title      = true, icon = "󰗡 " },
 			["WARNING"]   = { hl = "MarkviewBlockQuoteWarn", preview    = "󰀪  Warning", title   = true, icon = "󰀪 " },
 			-- stylua: ignore end
 		},
@@ -100,39 +100,45 @@ require("markview").setup({
 				sign = "",
 				hl = "MarkviewHeading1",
 			},
-			heading_2 = {
+			--[[ heading_2 = {
 				style = "icon",
 				icon = "  ",
 				sign = "",
 				hl = "MarkviewHeading2",
-			},
+			}, ]]
 
-			-- heading_2 = {
-			--     style = "label",
-			--              align = "center",
-			--     icon = "",
-			--              sign = "",
-			--              padding_left = " ",
-			--              padding_right = " ",
-			--     hl = "MarkviewHeading2"
-			-- },
+			heading_2 = {
+				style = "label",
+				align = "center",
+				icon = "  ",
+				sign = "",
+				corner_left = "",
+				corner_right = " ",
+				corner_left_hl = "MarkviewHeading2Sign",
+				corner_right_hl = "MarkviewHeading2Sign",
+				padding_left = "  ",
+				padding_right = "  ",
+				hl = "MarkviewHeading2",
+			},
 			heading_3 = {
 				style = "icon",
 				-- border = "-",
-				icon = "󰫣  ",
+				icon = "🟅  ",
 				sign = "",
-				hl = "MarkviewHeading2",
+				hl = "MarkviewHeading3",
 			},
 			--[[ heading_3 = {
 				style = "label",
-				-- corner_left = "⎸", --  "🭘"
-				-- corner_right = "⎹", --  "🭈"
-				padding_left = " ",
-				padding_right = " ",
-				icon = "",
-                -- sign = "🭬",
-                sign_hl = "Comment",
-				hl = "MarkviewHeading2"
+				-- corner_left = "", --  "🭘"
+				-- corner_right = "", --  "🭈"
+				corner_left = "",
+				corner_right = "",
+				padding_left = "  ",
+				padding_right = "  ",
+				icon = "  ",
+				-- sign = "🭬",
+				-- sign_hl = "Comment",
+				hl = "MarkviewHeading3",
 			}, ]]
 			heading_4 = {
 				style = "label",
@@ -208,7 +214,7 @@ require("markview").setup({
 				enable = true,
 				add_padding = true,
 				conceal_on_checkboxes = true,
-				text = "▱",
+				text = "󰺕 ",
 				hl = "MarkviewListItemMinus",
 			},
 			marker_plus = { enable = false },
@@ -264,9 +270,7 @@ require("markview").setup({
 	},
 
 	markdown_inline = {
-		enable = true,
-
-		hyperlinks = {
+		hyperlinks = { -- ────────────────────────────────────────────────────────────
 			default = { icon = " ", hl = "MarkviewHyperlink" },
 
             -- stylua: ignore start
@@ -287,13 +291,7 @@ require("markview").setup({
 			-- stylua: ignore end
 		},
 
-		checkboxes = {
-			enable = true,
-			checked = { text = " ", hl = "MarkviewCheckboxChecked", scope_hl = "MarkviewCheckboxChecked" },
-			unchecked = { text = " ", hl = "Comment", scope_hl = "MarkviewCheckboxUnchecked" },
-		},
-
-		images = {
+		images = { -- ────────────────────────────────────────────────────────────
 			default = { icon = "󰋵 ", hl = "MarkviewImage" },
 
 			["%.svg$"] = { icon = "󰜡 " },
@@ -303,24 +301,13 @@ require("markview").setup({
 			["%.pdf$"] = { icon = " " },
 		},
 
-		inline_codes = {
-			enable = true,
+		inline_codes = { -- ────────────────────────────────────────────────────────────
 			hl = "MarkviewInlineCode",
-			padding_left = " ",
-			padding_right = " ",
+			padding_left = "  ",
+			padding_right = "  ",
 		},
 
-		footnotes = {
-			default = { icon = "󱝂 ", hl = "MarkviewHyperlink" },
-			-- Numbered footnotes.
-			["^%d+$"] = { icon = "󱝂 ", hl = "MarkviewPalette4Fg" },
-		},
-
-		uri_autolinks = { default = { icon = "󰌹 ", hl = "MarkviewEmail" } },
-
-		block_references = {
-			enable = true,
-
+		block_references = { -- ────────────────────────────────────────────────────────────
 			default = {
 				icon = "󰿨 ",
 				hl = "MarkviewPalette6Fg",
@@ -328,28 +315,39 @@ require("markview").setup({
 			},
 		},
 
-		-- Configuration for Obsidian-style highlighted texts.
-		highlights = {
-
+		highlights = { -- ────────────────────────────────────────────────────────────
 			default = {
 				padding_left = " ",
 				padding_right = " ",
 				hl = "MarkviewPalette3",
 			},
 		},
+        -- stylua: ignore
+		checkboxes = { -- ────────────────────────────────────────────────────────────
+			checked   = { text = "󰄲 ", hl = "MarkviewCheckboxChecked", scope_hl   = "MarkviewCheckboxChecked" },
+			unchecked = { text = "󰄱 ", hl = "Comment", scope_hl                   = "MarkviewCheckboxUnchecked" },
+			["-"]     = { text = "󰛲 ", hl = "MarkviewCheckboxCancelled", scope_hl = "MarkviewCheckboxStriked" },
+			["/"]     = { text = "󱨃 ", hl = "MarkviewCheckboxPending" },
+		},
+
+		footnotes = { -- ────────────────────────────────────────────────────────────
+			default = { icon = "󱝂 ", hl = "MarkviewHyperlink" },
+			["^%d+$"] = { icon = "󱝂 ", hl = "MarkviewPalette0Fg" },
+		},
+
+		internal_links = { default = { icon = "󰌱 ", hl = "MarkviewPalette7Fg" } },
+
+		embed_files = { default = { icon = "󰠮 ", hl = "MarkviewPalette7Fg" } },
+
+		entities = { enable = true, hl = "Special" },
+
+		uri_autolinks = { default = { icon = "󰌹 ", hl = "MarkviewEmail" } },
 
 		emails = { default = { icon = "󰇯 ", hl = "MarkviewEmail" } },
 
-		-- Configuration for Github-styled emoji shorthands.
 		emoji_shorthands = { enable = true },
-		-- Configuration for HTML entities.
-		entities = { enable = true, hl = "Special" },
-		-- Configuration for escaped characters.
+
 		escapes = { enable = true },
-		-- Configuration for obsidian's internal links.
-		internal_links = { default = { icon = "󰌱 ", hl = "MarkviewPalette7Fg" } },
-		-- Configuration for obsidian's embed files.
-		embed_files = { default = { icon = "󰠮 ", hl = "MarkviewPalette7Fg" } },
 	},
 
 	yaml = {
