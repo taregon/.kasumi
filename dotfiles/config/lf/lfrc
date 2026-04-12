@@ -24,11 +24,11 @@
   map <delete> delete
   map <enter> open
 
-  map X %trash-put  $fx
-  map a push :mkdir<space>
+  map X %trash-put  "$fx"
+  map a push $mkdir<space>
 
 # Copia la ruta del archivo
-  map C %echo -n "$f" | wl-copy
+  map Y %echo -n "$f" | wl-copy
   map o %ripdrag -W 400 -H 200 -s 195 -bx "$f"
 
 # map C $cat "$fx" | wl-copy
