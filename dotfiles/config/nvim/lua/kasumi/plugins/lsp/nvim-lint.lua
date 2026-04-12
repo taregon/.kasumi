@@ -39,6 +39,14 @@ lint.linters.luacheck.args = {
 	"vim",
 }
 
+lint.linters.yamllint.args = {
+	"-f",
+	"parsable",
+	"-c",
+	vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/yamllint.yaml"),
+	"-",
+}
+
 -- Desactiva la regla MD013 (líneas demasiado largas) en markdownlint,
 lint.linters.markdownlint.args = {
 	"--disable",
