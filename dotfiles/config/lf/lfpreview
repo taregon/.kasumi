@@ -9,6 +9,7 @@ PREVIEW_X="$4"
 PREVIEW_Y="$5"
 THUMB_SIZE=800
 CACHE_DIR="${XDG_CACHE_HOME:-"$HOME/.cache"}/lf"
+PROFILE="$HOME/.config/lf/icc/sRGB-v2-micro.icc"
 mkdir -p "$CACHE_DIR"
 
 create_cache() {
