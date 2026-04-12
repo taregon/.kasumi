@@ -22,7 +22,7 @@ local lsp_servers = {
 	graphql  = { "graphql" },
 	html     = { "html" },
 	jsonls   = { "json", "jsonc" },
-	marksman = { "md" },
+	marksman = { "markdown" },
 	-- pyright  = { "python" },
 	-- stylua: ignore end
 }
@@ -42,7 +42,11 @@ vim.lsp.config["yamlls"] = {
 	settings = {
 		yaml = {
 			schemas = {
-				kubernetes = "*.yaml",
+				kubernetes = {
+					"k8s/**/*.yaml",
+					"**/*k8s*.yaml",
+					"kubernetes/**/*.yaml",
+				},
 			},
 		},
 	},
@@ -80,6 +84,7 @@ vim.lsp.enable("lua_ls")
 -- ast-grep es principalmente CLI; el editor solo lo integra
 -- El LSP añade diagnósticos y fixes si hay reglas definidas
 -- Sin sgconfig.yml, su uso práctico se limita al CLI
+-- https://ast-grep.github.io/reference/languages.html
 
 vim.lsp.config["ast_grep"] = {
 	cmd = { "ast-grep", "lsp" },
