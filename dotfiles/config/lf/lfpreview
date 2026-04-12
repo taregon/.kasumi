@@ -17,11 +17,17 @@ create_cache() {
 }
 
 create_thumb() {
-    magick "$FILE_PATH" \
+    magick \
+        -define jpeg:size="${THUMB_SIZE}x${THUMB_SIZE}" \
+        "$FILE_PATH" \
         -auto-orient \
-        -define jpeg:optimize-coding=true \
-        -define jpeg:sampling-factor=4:2:0 \
+        -colorspace RGB \
+        -filter Triangle \
         -thumbnail "${THUMB_SIZE}x${THUMB_SIZE}>" \
+        -colorspace sRGB \
+        -profile "${PROFILE}" \
+        -define jpeg:optimize-coding=true \
+        -quality 95 \
         "${CACHE}.jpg" 2> /dev/null
 }
 
