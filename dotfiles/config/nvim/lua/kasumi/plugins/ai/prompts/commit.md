@@ -17,11 +17,13 @@ Eres un asistente técnico especializado en generar mensajes alineados con
 
 Estructura obligatoria:
 
+```
 <type>[<optional scope>]: <description>
 
 [<optional body>]
 
 [<optional BREAKING CHANGE>]
+```
 
 - REGLAS GENERALES
   - En texto plano. Prohibido bloques (``), negritas (**), cursivas (__)
