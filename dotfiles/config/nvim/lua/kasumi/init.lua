@@ -23,12 +23,8 @@ require("kasumi/plugins/catppuccin") -- No mover
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                           PLUGS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
--- require("kasumi/plugins/lsp/nvim-navbuddy")
--- require("kasumi/plugins/lsp/nvim-supermaven") -- se me acabo el demo
--- require("kasumi/plugins/nvim-web-devicons") -- Esta de mas por que no tengo ajustes
--- require("kasumi/plugins/telescope") -- Ta potente el asunto
 require("kasumi/plugins/bufferline")
-require("kasumi/plugins/colorizer")
+require("kasumi/plugins/highlight-colors")
 require("kasumi/plugins/comment")
 require("kasumi/plugins/comment-box")
 require("kasumi/plugins/fidget")
@@ -37,16 +33,27 @@ require("kasumi/plugins/diffview")
 require("kasumi/plugins/indent-blankline")
 require("kasumi/plugins/lualine")
 require("kasumi/plugins/mini")
--- require("kasumi/plugins/neo-tree")
-require("kasumi/plugins/scrollbar")
 require("kasumi/plugins/treesitter")
 require("kasumi/plugins/which-key")
-require("kasumi/plugins/todo")
--- require("kasumi/plugins/fzf")
 require("kasumi/plugins/bqf") -- Quickfix integrada con fzf
 require("kasumi/plugins/ai/codecompanion")
-require("kasumi/plugins/render-markdown")
--- require("kasumi/plugins/spectre")
+require("kasumi/plugins/markview")
+require("kasumi/plugins/todo")
+require("kasumi/plugins/scrollbar")
+require("kasumi/plugins/treesj")
+
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                     PLUGS (inactivos)                     │
+-- ╘═══════════════════════════════════════════════════════════╛
+-- require("kasumi/plugins/lsp/nvim-navbuddy")
+-- require("kasumi/plugins/lsp/nvim-supermaven") -- se me acabo el demo
+-- require("kasumi/plugins/nvim-web-devicons") -- Esta de mas por que no tengo ajustes
+-- require("kasumi/plugins/telescope") -- Ta potente el asunto
+-- require("kasumi/plugins/colorizer")
+-- require("kasumi/plugins/neo-tree")
+-- require("kasumi/plugins/fzf")
+-- require("kasumi/plugins/render-markdown")
+
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                   Formatting & Linting                    │
 -- ╘═══════════════════════════════════════════════════════════╛
