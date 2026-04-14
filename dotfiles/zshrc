@@ -152,10 +152,10 @@ export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)         # Fin de subrayado (rmul 
 # █▀▀   ▄▀▀▀  █▀▀
 # ▀     ▀▀▀▀▀ ▀
 # OPCIONES GENERALES DE FZF
-
-# Generador de TEMAS para fzf
-# https://vitormv.github.io/fzf-themes/
-
+# ┌───────────────────────────────────────┐
+#   Generador de TEMAS para fzf
+#   https://vitormv.github.io/fzf-themes/
+# └───────────────────────────────────────┘
 # Parámetros globales de fzf: controlan colores,
 # diseño y comportamiento por defecto
 export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
