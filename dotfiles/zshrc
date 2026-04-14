@@ -25,55 +25,18 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
-# ────────────────────────────────────────────────────────────
-# CONFIGURACIÓN PERSONAL
-# Definir ruta base para archivos de configuración adicionales
-local ZSH_CONF=~/.config/zsh
-
-# CARGAR ALIAS
-source $ZSH_CONF/kasumi-zsh_alias.zsh
-
-# CARGAR FUNCIONES (anterior método)
-# source $ZSH_CONF/funcs/kasumi-zsh_functions.zsh
-
-# DIRECTORIOS DE FUNCIONES (AUTOLOAD)
-# Agrega el directorio al inicio de fpath y carga las funciones
-fpath=(
-    $ZSH_CONF/funcs
-    ${fpath[@]}
-)
-
-# Verifica que el directorio exista y tenga archivos antes de autoload
-if [[ -d "$ZSH_CONF/funcs" ]]; then
-    autoload -Uz $ZSH_CONF/funcs/*(.N:t)
-fi
 
 # ────────────────────────────────────────────────────────────
 # AUTO COMPLETADO
-# Este código verifica si necesita reconstruir el caché de completado (.zcompdump):
-# 1. Si .zcompdump no existe o es más antiguo que .zshrc:
-#    - Se carga compinit con seguridad (-Uz)
-#    - Se inicializa el sistema ignorando archivos inseguros (-i)
-# 2. Si .zcompdump existe y es más reciente que .zshrc:
-#    - Se usa el caché existente (-C) para una carga más rápida
-#    - Omite las verificaciones de seguridad para mejor rendimiento
-#
-# Esto asegura que el sistema de completado siempre esté sincronizado con
-# tus configuraciones actuales en .zshrc
+# Carga compinit: usa caché si tiene menos de 24h, sino lo crea
 #
 autoload -Uz compinit
-
-if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
-    # Reconstrucción del caché (ignora advertencias de seguridad)
-    compinit -i
+ZCOMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump"
+if [[ -n $ZCOMPDUMP(Nmh-24) ]]; then
+    compinit -C -d "$ZCOMPDUMP"
 else
-    # Uso del caché existente para carga rápida
-    compinit -C
+    compinit -d "$ZCOMPDUMP"
 fi
-
-# Registro de Zinit en el sistema de completado
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
 
 # ┌───────────────────────────────────────────────────────────┐
 #   Configuración de TERM para habilitar
@@ -293,7 +256,7 @@ zinit ice wait"1" lucid
 zinit light zsh-users/zsh-completions
 
 # Interfaz avanzada para la autocompletación con fzf
-zinit ice lucid
+zinit ice wait"0" lucid
 zinit light Aloxaf/fzf-tab
 
 # Muestra sugerencias basadas en el historial mientras se escribe,
@@ -307,6 +270,9 @@ zinit light zsh-users/zsh-autosuggestions
 # ni con las sugerencias de autosugestión.
 zinit ice wait"0" lucid
 zinit light zsh-users/zsh-syntax-highlighting
+
+# Replay de todas las completions diferidas (obligatorio con zinit + fzf-tab)
+zinit cdreplay -q
 
 # ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
@@ -330,7 +296,7 @@ zinit light zsh-users/zsh-syntax-highlighting
 # zstyle ':completion:*' menu select
 
 # Muestra descripciones detalladas de cada ítem del completion
-# (por ejemplo: “(archivo)”, “(directorio)”, etc.).
+# (por ejemplo: "(archivo)", "(directorio)", etc.).
 # zstyle ':completion:*' verbose yes
 
 # Define el formato para las descripciones mostradas por Zsh.
@@ -354,6 +320,29 @@ zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm,cmd
 
 # Habilita los valores por defecto de fzf en fzf-tab. https://github.com/Aloxaf/fzf-tab#configure
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+# ────────────────────────────────────────────────────────────
+# CONFIGURACIÓN PERSONAL
+# Definir ruta base para archivos de configuración adicionales
+local ZSH_CONF=~/.config/zsh
+
+# CARGAR ALIAS
+source $ZSH_CONF/kasumi-zsh_alias.zsh
+
+# CARGAR FUNCIONES (anterior método)
+# source $ZSH_CONF/funcs/kasumi-zsh_functions.zsh
+
+# DIRECTORIOS DE FUNCIONES (AUTOLOAD)
+# Agrega el directorio al inicio de fpath y carga las funciones
+fpath=(
+    $ZSH_CONF/funcs
+    ${fpath[@]}
+)
+
+# Verifica que el directorio exista y tenga archivos antes de autoload
+if [[ -d "$ZSH_CONF/funcs" ]]; then
+    autoload -Uz $ZSH_CONF/funcs/*(.N:t)
+fi
 
 # ────────────────────────────────────────────────────────────
 # ╓
