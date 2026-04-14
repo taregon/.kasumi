@@ -22,36 +22,42 @@ codecompanion.setup({
 					name = "Ministral-3B",
 					-- stylua: ignore
 					schema = {
-						-- Elige el modelo de IA que se cargará al inicio
 						model          = { default = "ministral-3:3b" },
-						-- Define cuánta memoria tiene la IA para recordar el chat y el código actual
 						num_ctx        = { default = 8192 },
-						-- Limita la longitud máxima de la respuesta para evitar textos infinitos
-						-- Con -1, el modelo no para hasta que él mismo decide que ha terminado
-						-- o hasta que se llena el contexto
-						num_predict    = { default = 512 },
-						-- Evita que la IA se quede trabada repitiendo las mismas frases una y otra vez
-						repeat_penalty = { default = 1.1 },
-						-- Controla la "locura" de la IA: 0.1 es serio y preciso, 1.0 es creativo y variado
-						temperature    = { default = 0.35 },
-						-- Prioriza las palabras más lógicas para que la IA no pierda el hilo técnico
-						top_p          = { default = 0.5 },
+						num_predict    = { default = 400 },
+						repeat_penalty = { default = 1.12 },
+						temperature    = { default = 0.15 },
+						top_p          = { default = 0.75 },
+						top_k          = { default = 40 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
-					-- headers = { ["Content-Type"] = "application/json" },
+				})
+			end,
+			gemma4 = function()
+				return require("codecompanion.adapters").extend("ollama", {
+					name = "Gemma-4",
+					-- stylua: ignore
+					schema = {
+						model          = { default = "gemma4:e2b" },
+						num_ctx        = { default = 8192 },
+						num_predict    = { default = 400 },
+						repeat_penalty = { default = 1.11 },
+						temperature    = { default = 0.14 },
+						top_p          = { default = 0.95 },
+						top_k          = { default = 64 },
+					},
+					env = { url = "http://127.0.0.1:11434" },
 				})
 			end,
 			opts = { show_presets = false },
-			-- parameters = { sync = true },
 		},
 	},
 	-- NOTA: Los tipos de interacciones válidos son: chat, inline, cmd, background
 	-- "strategies" fue renombrado a "interactions" en versiones recientes
 	-- stylua: ignore
 	interactions = {
-		-- agent NO es una interacción válida
-		chat   = { adapter = "ministral" },
-		inline = { adapter = "ministral" },
+		chat   = { adapter = "gemma4" },
+		inline = { adapter = "gemma4" },
 	},
 	display = {
 		chat = {
