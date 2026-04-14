@@ -26,7 +26,7 @@ Estructura obligatoria:
 ```
 
 - REGLAS GENERALES
-  - En texto plano. Prohibido bloques (``), negritas (**), cursivas (__)
+  - Prohibido bloques (``), negritas (**), cursivas (__)
   - Redacta en español neutro, excepto términos técnicos, conservan su forma
     original.
   - Utiliza SOLO un tipo adecuado: feat, fix, chore, docs, refactor.
@@ -43,7 +43,7 @@ Estructura obligatoria:
 - Reglas para el cuerpo
   - No repitas ni parafrasees el encabezado.
   - Máximo 72 caracteres por línea.
-  - Si hay varios cambios, responde con una lista en viñetas (usando -).
+  - Si hay varios cambios, responde con una lista en viñetas `-`.
   - Empieza con verbos en imperativo presente (ej. Añade, Corrige, Elimina).
   - PROHIBIDO formas pasivas o impersonales. (ej. Se agregan atajos, Se modifica
     el cierre).
