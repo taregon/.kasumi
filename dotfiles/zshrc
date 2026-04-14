@@ -156,6 +156,21 @@ export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)         # Fin de subrayado (rmul 
 #   Generador de TEMAS para fzf
 #   https://vitormv.github.io/fzf-themes/
 # └───────────────────────────────────────┘
+# FZF_FD_BASE es una variable creada para definir los ajustes en fzf, para listar archivos.
+# Se usa `fd` por rendimiento y simplicidad frente a `find`.
+# Los parámetros utilizados son:
+#   --type f: Restringe la selección a archivos, excluyendo directorios.
+#   --hidden: Incluye archivos ocultos, lo cual es relevante en sistemas Linux.
+#   --follow: Permite seguir los enlaces simbólicos.
+FZF_FD_BASE="fd \
+    --hidden \
+    --follow \
+    --exclude .cache \
+    --exclude .git \
+    --exclude build \
+    --exclude dotdrop \
+    --exclude node_modules
+"
 # Parámetros globales de fzf: controlan colores,
 # diseño y comportamiento por defecto
 export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
