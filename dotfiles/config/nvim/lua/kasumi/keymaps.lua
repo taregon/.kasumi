@@ -69,9 +69,9 @@ map("n", "<C-j>", "<C-w>j") -- Abajo
 map("n", "<C-k>", "<C-w>k") -- Arriba
 map("n", "<C-l>", "<C-w>l") -- Derecha
 
--- Alterna la visualización de render-markdown.
-local function toggle_render_markdown()
-	vim.cmd("RenderMarkdown toggle")
+-- Alterna la visualización de markview.nvim.
+local function toggle_markview()
+	vim.cmd("Markview Toggle")
 	vim.cmd("Gitsigns toggle_signs")
 	vim.cmd("set cursorline!")
 	vim.cmd("set invlist!")
@@ -79,7 +79,10 @@ local function toggle_render_markdown()
 	vim.cmd("set invnumber!")
 end
 
-map("n", "<F6>", toggle_render_markdown)
+map("n", "<F6>", toggle_markview)
+
+-- treesj -> split/join basado en Tree-sitter
+map("n", "<F4>", ":TSJToggle<cr>")
 
 -- ────────────────────────────────────────────────────────────
 -- █  ▄▀ █▀▀▀▀ █   █ █▀▀▀▀ █   █ █▄  █ ▄▀▀▀▀ ▄▀▀▀▀
