@@ -45,6 +45,14 @@ end)
 -- map("n", "|", ":vnew<cr>")
 
 -- ────────────────────────────────────────────────────────────
+-- Elimina mappings nativos de Neovim definidos en vim/_defaults.lua
+-- para evitar solapamientos y mantener control total de los atajos
+vim.keymap.del("n", "gc")
+vim.keymap.del("n", "gcc")
+vim.keymap.del("x", "gc")
+vim.keymap.del("o", "gc")
+
+-- ────────────────────────────────────────────────────────────
 -- Cierra el buffer actual .sin guardar!
 map("n", "<leader>x", ":bd<cr>", { desc = "Close Buffer" })
 
