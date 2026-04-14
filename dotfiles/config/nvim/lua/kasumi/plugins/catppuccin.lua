@@ -4,7 +4,6 @@
 -- ██║     ██╔══██║   ██║   ██╔═══╝ ██╔═══╝ ██║   ██║██║     ██║     ██║██║╚██╗██║
 -- ╚██████╗██║  ██║   ██║   ██║     ██║     ╚██████╔╝╚██████╗╚██████╗██║██║ ╚████║
 --  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝      ╚═════╝  ╚═════╝ ╚═════╝╚═╝╚═╝  ╚═══╝
-
 -- La escala de colores las genero en https://components.ai/color-scale
 -- Opciones: HSV y Natural / RGB y Lineal
 -- Comandos útiles para revisar colores
@@ -139,7 +138,7 @@ require("catppuccin").setup({
 				fg = colors.overlay0,
 			},
 
-			-- ─────────────────< COLORES RENDER MARKDOWN >──────────────
+			-- ─────────────────────< RENDER MARKDOWN >─────────────────────
 			RenderMarkdownCode = {
 				bg = kas.darken(colors.mantle, 0.8, colors.base),
 			},
@@ -159,10 +158,72 @@ require("catppuccin").setup({
 			RenderMarkdownH3Bg = {
 				fg = colors.peach,
 				bg = kas.darken(colors.peach, 0.1, colors.base),
-				-- nocombine = true,
 			},
 
-			-- ─────────────────< COLORES NVIM SCROLLBAR >──────────────
+			-- ────────────────────────< MARKVIEW >─────────────────────
+			-- Bloques de código
+			MarkviewCode = {
+				bg = kas.darken(colors.mantle, 0.8, colors.base),
+			},
+			MarkviewCodeInfo = {
+				fg = colors.overlay0,
+				bg = kas.darken(colors.mantle, 0.8, colors.base),
+			},
+			MarkviewInlineCode = {
+				fg = kas.darken(colors.sapphire, 0.80, colors.base),
+				bg = kas.darken(colors.green, 0.25, colors.base),
+			},
+
+			-- Tablas
+			MarkviewTableHeader = {
+				fg = kas.darken(colors.blue, 0.55, colors.base),
+			},
+			MarkviewTableBorder = {
+				fg = kas.darken(colors.blue, 0.35, colors.base),
+			},
+			MarkviewTableAlignLeft = {
+				fg = kas.darken(colors.blue, 0.65, colors.base),
+			},
+			MarkviewTableAlignRight = {
+				fg = kas.darken(colors.blue, 0.65, colors.base),
+			},
+			MarkviewTableAlignCenter = {
+				fg = kas.darken(colors.blue, 0.65, colors.base),
+			},
+			MarkviewIcon4 = {
+				fg = kas.darken(colors.blue, 0.65, colors.base),
+			},
+
+			-- Checkboxes
+			MarkviewCheckboxUnchecked = {
+				fg = kas.darken(colors.subtext0, 0.55, colors.base),
+			},
+			MarkviewCheckboxPending = {
+				fg = kas.darken(colors.peach, 0.80, colors.base),
+			},
+			MarkviewPalette0Fg = {
+				fg = kas.darken(colors.maroon, 0.75, colors.base),
+			},
+
+			-- Encabezados
+			MarkviewHeading2 = {
+				fg = kas.darken(colors.peach, 0.95, colors.base),
+				bg = kas.darken(colors.peach, 0.12, colors.base),
+			},
+			MarkviewHeading3 = {
+				fg = kas.darken(colors.peach, 0.95, colors.base),
+				bg = kas.darken(colors.peach, 0.06, colors.base),
+			},
+			MarkviewHeading2Sign = {
+				fg = kas.darken(colors.base, 0.90, colors.peach),
+			},
+
+			-- Listas
+			MarkviewListItemMinus = {
+				fg = kas.darken(colors.mauve, 0.55, colors.base),
+			},
+
+			-- ────────────────────────< SCROLLBAR >────────────────────────
 			ScrollbarError = {
 				fg = colors.red,
 			},
@@ -182,6 +243,23 @@ require("catppuccin").setup({
 			fg = colors.subtext0,
 		}
 
+		-- ────────────────────────────────────────────────────────────
+		-- Genera 9 niveles de gradiente para MarkviewGradient1..9,
+		-- interpolando linealmente un factor entre min y max para
+		-- oscurecer el color base de forma progresiva y consistente.
+		--      for i = 1, steps do
+		--      local factor = i * 0.1
+		local steps = 9
+		local min = 0.05
+		local max = 0.25
+
+		for i = 1, steps do
+			local factor = min + (max - min) * ((i - 1) / (steps - 1))
+
+			kasumi_colors["MarkviewGradient" .. i] = {
+				fg = kas.darken(colors.blue, factor, colors.base),
+			}
+		end
 		return kasumi_colors
 	end,
 })
