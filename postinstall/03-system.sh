@@ -180,6 +180,11 @@ install_app_general() {
         spek-x-git    # Analizador visual de frecuencias en archivos de audio
         syncthing     # Sincronización privada y cifrada entre dispositivos
         upscayl-bin   # Mejora y reescalado de imágenes con IA
+        # Libre Office
+        hunspell-es_pa       # Diccionario español (Panamá) para Hunspell
+        hyphen-es            # Reglas de separación silábica en español
+        libreoffice-fresh    # Suite ofimática con nuevas funciones
+        libreoffice-fresh-es # Paquete de idioma español para LibreOffice
     )
     instalar "${pkgs[@]}"
 
@@ -195,6 +200,7 @@ install_sys_fonts() {
         ttf-ibm-plex                # Fuente IBM Plex (sans, mono, serif)
         ttf-iosevka-nerd            # Fuente monoespaciada con ligaduras (Iosevka)
         ttf-jetbrains-mono-nerd     # Fuente JetBrains Mono
+        ttf-juliamono               # Fuente JuliaMono
         ttf-nerd-fonts-symbols-mono # Símbolos Nerd Fonts monoespaciados
         ttf-recursive-nerd          # Fuente Recursive (variable)
         ttf-ubuntusans-nerd         # Fuente Ubuntu Sans
@@ -259,6 +265,7 @@ install_sys_wayland() {
 
         # Audio y visualización
         cava # Visualizador de espectro de audio en terminal
+        wev  # Visor de eventos de entrada en Wayland
 
         # Conectividad y Bluetooth
         # blueman # Gestor gráfico de Bluetooth
@@ -268,6 +275,7 @@ install_sys_wayland() {
         polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
 
         # Entorno gráfico (Wayland)
+        awww         # Gestor de fondos animados para Wayland
         grim         # Captura de pantalla en Wayland
         hyprpicker   # Selector de color en Wayland
         mako         # Demonio de notificaciones para Wayland
@@ -290,9 +298,11 @@ install_utils_compress() {
         unzip    # Descomprimir .zip
         zip      # Comprimir archivos .zip
         # Otros
+        cjpeg         # Codificador de imagen a JPEG
+        djpeg         # Decodificador de JPEG a imagen
         jpegoptim     # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
         libwebp-utils # Utilidades CLI de WebP (incluye dwebp, cwebp, gif2webp)
-        oxipng        # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
+        oxipg         # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
     )
     instalar "${pkgs[@]}"
 }
@@ -308,10 +318,10 @@ install_utils_files() {
         gvfs-mtp          # Soporte MTP (Android, etc.)
         imv               # Visor de imágenes ligero
         mpv               # Reproductor multimedia
-        mtools            # Manipular discos MS-DOS/FAT
         mtpfs             # Montaje MTP vía FUSE
         nilfs-utils       # Herramientas para NILFS2
         ntfs-3g           # Soporte lectura/escritura NTFS
+        playerctl         # Control de reproductores multimedia desde CLI
         thunar            # Explorador de archivos GTK
         thunar-volman     # Gestión volúmenes en Thunar
         tumbler           # Generador de miniaturas
@@ -325,6 +335,7 @@ install_utils_terminal() {
     echo ">> Instalando utilidades de terminal"
     local pkgs=(
         aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
+        ast-grep-bin       # Herramienta de búsqueda y lint de código
         bat                # Visor tipo cat con resaltado y soporte Git
         bc                 # Calculadora CLI con soporte para decimales de alta precisión
         brightnessctl      # Control de brillo de pantalla desde terminal
@@ -338,6 +349,7 @@ install_utils_terminal() {
         grc                # Colorea automáticamente la salida de comandos
         iputils            # Herramientas de red (ping, traceroute, etc.)
         iw                 # Configuración avanzada de Wi-Fi
+        iwd                # Demonio de Wi-Fi para Linux
         jq                 # Procesador de JSON en CLI
         kitty              # Emulador de terminal acelerado por GPU
         less               # Paginador de texto para terminal
@@ -348,15 +360,13 @@ install_utils_terminal() {
         pacman-contrib     # Utilidades adicionales para pacman
         pamixer            # Control de volumen para PulseAudio en terminal
         pandoc             # Conversor de documentos markup entre formatos
-        playerctl          # Control de reproductores multimedia desde CLI
-        poppler            # Utilidades y herramientas para PDF
         python-pip         # Gestor de paquetes Python
+        ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
         source-highlight   # Resaltado de sintaxis para less y otros
         sshfs              # Montaje de sistemas remotos vía SSH
         toilet             # Generador de texto ASCII estilizado
-        wev                # Visor de eventos de entrada en Wayland
-        xan                # Gestor de ventanas X/Wayland (fork de xadrezsuico)
+        xan                # Utilidad para procesamiento de tablas CSV
         zoxide             # Navegación inteligente entre directorios
         zsh                # Shell interactivo avanzada
         zsh-completions    # Autocompletado adicional para zsh
