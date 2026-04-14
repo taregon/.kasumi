@@ -55,7 +55,7 @@ local function bullet_config()
 
 		-- Bullet según nivel
 		icons = function(ctx)
-			local icons = { " ", "", "", "󱘹", "⬬ ", "󰞇 ", " " }
+			local icons = { " ", "▰", "▱", "", "", "⬬ ", "󰞇 ", " " }
 			return icons[((ctx.level - 1) % #icons) + 1]
 		end,
 
