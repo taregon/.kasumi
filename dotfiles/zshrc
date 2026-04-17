@@ -361,18 +361,27 @@ fi
 
 # ────────────────────────────────────────────────────────────
 # ╓
-# ║ Zoxide: recuerda los directorios más frecuentados
-# ║ Es como cd, pero utilizando el comando z
+# ║ Zoxide: navegación inteligente por directorios
+# ║ Sustituye el uso tradicional de `cd` con el comando `z`
+# ║ Aprende automáticamente de los directorios más utilizados
 # ║ Requiere: pacman -S zoxide
 # ╙
 eval "$(zoxide init zsh)"
-# eval "$(zoxide init --cmd cd zsh)"
+
 # ╓
-# ║ Integración oficial de fzf
-# ║ Proporciona búsquedas interactivas y Ctrl+R mejorado
+# ║ fzf: buscador interactivo para la terminal
+# ║ Permite encontrar archivos, rutas e historial aunque no escribas el nombre exacto
+# ║ Mejora el historial (Ctrl+R), selección de archivos (Ctrl+T) y cambio de carpetas (Alt+C)
 # ║ Requiere: pacman -S fzf
 # ╙
 source <(fzf --zsh)
+
+# ╓
+# ║ Starship: prompt moderno, rápido y altamente configurable
+# ║ Detecta contexto (git, lenguajes, entorno) y lo muestra en el prompt
+# ║ Configuración centralizada en ~/.config/starship/kasumi.toml
+# ╙
+eval "$(starship init zsh)"
 
 # ────────────────────────────────────────────────────────────
 # 💤 Líneas desactivadas (referencia o pruebas)
