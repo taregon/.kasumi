@@ -29,14 +29,21 @@ source "${ZINIT_HOME}/zinit.zsh"
 # ────────────────────────────────────────────────────────────
 # AUTO COMPLETADO
 # Carga compinit: usa caché si tiene menos de 24h, sino lo crea
-#
-autoload -Uz compinit
-ZCOMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump"
-if [[ -n $ZCOMPDUMP(Nmh-24) ]]; then
-    compinit -C -d "$ZCOMPDUMP"
-else
-    compinit -d "$ZCOMPDUMP"
-fi
+# ╓
+# ║ zicompinit es una función de conveniencia
+# ║ proporcionada por Zinit que hace:
+# ║ autoload -Uz compinit
+# ║ compinit
+# ║
+# ║ Por lo que el siguiente codigo no hace falta
+# ╙
+# autoload -Uz compinit
+# ZCOMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump"
+# if [[ -n $ZCOMPDUMP(Nmh-24) ]]; then
+#     compinit -C -d "$ZCOMPDUMP"
+# else
+#     compinit -d "$ZCOMPDUMP"
+# fi
 
 # ┌───────────────────────────────────────────────────────────┐
 #   Configuración de TERM para habilitar
