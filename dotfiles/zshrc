@@ -13,9 +13,9 @@ zmodload zsh/zprof
 # NOTA: cualquier código que requiera interacción de usuario
 # (passwords, confirmaciones [y/n], etc.) debe ir **antes** de este bloque.
 #
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+# source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 # ────────────────────────────────────────────────────────────
 # ZINIT BOOTSTRAP
 # Configuración inicial de Zinit: instala el gestor si no existe
@@ -268,8 +268,8 @@ zshaddhistory() {
 
 # Clona de manera superficial para acelerar la carga
 # y muestra el prompt con información completa y personalizable
-zinit ice depth"1"
-zinit light romkatv/powerlevel10k
+# zinit ice depth"1"
+# zinit light romkatv/powerlevel10k
 
 # Proporciona definiciones adicionales de completado
 # para cientos de comandos y utilidades externas que Zsh no incluye por defecto.
@@ -413,7 +413,7 @@ eval "$(starship init zsh)"
 # https://git.nvds.be/NicolaiVdS/Dotfiles/src/commit/66cf71c398c811521d1959c0dbdd19213e2e73ef/.zshrc
 # ────────────────────────────────────────────────────────────
 # Cargar configuración de Powerlevel10k (si existe)
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Coloca esto al final de tu ~/.zshrc
 zprof
