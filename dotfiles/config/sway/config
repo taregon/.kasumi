@@ -45,14 +45,6 @@
   set $up    k
   set $right l
 
-  set $browser firefox
-  set $keepass keepassxc
-  set $colorpicker hyprpicker --autocopy
-  set $filemanager thunar
-  set $launcher rofi -show drun
-  set $music ~/.config/sway/scripts-legacy/rofi_music
-  set $term kitty
-
   floating_modifier $mod
 
 # ── BARRA DE ESTADO ───────────────────────────────────────────
