@@ -293,8 +293,14 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait"0" lucid
 zinit light zsh-users/zsh-syntax-highlighting
 
+# zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
+# zinit light sindresorhus/pure
+
+# autoload -U promptinit; promptinit
+# prompt pure
+
 # Replay de todas las completions diferidas (obligatorio con zinit + fzf-tab)
-zinit cdreplay -q
+# zinit cdreplay -q
 
 # ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
