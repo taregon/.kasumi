@@ -28,7 +28,7 @@ codecompanion.setup({
 						repeat_penalty = { default = 1.12 },
 						temperature    = { default = 0.15 },
 						top_p          = { default = 0.75 },
-						top_k          = { default = 40 },
+						top_k          = { default = 44 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
 				})
@@ -49,6 +49,23 @@ codecompanion.setup({
 					env = { url = "http://127.0.0.1:11434" },
 				})
 			end,
+			gemma4_itq5 = function()
+				return require("codecompanion.adapters").extend("ollama", {
+					name = "Gemma-4-it",
+					-- stylua: ignore
+					schema = {
+						model          = { default = "hf.co/dahus/gemma-4-e2b-it-Q5_K_M-GGUF:latest" },
+						num_ctx        = { default = 8192 },
+						num_predict    = { default = 512 },
+						repeat_penalty = { default = 1.01 },
+						temperature    = { default = 0.18 },
+						top_p          = { default = 0.84 },
+						top_k          = { default = 30 },
+					},
+					env = { url = "http://127.0.0.1:11434" },
+				})
+			end,
+
 			opts = { show_presets = false },
 		},
 	},
@@ -56,7 +73,7 @@ codecompanion.setup({
 	-- "strategies" fue renombrado a "interactions" en versiones recientes
 	-- stylua: ignore
 	interactions = {
-		chat   = { adapter = "gemma4" },
+		chat   = { adapter = "gemma4_itq5" },
 		inline = { adapter = "gemma4" },
 	},
 	display = {
