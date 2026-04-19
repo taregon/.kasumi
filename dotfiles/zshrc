@@ -271,27 +271,35 @@ zshaddhistory() {
 zinit ice depth"1"
 zinit light romkatv/powerlevel10k
 
-# Completa comandos externos y utilidades del sistema
-# que Zsh no cubre por defecto, con ligero retraso para no
-# bloquear el inicio del shell
-zinit ice wait"1" lucid
+# Proporciona definiciones adicionales de completado
+# para cientos de comandos y utilidades externas que Zsh no incluye por defecto.
+# Utiliza  zicompinit + zicdreplay: helper oficial de Zinit para Turbo mode.
+zinit ice wait'0' lucid blockf atload'zicompinit; zicdreplay'
 zinit light zsh-users/zsh-completions
 
-# Interfaz avanzada para la autocompletación con fzf
-zinit ice wait"0" lucid
+# Interfaz avanzada para el auto-completado con fzf
+zinit ice wait'0' lucid blockf
 zinit light Aloxaf/fzf-tab
 
 # Muestra sugerencias basadas en el historial mientras se escribe,
 # permitiendo completar con la flecha derecha.
 # Inicia automáticamente tras la carga del plugin.
-zinit ice wait"0" lucid atload"_zsh_autosuggest_start"
+zinit ice wait'0' lucid atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
 
 # Colorea la sintaxis de los comandos a medida que se escriben.
 # Carga al final para no interferir con completados
 # ni con las sugerencias de autosugestión.
-zinit ice wait"0" lucid
+zinit ice wait'0' lucid
 zinit light zsh-users/zsh-syntax-highlighting
+
+# Forgit: interfaz interactiva para Git basada en fzf
+# https://github.com/wfxr/forgit#full-command-list
+# Atajos de ejemplo:
+#   glo  -> historial de commits (log interactivo)
+#   gd   -> diff interactivo
+zinit ice wait'1' lucid
+zinit light wfxr/forgit
 
 # zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 # zinit light sindresorhus/pure
