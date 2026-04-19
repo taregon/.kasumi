@@ -69,6 +69,7 @@ require("which-key").add({
 	{ "<leader>cs", ":CBllline1<CR>", desc = "Title Line (left)" },
 	{ "<leader>cx", ":CBllline6<CR>", desc = "Title Line Squared (left)" },
 	{ "<leader>cb", ":CBlcbox8<CR>", desc = "Box" },
+	{ "<leader>cq", ":CBllbox13<CR>", desc = "Quote", mode = "v" },
 	{ "<leader>cl", ":CBline<CR>", desc = "Line" },
 	{ "<leader>cr", ":CBd<CR>", desc = "Remove", mode = "v" },
 	-- ───────────────────────< DIAGNOSTICS >───────────────────────
