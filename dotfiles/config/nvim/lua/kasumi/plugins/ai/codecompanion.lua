@@ -58,9 +58,9 @@ codecompanion.setup({
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
 						repeat_penalty = { default = 1.01 },
-						temperature    = { default = 0.18 },
+						temperature    = { default = 0.38 },
 						top_p          = { default = 0.84 },
-						top_k          = { default = 30 },
+						top_k          = { default = 40 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
 				})
