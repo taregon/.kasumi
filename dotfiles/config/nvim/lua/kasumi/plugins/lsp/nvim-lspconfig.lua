@@ -14,8 +14,8 @@ local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 --   Si algún servidor requiere ajustes específicos (por ej. settings),
 --   debe declararse fuera de este bloque, como el caso de yamlls.
 -- └────────────────────────────────────────────────────────────────────┘
+-- stylua: ignore
 local lsp_servers = {
-    -- stylua: ignore start
 	bashls   = { "sh" },
 	cssls    = { "css" },
 	dockerls = { "dockerfile" },
@@ -23,8 +23,9 @@ local lsp_servers = {
 	html     = { "html" },
 	jsonls   = { "json", "jsonc" },
 	marksman = { "markdown" },
+    tombi    = { "toml" },
+	ty       = { "python" },
 	-- pyright  = { "python" },
-	-- stylua: ignore end
 }
 
 for name, types in pairs(lsp_servers) do
@@ -57,7 +58,7 @@ vim.lsp.enable("yamlls")
 vim.lsp.config["lua_ls"] = {
 	cmd = { "lua-language-server" },
 	filetypes = { "lua" },
-	root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
+	root_markers = { ".git" },
 	capabilities = lsp_capabilities,
 	settings = {
 		Lua = {
