@@ -68,30 +68,33 @@ require("conform").setup({
 			args = { "--indent", "4", "-" },
 		},
 	},
+
 	-- stylua: ignore
 	formatters_by_ft = {
-		["*"] = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
+		["*"]    = { "trim_whitespace", "trim_newlines", "squeeze_blanks" }, -- El orden si importa
 		conf     = { "awk" },
 		css      = { "prettierd" },
 		graphql  = { "prettierd" },
 		html     = { "prettierd" },
 		json     = { "deno_fmt" },
-		json5    = { "fixjson" },
+		json5    = { "prettierd" },
 		jsonc    = { "deno_fmt" },
 		lua      = { "stylua" },
 		markdown = { "deno_fmt_markdown" },
 		python   = { "ruff_fix", "ruff_format" },
 		sh       = { "shfmt" },
 		sql      = { "sql_formatter" }, -- https://github.com/sql-formatter-org/sql-formatter/blob/master/docs/language.md
-		toml     = { "taplo" },
+		toml     = { "tombi" },
 		xml      = { "xmlformatter" },
 		yaml     = { "yamlfix" }, -- yamlfix preserva los comentarios
-		zsh      = { "beautysh" }, --
+		zsh      = { "shfmt" }, -- alternativa: beautysh
 	},
+
 	default_format_opts = {
 		lsp_format = "fallback",
-		timeout_ms = 5000, -- Tiempo máximo para esperar el formateo (en ms)
+		timeout_ms = 450, -- Tiempo máximo para esperar el formateo (en ms)
 	},
+
 	-- NOTA: Como el orden afecta, pasé estas lineas a una función en el archivo de autocmd
 	-- format_on_save = {
 	-- 	lsp_format = "fallback", -- Estrategia: usar LSP si está disponible; si no, recurrir a Conform
