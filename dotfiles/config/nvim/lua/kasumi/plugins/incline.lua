@@ -22,6 +22,7 @@ require("incline").setup({
 			InclineNormalNC = "Comment", -- Texto cuando esta inactivo
 		},
 	},
+
 	render = function(props)
 		-- Buffer actual
 		local buf = props.buf
@@ -41,7 +42,7 @@ require("incline").setup({
 		local lsp_active = #lsp_clients > 0
 
 		-- NOTE: Muestra la rama de Git (si usas gitsigns.nvim)
-		local branch = vim.b.gitsigns_head or ""
+		local branch = vim.b[buf].gitsigns_head or ""
 
 		-- Lista de segmentos que se mostrarán en la barra
 		local segments = {}
