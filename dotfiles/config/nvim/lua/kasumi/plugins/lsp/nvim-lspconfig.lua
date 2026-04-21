@@ -9,23 +9,24 @@
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- ┌────────────────────────────────────────────────────────────────────┐
---   Agrupa y activa servidores LSP con configuración básica.
 --   NOTA: Solo aplica con filetypes y capabilities compartidos.
---   Si algún servidor requiere ajustes específicos (por ej. settings),
---   debe declararse fuera de este bloque, como el caso de yamlls.
+--  1. Si algún servidor requiere ajustes específicos (por ej. settings),
+--     debe declararse fuera de este bloque, como el caso de yamlls.
+--  2. Se usan los nombres abreviados tal como aparecen en Mason;
+--     si en algún caso fallan, será necesario reemplazarlos por
+--     el nombre completo del servidor LSP.
 -- └────────────────────────────────────────────────────────────────────┘
 -- stylua: ignore
 local lsp_servers = {
-	bashls   = { "sh" },
+	bashls   = { "bash", "sh" },
 	cssls    = { "css" },
 	dockerls = { "dockerfile" },
 	graphql  = { "graphql" },
 	html     = { "html" },
 	jsonls   = { "json", "jsonc" },
 	marksman = { "markdown" },
-    tombi    = { "toml" },
+	tombi    = { "toml" },
 	ty       = { "python" },
-	-- pyright  = { "python" },
 }
 
 for name, types in pairs(lsp_servers) do
