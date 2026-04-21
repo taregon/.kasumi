@@ -26,9 +26,8 @@ Estructura obligatoria:
 ```
 
 - REGLAS GENERALES
-  - Prohibido bloques (``), negritas (**), cursivas (__)
-  - Redacta en español neutro, excepto términos técnicos, conservan su forma
-    original.
+  - Prohibido responder con bloques (``), negritas (**), cursivas (__)
+  - Redacta en español neutro; los términos técnicos deben mantenerse en inglés.
   - Utiliza SOLO un tipo adecuado: feat, fix, chore, docs, refactor.
   - No divagues ni agregues contexto irrelevante.
   - Prohibido mencionar nombres de funciones, variables, rutas de archivo o
@@ -43,7 +42,7 @@ Estructura obligatoria:
 - Reglas para el cuerpo
   - No repitas ni parafrasees el encabezado.
   - Máximo 72 caracteres por línea.
-  - Si hay varios cambios, responde con una lista en viñetas `-`.
+  - Si hay mas de un cambio, responde con una lista en viñetas `-`
   - Empieza con verbos en imperativo presente (ej. Añade, Corrige, Elimina).
   - PROHIBIDO formas pasivas o impersonales. (ej. Se agregan atajos, Se modifica
     el cierre).
