@@ -63,6 +63,15 @@ require("incline").setup({
 			})
 		end
 
+		-- FORMATTER ACTIVO (Conform)
+		local formatters = require("conform").list_formatters_to_run(buf)
+		if #formatters > 0 then
+			table.insert(segments, {
+				"  ",
+				group = props.focused and "DI_NoItalic" or "InclineNormalNC",
+			})
+		end
+
 		-- REMOTE
 		-- Se muestra solo si el archivo está en un host remoto
 		if remote ~= "" then
