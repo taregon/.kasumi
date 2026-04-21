@@ -69,7 +69,6 @@ Plug("onsails/lspkind-nvim") -- Iconos para autocompletado LSP (method, property
 Plug("SmiteshP/nvim-navic") -- Winbar/breadcrumb que muestra ubicación LSP (función, clase, scope)
 Plug("stevearc/conform.nvim") -- Formateador al guardar con soporte 80+ formatters
 Plug("WhoIsSethDaniel/mason-tool-installer.nvim") -- Instala automáticamente linters/formatters para Mason
-Plug("williamboman/mason-lspconfig.nvim") -- Conecta Mason con LSPConfig para instalar servidores LSP
 Plug("williamboman/mason.nvim") -- Instalador de LSP servers, linters y formatters (interfaz unificada)
 
 -- ╒═══════════════════════════════════════════════════════════╕
@@ -100,6 +99,7 @@ Plug("saadparwaiz1/cmp_luasnip") -- Integración de LuaSnip con nvim-cmp
 -- Plug("smoka7/multicursors.nvim") -- Editar multiples lineas
 -- Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se) y ya pa que, lo archivaron
 -- Plug("supermaven-inc/supermaven-nvim")
+-- Plug("williamboman/mason-lspconfig.nvim") -- Conecta Mason con LSPConfig para instalar servidores LSP
 -- Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
 Plug("lanej/hotreload.nvim") -- Recarga automática de archivos visibles cuando cambian en disco
 
