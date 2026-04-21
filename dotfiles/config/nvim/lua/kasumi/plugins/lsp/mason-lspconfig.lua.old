@@ -8,7 +8,9 @@
 -- Los ajustes los realizas en "nvim-lspconfig"
 
 require("mason-lspconfig").setup({
-	ensure_installed = {
+	-- La instalación de herramientas (incluyendo LSP) se centraliza en mason-tool-installer
+	-- mason-lspconfig se mantiene para mapear e inicializar los LSP con lspconfig
+	--[[ ensure_installed = {
 		"awk_ls",
 		"bashls",
 		"cssls",
@@ -21,6 +23,5 @@ require("mason-lspconfig").setup({
 		"pyright",
 		"sqlls",
 		"yamlls",
-	},
-	automatic_installation = true,
+	}, ]]
 })

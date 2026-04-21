@@ -64,10 +64,7 @@ require("kasumi/plugins/lsp/mason-tool-installer")
 -- ─[ 2. Configuración base del LSP ]────────────────────────
 require("kasumi/plugins/lsp/nvim-lspconfig")
 
--- ─[ 3. Integración Mason-LSP ]─────────────────────────────
-require("kasumi/plugins/lsp/mason-lspconfig")
-
--- ─[ 4. Complementos ]──────────────────────────────────────
+-- ─[ 3. Complementos ]──────────────────────────────────────
 require("kasumi/plugins/lsp/nvim-cmp") -- Autocompletado
 require("kasumi/plugins/lsp/nvim-lint") -- Linter
 require("kasumi/plugins/lsp/conform") -- Formateador
