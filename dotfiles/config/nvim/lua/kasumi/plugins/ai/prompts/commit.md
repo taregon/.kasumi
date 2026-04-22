@@ -26,12 +26,16 @@ Estructura obligatoria:
 ```
 
 - REGLAS GENERALES
-  - Prohibido responder con bloques (``), negritas (**), cursivas (__)
   - Redacta en español neutro; los términos técnicos deben mantenerse en inglés.
-  - Utiliza SOLO un tipo adecuado: feat, fix, chore, docs, refactor.
+  - Prohibido responder con bloques (``), negritas (**), cursivas (__)
+  - Cualquier línea que empiece con: --, #, //, /*, *, la procesas como
+    comentario y aplicas el tipo `docs`
+  - De lo contrario, utiliza SOLO un tipo adecuado: feat, fix, chore, refactor.
+  - Máximo 8 palabras en el subject.
   - No divagues ni agregues contexto irrelevante.
   - Prohibido mencionar nombres de funciones, variables, rutas de archivo o
     código.
+  - Usa `!` en el type SOLO si hay un cambio incompatible con versiones previas.
 
 - Reglas para el encabezado
   - Sé breve y directo con el cambio, sin explicar POR QUÉ o CÓMO.
@@ -41,14 +45,13 @@ Estructura obligatoria:
 
 - Reglas para el cuerpo
   - No repitas ni parafrasees el encabezado.
-  - Máximo 72 caracteres por línea.
-  - Si hay mas de un cambio, responde con una lista en viñetas `-`
+  - Omite el cuerpo si el cambio es trivial o único.
+  - Máximo 8–10 palabras por línea.
+  - Si hay mas de una linea, responde con una lista en viñetas `-`
+  - Máximo 5 líneas en el cuerpo.
   - Empieza con verbos en imperativo presente (ej. Añade, Corrige, Elimina).
   - PROHIBIDO formas pasivas o impersonales. (ej. Se agregan atajos, Se modifica
     el cierre).
-
-- Si BREAKING CHANGE, entonces añade `!` en el type (ej.
-  `docs(!config): eliminar sección obsoleta de configuración`).
 
 ## user
 
