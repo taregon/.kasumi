@@ -33,6 +33,7 @@ codecompanion.setup({
 					env = { url = "http://127.0.0.1:11434" },
 				})
 			end,
+
 			gemma4 = function()
 				return require("codecompanion.adapters").extend("ollama", {
 					name = "Gemma-4",
@@ -49,6 +50,7 @@ codecompanion.setup({
 					env = { url = "http://127.0.0.1:11434" },
 				})
 			end,
+
 			gemma4_itq5 = function()
 				return require("codecompanion.adapters").extend("ollama", {
 					name = "Gemma-4-it",
@@ -66,6 +68,26 @@ codecompanion.setup({
 				})
 			end,
 
+			qwen3 = function()
+				return require("codecompanion.adapters").extend("ollama", {
+					name = "Qwen-3-it",
+					-- stylua: ignore
+					schema = {
+						-- Cerberus 4B v2 Abliterated: basado en Qwen2
+						-- Sitio oficial: https://cerberusai.dev/
+						-- Modelo: hf.co/Grimxlock/cerberus-4b-v2-abliterated:Q4_K_M
+						model          = { default = "hf.co/Jeney/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M" },
+						num_ctx        = { default = 8192 },
+						num_predict    = { default = 512 },
+						repeat_penalty = { default = 1.02 },
+						temperature    = { default = 0.46 },
+						top_p          = { default = 0.84 },
+						top_k          = { default = 40 },
+					},
+					env = { url = "http://127.0.0.1:11434" },
+				})
+			end,
+
 			opts = { show_presets = false },
 		},
 	},
@@ -73,7 +95,7 @@ codecompanion.setup({
 	-- "strategies" fue renombrado a "interactions" en versiones recientes
 	-- stylua: ignore
 	interactions = {
-		chat   = { adapter = "gemma4_itq5" },
+		chat   = { adapter = "qwen3" },
 		inline = { adapter = "gemma4" },
 	},
 	display = {
