@@ -4,7 +4,7 @@
 -- a procesar desde el primer encabezado de hunk (@@).
 -- A partir de ese punto conserva únicamente el contenido real del cambio.
 -- Comportamiento equivalente (aplicado a un solo archivo) a:
--- git diff --cached --no-ext-diff --no-prefix --unified=0 --color=never
+-- git diff --cached --no-ext-diff --no-prefix --unified=1 --color=never
 
 local M = {}
 
@@ -16,7 +16,7 @@ function M.staged_diff()
 	end
 
 	-- 2. Resolver symlink -> path real
-	local abs_path = vim.loop.fs_realpath(buf_path)
+	local abs_path = vim.uv.fs_realpath(buf_path)
 	if not abs_path then
 		return "  No se pudo resolver el path real del archivo."
 	end
@@ -52,7 +52,7 @@ function M.staged_diff()
 		"--cached",
 		"--no-ext-diff",
 		"--no-prefix",
-		"--unified=1", -- más contexto si quieres
+		"--unified=1", -- agrega más contexto antes/después del hunk
 		"--color=never",
 		"--",
 		rel_path,
@@ -83,7 +83,8 @@ function M.staged_diff()
 	end
 
 	-- 7. Mostrar nombre del repo antes del diff
-	local header = " cambios staged en: " .. file_name .. "\n\n"
+	local parent_dir = file_dir:match("([^/]+)$") or ""
+	local header = " cambios staged en: " .. parent_dir .. "/" .. file_name .. "\n\n"
 	return #filtered > 0 and header .. table.concat(filtered, "\n") or "  No hay cambios staged en este archivo"
 end
 
