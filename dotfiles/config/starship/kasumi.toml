@@ -1,9 +1,14 @@
+# ╒════════════════════════════════════════════════════════════╕
+# │                   CONFIGURACIÓN GENERAL                    │
+# ╘════════════════════════════════════════════════════════════╛
 add_newline = true
 continuation_prompt = "[▸▹ ](dimmed white)"
 
-format = """($container`\n)\
+format = """
+($container`\n)\
 $directory
-$character"""
+$character
+"""
 
 right_format = """\
 $username\
@@ -12,8 +17,10 @@ $git_status\
 $git_metrics\
 $docker_context\
 $python\
-$time\
-$cmd_duration"""
+$status\
+$cmd_duration\
+$time
+"""
 
 palette = "catppuccin_dark"
 
@@ -31,16 +38,25 @@ color_docker = "#fab387"
 color_time = "#89b4fa"
 color_duration = "#f5e0dc"
 
+# ╒════════════════════════════════════════════════════════════╕
+# │                        SHELL / ENTRADA                     │
+# ╘════════════════════════════════════════════════════════════╛
 [character]
-success_symbol = "[ ](bold fg:#b4befe)"
-error_symbol = "[ ](bold fg:#f38ba8)"
+success_symbol = "[ ](bold fg:color_username)"
+error_symbol = "[ ](bold fg:color_danger)"
 
+# ╒════════════════════════════════════════════════════════════╕
+# │                       CONTEXTO USUARIO                     │
+# ╘════════════════════════════════════════════════════════════╛
 [username]
 show_always = true
 style_user = "fg:color_username"
 style_root = "bold fg:color_danger"
 format = "[ $user ]($style)"
 
+# ╒════════════════════════════════════════════════════════════╕
+# │                         DIRECTORIO                         │
+# ╘════════════════════════════════════════════════════════════╛
 [directory]
 style = "fg:color_directory"
 read_only_style = "fg:color_directory"
@@ -54,6 +70,34 @@ truncate_to_repo = true
 fish_style_pwd_dir_length = 0
 use_logical_path = true
 
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+# ╒════════════════════════════════════════════════════════════╕
+# │                   CONTENEDORES Y RUNTIME                   │
+# ╘════════════════════════════════════════════════════════════╛
+[docker_context]
+symbol = " "
+style = "fg:color_docker"
+format = "[ $symbol $context]($style) "
+
+[python]
+symbol = " "
+style = "fg:color_env"
+format = "[ $symbol $version]($style) "
+version_format = "${raw}"
+
+[container]
+symbol = "⬢"
+style = "fg:color_danger"
+format = "[ $symbol $name]($style) "
+
+# ╒════════════════════════════════════════════════════════════╕
+# │                            GIT                             │
+# ╘════════════════════════════════════════════════════════════╛
 [git_branch]
 symbol = " "
 style = "fg:color_git"
@@ -86,19 +130,13 @@ deleted_style = "fg:color_git_deleted"
 only_nonzero_diffs = true
 disabled = false
 
-[docker_context]
-symbol = "🐳"
-style = "fg:color_docker"
-format = "[ $symbol $context]($style) "
-
-[python]
-symbol = "🐍"
-style = "fg:color_env"
-format = "[ $symbol $version]($style) "
-version_format = "${raw}"
-
+# ╒════════════════════════════════════════════════════════════╕
+# │                       ESTADO SISTEMA                       │
+# ╘════════════════════════════════════════════════════════════╛
 [time]
+disabled = false
 style = "fg:color_time"
+time_format = "%R"
 format = "[ $time]($style) "
 
 [cmd_duration]
@@ -106,11 +144,15 @@ min_time = 2_000
 style = "fg:color_duration"
 format = "[ $duration]($style) "
 
-[container]
-symbol = "⬢"
-style = "fg:color_danger"
-format = "[ $symbol $name]($style) "
+[status]
+disabled = false
+symbol = "[✘](bold red) "
+success_symbol = "[✔](bold green) "
+format = "$symbol "
 
+# ╒════════════════════════════════════════════════════════════╕
+# │                     MÓDULOS DESACTIVADOS                   │
+# ╘════════════════════════════════════════════════════════════╛
 # [kubernetes]
 # symbol = "☸"
 # style = "fg:color_kubernetes"
