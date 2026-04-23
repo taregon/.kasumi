@@ -162,6 +162,10 @@ dotfiles:
     src: config/mpd
     dst: ~/.config/mpd
     link: absolute
+  d_starship:
+    src: config/starship
+    dst: ~/.config/starship
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -172,6 +176,7 @@ profiles:
       - d_lf
       - d_mako
       - d_rofi
+      - d_starship
       - d_vivid
       - d_wallpapers
       - d_zathura
