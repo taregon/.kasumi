@@ -313,6 +313,14 @@ zinit light wfxr/forgit
 # Replay de todas las completions diferidas (obligatorio con zinit + fzf-tab)
 # zinit cdreplay -q
 
+# Actualizar automáticamente zinit una vez al día
+local last_update=~/.zinit_last_update
+if [[ ! -f $last_update || -n $(find $last_update -mtime +1 2> /dev/null) ]]; then
+    echo "Updating zinit..."
+    zinit self-update && zinit update --all
+    touch $last_update
+fi
+
 # ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
 # █     █   █ █   █ █▀▀▀  █     █▀▀     █     █   █   █ █ ▀▄█
