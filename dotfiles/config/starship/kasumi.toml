@@ -1,25 +1,32 @@
-# ╒════════════════════════════════════════════════════════════╕
-# │                   CONFIGURACIÓN GENERAL                    │
-# ╘════════════════════════════════════════════════════════════╛
+# ┌────────────────────────────────┐
+# │░█▀▀░▀█▀░█▀█░█▀▄░█▀▀░█░█░▀█▀░█▀█│
+# │░▀▀█░░█░░█▀█░█▀▄░▀▀█░█▀█░░█░░█▀▀│
+# │░▀▀▀░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀▀▀░▀░░│
+# └────────────────────────────────┘
+# ── CONFIGURACIÓN GENERAL ───────────────────────────────────
+# https://fossies.org/linux/misc/starship-1.25.0.tar.gz/starship-1.25.0/docs/config/README.md
 add_newline = true
 continuation_prompt = "[▸▹ ](dimmed white)"
+scan_timeout = 35
+command_timeout = 700
 
 format = """
-($container`\n)\
-$directory
-$character
-"""
-
-right_format = """\
-$username\
+[╭─](fg:color_line)\
+$directory\
 $git_branch\
+$git_commit\
 $git_status\
+$git_state\
 $git_metrics\
 $docker_context\
 $python\
+$fill\
 $status\
 $cmd_duration\
-$time
+$time\
+$line_break\
+[╰─](fg:color_line)\
+$character\
 """
 
 palette = "catppuccin_dark"
@@ -37,16 +44,27 @@ color_git_deleted = "#eba0ac"
 color_docker = "#fab387"
 color_time = "#89b4fa"
 color_duration = "#f5e0dc"
+color_line = "#5a656c"
 
 # ╒════════════════════════════════════════════════════════════╕
-# │                        SHELL / ENTRADA                     │
+# │                      SHELL / ENTRADA                       │
 # ╘════════════════════════════════════════════════════════════╛
 [character]
-success_symbol = "[ ](bold fg:color_username)"
-error_symbol = "[ ](bold fg:color_danger)"
+success_symbol = "[❯](bold fg:color_username)"
+error_symbol = "[❯](bold fg:color_danger)"
+
+[fill]
+symbol = "┄"
+style = "fg:color_line"
+
+[status]
+disabled = false
+symbol = "[  ](fg:color_danger) "
+success_symbol = "[  ](fg:color_line) "
+format = "$symbol "
 
 # ╒════════════════════════════════════════════════════════════╕
-# │                       CONTEXTO USUARIO                     │
+# │                      CONTEXTO USUARIO                      │
 # ╘════════════════════════════════════════════════════════════╛
 [username]
 show_always = true
@@ -55,40 +73,34 @@ style_root = "bold fg:color_danger"
 format = "[ $user ]($style)"
 
 # ╒════════════════════════════════════════════════════════════╕
-# │                         DIRECTORIO                         │
+# │                         NAVEGACIÓN                         │
 # ╘════════════════════════════════════════════════════════════╛
 [directory]
 style = "fg:color_directory"
 read_only_style = "fg:color_directory"
 repo_root_style = "bold fg:color_directory"
-format = "[ $path ]($style)"
+format = "[$path]($style)"
 read_only = " "
 home_symbol = "~"
-truncation_symbol = "…/"
+truncation_symbol = " ‥/"
 truncation_length = 3
 truncate_to_repo = true
 fish_style_pwd_dir_length = 0
 use_logical_path = true
 
 [directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
+"Documents" = "󱔘 "
+"Downloads" = " "
 "Music" = " "
 "Pictures" = " "
 
 # ╒════════════════════════════════════════════════════════════╕
-# │                   CONTENEDORES Y RUNTIME                   │
+# │                   CONTENEDORES / RUNTIME                   │
 # ╘════════════════════════════════════════════════════════════╛
 [docker_context]
 symbol = " "
 style = "fg:color_docker"
 format = "[ $symbol $context]($style) "
-
-[python]
-symbol = " "
-style = "fg:color_env"
-format = "[ $symbol $version]($style) "
-version_format = "${raw}"
 
 [container]
 symbol = "⬢"
@@ -96,15 +108,43 @@ style = "fg:color_danger"
 format = "[ $symbol $name]($style) "
 
 # ╒════════════════════════════════════════════════════════════╕
+# │                         LENGUAJES                          │
+# ╘════════════════════════════════════════════════════════════╛
+[python]
+symbol = " "
+style = "fg:color_env"
+format = "[ $symbol$version]($style) "
+version_format = "${raw}"
+
+[lua]
+format = "[ $version](bold yellow_bright) "
+version_format = "v${major}.${minor}"
+
+[package]
+disabled = false
+symbol = "󰏗 "
+style = "fg:color_env"
+format = "( [$symbol( $version)]($style) )"
+
+# ╒════════════════════════════════════════════════════════════╕
 # │                            GIT                             │
 # ╘════════════════════════════════════════════════════════════╛
 [git_branch]
-symbol = " "
+symbol = "󰘬 "
 style = "fg:color_git"
-format = "[ $symbol $branch]($style) "
+format = "[ $symbol$branch]($style) "
 only_attached = true
 truncation_length = 25
 truncation_symbol = "..."
+disabled = false
+
+[git_commit]
+style = "fg:color_git"
+format = "( [($tag)(@$hash)]($style) )"
+commit_hash_length = 7
+only_detached = true
+tag_symbol = "󰓼 "
+tag_disabled = false
 disabled = false
 
 [git_status]
@@ -123,6 +163,18 @@ staged = "+${count}"
 untracked = "?${count}"
 disabled = false
 
+[git_state]
+style = "fg:color_danger"
+format = "([$state( $progress_current/$progress_total)]($style bold) )"
+rebase = "REBASING"
+merge = "MERGING"
+revert = "REVERTING"
+cherry_pick = "CHERRY-PICKING"
+bisect = "BISECTING"
+am = "AM"
+am_or_rebase = "AM/REBASE"
+disabled = false
+
 [git_metrics]
 format = "([+$added](added_style) [-$deleted](deleted_style))"
 added_style = "fg:color_git_added"
@@ -131,28 +183,27 @@ only_nonzero_diffs = true
 disabled = false
 
 # ╒════════════════════════════════════════════════════════════╕
-# │                       ESTADO SISTEMA                       │
+# │                     ESTADO DEL SISTEMA                     │
 # ╘════════════════════════════════════════════════════════════╛
+
 [time]
 disabled = false
 style = "fg:color_time"
 time_format = "%R"
-format = "[ $time]($style) "
+format = "[󰥔 $time]($style) "
+# format = "[[ 󰥔 $time ]]"
 
 [cmd_duration]
 min_time = 2_000
 style = "fg:color_duration"
-format = "[ $duration]($style) "
-
-[status]
-disabled = false
-symbol = "[✘](bold red) "
-success_symbol = "[✔](bold green) "
-format = "$symbol "
+format = "[ $duration](bold fg:yellow) "
 
 # ╒════════════════════════════════════════════════════════════╕
-# │                     MÓDULOS DESACTIVADOS                   │
+# │                   MÓDULOS DESHABILITADOS                   │
 # ╘════════════════════════════════════════════════════════════╛
+[direnv]
+disabled = true
+
 # [kubernetes]
 # symbol = "☸"
 # style = "fg:color_kubernetes"
