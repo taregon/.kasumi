@@ -27,7 +27,6 @@ Plug("EdenEast/nightfox.nvim") -- Tema personalizable con soporte LSP, treesitte
 -- Plug("MeanderingProgrammer/render-markdown.nvim") -- Renderiza Markdown con estilos e iconos en el buffer
 -- Plug("norcalli/nvim-colorizer.lua") -- Previsualiza colores HEX/RGB directamente en el buffer
 -- Plug("nvim-neo-tree/neo-tree.nvim") -- Navegador de archivos
--- Plug("nvim-treesitter/nvim-treesitter-context") -- una referencia en la parte superior. Debes habilitarlo en el *.lua
 Plug("akinsho/bufferline.nvim") -- Lista buffers en formato de pestañas con soporte LSP y diagnósticos
 Plug("b0o/incline.nvim") -- Barra flotante por ventana con nombre de buffer y estado contextual
 Plug("brenoprata10/nvim-highlight-colors") -- Resalta colores HEX/RGB/HSL/named en tiempo real con fondo, texto o virtual text
@@ -40,12 +39,12 @@ Plug("lukas-reineke/indent-blankline.nvim") -- Guías visuales de indentación y
 Plug("MagicDuck/grug-far.nvim") -- Interfaz interactiva para búsqueda y reemplazo masivo con ripgrep
 Plug("numToStr/Comment.nvim") -- Comentado rápido de líneas y bloques con operadores (gc, gcc, gcb)
 Plug("nvim-lualine/lualine.nvim") -- Barra de estado configurable y ligera con soporte themes
-Plug("nvim-treesitter/nvim-treesitter") -- Resaltado y parsing sintáctico basado en Treesitter con 20+ lenguajes
 Plug("olimorris/codecompanion.nvim") -- Integración de asistentes IA (CodeGPT, Codeium, Copilot) dentro de Neovim
 Plug("OXY2DEV/markview.nvim") -- Preview de Markdown, LaTeX, Typst, HTML y Asciidoc con modo híbrido y splitview
 Plug("petertriho/nvim-scrollbar") -- Barra de desplazamiento con marcas de diagnóstico, Git y search
 Plug("rmagatti/alternate-toggler") -- Alterna pares de valores opuestos bajo el cursor (true/false, yes/no, etc.)
 Plug("Wansmer/treesj") -- Divide/une bloques de código (arrays, objetos, funciones) usando Treesitter
+Plug("romus204/tree-sitter-manager.nvim")
 
 -- ────────────────────────────────────────────────────────────
 -- PLUGINS que no requieren "require" obligatoriamente

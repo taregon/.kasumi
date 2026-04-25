@@ -129,12 +129,13 @@ install_app_docs() {
 install_app_editor() {
     echo ">> Instalando editores de texto"
     local pkgs=(
-        luarocks                   # Gestor de paquetes para Lua (plugins de nvim)
-        neovim                     # Editor de texto/IDE ligero
-        neovim-symlinks            # vim y vi se redirigen a Neovim
-        nodejs                     # Requerido por VSCode y plugins de nvim
-        npm                        # Gestor de paquetes para Node.js
-        tree-sitter-cli-github-bin # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
+        luarocks        # Gestor de paquetes para Lua (plugins de nvim)
+        neovim          # Editor de texto/IDE ligero
+        neovim-symlinks # vim y vi se redirigen a Neovim
+        nodejs          # Requerido por VSCode y plugins de nvim
+        npm             # Gestor de paquetes para Node.js
+        tree-sitter-cli
+        tree-sitter # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
 
         # Editores adicionales
         obsidian               # Editor de notas en Markdown enfocado en conocimiento (AUR)

@@ -1,13 +1,23 @@
+-- ┌────────────────────────────────────────┐
+-- │░▀█▀░█▀▄░█▀▀░█▀▀░█▀▀░▀█▀░▀█▀░▀█▀░█▀▀░█▀▄│
+-- │░░█░░█▀▄░█▀▀░█▀▀░▀▀█░░█░░░█░░░█░░█▀▀░█▀▄│
+-- │░░▀░░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░░▀░░▀▀▀░▀░▀│
+-- └────────────────────────────────────────┘
 -- Lista de lenguajes soportados
 -- https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
 
-require("nvim-treesitter").install({
+local nts = require("nvim-treesitter")
+
+local ts_parsers = {
 	"awk",
 	"bash",
 	"comment",
+	"css",
 	"csv",
+	"desktop",
 	"diff",
 	"dockerfile",
+	"doxygen",
 	"editorconfig",
 	"git_config",
 	"git_rebase",
@@ -22,37 +32,44 @@ require("nvim-treesitter").install({
 	"jq",
 	"json",
 	"json5",
-	"julia",
+	"kitty",
+	"latex",
 	"lua",
 	"luadoc",
 	"luap",
-	"luau",
 	"markdown",
 	"markdown_inline",
+	"mermaid",
+	"nginx",
 	"passwd",
 	"pem",
 	"printf",
 	"python",
-	"query",
-	"readline",
+	"rasi",
 	"regex",
 	"requirements",
-	"robot",
+	"robots_txt",
+	"rust",
+	"snakemake",
 	"sql",
 	"ssh_config",
-	"sxhkdrc",
-	"textproto",
-	"tlaplus",
+	"styled",
 	"tmux",
+	"todotxt",
+	"toml",
+	"tsv",
+	"tsx",
 	"udev",
 	"vhs",
 	"vim",
 	"vimdoc",
-	"xcompose",
 	"xml",
 	"yaml",
 	"yuck",
 	"zathurarc",
-})
+	"zsh",
+}
 
--- require("nvim-treesitter").update()
+for _, parser in ipairs(ts_parsers) do
+	nts.install(parser)
+end

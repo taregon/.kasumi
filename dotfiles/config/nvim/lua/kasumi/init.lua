@@ -23,6 +23,7 @@ require("kasumi/plugins/catppuccin") -- No mover
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                           PLUGS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
+require("kasumi/plugins/ts-manager")
 require("kasumi/plugins/bufferline")
 require("kasumi/plugins/highlight-colors")
 require("kasumi/plugins/comment")
@@ -33,7 +34,6 @@ require("kasumi/plugins/diffview")
 require("kasumi/plugins/indent-blankline")
 require("kasumi/plugins/lualine")
 require("kasumi/plugins/mini")
-require("kasumi/plugins/treesitter")
 require("kasumi/plugins/which-key")
 require("kasumi/plugins/bqf") -- Quickfix integrada con fzf
 require("kasumi/plugins/ai/codecompanion")
