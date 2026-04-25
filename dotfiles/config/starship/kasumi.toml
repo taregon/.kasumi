@@ -6,6 +6,9 @@
 # ── CONFIGURACIÓN GENERAL ───────────────────────────────────
 # https://starship.rs/config/
 # https://fossies.org/linux/misc/starship-1.25.0.tar.gz/starship-1.25.0/docs/config/README.md
+# https://raw.githubusercontent.com/martinemde/starship-claude/refs/heads/main/plugin/templates/powerline.toml
+"$schema" = "https://starship.rs/config-schema.json"
+
 add_newline = true
 continuation_prompt = "[▸▹ ](dimmed fg:color_line)"
 scan_timeout = 35
@@ -13,18 +16,23 @@ command_timeout = 700
 
 format = """
 [╭─](fg:color_line)\
+[](fg:bg_mantle)\
+[ 󰫣  ](bg:bg_mantle fg:color_env)\
+[](bg:color_directory fg:bg_mantle)\
 $directory\
+[](fg:color_directory)\
 $git_branch\
 $git_commit\
 $git_status\
 $git_state\
 $git_metrics\
 $docker_context\
-$python\
 $fill\
+$python\
 $status\
 $cmd_duration\
 $time\
+$battery\
 $line_break\
 [╰─](fg:color_line)\
 $character\
@@ -46,6 +54,11 @@ color_docker = "#fab387"
 color_time = "#89b4fa"
 color_duration = "#f5e0dc"
 color_line = "#5a656c"
+# Fondos para formato powerline
+bg_directorio = "#89b4fa"  # mismo que color_time
+bg_git = "#a6e3a1"  # mismo que color_git/color_ok
+bg_docker = "#fab387"  # mismo que color_docker
+bg_mantle = "#343E43"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      SHELL / ENTRADA                       │
@@ -73,17 +86,37 @@ style_user = "fg:color_username"
 style_root = "bold fg:color_danger"
 format = "[ $user ]($style)"
 
+[battery]
+full_symbol = "󰇲 "
+charging_symbol = "󰇶 "
+discharging_symbol = "󰱪 "
+
+# Crítico
+[[battery.display]]
+threshold = 15
+style = "bold red"
+
+# Bajo
+[[battery.display]]
+threshold = 40
+style = "yellow"
+
+# Normal / siempre visible
+[[battery.display]]
+threshold = 100
+style = "green"
+
 # ╒════════════════════════════════════════════════════════════╕
 # │                         NAVEGACIÓN                         │
 # ╘════════════════════════════════════════════════════════════╛
 [directory]
-style = "fg:color_directory"
-read_only_style = "fg:color_directory"
-repo_root_style = "bold fg:color_directory"
-format = "[$path]($style)"
+style = "bg:color_directory fg:bg_mantle"
+# read_only_style = "fg:color_directory"
+# repo_root_style = "bold fg:color_directory"
+format = "[ $path ]($style)"
 read_only = " "
 home_symbol = "~"
-truncation_symbol = " ‥/"
+truncation_symbol = "‥/"
 truncation_length = 3
 truncate_to_repo = true
 fish_style_pwd_dir_length = 0
