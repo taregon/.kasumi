@@ -15,17 +15,11 @@ scan_timeout = 35
 command_timeout = 700
 
 format = """
-[╭─](fg:color_line)\
-[](fg:bg_mantle)\
-[ 󰫣  ](bg:bg_mantle fg:color_env)\
-[](bg:color_directory fg:bg_mantle)\
+[▒](fg:bg_mantle)\
+[ 󰫣  ](bg:bg_mantle fg:folder_sep)\
 $directory\
-[](fg:color_directory)\
 $git_branch\
-$git_commit\
 $git_status\
-$git_state\
-$git_metrics\
 $docker_context\
 $fill\
 $python\
@@ -34,7 +28,6 @@ $cmd_duration\
 $time\
 $battery\
 $line_break\
-[╰─](fg:color_line)\
 $character\
 """
 
@@ -59,12 +52,18 @@ bg_directorio = "#89b4fa"  # mismo que color_time
 bg_git = "#a6e3a1"  # mismo que color_git/color_ok
 bg_docker = "#fab387"  # mismo que color_docker
 bg_mantle = "#343E43"
+# === STATUS STYLE GROUP ===
+status_ok = "#5a656c"
+status_error = "bold red"
+status_signal = "bold yellow"
+status_sep = "#a6e3a1"
+folder_sep = "#6ab0c3"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      SHELL / ENTRADA                       │
 # ╘════════════════════════════════════════════════════════════╛
 [character]
-success_symbol = "[❯](bold fg:color_username)"
+success_symbol = "[❯](bold fg:folder_sep)"
 error_symbol = "[❯](bold fg:color_danger)"
 
 [fill]
@@ -110,10 +109,10 @@ style = "green"
 # │                         NAVEGACIÓN                         │
 # ╘════════════════════════════════════════════════════════════╛
 [directory]
-style = "bg:color_directory fg:bg_mantle"
+style = "bg:folder_sep fg:bg_mantle"
 # read_only_style = "fg:color_directory"
 # repo_root_style = "bold fg:color_directory"
-format = "[ $path ]($style)"
+format = "[](bg:folder_sep fg:bg_mantle)[ $path ]($style)[](fg:folder_sep)"
 read_only = " "
 home_symbol = "~"
 truncation_symbol = "‥/"
@@ -173,7 +172,7 @@ truncation_symbol = "..."
 disabled = false
 
 [git_commit]
-style = "fg:color_git"
+style = "bg:color_git"
 format = "( [($tag)(@$hash)]($style) )"
 commit_hash_length = 7
 only_detached = true
@@ -182,8 +181,8 @@ tag_disabled = false
 disabled = false
 
 [git_status]
-style = "fg:color_git"
-format = "([$all_status]($style) )"
+style = "fg:bg_mantle bg:status_sep"
+format = "[](fg:status_sep)[ $all_status ]($style)[](fg:status_sep) "
 stashed = "*${count}"
 ahead = "⇡${count}"
 behind = "⇣${count}"
@@ -224,7 +223,7 @@ disabled = false
 disabled = false
 style = "fg:color_time"
 time_format = "%R"
-format = "[󰥔 $time]($style) "
+format = "[ $time]($style) "
 # format = "[[ 󰥔 $time ]]"
 
 [cmd_duration]
