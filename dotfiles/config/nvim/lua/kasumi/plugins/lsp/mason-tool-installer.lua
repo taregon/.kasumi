@@ -24,7 +24,6 @@ require("mason-tool-installer").setup({
 
 		-- ───────────────────────< FORMATTERS >────────────────────
 		"deno", -- JSON / Markdown
-		"black",
 		"prettierd", -- CSS / GraphQL / HTML / JSON / JSON5 / JS / TS / YAML
 		"shfmt", -- Shell
 		"sql-formatter", -- SQL
