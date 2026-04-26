@@ -101,20 +101,20 @@ full_symbol = "󱐌"
 charging_symbol = "󱐌"
 discharging_symbol = "󱐌"
 
-# Crítico
+# Crítico: solo se muestra cuando batería < threshold
 [[battery.display]]
-threshold = 15
-style = "bold red"
+threshold = 20
+style = "bold fg:color_danger"
 
-# Bajo
+# Advertencia
 [[battery.display]]
-threshold = 40
-style = "yellow"
+threshold = 50
+style = "fg:color_caution"
 
-# Normal / siempre visible
+# Normal
 [[battery.display]]
 threshold = 100
-style = "green"
+style = "fg:color_ok"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                         NAVEGACIÓN                         │
