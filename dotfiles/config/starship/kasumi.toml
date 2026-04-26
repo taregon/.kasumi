@@ -15,8 +15,8 @@ scan_timeout = 35
 command_timeout = 700
 
 format = """
-[▒](fg:bg_mantle)\
-[ 󰫣  ](bg:bg_mantle fg:folder_sep)\
+[▒](fg:bg_left)\
+[ 󰫣  ](fg:folder_sep2 bg:bg_left)\
 $directory\
 $git_branch\
 $git_status\
@@ -52,12 +52,14 @@ bg_directorio = "#89b4fa"  # mismo que color_time
 bg_git = "#a6e3a1"  # mismo que color_git/color_ok
 bg_docker = "#fab387"  # mismo que color_docker
 bg_mantle = "#343E43"
+bg_left = "#49575E"
 # === STATUS STYLE GROUP ===
-status_ok = "#5a656c"
+status_ok = "#1e2020"
 status_error = "bold red"
 status_signal = "bold yellow"
 status_sep = "#a6e3a1"
 folder_sep = "#6ab0c3"
+folder_sep2 = "#7ac8dd"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      SHELL / ENTRADA                       │
@@ -112,7 +114,7 @@ style = "green"
 style = "bg:folder_sep fg:bg_mantle"
 # read_only_style = "fg:color_directory"
 # repo_root_style = "bold fg:color_directory"
-format = "[](bg:folder_sep fg:bg_mantle)[ $path ]($style)[](fg:folder_sep)"
+format = "[](bg:folder_sep fg:bg_left)[ $path ]($style)[](fg:folder_sep)"
 read_only = " "
 home_symbol = "~"
 truncation_symbol = "‥/"
@@ -224,7 +226,6 @@ disabled = false
 style = "fg:color_time"
 time_format = "%R"
 format = "[ $time]($style) "
-# format = "[[ 󰥔 $time ]]"
 
 [cmd_duration]
 min_time = 2_000
