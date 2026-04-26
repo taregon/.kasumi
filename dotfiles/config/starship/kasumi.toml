@@ -10,13 +10,13 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
-continuation_prompt = "[▸▹ ](dimmed fg:color_line)"
+continuation_prompt = "[▸▹ ](dimmed fg:ka_overlay0)"
 scan_timeout = 35
 command_timeout = 700
 
 format = """
-[▒](fg:bg_left)\
-[ 󰫣  ](fg:folder_sep2 bg:bg_left)\
+[▒](fg:ka_crust)\
+[ 󰫣  ](fg:ka_teal bg:ka_crust)\
 $directory\
 $git_branch\
 $git_status\
@@ -35,48 +35,33 @@ $character\
 palette = "kasumi_colors"
 
 [palettes.kasumi_colors]
-color_ok = "#a6e3a1"
-color_danger = "#f38ba8"
-color_caution = "#f9e2af"
-color_env = "#f5c2e7"
-color_username = "#b4befe"
-color_directory = "#f5c2e7"
-color_git = "#a6e3a1"
-color_git_added = "#94e2d5"
-color_git_deleted = "#eba0ac"
-color_docker = "#fab387"
-color_time = "#89b4fa"
-color_duration = "#f5e0dc"
-color_line = "#5a656c"
-# Fondos para formato powerline
-bg_directorio = "#89b4fa"  # mismo que color_time
-bg_git = "#a6e3a1"  # mismo que color_git/color_ok
-bg_docker = "#fab387"  # mismo que color_docker
-bg_mantle = "#343E43"
-bg_left = "#49575E"
-# === STATUS STYLE GROUP ===
-status_ok = "#1e2020"
-status_error = "bold red"
-status_signal = "bold yellow"
-status_sep = "#a6e3a1"
-folder_sep = "#6ab0c3"
-folder_sep2 = "#7ac8dd"
+ka_teal = "#89DCEB"
+ka_mantle = "#343E43"
+ka_overlay0 = "#5D6C74"
+ka_crust = "#49575E"
+ka_green = "#80C8A1"
+ka_red = "#F86E88"
+ka_yellow = "#F8E084"
+ka_blue = "#A7D6FA"
+ka_peach = "#FFCF94"
+ka_sapphire = "#BEF7DF"
+ka_gray = "#aebbc0"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      SHELL / ENTRADA                       │
 # ╘════════════════════════════════════════════════════════════╛
 [character]
-success_symbol = "[❯](bold fg:folder_sep)"
-error_symbol = "[❯](bold fg:color_danger)"
+success_symbol = "[❯](bold fg:ka_teal)"
+error_symbol = "[❯](bold fg:ka_red)"
 
 [fill]
 symbol = "┄"
-style = "fg:color_line"
+style = "fg:ka_overlay0"
 
 [status]
 disabled = false
-symbol = "[  ](fg:color_danger) "
-success_symbol = "[  ](fg:color_line) "
+symbol = "[  ](fg:ka_red) "
+success_symbol = "[  ](fg:ka_overlay0) "
 format = "$symbol "
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -84,17 +69,17 @@ format = "$symbol "
 # ╘════════════════════════════════════════════════════════════╛
 [username]
 show_always = true
-style_user = "fg:color_username"
-style_root = "bold fg:color_danger"
+style_user = "fg:ka_blue"
+style_root = "bold fg:ka_red"
 format = "[ $user ]($style)"
 
 [hostname]
+style = "fg:ka_gray"
 # format = '[ $ssh_symbol$hostname]($style)'
 format = "[ $hostname]($style)"  # fix
 ssh_only = false
 ssh_symbol = " "
 trim_at = ""
-style = "fg:white bg:gray"
 
 [battery]
 full_symbol = "󱐌"
@@ -104,26 +89,26 @@ discharging_symbol = "󱐌"
 # Crítico: solo se muestra cuando batería < threshold
 [[battery.display]]
 threshold = 20
-style = "bold fg:color_danger"
+style = "bold fg:ka_red"
 
 # Advertencia
 [[battery.display]]
 threshold = 50
-style = "fg:color_caution"
+style = "fg:ka_yellow"
 
 # Normal
 [[battery.display]]
 threshold = 100
-style = "fg:color_ok"
+style = "fg:ka_green"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                         NAVEGACIÓN                         │
 # ╘════════════════════════════════════════════════════════════╛
 [directory]
-style = "bg:folder_sep fg:bg_mantle"
+style = "bg:ka_teal fg:ka_mantle"
 # read_only_style = "fg:color_directory"
 # repo_root_style = "bold fg:color_directory"
-format = "[](bg:folder_sep fg:bg_left)[ $path ]($style)[](fg:folder_sep)"
+format = "[](bg:ka_teal fg:ka_crust)[ $path ]($style)[](fg:ka_teal)"
 read_only = " "
 home_symbol = "~"
 truncation_symbol = "‥/"
@@ -144,12 +129,12 @@ use_logical_path = true
 # ╘════════════════════════════════════════════════════════════╛
 [docker_context]
 symbol = " "
-style = "fg:color_docker"
+style = "fg:ka_peach"
 format = "[ $symbol $context]($style) "
 
 [container]
 symbol = "⬢"
-style = "fg:color_danger"
+style = "fg:ka_red"
 format = "[ $symbol $name]($style) "
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -157,18 +142,18 @@ format = "[ $symbol $name]($style) "
 # ╘════════════════════════════════════════════════════════════╛
 [python]
 symbol = " "
-style = "fg:color_env"
+style = "fg:ka_blue"
 format = "[ $symbol$version]($style) "
 version_format = "${raw}"
 
 [lua]
-format = "[ $version](bold fg:color_caution) "
+format = "[ $version](bold fg:ka_yellow) "
 version_format = "v${major}.${minor}"
 
 [package]
 disabled = false
 symbol = "󰏗 "
-style = "fg:color_env"
+style = "fg:ka_blue"
 format = "( [$symbol( $version)]($style) )"
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -176,8 +161,8 @@ format = "( [$symbol( $version)]($style) )"
 # ╘════════════════════════════════════════════════════════════╛
 [git_branch]
 symbol = "󰘬 "
-style = "fg:bg_mantle bg:status_sep"
-format = "[](fg:status_sep)[ $symbol$branch ]($style)[](fg:status_sep) "
+style = "fg:ka_mantle bg:ka_green"
+format = "[](fg:ka_green)[ $symbol$branch ]($style)[](fg:ka_green) "
 # format = "[ $symbol$branch ]($style) "
 
 only_attached = true
@@ -186,7 +171,7 @@ truncation_symbol = "..."
 disabled = false
 
 [git_commit]
-style = "bg:color_git"
+style = "bg:ka_green"
 format = "( [($tag)(@$hash)]($style) )"
 commit_hash_length = 7
 only_detached = true
@@ -195,7 +180,7 @@ tag_disabled = false
 disabled = false
 
 [git_status]
-style = "fg:status_sep"
+style = "fg:ka_green"
 format = "[$all_status ]($style) "
 stashed = "*${count}"
 ahead = "⇡${count}"
@@ -211,7 +196,7 @@ untracked = "?${count}"
 disabled = false
 
 [git_state]
-style = "fg:color_danger"
+style = "fg:ka_red"
 format = "([$state( $progress_current/$progress_total)]($style bold) )"
 rebase = "REBASING"
 merge = "MERGING"
@@ -224,10 +209,10 @@ disabled = false
 
 [git_metrics]
 format = "([+$added](added_style) [-$deleted](deleted_style))"
-added_style = "fg:color_git_added"
-deleted_style = "fg:color_git_deleted"
+added_style = "fg:ka_green"
+deleted_style = "fg:ka_red"
 only_nonzero_diffs = true
-disabled = false
+disabled = true
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                     ESTADO DEL SISTEMA                     │
@@ -235,14 +220,14 @@ disabled = false
 
 [time]
 disabled = false
-style = "fg:color_time"
+style = "fg:ka_blue"
 time_format = "%R"
 format = "[ $time]($style) "
 
 [cmd_duration]
 min_time = 2_000
-style = "fg:color_duration"
-format = "[ $duration](bold fg:color_env) "
+style = "fg:ka_blue"
+format = "[ $duration](bold fg:ka_blue) "
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                   MÓDULOS DESHABILITADOS                   │
