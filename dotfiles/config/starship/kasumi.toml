@@ -105,10 +105,10 @@ style = "fg:ka_green"
 # │                         NAVEGACIÓN                         │
 # ╘════════════════════════════════════════════════════════════╛
 [directory]
-style = "bg:ka_teal fg:ka_mantle"
+style = "fg:ka_mantle bg:ka_teal"
 # read_only_style = "fg:color_directory"
 # repo_root_style = "bold fg:color_directory"
-format = "[](bg:ka_teal fg:ka_crust)[ $path ]($style)[](fg:ka_teal)"
+format = "[](fg:ka_crust bg:ka_teal)[ $path ]($style)[](fg:ka_teal)"
 read_only = " "
 home_symbol = "~"
 truncation_symbol = "‥/"
