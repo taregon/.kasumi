@@ -27,6 +27,7 @@ $status\
 $cmd_duration\
 $time\
 $battery\
+$hostname\
 $line_break\
 $character\
 """
@@ -87,10 +88,18 @@ style_user = "fg:color_username"
 style_root = "bold fg:color_danger"
 format = "[ $user ]($style)"
 
+[hostname]
+# format = '[ $ssh_symbol$hostname]($style)'
+format = "[ $hostname]($style)"  # fix
+ssh_only = false
+ssh_symbol = " "
+trim_at = ""
+style = "fg:white bg:gray"
+
 [battery]
-full_symbol = "󰇲 "
-charging_symbol = "󰇶 "
-discharging_symbol = "󰱪 "
+full_symbol = "󱐌"
+charging_symbol = "󱐌"
+discharging_symbol = "󱐌"
 
 # Crítico
 [[battery.display]]
@@ -125,8 +134,9 @@ use_logical_path = true
 
 [directory.substitutions]
 "Documents" = "󱔘 "
-"Downloads" = " "
+"Downloads" = "   "
 "Music" = " "
+"Syncthing" = "   "
 "Pictures" = " "
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -166,8 +176,10 @@ format = "( [$symbol( $version)]($style) )"
 # ╘════════════════════════════════════════════════════════════╛
 [git_branch]
 symbol = "󰘬 "
-style = "fg:color_git"
-format = "[ $symbol$branch]($style) "
+style = "fg:bg_mantle bg:status_sep"
+format = "[](fg:status_sep)[ $symbol$branch ]($style)[](fg:status_sep) "
+# format = "[ $symbol$branch ]($style) "
+
 only_attached = true
 truncation_length = 25
 truncation_symbol = "..."
@@ -183,8 +195,8 @@ tag_disabled = false
 disabled = false
 
 [git_status]
-style = "fg:bg_mantle bg:status_sep"
-format = "[](fg:status_sep)[ $all_status ]($style)[](fg:status_sep) "
+style = "fg:status_sep"
+format = "[$all_status ]($style) "
 stashed = "*${count}"
 ahead = "⇡${count}"
 behind = "⇣${count}"
