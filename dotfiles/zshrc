@@ -147,15 +147,39 @@ export MANPAGER='less -M +Gg -R --use-color'
 # Asegura que groff use SGR (necesario para -R)
 export MANROFFOPT='-c'
 
-# Personalización de colores para man pages (y less en general)
-# Usa tput para máxima compatibilidad (mejor que secuencias \e hardcoded)
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 3)      # Inicio de parpadeo (blinking) → amarillo bold (poco usado en man, pero resalta warnings)
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6)      # Inicio de negrita → cyan bold (ideal para títulos, comandos y secciones)
-export LESS_TERMCAP_me=$(tput sgr0)                    # Fin de todos los modos (reset a normal)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3)      # Highlight de búsqueda / standout → amarillo bold (mejor contraste que blanco en fondos oscuros)
-export LESS_TERMCAP_se=$(tput sgr0)                    # Fin de standout
-export LESS_TERMCAP_us=$(tput smul; tput setaf 2)      # Inicio de subrayado → verde (clásico para opciones, flags y argumentos)
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)         # Fin de subrayado (rmul es más preciso que sgr0 solo)
+# Personalización de atributos visuales para man pages (LESS_TERMCAP_*)
+# Se usan capacidades terminfo vía tput para máxima portabilidad (evita secuencias ANSI hardcoded)
+# Cada variable define qué secuencia aplicar cuando less encuentra ese atributo en la página
+#   mb (begin blink) -> raramente usado en man; se reutiliza como énfasis visual (amarillo + bold)
+#   md (begin bold) -> títulos/encabezados y elementos destacados (cyan + bold)
+#   me (end mode) -> reset completo de atributos (estado base)
+#   se (end standout) -> fin de modo standout (reset)
+#   so (standout) -> coincidencias de búsqueda y resaltado (amarillo + bold para contraste)
+#   ue (end underline) -> desactiva subrayado; se refuerza con reset para evitar artefactos
+#   us (begin underline) -> subrayado (común en flags/opciones; verde como convención visual)
+
+export LESS_TERMCAP_mb=$(
+    tput bold
+    tput setaf 3
+)
+export LESS_TERMCAP_md=$(
+    tput bold
+    tput setaf 6
+)
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_se=$(tput sgr0)
+export LESS_TERMCAP_so=$(
+    tput bold
+    tput setaf 3
+)
+export LESS_TERMCAP_ue=$(
+    tput rmul
+    tput sgr0
+)
+export LESS_TERMCAP_us=$(
+    tput smul
+    tput setaf 2
+)
 
 # ------------------------------------------------------
 # █▀▀▀▀ ▀▀▀▀█ █▀▀▀▀
