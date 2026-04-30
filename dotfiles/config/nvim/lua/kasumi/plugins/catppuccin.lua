@@ -196,7 +196,7 @@ require("catppuccin").setup({
 
 			-- Checkboxes
 			MarkviewCheckboxUnchecked = {
-				fg = kas.darken(colors.subtext0, 0.55, colors.base),
+				fg = kas.darken(colors.text, 0.75, colors.base),
 			},
 			MarkviewCheckboxPending = {
 				fg = kas.darken(colors.peach, 0.80, colors.base),
@@ -220,7 +220,7 @@ require("catppuccin").setup({
 
 			-- Listas
 			MarkviewListItemMinus = {
-				fg = kas.darken(colors.mauve, 0.55, colors.base),
+				fg = kas.darken(colors.pink, 0.74),
 			},
 
 			-- ────────────────────────< SCROLLBAR >────────────────────────

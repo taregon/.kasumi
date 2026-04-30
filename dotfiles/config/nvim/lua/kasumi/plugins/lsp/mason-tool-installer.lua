@@ -3,7 +3,7 @@
 -- │░█░░░░█░░█░█░░█░░█▀▀░█▀▄░░░▄█▀░░░█▀▀░█░█░█▀▄░█░█░█▀█░░█░░░█░░█▀▀░█▀▄│
 -- │░▀▀▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀░░░░▀▀░░░▀░░░▀▀▀░▀░▀░▀░▀░▀░▀░░▀░░░▀░░▀▀▀░▀░▀│
 -- └────────────────────────────────────────────────────────────────────┘
--- NOTA: solo instala LINTERS & FORMATTER y ahora... LSP!
+-- NOTA: Instala LINTERS, FORMATTER y ahora... LSP!
 -- Si encuentras fallas, puedes ejecutar :checkhealth mason, también :MasonLog
 -- Puede que necesites instalar 'npm'
 -- https://github.com/williamboman/mason.nvim/blob/main/doc/mason.txt#L50
@@ -31,6 +31,7 @@ require("mason-tool-installer").setup({
 		"tombi", -- TOML
 		"xmlformatter", -- XML
 		"yamlfix", -- YAML
+		"beautysh",
 
 		-- ───────────────────────────< LSP >───────────────────────────
 		-- Normalmente estaría en mason-lspconfig.lua, pero este plugin

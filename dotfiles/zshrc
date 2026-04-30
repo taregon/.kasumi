@@ -239,29 +239,29 @@ export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
 # https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
 # https://zsh.sourceforge.io/Doc/Release/Options.html#History
 
-PROMPT_EOL_MARK="🐙"                # Define el símbolo que se mostrará al final de la línea de comandos en el prompt.
-HISTFILE=~/.cache/zsh_history       # Archivo donde se guarda el historial
-HISTSIZE=30000                      # Comandos que se mantienen en memoria
-SAVEHIST=30000                      # Comandos que se guardan en disco
-setopt APPEND_HISTORY               # Permite que múltiples sesiones de terminal agreguen comandos al historial en lugar de sobrescribirlo.
-setopt BANG_HIST                    # Permite tratar el carácter '!' de manera especial durante la expansión de comandos.
-setopt COMPLETE_ALIASES             # Activa la auto completado para alias.
-setopt EXTENDED_HISTORY             # Registra la marca de tiempo de cada comando en el archivo de historial en el formato ":inicio:transcurrido;comando".
-setopt HIST_ALLOW_CLOBBER           # Permite que las referencias al historial sobrescriban archivos, incluso cuando CLOBBER está desactivado.
-setopt HIST_BEEP                    # Emite un pitido cuando se accede a un historial inexistente.
-setopt HIST_EXPIRE_DUPS_FIRST       # Elimina comandos duplicados cuando se alcanza el límite de $HISTSIZE.
-setopt HIST_FIND_NO_DUPS            # Evita encontrar comandos duplicados durante la búsqueda en el historial.
-setopt HIST_IGNORE_ALL_DUPS         # Elimina una entrada anterior en el historial si la nueva es un duplicado.
-setopt HIST_IGNORE_DUPS             # Ignora comandos duplicados en la lista del historial.
-setopt HIST_IGNORE_SPACE            # Ignora comandos que comienzan con un espacio.
-setopt HIST_NO_STORE                # No almacena el comando `fc -l` en el historial.
-setopt HIST_REDUCE_BLANKS           # Elimina espacios adicionales de cada línea de comando antes de agregarla al historial.
-setopt HIST_SAVE_NO_DUPS            # Ignora duplicados al guardar el historial en el archivo.
-setopt HIST_VERIFY                  # Muestra el comando antes de ejecutarlo si se selecciona del historial.
-setopt INC_APPEND_HISTORY           # Escribe en el archivo de historial de inmediato, no solo cuando la shell termina.
-setopt NO_HIST_NO_FUNCTIONS         # No elimina definiciones de funciones del historial.
-setopt RM_STAR_WAIT                 # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
-setopt SHARE_HISTORY                # Comparte el historial entre todas las sesiones de terminal.
+PROMPT_EOL_MARK="🐙"           # Define el símbolo que se mostrará al final de la línea de comandos en el prompt.
+HISTFILE=~/.cache/zsh_history # Archivo donde se guarda el historial
+HISTSIZE=30000                # Comandos que se mantienen en memoria
+SAVEHIST=30000                # Comandos que se guardan en disco
+setopt APPEND_HISTORY         # Permite que múltiples sesiones de terminal agreguen comandos al historial en lugar de sobrescribirlo.
+setopt BANG_HIST              # Permite tratar el carácter '!' de manera especial durante la expansión de comandos.
+setopt COMPLETE_ALIASES       # Activa la auto completado para alias.
+setopt EXTENDED_HISTORY       # Registra la marca de tiempo de cada comando en el archivo de historial en el formato ":inicio:transcurrido;comando".
+setopt HIST_ALLOW_CLOBBER     # Permite que las referencias al historial sobrescriban archivos, incluso cuando CLOBBER está desactivado.
+setopt HIST_BEEP              # Emite un pitido cuando se accede a un historial inexistente.
+setopt HIST_EXPIRE_DUPS_FIRST # Elimina comandos duplicados cuando se alcanza el límite de $HISTSIZE.
+setopt HIST_FIND_NO_DUPS      # Evita encontrar comandos duplicados durante la búsqueda en el historial.
+setopt HIST_IGNORE_ALL_DUPS   # Elimina una entrada anterior en el historial si la nueva es un duplicado.
+setopt HIST_IGNORE_DUPS       # Ignora comandos duplicados en la lista del historial.
+setopt HIST_IGNORE_SPACE      # Ignora comandos que comienzan con un espacio.
+setopt HIST_NO_STORE          # No almacena el comando `fc -l` en el historial.
+setopt HIST_REDUCE_BLANKS     # Elimina espacios adicionales de cada línea de comando antes de agregarla al historial.
+setopt HIST_SAVE_NO_DUPS      # Ignora duplicados al guardar el historial en el archivo.
+setopt HIST_VERIFY            # Muestra el comando antes de ejecutarlo si se selecciona del historial.
+setopt INC_APPEND_HISTORY     # Escribe en el archivo de historial de inmediato, no solo cuando la shell termina.
+setopt NO_HIST_NO_FUNCTIONS   # No elimina definiciones de funciones del historial.
+setopt RM_STAR_WAIT           # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
+setopt SHARE_HISTORY          # Comparte el historial entre todas las sesiones de terminal.
 
 # ┌────────────────────────────────────────────────┐
 #   FILTRA EL HISTORIAL DE ZSH ANTES DE GUARDARLO.
