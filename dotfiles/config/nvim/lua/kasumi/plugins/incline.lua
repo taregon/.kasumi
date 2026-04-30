@@ -67,7 +67,7 @@ require("incline").setup({
 		local formatters = require("conform").list_formatters_to_run(buf)
 		if #formatters > 0 then
 			table.insert(segments, {
-				" 󰉢 ",
+				" 󰉣 ",
 				group = props.focused and "DI_NoItalic" or "InclineNormalNC",
 			})
 		end
