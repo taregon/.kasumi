@@ -31,7 +31,6 @@ require("mason-tool-installer").setup({
 		"tombi", -- TOML
 		"xmlformatter", -- XML
 		"yamlfix", -- YAML
-		"beautysh",
 
 		-- ───────────────────────────< LSP >───────────────────────────
 		-- Normalmente estaría en mason-lspconfig.lua, pero este plugin

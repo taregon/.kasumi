@@ -123,7 +123,7 @@ require("markview").setup({
 			heading_3 = {
 				style = "icon",
 				-- border = "-",
-				icon = "🟅  ",
+				icon = "🙗  ",
 				sign = "",
 				hl = "MarkviewHeading3",
 			},
@@ -151,7 +151,6 @@ require("markview").setup({
 			},
 			heading_5 = { style = "icon", icon = "󰎯  ", hl = "MarkviewHeading5" },
 			heading_6 = { style = "icon", icon = "󰎴  ", hl = "MarkviewHeading6" },
-			-- stylua: ignore end
 		},
 
 		horizontal_rules = { -- ────────────────────────────────────────────────────────────
@@ -214,7 +213,7 @@ require("markview").setup({
 				enable = true,
 				add_padding = true,
 				conceal_on_checkboxes = true,
-				text = "󰺕 ",
+				text = "🙗 ",
 				hl = "MarkviewListItemMinus",
 			},
 			marker_plus = { enable = false },
@@ -325,7 +324,7 @@ require("markview").setup({
         -- stylua: ignore
 		checkboxes = { -- ────────────────────────────────────────────────────────────
 			checked   = { text = "󰄲 ", hl = "MarkviewCheckboxChecked", scope_hl   = "MarkviewCheckboxChecked" },
-			unchecked = { text = "󰄱 ", hl = "Comment", scope_hl                   = "MarkviewCheckboxUnchecked" },
+			unchecked = { text = "󰄱 ", hl = "MarkviewCheckboxUnchecked", scope_hl = "MarkviewCheckboxUnchecked" },
 			["-"]     = { text = "󰛲 ", hl = "MarkviewCheckboxCancelled", scope_hl = "MarkviewCheckboxStriked" },
 			["/"]     = { text = "󱨃 ", hl = "MarkviewCheckboxPending" },
 		},
