@@ -190,32 +190,24 @@ require("markview").setup({
 			enable = true,
 			wrap = true,
 			indent_size = 4,
-			shift_width = 4,
-			-- shift_width = function(_, item)
-			-- 	local level = math.max(1, item.indent)
-			-- 	local max_level = 6
-			-- 	local max_value = 4
 
-			-- 	return ((level - 1) / (max_level - 1)) * max_value
-			-- end,
+			shift_width = function(buffer, item)
+				local sw = vim.bo[buffer].shiftwidth
+				local step = math.max(1, math.floor(sw / 2))
 
-			-- marker_minus = {
-			-- 	add_padding = function(_, item)
-			-- 		local level = math.max(1, math.min(item.indent, 6))
-			-- 		local max_level = 6
-			-- 		local max_padding = 4
-
-			-- 		return ((level - 1) / (max_level - 1)) * max_padding
-			-- 	end,
-			-- },
+				return math.floor(item.indent / sw) * step + 4
+			end,
 
 			marker_minus = {
 				enable = true,
-				add_padding = true,
+				add_padding = function()
+					return true
+				end,
 				conceal_on_checkboxes = true,
 				text = "🙗 ",
 				hl = "MarkviewListItemMinus",
 			},
+
 			marker_plus = { enable = false },
 			marker_star = { enable = false },
 			marker_dot = {
