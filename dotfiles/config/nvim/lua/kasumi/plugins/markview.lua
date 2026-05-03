@@ -8,6 +8,25 @@ local function get_sizes(buffer)
 	return width, textoff
 end
 
+-- Numeración de headings usando `item.levels` (AST de Markview).
+-- Sin contadores; determinista y seguro ante re-render.
+local function num_levels_h2(_, item)
+	local levels = item.levels or {}
+	local h_index = levels[#levels] or "?"
+
+	return "  " .. h_index .. ".   "
+end
+
+local function num_levels_h3(_, item)
+	local levels = item.levels or {}
+	local depth = #levels
+
+	local last = levels[depth] or "?"
+	local prev = levels[depth - 1]
+
+	return "🙗  " .. prev .. "." .. last .. " "
+end
+
 -- Genera una lista de highlights tipo gradiente (1→9),
 -- repitiendo cada nivel N veces para crear una transición
 -- visual más suave sin hardcodear valores.
