@@ -11,90 +11,97 @@
 
   set dircounts true
   set drawbox true
-  set incsearch true
+  set icons true
   set ignorecase true
+  set incsearch true
   set period 3
   set preview true
   set scrolloff 10
-  set sortby ctime
-  set icons true
 
   set previewer ~/.config/lf/lfpreview
   set ratios 1:2:2
-  set info ctime:size
 
+  set info ctime:size
   set infotimefmtnew "Jan _2 2006"
   set infotimefmtold "Jan _2 2006"
+  set sortby ctime
 
+# ╒═════════════════════════════════════════════════════════════╕
+# │                           ATAJOS                            │
+# ╘═════════════════════════════════════════════════════════════╛
   map <delete> delete
   map <enter> open
 
+  map . set hidden!
   map X %trash-put  "$fx"
   map a push $mkdir<space>
 
+  map gN cd ~/Syncthing/OsiriaFS/Notas
+
 # Copia la ruta del archivo
   map Y %echo -n "$f" | wl-copy
+
+# Abre una ventana GTK4, carga archivos desde CLI
+# y permite arrastrarlos a aplicaciones gráficas
   map o %ripdrag -W 400 -H 200 -s 195 -bx "$f"
 
 # map C $cat "$fx" | wl-copy
-# map O $xdg-open "$f"
-# ────────────────────────────────────────────────────────────
-# Comandos por defecto
+#
+# ─[ POR DEFECTO ]──────────────────────────────────────────────
 #   🟆  copy          'y'     🟆  rename        'r'
-#   🟆  cut           'd'     🟆  run           '$'
-#   🟆  paste         'p'     🟆  sort          's'
-#   🟆  clear         'c'     🟆  shell         'w'
-#   🟆  invert        'v      🟆  toggle hidden 'zh''
-#   🟆  unselect      'u'
-# ────────────────────────────────────────────────────────────
-# Forzar redraw completo tras cada selección (crucial en tmux)
-  cmd on-select &{{
-  lf -remote "send $id redraw"
-  }}
+#   🟆  cut           'd'     🟆  sort          's'
+#   🟆  paste         'p'     🟆  run           '$'
+#   🟆  clear         'c'     🟆  move middle   'M'
+#   🟆  invert        'v      🟆  shell         'w'
+#   🟆  unselect      'u'     🟆  toggle hidden 'zh''
 
 # ╒═════════════════════════════════════════════════════════════╕
 # │                    NAVEGACIÓN Y BÚSQUEDA                    │
 # ╘═════════════════════════════════════════════════════════════╛
+# Forzar redraw completo tras cada selección (crucial en tmux)
+cmd on-select &{{
+  lf -remote "send $id redraw"
+}}
 
 # ─[ FZF JUMP ]─────────────────────────────────────────────────
 # Búsqueda rápida de archivos y directorios mediante fd + fzf.
 # Reutilización de FZF_CTRL_T_COMMAND desde zshrc.
 # Preserva exclusiones y opciones configuradas.
 cmd fzf_jump ${{
-    # Reemplaza --type f por --type f --type d de forma más limpia
-    fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
+  # Reemplaza --type f por --type f --type d de forma más limpia
+  fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
 
-     selected_path="$(eval "$fd_cmd" 2>/dev/null | \
-            fzf --reverse --header=' Localizar archivo ')"
+  selected_path="$(eval "$fd_cmd" 2>/dev/null | \
+    fzf --reverse --header=' Localizar archivo ')"
 
-    [ -z "$selected_path" ] && exit
+  [ -z "$selected_path" ] && exit
 
-    if [ -d "$selected_path" ]; then
-        lf -remote "send $id cd \"$selected_path\""
-    else
-        lf -remote "send $id select \"$selected_path\""
-    fi
+  if [ -d "$selected_path" ]; then
+    lf -remote "send $id cd \"$selected_path\""
+  else
+    lf -remote "send $id select \"$selected_path\""
+  fi
 }}
 
-map <c-f> :fzf_jump
+  map <c-f> :fzf_jump
 
 # ─[ FZF SEARCH ]───────────────────────────────────────────────
 # Búsqueda de contenido en archivos mediante ripgrep + fzf.
 # Recarga dinámica al modificar la consulta.
 cmd fzf_ripgrep ${{
-    rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
+  rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
 
-    selected_file="$(
-        fzf --ansi \
-            --disabled \
-            --header=' Buscar contenido ' \
-            --delimiter ':' \
-            --bind "change:reload:$rg_cmd {q} || true" \
-            --preview '[ -n {2} ] && bat --color=always --style=plain {1} --highlight-line {2}'
-            2>/dev/null | cut -d':' -f1
-    )"
+  selected_file="$(
+    fzf --ansi \
+      --disabled \
+      --header=' Buscar contenido ' \
+      --delimiter ':' \
+      --bind "change:reload:$rg_cmd {q} || true" \
+      --preview '[ -n {2} ] && bat --color=always --style=plain {1} --highlight-line {2}'
+    2>/dev/null | cut -d':' -f1
+  )"
 
-    [ -n "$selected_file" ] && lf -remote "send $id select \"$selected_file\""
+  [ -n "$selected_file" ] && lf -remote "send $id select \"$selected_file\""
 }}
 
-map <c-g> :fzf_ripgrep
+  map <c-g> :fzf_ripgrep
