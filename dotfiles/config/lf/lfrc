@@ -54,42 +54,42 @@
 
 # FZF JUMP
 # Búsqueda rápida de archivos y directorios mediante fd + fzf.
-# Reutiliza FZF_CTRL_T_COMMAND definido en zshrc para mantener
-# las mismas exclusiones y opciones.
+# Reutilización de FZF_CTRL_T_COMMAND desde zshrc.
+# Preserva exclusiones y opciones configuradas.
 cmd fzf_jump ${{
-    # Reemplazamos --type f por --type f --type d de forma más limpia
-    cmd_search="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
+    # Reemplaza --type f por --type f --type d de forma más limpia
+    fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
 
-    res="$(eval "$cmd_search" 2>/dev/null | \
-           fzf --reverse --header=' Jump to location ' --prompt='❯ ')"
+     selected_path="$(eval "$fd_cmd" 2>/dev/null | \
+            fzf --reverse --header=' Localizar archivo ')"
 
-    [ -z "$res" ] && exit
+    [ -z "$selected_path" ] && exit
 
-    if [ -d "$res" ]; then
-        lf -remote "send $id cd \"$res\""
+    if [ -d "$selected_path" ]; then
+        lf -remote "send $id cd \"$selected_path\""
     else
-        lf -remote "send $id select \"$res\""
+        lf -remote "send $id select \"$selected_path\""
     fi
 }}
 
 map <c-f> :fzf_jump
 
-# FZF SEARCH (Content)
-# Búsqueda de texto dentro de archivos usando ripgrep + fzf.
-# Recarga dinámica mientras se escribe.
-cmd fzf_search ${{
-    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden"
+# FZF GREP (Content)
+# Búsqueda de contenido en archivos mediante ripgrep + fzf.
+# Recarga dinámica al modificar la consulta.
+cmd fzf_grep ${{
+    rg_base_cmd="rg --column --line-number --no-heading --color=always --smart-case --hidden"
 
-    res="$(
-        FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
-        fzf --bind "change:reload:$RG_PREFIX {q} || true" \
-            --ansi --layout=reverse --header='Search in files' \
+    selected_file="$(
+        FZF_DEFAULT_COMMAND="$rg_base_cmd ''" \
+        fzf --bind "change:reload:$rg_base_cmd {q} || true" \
+             --ansi --layout=reverse --header=' Buscar contenido ' \
             --preview 'bat --color=always --style=plain {1} --highlight-line {2}' \
             --delimiter ':' \
             2>/dev/null | cut -d':' -f1
     )"
 
-    [ -n "$res" ] && lf -remote "send $id select \"$res\""
+    [ -n "$selected_file" ] && lf -remote "send $id select \"$selected_file\""
 }}
 
-map <c-g> :fzf_search
+map <c-g> :fzf_grep
