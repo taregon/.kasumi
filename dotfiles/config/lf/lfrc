@@ -90,7 +90,7 @@ cmd fzf_ripgrep ${{
             --delimiter ':' \
             --bind "change:reload:$rg_cmd {q} || true" \
             --preview 'bat --color=always --style=plain {1} --highlight-line {2}' \
-            2>/dev/null | awk -F':' '{print $1 ":" $2}'
+            2>/dev/null | cut -d':' -f1
     )"
 
     [ -n "$selected_file" ] && lf -remote "send $id select \"$selected_file\""
