@@ -5,14 +5,19 @@
 # └────────┘
 # https://man.archlinux.org/man/lf.1.en
 # ────────────────────────────────────────────────────────────
-  set dircounts
-  set drawbox
-  set ignoredia
+  set shell zsh
+  set shellopts '-eu'
+  set ifs "\n"
+
+  set dircounts true
+  set drawbox true
   set incsearch true
+  set ignorecase true
   set period 3
   set preview true
   set scrolloff 10
   set sortby ctime
+  set icons true
 
   set previewer ~/.config/lf/lfpreview
   set ratios 1:2:2
@@ -46,3 +51,45 @@
   cmd on-select &{{
   lf -remote "send $id redraw"
   }}
+
+# FZF JUMP
+# Búsqueda rápida de archivos y directorios mediante fd + fzf.
+# Reutiliza FZF_CTRL_T_COMMAND definido en zshrc para mantener
+# las mismas exclusiones y opciones.
+cmd fzf_jump ${{
+    # Reemplazamos --type f por --type f --type d de forma más limpia
+    cmd_search="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
+
+    res="$(eval "$cmd_search" 2>/dev/null | \
+           fzf --reverse --header=' Jump to location ' --prompt='❯ ')"
+
+    [ -z "$res" ] && exit
+
+    if [ -d "$res" ]; then
+        lf -remote "send $id cd \"$res\""
+    else
+        lf -remote "send $id select \"$res\""
+    fi
+}}
+
+map <c-f> :fzf_jump
+
+# FZF SEARCH (Content)
+# Búsqueda de texto dentro de archivos usando ripgrep + fzf.
+# Recarga dinámica mientras se escribe.
+cmd fzf_search ${{
+    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden"
+
+    res="$(
+        FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
+        fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+            --ansi --layout=reverse --header='Search in files' \
+            --preview 'bat --color=always --style=plain {1} --highlight-line {2}' \
+            --delimiter ':' \
+            2>/dev/null | cut -d':' -f1
+    )"
+
+    [ -n "$res" ] && lf -remote "send $id select \"$res\""
+}}
+
+map <c-g> :fzf_search
