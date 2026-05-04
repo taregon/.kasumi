@@ -52,7 +52,11 @@
   lf -remote "send $id redraw"
   }}
 
-# FZF JUMP
+# ╒═════════════════════════════════════════════════════════════╕
+# │                    NAVEGACIÓN Y BÚSQUEDA                    │
+# ╘═════════════════════════════════════════════════════════════╛
+
+# ─[ FZF JUMP ]─────────────────────────────────────────────────
 # Búsqueda rápida de archivos y directorios mediante fd + fzf.
 # Reutilización de FZF_CTRL_T_COMMAND desde zshrc.
 # Preserva exclusiones y opciones configuradas.
@@ -74,7 +78,7 @@ cmd fzf_jump ${{
 
 map <c-f> :fzf_jump
 
-# FZF GREP (Content)
+# ─[ FZF GREP (Content) ]───────────────────────────────────────
 # Búsqueda de contenido en archivos mediante ripgrep + fzf.
 # Recarga dinámica al modificar la consulta.
 cmd fzf_grep ${{
