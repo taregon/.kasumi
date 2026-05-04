@@ -97,7 +97,7 @@ cmd fzf_ripgrep ${{
       --header=' Buscar contenido ' \
       --delimiter ':' \
       --bind "change:reload:$rg_cmd {q} || true" \
-      --preview '[ -n {2} ] && bat --color=always --style=plain {1} --highlight-line {2}'
+      --preview '[ -n {2} ] && bat --color=always --style=plain {1} --highlight-line {2}' \
     2>/dev/null | cut -d':' -f1
   )"
 
