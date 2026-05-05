@@ -1,5 +1,6 @@
 # Habilitar profiling
 zmodload zsh/zprof
+# ────────────────────────────────────────────────────────────
 # ███████╗███████╗██╗  ██╗
 # ╚══███╔╝██╔════╝██║  ██║
 #   ███╔╝ ███████╗███████║
@@ -135,7 +136,6 @@ fi
 # Idioma y codificación (comentado porque generó error en Arch)
 # export LC_ALL="en_US.UTF-8"
 
-# RANGER
 # ─[ RANGER ]─────────────────────────────────────────────────
 # Desactiva la carga de ajustes predeterminado para rc.conf
 export RANGER_LOAD_DEFAULT_RC=FALSE
@@ -151,6 +151,7 @@ export VISUAL="nvim"
 
 # ─[ STARSHIP PROMPT ]────────────────────────────────────────
 export STARSHIP_CONFIG=~/.config/starship/kasumi.toml
+TRANSIENT_PROMPT_TRANSIENT_PROMPT=' '
 # STARSHIP_LOG=trace starship prompt
 # ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █     ▄▀▀▀▄ █▀▀▀▄ ▄▀▀▀▀
@@ -159,7 +160,7 @@ export STARSHIP_CONFIG=~/.config/starship/kasumi.toml
 #
 # ─[ COLORES PARA BAT ]───────────────────────────────────────
 export BAT_STYLE="full"
-export BAT_THEME="base16"   # Tema de colores compatible con kitty
+export BAT_THEME="base16" # Tema de colores compatible con kitty
 
 # ─[ COLORES PARA LS ]────────────────────────────────────────
 # export LS_COLORS="*.zip=36:*.rar=36:*.tar=36:*.gz=36:*.tar.gz=36:*.7z=36:$LS_COLORS"
@@ -278,11 +279,17 @@ export FZF_DEFAULT_OPTS='
 ' # Fin de linea
 
 export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
+
+export FZF_CTRL_R_OPTS=$FZF_DEFAULT_OPTS"
+--bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'
+--color header:italic
+--header 'Press CTRL-Y to copy command into clipboard'"
+
 # Alt+C (cambio de directorio)
 # export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
 # Ctrl+T (búsqueda de archivos)
-export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
+# export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
 
 # ------------------------------------------------------
 # █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
@@ -346,6 +353,7 @@ zshaddhistory() {
 # ▄▀▀▀    █   █ ▀▄█   █     █
 # ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
 # FAST ZSHELL PLUGIN MANAGER
+# zinit delete --clean  # Elimina plugins no declarados actualmente en la configuración
 
 # Clona de manera superficial para acelerar la carga
 # y muestra el prompt con información completa y personalizable
@@ -399,53 +407,6 @@ if [[ ! -f $last_update || -n $(find $last_update -mtime +1 2> /dev/null) ]]; th
     zinit self-update && zinit update --all
     touch $last_update
 fi
-
-# ────────────────────────────────────────────────────────────
-# ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
-# █     █   █ █   █ █▀▀▀  █     █▀▀     █     █   █   █ █ ▀▄█
-#  ▀▀▀▀  ▀▀▀  ▀   ▀ ▀     ▀▀▀▀▀ ▀▀▀▀▀   ▀   ▀▀▀▀▀  ▀▀▀  ▀   ▀
-
-# NOTA: Para revisar las activas, ejecuta: zstyle -L ':completion:*'
-
-# ── AJUSTES DE AUTOCOMPLETADO NATIVO DE ZSH (SIN FZF-TAB) ───
-
-# Muestra los directorios especiales '.' y '..' en la
-# autocompletación de rutas.
-# zstyle ':completion:*' special-dirs true
-
-# Agrupa resultados de coincidencias por categoría (comandos,
-# archivos, procesos, etc.) para una visualización ordenada.
-# zstyle ':completion:*:matches' group 'yes'
-
-# Activa navegación por menú cuando hay múltiples resultados,
-# permitiendo desplazarse con las flechas.
-# zstyle ':completion:*' menu select
-
-# Muestra descripciones detalladas de cada ítem del completion
-# (por ejemplo: "(archivo)", "(directorio)", etc.).
-# zstyle ':completion:*' verbose yes
-
-# Define el formato para las descripciones mostradas por Zsh.
-# %d se reemplaza por la descripción del grupo.
-# zstyle ':completion:*:descriptions' format '-- %d --'
-
-# Usa los colores definidos en LS_COLORS para colorear los
-# elementos listados en el menú de completado.
-# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# ── AJUSTES DE AUTOCOMPLETADO CON FZF-TAB ───────────────────
-
-# Fuerza actualización automática de comandos recién instalados.
-zstyle ':completion:*' rehash true
-
-# Coincidencia insensible a mayúsculas.
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-# Proveedor de lista de procesos (para kill y similares).
-zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm,cmd -w -w'
-
-# Habilita los valores por defecto de fzf en fzf-tab. https://github.com/Aloxaf/fzf-tab#configure
-zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
 # ────────────────────────────────────────────────────────────
 # CONFIGURACIÓN PERSONAL
