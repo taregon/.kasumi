@@ -214,8 +214,8 @@ typeset -a FZF_FD_OPTS=(
 
 # Parámetros globales de fzf: controlan colores,
 # diseño y comportamiento por defecto
-export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+# export FZF_DEFAULT_OPTS="--layout=reverse" # El prompt se abre desde arriba
+export FZF_DEFAULT_OPTS='
   --color=fg:#818F98,fg+:#C8D0D6,bg:-1,bg+:#333C42
   --color=hl:#A88E6B,hl+:#FBC06E,info:#94B8BC,marker:#FF62E0
   --color=prompt:#AFEEAE,spinner:#EA676D,pointer:#FBC06E,header:#87AFAF
@@ -229,6 +229,7 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --pointer="▒"
   --separator="─"
   --scrollbar="▐"
+  --layout=reverse
 ' # Fin de linea
 
 # Alt+C (cambio de directorio)
