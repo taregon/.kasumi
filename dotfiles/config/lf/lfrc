@@ -33,19 +33,19 @@
   map <enter> open
 
   map . set hidden!
-  map X %trash-put  "$fx"
+  map X $trash-put $fx
   map a push $mkdir<space>
 
   map gN cd ~/Syncthing/OsiriaFS/Notas
 
+  map y
+  map yy copy
 # Copia la ruta del archivo
-  map Y %echo -n "$f" | wl-copy
-
+  map yp %echo $fx | wl-copy
 # Abre una ventana GTK4, carga archivos desde CLI
 # y permite arrastrarlos a aplicaciones gráficas
-  map o %ripdrag -W 400 -H 200 -s 195 -bx "$f"
-
-# map C $cat "$fx" | wl-copy
+# map o $printf '%s\n' $fs | sed 's#.*/##' | ripdrag -I
+  map o $while IFS= read -r f; do printf '%s\n' "${f##*/}"; done <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 #
 # ─[ POR DEFECTO ]──────────────────────────────────────────────
 #   🟆  copy          'y'     🟆  rename        'r'
@@ -72,7 +72,7 @@ cmd fzf_jump ${{
   fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
 
   selected_path="$(eval "$fd_cmd" 2>/dev/null | \
-    fzf --reverse --header='  Buscar archivo')"
+    fzf --reverse --header='  Buscar directorio o archivo')"
 
   [ -z "$selected_path" ] && exit
 
