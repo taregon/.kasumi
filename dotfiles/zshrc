@@ -27,6 +27,51 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 source "${ZINIT_HOME}/zinit.zsh"
 
 # ────────────────────────────────────────────────────────────
+# ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
+# █     █   █ █   █ █▀▀▀  █     █▀▀     █     █   █   █ █ ▀▄█
+#  ▀▀▀▀  ▀▀▀  ▀   ▀ ▀     ▀▀▀▀▀ ▀▀▀▀▀   ▀   ▀▀▀▀▀  ▀▀▀  ▀   ▀
+
+# NOTA: Para revisar las activas, ejecuta: zstyle -L ':completion:*'
+
+# ── AJUSTES DE AUTOCOMPLETADO NATIVO DE ZSH (SIN FZF-TAB) ───
+
+# Muestra los directorios especiales '.' y '..' en la
+# autocompletación de rutas.
+# zstyle ':completion:*' special-dirs true
+
+# Agrupa resultados de coincidencias por categoría (comandos,
+# archivos, procesos, etc.) para una visualización ordenada.
+# zstyle ':completion:*:matches' group 'yes'
+
+# Activa navegación por menú cuando hay múltiples resultados,
+# permitiendo desplazarse con las flechas.
+# zstyle ':completion:*' menu select
+
+# Muestra descripciones detalladas de cada ítem del completion
+# (por ejemplo: "(archivo)", "(directorio)", etc.).
+# zstyle ':completion:*' verbose yes
+
+# Define el formato para las descripciones mostradas por Zsh.
+# %d se reemplaza por la descripción del grupo.
+# zstyle ':completion:*:descriptions' format '-- %d --'
+
+# Usa los colores definidos en LS_COLORS para colorear los
+# elementos listados en el menú de completado.
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# Fuerza actualización automática de comandos recién instalados.
+zstyle ':completion:*' rehash true
+
+# Coincidencia insensible a mayúsculas.
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Proveedor de lista de procesos (para kill y similares).
+zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm,cmd -w -w'
+
+# Habilita los valores por defecto de fzf en fzf-tab. https://github.com/Aloxaf/fzf-tab#configure
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+# ────────────────────────────────────────────────────────────
 # AUTO COMPLETADO
 # Carga compinit: usa caché si tiene menos de 24h, sino lo crea
 # ╓
