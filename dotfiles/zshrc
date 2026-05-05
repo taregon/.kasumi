@@ -273,7 +273,7 @@ setopt SHARE_HISTORY          # Comparte el historial entre todas las sesiones d
 # Lista de comandos a ignorar
 HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|ranger|yt-mp3"
 
-# Hook: decidir qué comandos se guardan en el historial
+# Hook: decide qué comandos guardar en historial
 zshaddhistory() {
     local line cmd
     # El comando completo sin salto de línea
@@ -282,7 +282,7 @@ zshaddhistory() {
     # 1. Ignorar si el comando no existe
     whence "$cmd" >| /dev/null || return 1
     # 2. Ignorar si coincide con algún patrón en HISTORY_IGNORE
-    [[ $cmd == ${~HISTORY_IGNORE} ]] && return 1
+    [[ $cmd == $~HISTORY_IGNORE ]] && return 1
     # 3. Guardar los demás
     return 0
 }
