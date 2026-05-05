@@ -232,6 +232,7 @@ export FZF_DEFAULT_OPTS='
   --layout=reverse
 ' # Fin de linea
 
+export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 # Alt+C (cambio de directorio)
 # export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
