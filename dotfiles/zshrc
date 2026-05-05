@@ -196,15 +196,22 @@ export LESS_TERMCAP_us=$(
 #   --type f: Restringe la selección a archivos, excluyendo directorios.
 #   --hidden: Incluye archivos ocultos, lo cual es relevante en sistemas Linux.
 #   --follow: Permite seguir los enlaces simbólicos.
-FZF_FD_BASE="fd \
-    --hidden \
-    --follow \
-    --exclude .cache \
-    --exclude .git \
-    --exclude build \
-    --exclude dotdrop \
+typeset -a FZF_FD_OPTS=(
+    --exclude .cache
+    --exclude .git
+    --exclude .local
+    --exclude .obsidian
+    --exclude .stfolder
+    --exclude .stversions
+    --exclude build
+    --exclude dotdrop
     --exclude node_modules
-"
+    --exclude venv
+    --follow
+    --hidden
+    --strip-cwd-prefix
+)
+
 # Parámetros globales de fzf: controlan colores,
 # diseño y comportamiento por defecto
 export FZF_DEFAULT_OPTS="--layout=reverse"   # El prompt se abre desde arriba
