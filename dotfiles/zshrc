@@ -337,14 +337,16 @@ HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|ranger|yt-mp3"
 # Hook: decide qué comandos guardar en historial
 zshaddhistory() {
     local line cmd
-    # El comando completo sin salto de línea
     line=${1%%$'\n'}
     cmd=${line%% *}
     # 1. Ignorar si el comando no existe
     whence "$cmd" >| /dev/null || return 1
     # 2. Ignorar si coincide con algún patrón en HISTORY_IGNORE
-    [[ $cmd == $~HISTORY_IGNORE ]] && return 1
-    # 3. Guardar los demás
+    local -a ignore_patterns
+    ignore_patterns=(${(s:|:)HISTORY_IGNORE}) # Divide patrones por |
+    for pattern in "${ignore_patterns[@]}"; do
+        [[ $line == $~pattern ]] && return 1
+    done
     return 0
 }
 
