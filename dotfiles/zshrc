@@ -280,7 +280,7 @@ export FZF_DEFAULT_OPTS='
 
 export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 
-export FZF_CTRL_R_OPTS=$FZF_DEFAULT_OPTS"
+export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
@@ -403,7 +403,7 @@ zinit light olets/zsh-transient-prompt
 # zinit cdreplay -q
 
 # Actualizar automáticamente zinit una vez al día
-local last_update=~/.zinit_last_update
+last_update=~/.zinit_last_update
 if [[ ! -f $last_update || -n $(find $last_update -mtime +1 2> /dev/null) ]]; then
     echo "Updating zinit..."
     zinit self-update && zinit update --all
