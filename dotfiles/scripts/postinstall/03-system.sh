@@ -134,8 +134,8 @@ install_app_editor() {
         neovim-symlinks # vim y vi se redirigen a Neovim
         nodejs          # Requerido por VSCode y plugins de nvim
         npm             # Gestor de paquetes para Node.js
-        tree-sitter-cli
-        tree-sitter # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
+        tree-sitter     # Biblioteca para parsing incremental y reutilizable
+        tree-sitter-cli # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
 
         # Editores adicionales
         obsidian               # Editor de notas en Markdown enfocado en conocimiento (AUR)
