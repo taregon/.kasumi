@@ -372,6 +372,7 @@ install_utils_terminal() {
         source-highlight   # Resaltado de sintaxis para less y otros
         sshfs              # Montaje de sistemas remotos vía SSH
         toilet             # Generador de texto ASCII estilizado
+        vivid              # Generador de LS_COLORS con soporte de temas (reemplazo moderno de dircolors)
         xan                # Utilidad para procesamiento de tablas CSV
         zoxide             # Navegación inteligente entre directorios
         zsh                # Shell interactivo avanzada
