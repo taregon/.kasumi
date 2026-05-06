@@ -415,72 +415,76 @@ mostrar_menu() {
 }
 
 main() {
-    mostrar_menu
-    read -rp "Seleccione una opción: " opcion
-    case "$opcion" in
-        1)
-            confirmar
-            prepare_system
-            update_mirror
-            ;;
-        2)
-            confirmar
-            install_app_general
-            install_sys_wayland
-            ;;
-        3)
-            confirmar
-            install_app_editor
-            ;;
-        4)
-            confirmar
-            install_app_browser
-            install_app_cli_fm
-            install_app_pdf
-            install_utils_files
-            install_utils_compress
-            ;;
-        5)
-            confirmar
-            install_sys_fonts
-            install_sys_theme
-            ;;
-        6)
-            confirmar
-            install_sys_network
-            ;;
-        7)
-            confirmar
-            install_app_docs
-            install_utils_terminal
-            ;;
-        8)
-            confirmar
-            prepare_system
-            update_mirror
-            install_app_browser
-            install_app_docs
-            install_app_editor
-            install_app_cli_fm
-            install_app_pdf
-            install_app_general
-            install_sys_fonts
-            install_sys_network
-            install_sys_theme
-            install_sys_wayland
-            install_utils_compress
-            install_utils_files
-            install_utils_terminal
-            ;;
-        0)
-            echo "Saliendo..."
-            exit 0
-            ;;
-        *)
-            echo "Opción inválida."
-            exit 1
-            ;;
-    esac
+    while true; do
+        mostrar_menu
+        read -rp "Seleccione una opción: " opcion
+        case "$opcion" in
+            1)
+                confirmar
+                prepare_system
+                update_mirror
+                ;;
+            2)
+                confirmar
+                install_app_general
+                install_sys_wayland
+                ;;
+            3)
+                confirmar
+                install_app_editor
+                ;;
+            4)
+                confirmar
+                install_app_browser
+                install_app_cli_fm
+                install_app_pdf
+                install_utils_files
+                install_utils_compress
+                ;;
+            5)
+                confirmar
+                install_sys_fonts
+                install_sys_theme
+                ;;
+            6)
+                confirmar
+                install_sys_network
+                ;;
+            7)
+                confirmar
+                install_app_docs
+                install_utils_terminal
+                ;;
+            8)
+                confirmar
+                prepare_system
+                update_mirror
+                install_app_browser
+                install_app_docs
+                install_app_editor
+                install_app_cli_fm
+                install_app_pdf
+                install_app_general
+                install_sys_fonts
+                install_sys_network
+                install_sys_theme
+                install_sys_wayland
+                install_utils_compress
+                install_utils_files
+                install_utils_terminal
+                ;;
+            0)
+                echo "Saliendo..."
+                break
+                ;;
+            *)
+                echo "Opción inválida."
+                sleep 1
+                ;;
+        esac
+        echo
+        read -rp "Presione Enter para volver al menú principal..."
+    done
 }
 
 main "$@"
