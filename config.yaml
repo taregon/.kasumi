@@ -106,6 +106,10 @@ dotfiles:
     src: wallpapers
     dst: ~/.local/share/kasumi/wallpapers
     link: absolute
+  d_scripts:
+    src: scripts
+    dst: ~/.local/share/kasumi/scripts
+    link: absolute
   d_rofi:
     src: config/rofi
     dst: ~/.config/rofi
@@ -176,6 +180,7 @@ profiles:
       - d_lf
       - d_mako
       - d_rofi
+      - d_scripts
       - d_starship
       - d_vivid
       - d_wallpapers
