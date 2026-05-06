@@ -62,6 +62,7 @@ update_mirror() {
     echo ">> Estableciendo los 20 mirrors más rápidos"
     pacman -S --needed reflector
     reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+    pacman -Syy
     echo ">> ACTUALIZACIÓN DE MIRRORS COMPLETADA"
 }
 
