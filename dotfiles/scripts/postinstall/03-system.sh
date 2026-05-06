@@ -40,7 +40,7 @@ trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
 
 # Confirmación interactiva antes de aplicar cambios en el sistema
 confirmar() {
-    read -rp "¿Desea volver a la instalación? [s/N]: " respuesta
+    read -rp "¿Desea proceder con la instalación? [s/N]: " respuesta
     [[ "$respuesta" =~ ^[sS]$ ]] || {
         echo "  Cancelado."
         exit 0
