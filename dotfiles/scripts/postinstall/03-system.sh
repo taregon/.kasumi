@@ -16,14 +16,18 @@ set -o pipefail # Propaga errores en tuberías
 # - Usa SUDO_USER si se invocó con sudo
 # - Si no, recurre a logname (usuario de sesión)
 # - Como último recurso, toma la variable $USER
-REAL_USER="${SUDO_USER:-$(logname 2> /dev/null || echo "$USER")}"
-
 # Elevación automática de privilegios:
 # relanza con sudo si no es root
 if [[ $EUID -ne 0 ]]; then
     echo "  Elevando privilegios..."
     exec sudo -- "$0" "$@"
 fi
+
+# Determina el usuario real que ejecuta el script:
+# - Usa SUDO_USER si se invocó con sudo
+# - Si no, recurre a logname (usuario de sesión)
+# - Como último recurso, toma la variable $USER
+REAL_USER="${SUDO_USER:-$(logname 2> /dev/null || echo "$USER")}"
 
 # Mantiene activa la sesión sudo mientras el script se ejecuta:
 # - Lanza un proceso en segundo plano que renueva sudo cada 60s
@@ -183,7 +187,6 @@ install_app_general() {
         syncthing     # Sincronización privada y cifrada entre dispositivos
         upscayl-bin   # Mejora y reescalado de imágenes con IA
         # Libre Office
-        hunspell-es_pa       # Diccionario español (Panamá) para Hunspell
         hyphen-es            # Reglas de separación silábica en español
         libreoffice-fresh    # Suite ofimática con nuevas funciones
         libreoffice-fresh-es # Paquete de idioma español para LibreOffice
@@ -342,6 +345,7 @@ install_utils_terminal() {
         bc                 # Calculadora CLI con soporte para decimales de alta precisión
         brightnessctl      # Control de brillo de pantalla desde terminal
         cdu                # Analizador interactivo de uso de disco (TUI)
+        cronie             # daemon cron oficial Arch Linux para tareas programadas
         dotdrop            # Gestor de dotfiles con perfiles y plantillas
         eza                # ls moderno con colores e iconos (reemplazo de exa)
         figlet             # Generador de texto en ASCII art
@@ -376,9 +380,10 @@ install_utils_terminal() {
     instalar "${pkgs[@]}"
 
     sudo -u "$REAL_USER" systemctl --user enable --now ssh-agent.service
+    systemctl enable --now cronie
 
     echo "  Cambiando shell predeterminada a zsh..."
-    chsh -s "$(which zsh)" "$REAL_USER"
+    sudo -u "$REAL_USER" chsh -s "$(which zsh)"
 
     echo "  Usuario $REAL_USER agregado al grupo input" # requerido para módulos de waybar
     usermod -aG input "$REAL_USER"
