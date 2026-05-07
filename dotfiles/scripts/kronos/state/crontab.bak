@@ -2,6 +2,8 @@
 # █     █▀▀▀▄ █   █ █ ▀▄█   █   █▀▀▀█ █▀▀▀▄
 #  ▀▀▀▀ ▀   ▀  ▀▀▀  ▀   ▀   ▀   ▀   ▀ ▀▀▀▀
 # Tareas programadas en entorno mínimo
+# WARN: Debe respaldarse manualmente
+# crontab -l >| ~/.local/bin/kasumi/kronos/state/crontab.bak
 
 KASUMI_KRONOS=/home/ixos/.local/bin/kasumi/kronos
 
