@@ -46,7 +46,7 @@
 # y permite arrastrarlos a aplicaciones gráficas
 # map o $printf '%s\n' $fs | sed 's#.*/##' | ripdrag -I
   map o $while IFS= read -r f; do printf '%s\n' "${f##*/}"; done <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
-#
+
 # ─[ POR DEFECTO ]──────────────────────────────────────────────
 #   🟆  copy          'y'     🟆  rename        'r'
 #   🟆  cut           'd'     🟆  sort          's'
