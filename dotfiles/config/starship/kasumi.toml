@@ -234,9 +234,8 @@ format = "[ $duration](bold fg:ka_blue) "
 # ╘════════════════════════════════════════════════════════════╛
 # Ver estado de módulos:
 #   starship print-config | grep -E '^\[[a-z_]+\]|^\s*disabled = '
-# Habilita los módulos que uses descomentando 'disabled = true'.
 
-# ─────────────────< CLOUD / INFRAESTRUCTURA >───────────────
+# ──────────────────────< CLOUD / INFRA >────────────────────
 [aws]
 disabled = true
 
@@ -262,7 +261,7 @@ disabled = true
 [spack]
 disabled = true
 
-# ───────────────────< HERRAMIENTAS / BUILD >───────────────────
+# ───────────────────────< HERRAMIENTAS >───────────────────────
 [buf]
 disabled = true
 
@@ -287,7 +286,10 @@ disabled = true
 [xmake]
 disabled = true
 
-# ───────────────────< LENGUAJES / RUNTIMES >───────────────────
+[mise]
+disabled = true
+
+# ───────────────────< LENGUAJES Y RUNTIMES >───────────────────
 [bun]
 disabled = true
 
@@ -333,10 +335,16 @@ disabled = true
 [gleam]
 disabled = true
 
+[golang]
+disabled = true
+
 [haskell]
 disabled = true
 
 [haxe]
+disabled = true
+
+[java]
 disabled = true
 
 [julia]
@@ -355,6 +363,9 @@ disabled = true
 disabled = true
 
 [opa]
+disabled = true
+
+[ocaml]
 disabled = true
 
 [perl]
@@ -402,14 +413,11 @@ disabled = true
 [zig]
 disabled = true
 
-# ───────────────────< PAQUETES / ENTORNOS >─────────────────
+# ───────────────────< PAQUETES Y ENTORNOS >─────────────────
 [conda]
 disabled = true
 
 [pixi]
-disabled = true
-
-[mise]
 disabled = true
 
 # ─────────────────────< SHELL / SISTEMA >───────────────────
@@ -423,6 +431,9 @@ disabled = true
 disabled = true
 
 [netns]
+disabled = true
+
+[nix_shell]
 disabled = true
 
 [shlvl]
@@ -447,7 +458,7 @@ disabled = true
 [pijul_channel]
 disabled = true
 
-# ──────────────────< IA / PLUGINS EXTERNOS >────────────────
+# ───────────────────────< IA / EXTRAS >─────────────────────
 [claude_context]
 disabled = true
 
@@ -457,7 +468,7 @@ disabled = true
 [claude_model]
 disabled = true
 
-# ──────────────────────────< OTROS >────────────────────────
+# ───────────────────────────< MISC >───────────────────────────
 [localip]
 disabled = true
 
