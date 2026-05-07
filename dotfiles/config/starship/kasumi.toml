@@ -11,8 +11,8 @@
 
 add_newline = true
 continuation_prompt = "[▸▹ ](dimmed fg:ka_overlay0)"
-scan_timeout = 35
-command_timeout = 700
+# scan_timeout = 35
+# command_timeout = 700
 
 format = """
 [▒](fg:ka_crust)\
@@ -35,10 +35,10 @@ $character\
 palette = "kasumi_colors"
 
 [palettes.kasumi_colors]
-ka_teal = "#89DCEB"
+ka_teal = "#5dbdc9"
 ka_mantle = "#343E43"
-ka_overlay0 = "#5D6C74"
-ka_crust = "#49575E"
+ka_overlay0 = "#5f6e78"
+ka_crust = "#455158"
 ka_green = "#80C8A1"
 ka_red = "#F86E88"
 ka_yellow = "#F8E084"
@@ -232,8 +232,8 @@ format = "[ $duration](bold fg:ka_blue) "
 # ╒════════════════════════════════════════════════════════════╕
 # │                   MÓDULOS DESHABILITADOS                   │
 # ╘════════════════════════════════════════════════════════════╛
-[direnv]
-disabled = true
+# [direnv]
+# disabled = true
 
 # [kubernetes]
 # symbol = "☸"
