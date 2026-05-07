@@ -29,7 +29,7 @@ dotfiles:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
-  f_zsh:
+  f_zshrc:
     src: zshrc
     dst: ~/.zshrc
     link: absolute
@@ -37,13 +37,9 @@ dotfiles:
     src: config/StartTree/config.yaml
     dst: ~/.config/StartTree/config.yaml
     link: absolute
-  f_zsh_alias:
-    src: config/zsh/kasumi-zsh_alias.zsh
-    dst: ~/.config/zsh/kasumi-zsh_alias.zsh
-    link: absolute
-  d_zsh_functions:
-    src: config/zsh/funcs
-    dst: ~/.config/zsh/funcs
+  d_zsh:
+    src: config/zsh
+    dst: ~/.config/zsh
     link: absolute
   d_neovim:
     src: config/nvim
@@ -193,7 +189,7 @@ profiles:
       - f_redshift
       - f_tmux
       - f_zprofile
-      - f_zsh
+      - f_zshrc
   kasumi_extras:
     dotfiles:
       - d_aria2
@@ -201,12 +197,11 @@ profiles:
       - d_mpd
       - d_neovim
       - d_opencode_theme
-      - d_zsh_functions
+      - d_zsh
       - f_fonts
       - f_lnav
       - f_ssh
       - f_starttree
-      - f_zsh_alias
       - f_zshenv
   kasumi_wayland:
     dotfiles:
