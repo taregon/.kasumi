@@ -46,7 +46,7 @@ local function gradient_colors()
 end
 
 require("markview").setup({
-
+	preview = { enable = false },
 	markdown = {
 		enable = true,
 		wrap = true,
@@ -119,46 +119,29 @@ require("markview").setup({
 				sign = "",
 				hl = "MarkviewHeading1",
 			},
-			--[[ heading_2 = {
-				style = "icon",
-				icon = "  ",
-				sign = "",
-				hl = "MarkviewHeading2",
-			}, ]]
 
 			heading_2 = {
 				style = "label",
 				align = "center",
-				icon = "  ",
+				icon = num_levels_h2,
 				sign = "",
-				corner_left = "",
-				corner_right = " ",
+				corner_left = "▒",
+				corner_right = "▒ ",
 				corner_left_hl = "MarkviewHeading2Sign",
 				corner_right_hl = "MarkviewHeading2Sign",
-				padding_left = "  ",
-				padding_right = "  ",
+				padding_left = "  ",
+				padding_right = "    ",
 				hl = "MarkviewHeading2",
 			},
+
 			heading_3 = {
 				style = "icon",
 				-- border = "-",
-				icon = "🙗  ",
+				icon = num_levels_h3,
 				sign = "",
 				hl = "MarkviewHeading3",
 			},
-			--[[ heading_3 = {
-				style = "label",
-				-- corner_left = "", --  "🭘"
-				-- corner_right = "", --  "🭈"
-				corner_left = "",
-				corner_right = "",
-				padding_left = "  ",
-				padding_right = "  ",
-				icon = "  ",
-				-- sign = "🭬",
-				-- sign_hl = "Comment",
-				hl = "MarkviewHeading3",
-			}, ]]
+
 			heading_4 = {
 				style = "label",
 				padding_left = "  ",
@@ -205,7 +188,6 @@ require("markview").setup({
 		},
 
 		list_items = { -- ────────────────────────────────────────────────────────────
-			-- PEND:
 			enable = true,
 			wrap = true,
 			indent_size = 4,
@@ -229,12 +211,14 @@ require("markview").setup({
 
 			marker_plus = { enable = false },
 			marker_star = { enable = false },
+
 			marker_dot = {
 				enable = true,
 				add_padding = true,
 				conceal_on_checkboxes = true,
 				hl = "@markup.list.markdown",
 			},
+
 			marker_parenthesis = {
 				enable = true,
 				add_padding = true,
@@ -242,6 +226,7 @@ require("markview").setup({
 				hl = "@markup.list.markdown",
 			},
 		},
+
 		tables = { -- ────────────────────────────────────────────────────────────
 			enable = true,
 			block_decorator = true,
