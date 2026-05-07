@@ -30,6 +30,11 @@ require("conform").setup({
 		shfmt = { -- https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd
 			args = { "-i", "4", "-ci", "-bn", "-sr" },
 		},
+
+		shfmt_zsh = {
+			command = "shfmt",
+			args = { "-ln", "zsh", "-i", "4", "-ci", "-bn", "-sr" },
+		},
 		-- ────────────────────────────────────────────────────────────
 		awk = {
 			args = { "-f", vim.fn.expand("~/.config/nvim/lua/kasumi/goodies/format.awk") },
@@ -87,7 +92,7 @@ require("conform").setup({
 		toml     = { "tombi" },
 		xml      = { "xmlformatter" },
 		yaml     = { "yamlfix" }, -- yamlfix preserva los comentarios
-		zsh      = { "shfmt" }, -- alternativa: beautysh
+		zsh      = { "shfmt_zsh" }, -- alternativa: beautysh
 	},
 
 	default_format_opts = {
