@@ -20,7 +20,6 @@ alias ports="netstat -tunalp"
 alias ps="grc ps"
 alias sensors="grc sensors"
 alias stat="grc stat"
-alias tail="grc tail"
 alias w="grc w --ip-addr"
 alias whois="grc whois"
 
