@@ -3,3 +3,9 @@
 # El socket se crea automáticamente en $XDG_RUNTIME_DIR/ssh-agent.socket
 # Requisito: systemctl --user enable --now ssh-agent
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+
+# ─[ PATH ]───────────────────────────────────────────────────
+# Entorno de pruebas para scripts en kronos
+# Se usa para ejecutar y validar comandos antes de automatizarlos
+# sin tener que escribir rutas largas
+export PATH="$HOME/.local/bin/kasumi/kronos:$PATH"

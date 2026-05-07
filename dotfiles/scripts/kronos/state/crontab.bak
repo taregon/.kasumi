@@ -1,0 +1,10 @@
+# ▄▀▀▀▀ █▀▀▀▄ ▄▀▀▀▄ █▄  █ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄
+# █     █▀▀▀▄ █   █ █ ▀▄█   █   █▀▀▀█ █▀▀▀▄
+#  ▀▀▀▀ ▀   ▀  ▀▀▀  ▀   ▀   ▀   ▀   ▀ ▀▀▀▀
+# Tareas programadas en entorno mínimo
+
+KASUMI_KRONOS=/home/ixos/.local/bin/kasumi/kronos
+
+# Actualización de plugins (core + all)
+# Frecuencia: cada 2 días 20:45
+45 20 */2 * *       $KASUMI_KRONOS/update-zinit >> $HOME/.cache/zinit-update.log 2>&1

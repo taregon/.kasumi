@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+# Actualizar zinit y plugins usando una shell interactiva/login
+# para cargar correctamente el entorno y las funciones de zinit.
+
+set -e
+
+timestamp() {
+    date '+%Y-%m-%d %H:%M:%S'
+}
+
+echo "========================================================================="
+echo "[$(timestamp)] [zinit] Iniciando actualización..."
+
+echo
+echo "[$(timestamp)] [zinit] Actualizando núcleo..."
+zsh -ilsc 'zinit self-update'
+
+echo
+echo "[$(timestamp)] [zinit] Actualizando plugins..."
+zsh -ilsc 'zinit update --all'
+
+echo
+echo "[$(timestamp)] [zinit] Finalizado."
+echo
