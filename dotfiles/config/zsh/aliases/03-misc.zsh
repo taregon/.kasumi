@@ -3,7 +3,6 @@ alias sumishell-date="date +'%Y%m%d-%H%M%S'"
 alias sumishell-geo='/usr/lib/geoclue-2.0/demos/where-am-i'
 alias sumishell-hist="history"
 alias tolower="tr '[:upper:]' '[:lower:]'"
-alias q="exit"
 alias sumishell-rldt="tmux source ~/.tmux.conf"
 alias sumishell-rldz="source ~/.zshrc"
 

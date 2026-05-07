@@ -6,7 +6,7 @@
 #
 # También puedes ver los comandos soportados en:
 # https://github.com/lazywalker/rgrc/tree/master/share
-#
+
 alias blkid='rgrc blkid'
 alias curl='rgrc curl'
 alias df='rgrc df'
