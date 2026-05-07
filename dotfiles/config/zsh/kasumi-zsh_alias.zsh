@@ -6,22 +6,22 @@
 alias fh="history | fzf +s --tac"
 
 # ── PUKE RAINBOW ────────────────────────────────────────────
-alias df="grc df -hT --total -x tmpfs -x devtmpfs -x efivarfs -x squashfs"
-alias dig="grc dig"
-alias du="grc du -h"
-alias free="grc free -m"
-alias ifconfig="grc ifconfig"
+# alias df="rgrc df -hT --total -x tmpfs -x devtmpfs -x efivarfs -x squashfs"
+# alias dig="rgrc dig"
+# alias du="rgrc du -h"
+# alias free="rgrc free -m"
+# alias ifconfig="rgrc ifconfig"
 alias ip="ip --color=auto"
-alias last="grc last -12axw"
-alias lsblk="grc lsblk -o NAME,TYPE,MODEL,SIZE,FSTYPE,PARTTYPENAME,MOUNTPOINTS,LABEL -e 7"
-alias netstat="grc netstat"
-alias ping="grc ping"
+# alias last="rgrc last -12axw"
+# alias lsblk="rgrc lsblk -o NAME,TYPE,MODEL,SIZE,FSTYPE,PARTTYPENAME,MOUNTPOINTS,LABEL -e 7"
+# alias netstat="rgrc netstat"
+# alias ping="rgrc ping"
 alias ports="netstat -tunalp"
-alias ps="grc ps"
-alias sensors="grc sensors"
-alias stat="grc stat"
-alias w="grc w --ip-addr"
-alias whois="grc whois"
+# alias ps="rgrc ps"
+# alias sensors="rgrc sensors"
+# alias stat="rgrc stat"
+# alias w="rgrc w --ip-addr"
+# alias whois="rgrc whois"
 
 # ── COLOR TEST ──────────────────────────────────────────────
 alias colortest-0="curl -sL https://tinyurl.com/3dhra5dr -o - | sh"
@@ -42,7 +42,7 @@ alias journalctl-fail="journalctl --no-pager --since "yesterday" --until "today"
 alias journalctl-kernel="journalctl -f -k -o cat"
 alias journalctl-lastboot="journalctl -b -1 -p 0..3"
 alias journalctl-ssh="journalctl -f _COMM=sshd"
-alias journalctl="grc journalctl -f"
+# alias journalctl="rgrc journalctl -f"
 
 # ── VOLUMEN ─────────────────────────────────────────────────
 alias v-='amixer -q set Master 1%-'
@@ -74,6 +74,8 @@ alias yt-update="python3 -m pip install -U yt-dlp"
 # ╘════════════════════════════════════════════════════════════╛
 
 # ── TRIVIAL ─────────────────────────────────────────────────
+# Comandos soportados por rgrc
+# https://github.com/lazywalker/rgrc/tree/master/share
 alias cavak="cava -p ~/.config/cava/kasumi-cava.conf"
 alias a_miniscula="tr '[:upper:]' '[:lower:]'"
 alias chao="reboot -h now"
@@ -175,3 +177,47 @@ alias ka-df="df -hT -x tmpfs -x devtmpfs -x efivarfs"
 alias mem+="ps -eo pid,ppid,cmd,%mem --sort=-%mem | head"
 alias cpu+="ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head"
 alias dmesg="dmesg --ctime --follow"
+
+# ── RGRC (Rusty Generic Colouriser) ────────────────────────────────────
+# Colorea la salida de comandos comunes (ping, traceroute, dig, etc.)
+# Opciones útiles:
+#   --aliases           Muestra alias para los comandos disponibles
+#   --all-aliases       Muestra todos los alias soportados
+alias blkid='rgrc blkid'
+alias curl='rgrc curl'
+alias df='rgrc df'
+alias diff='rgrc diff'
+alias docker='rgrc docker'
+alias du='rgrc du'
+alias env='rgrc env'
+alias fdisk='rgrc fdisk'
+alias findmnt='rgrc findmnt'
+alias free='rgrc free'
+alias gcc='rgrc gcc'
+alias getfacl='rgrc getfacl'
+alias id='rgrc id'
+alias iostat='rgrc iostat'
+alias ip='rgrc ip'
+alias iptables='rgrc iptables'
+alias iwconfig='rgrc iwconfig'
+alias journalctl='rgrc journalctl --no-pager | less -R'
+alias last='rgrc last'
+alias ls='rgrc ls'
+alias lsattr='rgrc lsattr'
+alias lsblk='rgrc lsblk'
+alias lsmod='rgrc lsmod'
+alias lsof='rgrc lsof'
+alias lspci='rgrc lspci'
+alias mount='rgrc mount'
+alias ping='rgrc ping'
+alias ps='rgrc ps'
+alias sensors='rgrc sensors'
+alias ss='rgrc ss'
+alias stat='rgrc stat'
+alias sysctl='rgrc sysctl'
+alias systemctl='rgrc systemctl'
+alias tail='rgrc tail'
+alias tcpdump='rgrc tcpdump'
+alias tune2fs='rgrc tune2fs'
+alias uptime='rgrc uptime'
+alias vmstat='rgrc vmstat'
