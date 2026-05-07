@@ -78,6 +78,7 @@ require("which-key").add({
 	{ "<leader>t", group = "󰂖  Diagnostic", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>tb", ":ToggleAlternate<CR>", desc = "Toggle Boolean" },
+	{ "<leader>tm", ":Markview splitToggle<CR>", desc = "Markview toggle split" },
 	{ "<leader>tc", ":ConformInfo<CR>", desc = "Toggle ConformInfo" },
 	{ "<leader>ti", ":set invlist! | Gitsigns toggle_signs<CR>", desc = "Toggle Special Chars" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
