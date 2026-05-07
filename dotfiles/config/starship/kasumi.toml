@@ -232,11 +232,243 @@ format = "[ $duration](bold fg:ka_blue) "
 # ╒════════════════════════════════════════════════════════════╕
 # │                   MÓDULOS DESHABILITADOS                   │
 # ╘════════════════════════════════════════════════════════════╛
-# [direnv]
-# disabled = true
+# Ver estado de módulos:
+#   starship print-config | grep -E '^\[[a-z_]+\]|^\s*disabled = '
+# Habilita los módulos que uses descomentando 'disabled = true'.
 
-# [kubernetes]
-# symbol = "☸"
-# style = "fg:color_kubernetes"
-# format = "[ $symbol $cluster]($style) "
-# disabled = true
+# ─────────────────< CLOUD / INFRAESTRUCTURA >───────────────
+[aws]
+disabled = true
+
+[azure]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[openstack]
+disabled = true
+
+[kubernetes]
+disabled = true
+
+[pulumi]
+disabled = true
+
+# ───────────────────────< CONTENEDORES >───────────────────────
+[singularity]
+disabled = true
+
+[spack]
+disabled = true
+
+# ───────────────────< HERRAMIENTAS / BUILD >───────────────────
+[buf]
+disabled = true
+
+[cmake]
+disabled = true
+
+[gradle]
+disabled = true
+
+[helm]
+disabled = true
+
+[maven]
+disabled = true
+
+[meson]
+disabled = true
+
+[terraform]
+disabled = true
+
+[xmake]
+disabled = true
+
+# ───────────────────< LENGUAJES / RUNTIMES >───────────────────
+[bun]
+disabled = true
+
+[c]
+disabled = true
+
+[cobol]
+disabled = true
+
+[cpp]
+disabled = true
+
+[crystal]
+disabled = true
+
+[daml]
+disabled = true
+
+[dart]
+disabled = true
+
+[deno]
+disabled = true
+
+[dotnet]
+disabled = true
+
+[elixir]
+disabled = true
+
+[elm]
+disabled = true
+
+[erlang]
+disabled = true
+
+[fennel]
+disabled = true
+
+[fortran]
+disabled = true
+
+[gleam]
+disabled = true
+
+[haskell]
+disabled = true
+
+[haxe]
+disabled = true
+
+[julia]
+disabled = true
+
+[kotlin]
+disabled = true
+
+[mojo]
+disabled = true
+
+[nim]
+disabled = true
+
+[odin]
+disabled = true
+
+[opa]
+disabled = true
+
+[perl]
+disabled = true
+
+[php]
+disabled = true
+
+[purescript]
+disabled = true
+
+[quarto]
+disabled = true
+
+[raku]
+disabled = true
+
+[red]
+disabled = true
+
+[rlang]
+disabled = true
+
+[ruby]
+disabled = true
+
+[rust]
+disabled = true
+
+[scala]
+disabled = true
+
+[solidity]
+disabled = true
+
+[swift]
+disabled = true
+
+[typst]
+disabled = true
+
+[vlang]
+disabled = true
+
+[zig]
+disabled = true
+
+# ───────────────────< PAQUETES / ENTORNOS >─────────────────
+[conda]
+disabled = true
+
+[pixi]
+disabled = true
+
+[mise]
+disabled = true
+
+# ─────────────────────< SHELL / SISTEMA >───────────────────
+[direnv]
+disabled = true
+
+[guix_shell]
+disabled = true
+
+[jobs]
+disabled = true
+
+[netns]
+disabled = true
+
+[shlvl]
+disabled = true
+
+[vagrant]
+disabled = true
+
+# ─────────────────────< SCM ALTERNATIVOS >─────────────────────
+[fossil_branch]
+disabled = true
+
+[fossil_metrics]
+disabled = true
+
+[hg_branch]
+disabled = true
+
+[hg_state]
+disabled = true
+
+[pijul_channel]
+disabled = true
+
+# ──────────────────< IA / PLUGINS EXTERNOS >────────────────
+[claude_context]
+disabled = true
+
+[claude_cost]
+disabled = true
+
+[claude_model]
+disabled = true
+
+# ──────────────────────────< OTROS >────────────────────────
+[localip]
+disabled = true
+
+[memory_usage]
+disabled = true
+
+[os]
+disabled = true
+
+[vcsh]
+disabled = true
+
+[vcs]
+disabled = true
