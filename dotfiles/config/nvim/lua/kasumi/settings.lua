@@ -1,3 +1,7 @@
+-- https://neovim.io/doc/user/quickref/#option-list
+-- https://neovim.io/doc/user/options/
+-- https://neovim.io/doc/user/deprecated/
+
 local opt = vim.opt
 local cmd = vim.cmd
 
@@ -18,11 +22,9 @@ opt.lazyredraw = true -- No actualizar la pantalla durante la ejecución de macr
 opt.number = true -- Mostrar el número de línea actual (absoluto)
 opt.pumblend = 6 -- Transparencia del Pop-up
 opt.showmode = false -- Ocultar el aviso que indica en qué modo estás
-opt.spell = true -- Activa la corrección ortográfica
 opt.spelllang = { "en", "es" } -- Corregir palabras usando diccionarios en inglés y español
 opt.splitbelow = true -- Controla la posición de la nueva ventana (abajo)
 opt.splitright = true -- Controla la posición de la nueva ventana (a la derecha)
-opt.ttyfast = true -- Acelera el scroll
 opt.undofile = true -- Guarda el historial de deshacer. Persistencia entre sesiones.
 
 -- ╒═══════════════════════════════════════════════════════════╕
@@ -32,7 +34,6 @@ opt.undofile = true -- Guarda el historial de deshacer. Persistencia entre sesio
 opt.autoindent = true -- Las nuevas líneas heredan la indentación de las líneas anteriores
 opt.expandtab = true -- Utilizar espacios en lugar de TAB
 opt.shiftwidth = 4 -- Cantidad de espacios para ident. Si afecta al guardar.
-opt.smartindent = true
 opt.softtabstop = 4 -- Cuando eliminas, cuántos espacios debe quitar
 opt.tabstop = 4 -- Define el ancho visual de las tabulaciones. Un <TAB> en BAT usa 4 espacios.
 
@@ -40,12 +41,13 @@ opt.tabstop = 4 -- Define el ancho visual de las tabulaciones. Un <TAB> en BAT u
 -- │                           TEXTO                           │
 -- ╘═══════════════════════════════════════════════════════════╛
 opt.conceallevel = 2 -- Oculta marcas de formato en markdown
-opt.mouse = "ivh" -- Desactivar soporte del ratón en el modo normal
+opt.mouse = "iv" -- Habilita mouse en Insert y Visual, NO en Normal
 opt.pumheight = 10 -- Establece la altura máxima del menú de completado.
 opt.scrolloff = 20 -- Mantener ciertas líneas visibles antes de llegar al final o comienzo
 opt.sidescrolloff = 10 -- Margen de espacio a la izquierda o derecha
 opt.virtualedit = "block" -- Permitir el movimiento del cursor cuando no hay texto en V-BLOCK
-opt.winminwidth = 10 -- Ancho mínimo de una ventana
+opt.winwidth = 20 -- Ancho inicial de ventana (debe ser >= winminwidth)
+opt.winminwidth = 5 -- Ancho mínimo de una ventana (como LazyVim - mínimo razonable)
 opt.wrap = false -- Desactivar el ajuste de línea
 
 -- ╒═══════════════════════════════════════════════════════════╕
@@ -54,7 +56,6 @@ opt.wrap = false -- Desactivar el ajuste de línea
 opt.hlsearch = true -- Resalta todas las coincidencias de la búsqueda
 opt.ignorecase = true -- Ignorar mayúsculas al hacer búsquedas
 opt.incsearch = true -- Muestra coincidencias a medida que escribes
-opt.magic = true -- Evita que utilices '\' cuando empleas regex
 opt.smartcase = true -- No ignorar mayúsculas si la palabra contiene mayúsculas
 
 -- ╒═══════════════════════════════════════════════════════════╕
@@ -160,3 +161,11 @@ opt.completeopt = {
 	"preview",
 }
 opt.clipboard = { "unnamed", "unnamedplus" }
+
+-- ╒═══════════════════════════════════════════════════════════╕
+-- │                        DEPRECATED                         │
+-- ╘═══════════════════════════════════════════════════════════╛
+-- ttyfast: REMOVIDO de Neovim (ya no existe)
+-- magic: DEPRECATED en 0.8+ (rompe plugins)
+-- smartindent: causa problemas con comentarios; treesitter lo reemplaza
+-- spell: usar autocmd para filetypes específicos en vez de global
