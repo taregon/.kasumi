@@ -176,6 +176,35 @@ end)
 -- │                      DISABLE PLUGINS                      │
 -- ╘═══════════════════════════════════════════════════════════╛
 
+-- Activa spell en buffers orientados a escritura
+augroup("Spell_On", function(group)
+	aucmd("FileType", {
+		group = group,
+		pattern = {
+			"markdown",
+			"text",
+			"gitcommit",
+			"asciidoc",
+		},
+		callback = function()
+			vim.opt_local.spell = true
+		end,
+	})
+end)
+
+-- Desactiva spell en buffers especiales
+augroup("Spell_Off", function(group)
+	aucmd("FileType", {
+		group = group,
+		pattern = {
+			"codecompanion",
+		},
+		callback = function()
+			vim.opt_local.spell = false
+		end,
+	})
+end)
+
 -- Deshabilita mini.indentscope en buffers donde no aporta valor
 augroup("Indent_Mini_Off", function(group)
 	aucmd("FileType", {
@@ -192,15 +221,6 @@ augroup("Indent_Mini_Off", function(group)
 		callback = function()
 			vim.b.miniindentscope_disable = true
 		end,
-	})
-end)
-
--- Desactiva spell en logs, txt y codecompanion
-augroup("Spell_Off", function(group)
-	aucmd({ "BufRead", "BufNewFile", "BufEnter", "BufWinEnter", "FileType" }, {
-		group = group,
-		pattern = { "*.log", "*.txt", "codecompanion" },
-		command = "setlocal nospell",
 	})
 end)
 
