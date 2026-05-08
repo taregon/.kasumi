@@ -1,3 +1,8 @@
+-- ┌───────────────────────────┐
+-- │░█░█░▀█▀░█▄█░░░░█▀█░█▀█░▀█▀│
+-- │░▀▄▀░░█░░█░█░░░░█░█░█▀▀░░█░│
+-- │░░▀░░▀▀▀░▀░▀░▀░░▀▀▀░▀░░░░▀░│
+-- └───────────────────────────┘
 -- https://neovim.io/doc/user/quickref/#option-list
 -- https://neovim.io/doc/user/options/
 -- https://neovim.io/doc/user/deprecated/
