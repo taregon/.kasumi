@@ -4,7 +4,7 @@
 -- ██╔═██╗ ██╔══╝    ╚██╔╝  ██║╚██╔╝██║██╔══██║██╔═══╝ ╚════██║
 -- ██║  ██╗███████╗   ██║   ██║ ╚═╝ ██║██║  ██║██║     ███████║
 -- ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝
-
+-- https://neovim.io/doc/user/lua/#vim.keymap
 -- Para verificar la tecla líder
 -- :echo mapleader
 -- :verbose map <Leader>
@@ -69,20 +69,29 @@ map("n", "<C-j>", "<C-w>j") -- Abajo
 map("n", "<C-k>", "<C-w>k") -- Arriba
 map("n", "<C-l>", "<C-w>l") -- Derecha
 
+-- treesj -> split/join basado en Tree-sitter
+map("n", "<F4>", ":TSJToggle<cr>")
+
+-- ────────────────────────────────────────────────────────────
 -- Alterna la visualización de markview.nvim.
 local function toggle_markview()
-	vim.cmd("Markview Toggle")
+	vim.cmd("Markview")
 	vim.cmd("Gitsigns toggle_signs")
 	vim.cmd("set cursorline!")
 	vim.cmd("set invlist!")
 	vim.cmd("set invrelativenumber!")
-	vim.cmd("set invnumber!")
+	-- vim.cmd("set invnumber!")
 end
 
-map("n", "<F6>", toggle_markview)
+-- Activar automáticamente en markdown.
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function()
+		vim.schedule(toggle_markview)
+	end,
+})
 
--- treesj -> split/join basado en Tree-sitter
-map("n", "<F4>", ":TSJToggle<cr>")
+map("n", "<F6>", toggle_markview)
 
 -- ────────────────────────────────────────────────────────────
 -- █  ▄▀ █▀▀▀▀ █   █ █▀▀▀▀ █   █ █▄  █ ▄▀▀▀▀ ▄▀▀▀▀
