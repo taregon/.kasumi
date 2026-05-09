@@ -119,4 +119,11 @@ function M.vsplit_in_bufdir()
 	vim.cmd(cmd)
 end
 
+-- Alterna spell en la ventana actual
+function M.toggle_spell()
+	vim.wo.spell = not vim.wo.spell
+
+	print("Spell: " .. (vim.wo.spell and "ON" or "OFF"))
+end
+
 return M
