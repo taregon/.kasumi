@@ -78,11 +78,12 @@ require("which-key").add({
 	{ "<leader>t", group = "󰂖  Diagnostic", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>tb", ":ToggleAlternate<CR>", desc = "Toggle Boolean" },
-	{ "<leader>tm", ":Markview splitToggle<CR>", desc = "Markview toggle split" },
 	{ "<leader>tc", ":ConformInfo<CR>", desc = "Toggle ConformInfo" },
 	{ "<leader>ti", ":set invlist! | Gitsigns toggle_signs<CR>", desc = "Toggle Special Chars" },
+	{ "<leader>tm", ":Markview splitToggle<CR>", desc = "Markview toggle split" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
 	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
+	{ "<leader>ts", k.toggle_spell, desc = "Toggle Spell" },
 	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
