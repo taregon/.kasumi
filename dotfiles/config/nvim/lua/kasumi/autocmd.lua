@@ -20,18 +20,6 @@ local function augroup(name, fn)
 	fn(group)
 end
 
--- SEMÁNTICA DE NOMBRES
--- ────────────────────────────────────────────────────────────
--- Formato: PascalSnake_Case
--- Separadores por contexto:
---   ft_*     -> filetypes (ft_Ini_Syntax, ft_Csv_Filetypes)
---   cursor_* -> cursor (Cursor_Restore)
---   num_*    -> números (Num_Rel_Toggle)
---   *_*      -> acciones (Awk_Indent_Save, Lint_Auto, Fmt_On_Save)
---   *_Off    -> desactivación (Indent_Mini_Off, Spell_Off)
---   ts_*     -> treesitter (Ts_Start)
---   bash_*   -> bash (SortBashFunctions)
-
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                         FILETYPES                         │
 -- ╘═══════════════════════════════════════════════════════════╛
