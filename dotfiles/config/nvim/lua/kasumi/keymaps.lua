@@ -90,6 +90,12 @@ map("n", "<F4>", ":TSJToggle<cr>")
 -- ▀   ▀ ▀▀▀▀▀ ▀▀▀▀▀ ▀      ▀▀▀  ▀   ▀  ▀▀▀▀ ▀▀▀▀
 -- Funciones auxiliares para atajos personalizados.
 -- Estas funciones son invocadas desde which-key
+-- ┌────────────────────────────────────────────┐
+--   PROMPT PARA HELPERS
+--   Convierte esto en un módulo `local M = {}`
+--   usando APIs modernas de Neovim, respetando
+--   window-local/buffer-local y sin globals.
+-- └────────────────────────────────────────────┘
 
 local M = {}
 
