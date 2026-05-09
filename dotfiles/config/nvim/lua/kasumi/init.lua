@@ -11,7 +11,7 @@
 -- ─────────────────────────< GENERAL >─────────────────────────
 vim.loader.enable()
 require("kasumi/vim-plug")
-require("kasumi/settings")
+require("kasumi/options")
 require("kasumi/autocmd")
 require("kasumi/keymaps") -- PEND: Evaluar la posibilidad de mover esta linea a which-key
 
