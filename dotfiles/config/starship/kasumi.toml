@@ -18,6 +18,7 @@ format = """
 [▒](fg:ka_crust)\
 [ 󰫣  ](fg:ka_teal bg:ka_crust)\
 $directory\
+${custom.lf}\
 $git_branch\
 $git_status\
 $docker_context\
@@ -63,6 +64,12 @@ disabled = false
 symbol = "[  ](fg:ka_red) "
 success_symbol = "[  ](fg:ka_overlay0) "
 format = "$symbol "
+
+[custom.lf]
+command = 'echo "   lf"'
+when = '[[ -n "$LF_LEVEL" ]]'
+format = "[$output]($style) "
+style = "bold cyan"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      CONTEXTO USUARIO                      │
