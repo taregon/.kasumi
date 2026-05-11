@@ -58,6 +58,12 @@
   xkb_options grp:alt_shift_toggle
   }
 
+  input "type:touchpad" {
+  dwt enabled
+  tap enabled
+  middle_emulation enabled
+  }
+
 # ── CONFIGURACIONES ADICIONALES ───────────────────────────────
 # No muevas esta sección o sino cuando cargue la configuración,
 # no sabrán que teclas asignaste
