@@ -20,10 +20,6 @@ cd paru
 # 4. Ejecutar makepkg sin privilegios elevados
 makepkg -si --noconfirm
 
-# 5. Limpiar el árbol de construcción
-cd "$tmp_dir"
-rm -rf paru
-
 echo
 echo "  Instalación completada."
 echo "Paru está disponible en el sistema."
