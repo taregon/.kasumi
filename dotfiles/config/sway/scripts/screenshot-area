@@ -6,27 +6,8 @@
 #   swappy            - selecciona área y abre swappy para editar antes de guardar
 # Cancela con ESC. No guarda nada si no hay selección
 
-# Variables
-OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}" # Directorio donde se guardan las capturas
-DATE=$(date +%Y%m%d)                         # Fecha actual en formato YYYYMMDD
-FILE_PREFIX="shot"                           # Prefijo de archivos (cambiar si se desea)
-
-# # Crear directorio si no existe
-# if [ ! -d "$OUTPUT_DIR" ]; then
-#     mkdir -p "$OUTPUT_DIR"
-# fi
-
-# Numeración automática
-# Busca el mayor número de archivo del día (formato: prefix-YYYYMMDD-NNN.png)
-LAST_NUM=0
-for file in "$OUTPUT_DIR"/"${FILE_PREFIX}-${DATE}"-[0-9][0-9][0-9].png; do
-    num=${file##*-} # extrae "NNN.png"
-    num=${num%.png} # quita extensión
-    ((10#$num > LAST_NUM)) && LAST_NUM=$((10#$num))
-done
-
-NEXT_NUM=$((LAST_NUM + 1))
-FILENAME="$OUTPUT_DIR/${FILE_PREFIX}-${DATE}-$(printf "%03d" $NEXT_NUM).png"
+OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}"
+FILENAME="$OUTPUT_DIR/shot-$(date +%Y%m%d-%H%M%S).png"
 
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
