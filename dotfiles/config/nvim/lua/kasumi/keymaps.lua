@@ -128,6 +128,13 @@ function M.vsplit_in_bufdir()
 	vim.cmd(cmd)
 end
 
+-- Abre una ventana de Kitty en el directorio del archivo actual.
+function M.open_kitty_in_bufdir()
+	local dir = vim.fn.expand("%:p:h")
+	local cmd = string.format("kitty --detach --directory=%s", vim.fn.shellescape(dir))
+	vim.fn.jobstart(cmd, { detach = true })
+end
+
 -- Alterna spell en la ventana actual
 function M.toggle_spell()
 	vim.wo.spell = not vim.wo.spell
