@@ -122,4 +122,5 @@ require("which-key").add({
 	-- ────────────────────────────────────────────────────────────
 	--  Abre un split vertical en Kitty usando el directorio del archivo abierto en Neovim
 	{ "<leader>l", k.vsplit_in_bufdir, desc = "Kitty vsplit here" },
+	{ "<leader>L", k.open_kitty_in_bufdir, desc = "Kitty window from here" },
 })
