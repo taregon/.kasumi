@@ -1,5 +1,5 @@
 # Habilitar profiling
-zmodload zsh/zprof
+# zmodload zsh/zprof
 # ────────────────────────────────────────────────────────────
 # ███████╗███████╗██╗  ██╗
 # ╚══███╔╝██╔════╝██║  ██║
@@ -165,6 +165,7 @@ export BAT_THEME="base16" # Tema de colores compatible con kitty
 # ─[ COLORES PARA LS ]────────────────────────────────────────
 # export LS_COLORS="*.zip=36:*.rar=36:*.tar=36:*.gz=36:*.tar.gz=36:*.7z=36:$LS_COLORS"
 # export LS_COLORS="ex=30;42"               # Ejecutables con fondo verde
+# Requiere: vivid
 export LS_COLORS="$(vivid generate kasumi)"
 
 # ─[ COLORES PARA GREP ]──────────────────────────────────────
@@ -175,6 +176,7 @@ export LS_COLORS="$(vivid generate kasumi)"
 # Primero tienes que instalar: 'source-highlight'
 # Coloco únicamente el nombre, sino sirve, prueba con la ruta
 # export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+# Requiere: source-highlight
 export LESSOPEN="| src-hilite-lesspipe.sh %s"
 
 # Opciones globales para less
@@ -243,9 +245,13 @@ export LESS_TERMCAP_us=$(
 #   --hidden: Incluye archivos ocultos, lo cual es relevante en sistemas Linux.
 #   --follow: Permite seguir los enlaces simbólicos.
 typeset -a FZF_FD_OPTS=(
+    --exclude .bun
     --exclude .cache
+    --exclude .cargo
+    --exclude .config
     --exclude .git
     --exclude .local
+    --exclude .mozilla
     --exclude .obsidian
     --exclude .stfolder
     --exclude .stversions
@@ -402,21 +408,19 @@ zinit light olets/zsh-transient-prompt
 # Replay de todas las completions diferidas (obligatorio con zinit + fzf-tab)
 # zinit cdreplay -q
 
-# Actualizar automáticamente zinit una vez al día
-last_update=~/.zinit_last_update
-if [[ ! -f $last_update || -n $(find $last_update -mtime +1 2> /dev/null) ]]; then
-    echo "Updating zinit..."
-    zinit self-update && zinit update --all
-    touch $last_update
-fi
-
 # ────────────────────────────────────────────────────────────
 # CONFIGURACIÓN PERSONAL
 # Definir ruta base para archivos de configuración adicionales
 local ZSH_CONF=~/.config/zsh
 
 # CARGAR ALIAS
-source $ZSH_CONF/kasumi-zsh_alias.zsh
+# source $ZSH_CONF/kasumi-zsh_alias.zsh
+
+# ==================== ALIASES ====================
+for file in $ZSH_CONF/aliases/*.zsh(N); do
+    source "$file"
+done
+# ================================================
 
 # CARGAR FUNCIONES (anterior método)
 # source $ZSH_CONF/funcs/kasumi-zsh_functions.zsh
@@ -469,4 +473,4 @@ eval "$(starship init zsh)"
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Coloca esto al final de tu ~/.zshrc
-zprof
+# zprof
