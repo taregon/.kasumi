@@ -21,13 +21,19 @@
 # ─[ WALLPAPER ]──────────────────────────────────────────────
 # Directorio estándar en $HOME para almacenar los
 # fondos de pantalla gestionados por el dotfile kasumi
-  export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
+export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
 
 # ─[ SCREENSHOTS ]────────────────────────────────────────────
-  export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots/"
+export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots/"
 
 # ─[ QT FIXES ]───────────────────────────────────────────────
 # Forzar backend XCB -> mejor compatibilidad y Auto-Type en Wayland
 # Ajustar el DPI de las fuentes para que se vean mejor sin necesidad de escalar demasiado
-  export QT_QPA_PLATFORM=xcb
-  export QT_FONT_DPI=120
+export QT_FONT_DPI=120
+export QT_QPA_PLATFORM="wayland;xcb"
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# Indica a Java AWT/Swing que el window manager no es reparenting,
+# ajustando su comportamiento en gestores de ventanas tiling y mejorando
+# la compatibilidad en X11/XWayland (foco, gestión de ventanas y decoraciones).
+export _JAVA_AWT_WM_NONREPARENTING=1
