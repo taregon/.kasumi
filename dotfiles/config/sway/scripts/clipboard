@@ -4,52 +4,53 @@
 #   text  -> solo texto
 #   image -> solo imágenes con preview
 
+# Salir ante error, variable indefinida o pipe roto
 set -euo pipefail
 
 case "$1" in
     text)
         seleccion=$(
+            # Listar historial, filtrar solo entradas de texto (no binarias)
             cliphist list \
                 | grep -Fv '[[ binary data' \
                 | rofi -dmenu \
-                    -p " Historial texto" \
+                    -p "󰯗  Historial de texto:" \
                     -display-columns 2 \
                     -theme-str '
-                        listview {
-                            columns: 1;
-                        }
+                        listview {columns: 1; }
                     '
         )
         ;;
 
     image)
+        # Directorio temporal para previews de imágenes
         tmp_dir=$(mktemp -d)
+        # Limpiar directorio temporal al salir
         trap 'rm -rf "$tmp_dir"' EXIT
 
         seleccion=$(
+            # Listar historial, filtrar solo entradas binarias (imágenes)
             cliphist list \
                 | grep -F '[[ binary data' \
                 | while IFS= read -r line; do
+                    # Extraer ID numérico del formato "ID<TAB>contenido"
                     id="${line%% *}"
                     img="$tmp_dir/$id"
 
+                    # Decodificar binario a archivo temporal para preview en rofi
                     cliphist decode <<< "$line" > "$img"
 
+                    # Formato rofi icon row: "línea\0icon\x1f/ruta/imagen"
                     printf '%s\0icon\x1f%s\n' \
                         "$line" \
                         "$img"
                 done \
                 | rofi -dmenu \
-                    -p "󰋩 Historial imágenes" \
+                    -p "󰯕  Historial de imágenes:" \
                     -display-columns 2 \
                     -theme-str '
-                        listview {
-                            columns: 1;
-                        }
-
-                        element-icon {
-                            size: 64px;
-                        }
+                        listview { columns: 1; }
+                        element-icon { size: 64px; }
                     '
         )
         ;;
@@ -64,7 +65,9 @@ case "$1" in
         ;;
 esac
 
+# Copiar selección al portapapeles
 if [ -n "$seleccion" ]; then
+    # Decodificar y copiar con wl-copy
     if printf '%s\n' "$seleccion" | cliphist decode | wl-copy; then
         notify-send \
             "Cliphist" \
