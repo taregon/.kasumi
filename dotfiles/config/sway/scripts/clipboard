@@ -1,15 +1,43 @@
 #!/usr/bin/env bash
-# Historial de portapapeles con rofi
+# Historial de portapapeles con rofi + previews de imágenes
 
 set -o pipefail
 
-seleccion=$(cliphist list \
-    | rofi -dmenu \
-        -p " Historial portapapeles" \
-        -display-columns 2)
+tmp_dir=$(mktemp -d)
 
-# Solo copiar y notificar si se seleccionó algo
+cleanup() {
+    rm -rf "$tmp_dir"
+}
+
+trap cleanup EXIT
+
+seleccion=$(
+    cliphist list | while IFS= read -r line; do
+        if [[ "$line" == *"binary data"* ]]; then
+            id="${line%% *}"
+            img="$tmp_dir/$id"
+
+            cliphist decode <<< "$line" > "$img"
+
+            printf '%s\0icon\x1f%s\n' \
+                "$line" \
+                "$img"
+        else
+            printf '%s\n' "$line"
+        fi
+    done | rofi -dmenu \
+        -p " Historial portapapeles" \
+        -theme-str '
+        listview { columns: 1; }
+        element-icon { size: 64px; }
+        ' \
+        -display-columns 2
+)
+
 if [ -n "$seleccion" ]; then
-    printf '%s\n' "$seleccion" | cliphist decode | wl-copy
-    notify-send "Cliphist" "Contenido copiado al portapapeles" -t 1200
+    if printf '%s\n' "$seleccion" | cliphist decode | wl-copy; then
+        notify-send "Cliphist" "Contenido copiado al portapapeles" -t 1200
+    else
+        notify-send "Cliphist" "Error al copiar contenido" -u critical
+    fi
 fi
