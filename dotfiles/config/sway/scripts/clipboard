@@ -1,43 +1,79 @@
 #!/usr/bin/env bash
-# Historial de portapapeles con rofi + previews de imágenes
+# Historial de portapapeles con rofi
+# Modos:
+#   text  -> solo texto
+#   image -> solo imágenes con preview
 
-set -o pipefail
+set -euo pipefail
 
-tmp_dir=$(mktemp -d)
+case "$1" in
+    text)
+        seleccion=$(
+            cliphist list \
+                | grep -Fv '[[ binary data' \
+                | rofi -dmenu \
+                    -p " Historial texto" \
+                    -display-columns 2 \
+                    -theme-str '
+                        listview {
+                            columns: 1;
+                        }
+                    '
+        )
+        ;;
 
-cleanup() {
-    rm -rf "$tmp_dir"
-}
+    image)
+        tmp_dir=$(mktemp -d)
+        trap 'rm -rf "$tmp_dir"' EXIT
 
-trap cleanup EXIT
+        seleccion=$(
+            cliphist list \
+                | grep -F '[[ binary data' \
+                | while IFS= read -r line; do
+                    id="${line%% *}"
+                    img="$tmp_dir/$id"
 
-seleccion=$(
-    cliphist list | while IFS= read -r line; do
-        if [[ "$line" == *"binary data"* ]]; then
-            id="${line%% *}"
-            img="$tmp_dir/$id"
+                    cliphist decode <<< "$line" > "$img"
 
-            cliphist decode <<< "$line" > "$img"
+                    printf '%s\0icon\x1f%s\n' \
+                        "$line" \
+                        "$img"
+                done \
+                | rofi -dmenu \
+                    -p "󰋩 Historial imágenes" \
+                    -display-columns 2 \
+                    -theme-str '
+                        listview {
+                            columns: 1;
+                        }
 
-            printf '%s\0icon\x1f%s\n' \
-                "$line" \
-                "$img"
-        else
-            printf '%s\n' "$line"
-        fi
-    done | rofi -dmenu \
-        -p " Historial portapapeles" \
-        -theme-str '
-        listview { columns: 1; }
-        element-icon { size: 64px; }
-        ' \
-        -display-columns 2
-)
+                        element-icon {
+                            size: 64px;
+                        }
+                    '
+        )
+        ;;
+
+    *)
+        notify-send \
+            "Cliphist" \
+            "Modo inválido: usar 'text' o 'image'" \
+            -u critical
+
+        exit 1
+        ;;
+esac
 
 if [ -n "$seleccion" ]; then
     if printf '%s\n' "$seleccion" | cliphist decode | wl-copy; then
-        notify-send "Cliphist" "Contenido copiado al portapapeles" -t 1200
+        notify-send \
+            "Cliphist" \
+            "Contenido copiado al portapapeles" \
+            -t 1200
     else
-        notify-send "Cliphist" "Error al copiar contenido" -u critical
+        notify-send \
+            "Cliphist" \
+            "Error al copiar contenido" \
+            -u critical
     fi
 fi
