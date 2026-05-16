@@ -6,8 +6,9 @@
 #   swappy            - selecciona área y abre swappy para editar antes de guardar
 # Cancela con ESC. No guarda nada si no hay selección
 
+set -o pipefail
+
 OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}"
-FILENAME="$OUTPUT_DIR/shot-$(date +%Y%m%d-%H%M%S).png"
 
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
@@ -19,41 +20,42 @@ KASUMI_SLURP_ARGS=(
 )
 
 MODE="${1:-region}" # Primer argumento: region (default)
+[ "$MODE" != "swappy" ] && FILENAME="$OUTPUT_DIR/shot-$(date +%Y%m%d-%H%M%S).png"
 
 # Función de captura
-# Flujo: slurp (selección) -> grim (captura) -> salida (guarda/copia/swappy)
-# Retorna 1 si el usuario cancela (sin selección)
+# Flujo: slurp (selección) -> grim (captura) -> salida (guarda+copia, o swappy)
+# Retorna 0 éxito, 2 si el usuario cancela (sin selección), otro si error
 capture() {
+    local GEOMETRY
+
     case "$MODE" in
         window)
             GEOMETRY=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h')
             ;;
-        *)
+        region | swappy)
             GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
             ;;
     esac
 
-    [ -z "$GEOMETRY" ] && return 1
+    [ -z "$GEOMETRY" ] && return 2 # Sin selección -> cancelación
 
     case "$MODE" in
-        window)
-            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
-            ;;
         swappy)
+            # grim captura y pasa la imagen por tubería a swappy, que la muestra para editar
             grim -g "$GEOMETRY" - | swappy -f -
             ;;
-        *)
+        region | window)
             grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
             ;;
     esac
 }
 
 # Notificaciones
-if capture; then
+capture
+capture_status=$?
+if [ $capture_status -eq 0 ]; then
     # swappy maneja su propia notificación interna
-    if [ "$MODE" != "swappy" ]; then
-        notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
-    fi
-else
+    [ "$MODE" != "swappy" ] && notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
+elif [ $capture_status -ne 2 ]; then
     notify-send -u critical "Error en captura" "No se pudo capturar la región"
 fi
