@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Historial de portapapeles con rofi
+
+set -o pipefail
+
+seleccion=$(cliphist list \
+    | rofi -dmenu \
+        -p " Historial portapapeles" \
+        -display-columns 2)
+
+# Solo copiar y notificar si se seleccionó algo
+if [ -n "$seleccion" ]; then
+    printf '%s\n' "$seleccion" | cliphist decode | wl-copy
+    notify-send "Cliphist" "Contenido copiado al portapapeles" -t 1200
+fi
