@@ -166,6 +166,10 @@ dotfiles:
     src: config/starship
     dst: ~/.config/starship
     link: absolute
+  d_cliphist:
+    src: config/cliphist
+    dst: ~/.config/cliphist
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -193,6 +197,7 @@ profiles:
   kasumi_extras:
     dotfiles:
       - d_aria2
+      - d_cliphist
       - d_lnav
       - d_mpd
       - d_neovim
