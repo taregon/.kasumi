@@ -13,12 +13,12 @@ configuration {
     display-window:      " ";
 }
 
-@theme "~/.config/rofi/kasumi-ex.rasi"
+@theme "~/.config/rofi/kasumi-full.rasi"
 
 inputbar {
     font: "JetBrainsMono Nerd Font 20";
 }
 
 window {
-	width: 30%;
+    width: calc(40% + 20px);
 }
