@@ -30,8 +30,10 @@ case "$1" in
 
         seleccion=$(
             # Listar historial, filtrar solo entradas binarias (imágenes)
+            # Limita la cantidad de minuaturas con head
             cliphist list \
                 | grep -F '[[ binary data' \
+                | head -n 12 \
                 | while IFS= read -r line; do
                     # Extraer ID numérico del formato "ID<TAB>contenido"
                     id="${line%% *}"
@@ -49,9 +51,14 @@ case "$1" in
                     -p "󰯕  Historial de imágenes:" \
                     -display-columns 2 \
                     -theme-str '
-                        listview { columns: 1; }
-                        element-icon { size: 64px; }
-                    '
+                        element { border-radius: 8px; orientation: vertical; padding: 6px; }
+                        element-icon { size: 128px; horizontal-align: 0.5; vertical-align: 0.5; padding: 2px; }
+                        element-text { enabled: false; }
+                        listview { columns: 3; lines: 2; spacing: 10px; }
+                        window { width: 30%; }
+                '
+            # Mas ajustes para rofi
+            # https://davatorium.github.io/rofi/current/rofi-theme.5/
         )
         ;;
 
