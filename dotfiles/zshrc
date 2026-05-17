@@ -1,24 +1,13 @@
+# ███████╗███████╗██╗  ██╗███████╗██╗     ██╗
+# ╚══███╔╝██╔════╝██║  ██║██╔════╝██║     ██║
+#   ███╔╝ ███████╗███████║█████╗  ██║     ██║
+#  ███╔╝  ╚════██║██╔══██║██╔══╝  ██║     ██║
+# ███████╗███████║██║  ██║███████╗███████╗███████╗
+# ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 # Habilitar profiling
 # zmodload zsh/zprof
-# ────────────────────────────────────────────────────────────
-# ███████╗███████╗██╗  ██╗
-# ╚══███╔╝██╔════╝██║  ██║
-#   ███╔╝ ███████╗███████║
-#  ███╔╝  ╚════██║██╔══██║
-# ███████╗███████║██║  ██║
-# ╚══════╝╚══════╝╚═╝  ╚═╝
-# ────────────────────────────────────────────────────────────
-# POWERLEVEL10K INSTANT PROMPT
-# Este bloque debe estar cerca del inicio de ~/.zshrc para
-# que el prompt se cargue lo antes posible al abrir la terminal.
-# NOTA: cualquier código que requiera interacción de usuario
-# (passwords, confirmaciones [y/n], etc.) debe ir **antes** de este bloque.
-#
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-# source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-# ────────────────────────────────────────────────────────────
-# ZINIT BOOTSTRAP
+
+# ─[ ZINIT BOOTSTRAP ]────────────────────────────────────────
 # Configuración inicial de Zinit: instala el gestor si no existe
 # y lo deja listo para cargar plugins.
 #
@@ -95,35 +84,10 @@ zstyle ':fzf-tab:*' use-fzf-default-opts yes
 #   Configuración de TERM para habilitar
 #   pre visualización de imágenes en Ranger según la terminal
 # └───────────────────────────────────────────────────────────┘
-# Se verifica si la sesión actual corresponde a Kitty.
-# La variable KITTY_WINDOW_ID es proporcionada automáticamente por Kitty
-# y contiene un identificador único de la ventana.
-# Se usa para que aplicaciones como ranger puedan determinar
-# que el protocolo de imágenes de Kitty puede ser empleado.
-#
 if [[ -n "$KITTY_WINDOW_ID" ]] && [[ -z "$TMUX" ]]; then
-    # Se detecta Kitty mediante la variable KITTY_WINDOW_ID.
-    # Se establece TERM=xterm-kitty para activar el protocolo gráfico nativo,
-    # lo que permite a ranger mostrar previsualizaciones de imágenes rápidas y de alta calidad.
-    # Este ajuste resulta la opción recomendada y más fiable en entornos Kitty.
     export TERM="xterm-kitty"
-
-    # Se define un alias para ssh que invoca el kitten oficial de Kitty (kitty +kitten ssh).
-    # Beneficios principales:
-    #   - Copia automáticamente el terminfo de Kitty al host remoto (solo en la primera conexión),
-    #     evitando errores de terminal desconocido o visualizaciones incorrectas.
-    #   - Habilita la integración con el shell en el remoto (si resulta compatible: marcado de prompts,
-    #     navegación entre prompts anteriores, etc.).
-    #   - Reutiliza conexiones internas (multiplexing) para reducir la latencia en reconexiones.
-    #   - Mejora la compatibilidad general: las características avanzadas de Kitty (incluido el
-    #     protocolo gráfico) funcionan de manera más consistente en sesiones remotas.
-    #   - Evita conflictos frecuentes que surgen al propagar TERM=xterm-kitty directamente mediante SSH convencional.
     alias ssh='kitty +kitten ssh'
-
 else
-    # En terminales distintas a Kitty (Alacritty, WezTerm, GNOME Terminal, etc.) o dentro de tmux
-    # (donde el protocolo gráfico de Kitty suele fallar), se utiliza un TERM seguro
-    # con soporte completo para 256 colores y alta compatibilidad general.
     export TERM="xterm-256color"
 fi
 
@@ -132,9 +96,6 @@ fi
 #  ▀▀▀▄ █▀▀     █     █     █   █ ▀▄█ █ ▀▀█  ▀▀▀▄
 # ▀▀▀▀  ▀▀▀▀▀   ▀     ▀   ▀▀▀▀▀ ▀   ▀  ▀▀▀  ▀▀▀▀
 # VARIABLES DE ENTORNO
-
-# Idioma y codificación (comentado porque generó error en Arch)
-# export LC_ALL="en_US.UTF-8"
 
 # ─[ RANGER ]─────────────────────────────────────────────────
 # Desactiva la carga de ajustes predeterminado para rc.conf
@@ -152,7 +113,7 @@ export VISUAL="nvim"
 # ─[ STARSHIP PROMPT ]────────────────────────────────────────
 export STARSHIP_CONFIG=~/.config/starship/kasumi.toml
 TRANSIENT_PROMPT_TRANSIENT_PROMPT=' '
-# STARSHIP_LOG=trace starship prompt
+
 # ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █     ▄▀▀▀▄ █▀▀▀▄ ▄▀▀▀▀
 # █     █   █ █     █   █ █▀▀▀▄  ▀▀▀▄
@@ -163,8 +124,6 @@ export BAT_STYLE="full"
 export BAT_THEME="base16" # Tema de colores compatible con kitty
 
 # ─[ COLORES PARA LS ]────────────────────────────────────────
-# export LS_COLORS="*.zip=36:*.rar=36:*.tar=36:*.gz=36:*.tar.gz=36:*.7z=36:$LS_COLORS"
-# export LS_COLORS="ex=30;42"               # Ejecutables con fondo verde
 # Requiere: vivid
 export LS_COLORS="$(vivid generate kasumi)"
 
@@ -173,9 +132,6 @@ export LS_COLORS="$(vivid generate kasumi)"
 # export GREP_COLORS="mt=1;33"
 
 # ─[ COLORES PARA LESS ]──────────────────────────────────────
-# Primero tienes que instalar: 'source-highlight'
-# Coloco únicamente el nombre, sino sirve, prueba con la ruta
-# export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 # Requiere: source-highlight
 export LESSOPEN="| src-hilite-lesspipe.sh %s"
 
@@ -282,20 +238,21 @@ export FZF_DEFAULT_OPTS='
   --separator="─"
   --scrollbar="▐"
   --layout=reverse
+  --height=75%
 ' # Fin de linea
 
-export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
-
+# Ctrl+r -> busqueda en historial
 export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 --bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
 
-# Alt+C (cambio de directorio)
+# Alt+c -> cambio de directorio
 # export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
-# Ctrl+T (búsqueda de archivos)
+# Ctrl+t -> búsqueda de archivos
 # export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
+export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 
 # ------------------------------------------------------
 # █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
@@ -361,12 +318,6 @@ zshaddhistory() {
 # ▄▀▀▀    █   █ ▀▄█   █     █
 # ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
 # FAST ZSHELL PLUGIN MANAGER
-# zinit delete --clean  # Elimina plugins no declarados actualmente en la configuración
-
-# Clona de manera superficial para acelerar la carga
-# y muestra el prompt con información completa y personalizable
-# zinit ice depth"1"
-# zinit light romkatv/powerlevel10k
 
 # Proporciona definiciones adicionales de completado
 # para cientos de comandos y utilidades externas que Zsh no incluye por defecto.
@@ -402,28 +353,15 @@ zinit light wfxr/forgit
 zinit ice wait'0' lucid
 zinit light olets/zsh-transient-prompt
 
-# autoload -U promptinit; promptinit
-# prompt pure
-
-# Replay de todas las completions diferidas (obligatorio con zinit + fzf-tab)
-# zinit cdreplay -q
-
 # ────────────────────────────────────────────────────────────
 # CONFIGURACIÓN PERSONAL
 # Definir ruta base para archivos de configuración adicionales
 local ZSH_CONF=~/.config/zsh
 
-# CARGAR ALIAS
-# source $ZSH_CONF/kasumi-zsh_alias.zsh
-
-# ==================== ALIASES ====================
+# ALIASES
 for file in $ZSH_CONF/aliases/*.zsh(N); do
     source "$file"
 done
-# ================================================
-
-# CARGAR FUNCIONES (anterior método)
-# source $ZSH_CONF/funcs/kasumi-zsh_functions.zsh
 
 # DIRECTORIOS DE FUNCIONES (AUTOLOAD)
 # Agrega el directorio al inicio de fpath y carga las funciones
@@ -437,7 +375,9 @@ if [[ -d "$ZSH_CONF/funcs" ]]; then
     autoload -Uz $ZSH_CONF/funcs/*(.N:t)
 fi
 
-# ────────────────────────────────────────────────────────────
+# ▀▀█▀▀ ▄▀▀▀▄ ▄▀▀▀▄ █     ▄▀▀▀▀
+#   █   █   █ █   █ █      ▀▀▀▄
+#   ▀    ▀▀▀   ▀▀▀  ▀▀▀▀▀ ▀▀▀▀
 # ╓
 # ║ Zoxide: navegación inteligente por directorios
 # ║ Sustituye el uso tradicional de `cd` con el comando `z`
@@ -460,17 +400,3 @@ source <(fzf --zsh)
 # ║ Configuración centralizada en ~/.config/starship/kasumi.toml
 # ╙
 eval "$(starship init zsh)"
-
-# ────────────────────────────────────────────────────────────
-# 💤 Líneas desactivadas (referencia o pruebas)
-
-# Starship prompt (no en uso actualmente)
-# Requiere: pacman -S starship
-# eval "$(starship init zsh)"
-# https://git.nvds.be/NicolaiVdS/Dotfiles/src/commit/66cf71c398c811521d1959c0dbdd19213e2e73ef/.zshrc
-# ────────────────────────────────────────────────────────────
-# Cargar configuración de Powerlevel10k (si existe)
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Coloca esto al final de tu ~/.zshrc
-# zprof
