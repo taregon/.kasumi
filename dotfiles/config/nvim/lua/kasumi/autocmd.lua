@@ -212,6 +212,18 @@ augroup("Indent_Mini_Off", function(group)
 	})
 end)
 
+-- Desactiva el soporte documentColor del LSP
+-- Previene interferencias con plugins de visualización de colores hex
+-- PEND: A espera que el plug pueda lidiar con este problema para elimnar este ajuste
+augroup("LspDisableDocumentColor", function(group)
+	aucmd("LspAttach", {
+		group = group,
+		callback = function()
+			vim.lsp.document_color.enable(false)
+		end,
+	})
+end)
+
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                           TOOLS                           │
 -- ╘═══════════════════════════════════════════════════════════╛
