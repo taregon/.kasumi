@@ -2,10 +2,10 @@
 # █     █▀▀▀▄ █   █ █ ▀▄█   █   █▀▀▀█ █▀▀▀▄
 #  ▀▀▀▀ ▀   ▀  ▀▀▀  ▀   ▀   ▀   ▀   ▀ ▀▀▀▀
 # Tareas programadas en entorno mínimo
-# WARN: Debe respaldarse manualmente
-# crontab -l >| ~/.local/bin/kasumi/kronos/state/crontab.bak
+# Debe respaldarse manualmente
+# crontab -l >| ~/.local/bin/kasumi/kronos/crontab.bak
 
-KASUMI_KRONOS=/home/ixos/.local/bin/kasumi/kronos
+KASUMI_KRONOS=/home/ixos/.local/bin/kasumi/helpers
 
 # Actualización de plugins (core + all)
 # Frecuencia: cada 2 días 20:45

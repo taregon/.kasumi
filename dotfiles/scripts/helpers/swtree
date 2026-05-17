@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+swaymsg -t get_tree | jq '.. | objects | select(.type=="con" and (.app_id? or .window?)) | {name, app_id, class:.window_properties.class, focused, urgent}'
