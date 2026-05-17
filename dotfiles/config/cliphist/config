@@ -1,0 +1,27 @@
+# ┌────────────────────────────────┐
+# │░█▀▀░█░░░▀█▀░█▀█░█░█░▀█▀░█▀▀░▀█▀│
+# │░█░░░█░░░░█░░█▀▀░█▀█░░█░░▀▀█░░█░│
+# │░▀▀▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀▀▀░▀▀▀░░▀░│
+# └────────────────────────────────┘
+# # Historial persistente de portapapeles para Wayland (wl-clipboard),
+# que permite almacenar, buscar y reutilizar entradas de texto e imágenes de forma eficiente
+
+# Número máximo de entradas que se conservan en el historial
+# Controla el tamaño total del registro de portapapeles
+  max-items 1200
+
+# Cantidad de entradas recientes analizadas para detectar duplicados
+# A mayor valor, mejor deduplicación en flujos repetitivos
+  max-dedupe-search 400
+
+# Tamaño máximo permitido por entrada del portapapeles
+# Incluye texto, imágenes y datos binarios
+  max-store-size 8MiB
+
+# Longitud mínima en caracteres para guardar una entrada
+# Evita almacenar selecciones accidentales o vacías
+  min-store-length 3
+
+# Ancho máximo de la vista previa en el selector
+# Solo afecta la presentación en la interfaz (rofi/fuzzel)
+  preview-width 85
