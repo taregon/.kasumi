@@ -7,4 +7,4 @@ export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 # ─[ PATH ]───────────────────────────────────────────────────
 # Helpers y tooling personal reutilizable
 # Facilita pruebas, automatización y ejecución sin rutas largas
-export PATH="$HOME/.local/bin/kasumi:$PATH"
+export PATH="$HOME/.local/bin/kasumi/helpers:$PATH"
