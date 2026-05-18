@@ -1,5 +1,8 @@
-/** Nordic rofi theme limpio con mode-switcher **/
+/** Nordic rofi theme — paleta oscura con acentos verde-azulados
+ *  Estructura: window > mainbox > [ inputbar, message, listview, mode-switcher ] **/
 
+/* --- Global properties section ---
+ *  Define variables reutilizables con @{nombre} en el resto del tema. */
 * {
     bg-dark:      #374247;
     bg-light:     #356c73;
@@ -16,7 +19,8 @@
     transparent: @bg-dark;
 }
 
-/* --- Window --- */
+/* --- window (contenedor raíz) ---
+ *  Widget de nivel superior. Ancla al centro del monitor, borde exterior. */
 window {
     location: center;
     anchor: center;
@@ -30,7 +34,8 @@ window {
     children: [ mainbox ];
 }
 
-/* --- Layout principal --- */
+/* --- mainbox (box:vertical) ---
+ *  Caja vertical que organiza los 4 bloques principales del tema. */
 mainbox {
     padding: 10px;
     spacing: 10px;
@@ -38,15 +43,8 @@ mainbox {
     children: [ inputbar, message, listview, mode-switcher ];
 }
 
-/* --- Mensajes --- */
-message {
-    color: @bg-dark;
-    padding: 5px;
-    border: 0px;
-    background-color: @bg-dark;
-}
-
-/* --- Input bar --- */
+/* --- inputbar (box:horizontal) ---
+ *  Barra de entrada que contiene: prompt, entry, case-indicator, etc. */
 inputbar {
     color: @fg-color;
     padding: 12px;
@@ -57,6 +55,8 @@ inputbar {
     border-color: @border-color;
 }
 
+/* entry, prompt, case-indicator (textbox) ---
+ *  Sub-widgets de textbox dentro del inputbar. Heredan color de fondo. */
 entry, prompt, case-indicator {
     text-color: inherit;
     background-color: @bg-light;
@@ -66,7 +66,17 @@ prompt {
     margin: 0px 1em 0px 0px;
 }
 
-/* --- List view --- */
+/* --- message ---
+ *  Contenedor para mensajes de estado, error o información. */
+message {
+    color: @bg-dark;
+    padding: 5px;
+    border: 0px;
+    background-color: @bg-dark;
+}
+
+/* --- listview ---
+ *  Muestra los resultados en 2 columnas, 6 líneas, sin scroll dinámico. */
 listview {
     padding: 12px;
     spacing: 6px;
@@ -80,7 +90,9 @@ listview {
     dynamic: false;
 }
 
-/* --- Items --- */
+/* --- element (box) ---
+ *  Cada entrada individual dentro del listview.
+ *  Contiene: element-text, element-icon, element-index. */
 element {
     padding: 6px;
     vertical-align: 0.5;
@@ -90,24 +102,31 @@ element {
     text-color: @text-normal;
 }
 
+/* element selected.normal ---
+ *  Estado: seleccionado + normal (sin urgente/active).
+ *  Aplica highlight inverso sobre el item activo. */
 element selected.normal {
     background-color: @highlight-bg;
     text-color: @highlight-fg;
 }
 
+/* element-text, element-icon ---
+ *  Sub-widgets de cada element. Heredan color del padre. */
 element-text, element-icon {
     background-color: inherit;
     text-color: inherit;
 }
 
-/* --- Mode Switcher (barra de modos) --- */
+/* --- mode-switcher (box:horizontal) ---
+ *  Barra inferior con botones para cambiar entre modos (drun, window, etc.). */
 mode-switcher {
     spacing: 6px;
     padding: 6px 0px;
     background-color: @bg-dark;
 }
 
-/* Botones de modo */
+/* button (textbox) ---
+ *  Botón individual dentro del mode-switcher. */
 button {
     padding: 6px;
     border: 1px;
@@ -117,12 +136,15 @@ button {
     text-color: @foreground;
 }
 
+/* button selected ---
+ *  Botón del modo actualmente activo. */
 button selected {
     background-color: @highlight-bg;
     text-color: @highlight-fg;
 }
 
-/* --- Textbox --- */
+/* --- textbox ---
+ *  Widget genérico de texto (usado en message, entre otros). */
 textbox {
     padding: 8px;
     border-radius: 0px;
