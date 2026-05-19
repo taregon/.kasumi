@@ -17,7 +17,9 @@ case "$1" in
                     -p "󰯗  Historial de texto:" \
                     -display-columns 2 \
                     -theme-str '
+                        element-icon { size: 0%; }
                         listview {columns: 1; }
+                        mode-switcher { enabled: false; }
                     '
         )
         ;;
@@ -55,6 +57,7 @@ case "$1" in
                         element-icon { size: 128px; horizontal-align: 0.5; vertical-align: 0.5; padding: 2px; }
                         element-text { enabled: false; }
                         listview { columns: 3; lines: 2; spacing: 10px; }
+                        mode-switcher { enabled: false; }
                         window { width: 30%; }
                 '
             # Mas ajustes para rofi
