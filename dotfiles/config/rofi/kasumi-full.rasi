@@ -23,7 +23,7 @@
 /* --- window (contenedor raíz) ---
  *  Widget de nivel superior. Ancla al centro del monitor, borde exterior. */
 window {
-    transparency: "screenshot";
+    transparency: "background";
     location: center;
     anchor: center;
     padding: 10px;
@@ -51,7 +51,7 @@ inputbar {
     color: @fg-color;
     padding: 12px;
     spacing: 10px;
-    margin: 8px;
+    margin: 4px;
     border: 2px;
     border-radius: 0px;
     border-color: @border-alpha;
@@ -83,7 +83,7 @@ message {
 listview {
     padding: 12px;
     spacing: 6px;
-    /* 2 columnas */
+    margin: 4px;
     columns: 2;
     lines: 6;
 
@@ -125,6 +125,7 @@ element-text, element-icon {
 mode-switcher {
     spacing: 16px;
     padding: 8px;
+    margin: 4px;
     background-color: @bg-dark-alpha;
 }
 
