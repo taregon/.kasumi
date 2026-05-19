@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+# Muestra el historial del portapapeles con fzf, incluyendo
+# vista previa para texto e imágenes, y copia la selección
+# nuevamente al portapapeles usando wl-copy.
+
+local preview_cmd='
+entry={}
+printf "\033[2J\033[H"
+
+if [[ "$entry" == *"[[ binary data"* ]]; then
+  printf "%s\n" "$entry" | cliphist decode 2>/dev/null |
+    kitten icat --clear \
+      --transfer-mode=memory \
+      --unicode-placeholder \
+      --stdin=yes \
+      --place="$((FZF_PREVIEW_COLUMNS - 2))x${FZF_PREVIEW_LINES}@0x0"
+else
+  printf "%s\n" "$entry" | cliphist decode 2>/dev/null
+fi
+'
+
+local selected=$(
+    cliphist list | fzf \
+        --preview "$preview_cmd" \
+        --preview-window 'right:50%:wrap' \
+        --layout reverse \
+        --border \
+        --header '  Buscar en portapapeles (Enter para copiar)'
+)
+
+[[ -n "$selected" ]] && echo "$selected" | cliphist decode | wl-copy
