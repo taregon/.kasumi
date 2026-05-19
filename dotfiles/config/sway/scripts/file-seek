@@ -22,7 +22,11 @@ selection="$(
             printf '%s\0icon\x1fthumbnail://%s\n' \
                 "$short_path" "$file"
         done \
-        | rofi -dmenu -show-icons -p "Files" -matching glob -case-smart -sort \
+        | rofi -dmenu \
+            -show-icons \
+            -p "Files" \
+            -matching glob \
+            -case-smart -sort \
             -theme-str '
             listview { lines: 8; columns: 1; dynamic: true; }
             element { padding: 6px; }
