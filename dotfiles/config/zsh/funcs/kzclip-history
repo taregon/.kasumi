@@ -19,13 +19,20 @@ else
 fi
 '
 
+# --bind: Vincula la tecla Supr para eliminar la entrada seleccionada
+# de cliphist y recargar la lista sin cerrar fzf
 local selected=$(
     cliphist list | fzf \
+        --tiebreak=index \
         --preview "$preview_cmd" \
         --preview-window 'right:50%:wrap' \
         --layout reverse \
         --border \
-        --header '  Buscar en portapapeles (Enter para copiar)'
+        --bind 'delete:execute-silent(echo {} | cliphist delete)+reload(cliphist list)' \
+        --header $'  Buscar en portapapeles\n<Supr> eliminar entrada  <Enter> copiar'
 )
 
-[[ -n "$selected" ]] && echo "$selected" | cliphist decode | wl-copy
+# Decodifica la entrada seleccionada y ejecuta wl-copy en segundo plano
+# para evitar bloqueos o retención de la terminal al finalizar el script
+# Anteriormente: [[ -n "$selected" ]] && echo "$selected" | cliphist decode | wl-copy
+[[ -n "$selected" ]] && cliphist decode <<< "$selected" | wl-copy > /dev/null 2>&1 &
