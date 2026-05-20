@@ -1,40 +1,32 @@
 #!/usr/bin/env bash
-# Se lanza así:
-# rofi \
-#     -show cliphist \
-#     -modi "cliphist:~/.config/rofi/scripts/cliphist.sh" \
-#     -kb-custom-1 "Alt+Delete"
+#
+# Lista todas las entradas de texto (excluye binarios). Enter copia
+# al portapapeles (wl-copy), Alt+Delete elimina la entrada del historial.
+#
+# Pruebas:  rofi -show cliphist -kb-custom-1 "Alt+Delete" \
+#               -modi "cliphist:~/.config/rofi/scripts/cliphist-modi-text" \
 
 set -euo pipefail
 
-# --------------------------------------------------
-# Lista entradas de texto para rofi
-# --------------------------------------------------
-list_text() {
-    cliphist list | grep -Fv '[[ binary data'
-}
-
-# -------------------------
-# 1. LISTADO (UI)
-# -------------------------
-if [[ "$ROFI_RETV" -eq 0 ]]; then
+# ── 1. LISTADO (UI) ─────────────────────────────────────────
+if [[ "${ROFI_RETV:-0}" -eq 0 ]]; then
     echo -en "\0use-hot-keys\x1ftrue\n"
-    list_text
+    cliphist list | grep -Fv '[[ binary data'
     exit 0
 fi
 
-# -------------------------
-# 2. DELETE (Alt+Delete)
-# -------------------------
-if [[ "$ROFI_RETV" -eq 10 ]]; then
-    cliphist delete <<< "$1"
+# ── 2. SELECCIÓN ────────────────────────────────────────────
+selection="${1:-}"
+
+# ── 3. DELETE (Alt+Delete) ──────────────────────────────────
+if [[ "${ROFI_RETV:-0}" -eq 10 ]]; then
+    cliphist delete <<< "$selection"
+    notify-send "Cliphist" "Entrada eliminada" -t 1200
     echo -en "\0use-hot-keys\x1ftrue\n\0keep-selection\x1ftrue\n"
-    list_text
+    cliphist list | grep -Fv '[[ binary data'
     exit 0
 fi
 
-# -------------------------
-# 3. COPY (Enter)
-# -------------------------
-cliphist decode <<< "$1" | wl-copy
+# ── 4. COPY (Enter) ─────────────────────────────────────────
+cliphist decode <<< "$selection" | wl-copy
 notify-send "Cliphist" "Contenido copiado al portapapeles" -t 1200
