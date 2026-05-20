@@ -47,6 +47,7 @@ ka_blue = "#A7D6FA"
 ka_peach = "#FFCF94"
 ka_sapphire = "#BEF7DF"
 ka_gray = "#aebbc0"
+ka_maroon = "#9183c5"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      SHELL / ENTRADA                       │
@@ -66,10 +67,10 @@ success_symbol = "[  ](fg:ka_overlay0) "
 format = "$symbol "
 
 [custom.lf]
-command = 'echo "   lf"'
+command = 'echo "   "'
 when = '[[ -n "$LF_LEVEL" ]]'
-format = "[$output]($style) "
-style = "bold cyan"
+style = "bg:ka_maroon fg:ka_mantle"
+format = "[](fg:ka_maroon)[ $output  ]($style)[](fg:ka_maroon)"
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                      CONTEXTO USUARIO                      │
@@ -229,12 +230,13 @@ disabled = true
 disabled = false
 style = "fg:ka_blue"
 time_format = "%R"
-format = "[ $time]($style) "
+format = "[󰅐 $time]($style) "
 
 [cmd_duration]
+disabled = false
+style = "fg:ka_maroon"
 min_time = 2_000
-style = "fg:ka_blue"
-format = "[ $duration](bold fg:ka_blue) "
+format = "[$duration]($style) "
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                   MÓDULOS DESHABILITADOS                   │
