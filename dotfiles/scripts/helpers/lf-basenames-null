@@ -1,16 +1,14 @@
 #!/usr/bin/env zsh
 # Convierte rutas recibidas por stdin en nombres base
-# y los emite separados por saltos de línea (\n)
-#
+# y los emite separados por bytes NUL (\0) para uso con xargs -0
 # Ejemplo:
 #   Entrada:
 #     /tmp/ELECTRO SWING.mp3
 #     /home/user/Late Night Mix.flac
 #
 #   Salida:
-#     ELECTRO SWING.mp3
-#     Late Night Mix.flac
+#     ELECTRO SWING.mp3\0Late Night Mix.flac\0
 
 while IFS= read -r f; do
-    printf '%s\n' "${f##*/}"
+    printf '%s\0' "${f##*/}"
 done
