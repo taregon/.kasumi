@@ -1,0 +1,33 @@
+@import "~/.config/rofi/kasumi-full.rasi"
+
+element {
+    children: [ element-icon ];
+    border-radius: 8px;
+    orientation: vertical;
+    padding: 6px;
+}
+
+element-icon {
+    size: 128px;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    padding: 2px;
+}
+
+element-text {
+    enabled: false;
+}
+
+listview {
+    columns: 3;
+    lines: 2;
+    spacing: 10px;
+}
+
+mode-switcher {
+    enabled: false;
+}
+
+window {
+    width: 30%;
+}
