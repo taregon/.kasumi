@@ -15,7 +15,7 @@
     highlight-bg:   @fg-color;
     highlight-fg:   @bg-dark;
 
-    bg-dark-alpha:  rgba(55, 66, 71, 0.56);
+    bg-dark-alpha:  rgba(52, 62, 67, 0.65);
     fg-color-alpha: rgba(162, 217, 224, 0.48);
     border-alpha:   rgba(116, 198, 209, 0.76);
 }
