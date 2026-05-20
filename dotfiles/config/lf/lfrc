@@ -33,7 +33,7 @@
   map <enter> open
 
   map . set hidden!
-  map X $lf-basenames <<< "$fx" | xargs trash-put
+  map X $lf-basenames-null <<< "$fx" | xargs -0 trash-put
   map a push $mkdir<space>
 
   map gN cd ~/Syncthing/OsiriaFS/Notas
