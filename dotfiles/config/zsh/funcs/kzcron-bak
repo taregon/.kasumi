@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+# Respalda el crontab actual en un archivo local
+
+local dst="$HOME/.local/bin/kasumi/kronos/crontab.bak"
+
+if crontab -l > "$dst" 2> /dev/null; then
+    printf '󰆓  Crontab respaldado -> %s\n' "$dst"
+else
+    printf '󰅙  No se pudo respaldar el crontab\n' >&2
+    return 1
+fi
