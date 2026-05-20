@@ -71,11 +71,23 @@ case "$MIMETYPE" in
     application/x-bittorrent)
         aria2c -S "$FILE_PATH" 2> /dev/null
         ;;
-    application/zip)
-        unzip -l "$FILE_PATH"
-        ;;
-    application/x-7z-compressed | application/x-rar | application/x-tar | application/gzip | application/x-bzip2 | application/x-xz | application/x-rpm | application/java-archive)
-        7z l "$FILE_PATH"
+    application/zip | \
+        application/gzip | \
+        application/java-archive | \
+        application/vnd.rar | \
+        application/x-7z-compressed | \
+        application/x-bzip2 | \
+        application/x-cab | \
+        application/x-cpio | \
+        application/x-deb | \
+        application/x-lzma | \
+        application/x-rar | \
+        application/x-tar | \
+        application/x-xz | \
+        application/x-zstd | \
+        application/zstd | \
+        application/vnd.ms-cab-compressed)
+        als "$FILE_PATH"
         ;;
     audio/*)
         mpv --audio-display=no "$FILE_PATH"
@@ -96,6 +108,12 @@ case "$MIMETYPE" in
         create_cache
         [ -f "${CACHE}.jpg" ] || ffmpegthumbnailer -i "$FILE_PATH" -o "${CACHE}.jpg" -s 0 -c jpeg
         draw_kitty "${CACHE}.jpg"
+        ;;
+esac
+
+case "$FILE_PATH" in
+    *.img)
+        7z l "$FILE_PATH"
         ;;
 esac
 
