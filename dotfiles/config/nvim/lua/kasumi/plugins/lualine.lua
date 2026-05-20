@@ -118,6 +118,13 @@ lualine.setup({
 	},
 	-- winbar = { lualine_c = { "navic" } },
 	sections = {
+		lualine_a = {
+			{
+				"mode",
+				separator = { left = "▒", right = "" },
+			},
+		},
+
 		lualine_b = {
 			"branch",
 			{
@@ -132,7 +139,7 @@ lualine.setup({
 				-- shorting_target = 24,
 				file_status_name,
 				path = 4, -- Carpeta principal y nombre
-				symbols = { modified = "", readonly = "󰞀", unnamed = "󰔦" },
+				symbols = { modified = "", readonly = "󰞀", unnamed = "" },
 			},
 		},
 		lualine_x = {
@@ -157,6 +164,13 @@ lualine.setup({
 					local _, color = require("nvim-web-devicons").get_icon_cterm_color_by_filetype(vim.bo.filetype)
 					return { fg = color }
 				end,
+			},
+		},
+
+		lualine_z = {
+			{
+				"location",
+				separator = { left = "", right = "▒" },
 			},
 		},
 	},
