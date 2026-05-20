@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Se lanza así:
+# rofi \
+#     -show cliphist \
+#     -modi "cliphist:~/.config/rofi/scripts/cliphist-modi-image-v2" \
+#     -kb-custom-1 "Alt+Delete"
+
+set -euo pipefail
+
+tmp_dir=$(mktemp -d)
+
+# --------------------------------------------------
+# Genera thumbnails y los lista para rofi
+# --------------------------------------------------
+list_images() {
+    cliphist list \
+        | grep -F '[[ binary data' \
+        | head -n 12 \
+        | while IFS= read -r line; do
+            id="${line%% *}"
+            img="$tmp_dir/$id"
+            if [[ ! -f "$img" ]]; then
+                cliphist decode <<< "$line" > "$img" 2>/dev/null || continue
+            fi
+            printf '%s\0icon\x1f%s\n' "$line" "$img"
+        done
+}
+
+# -------------------------
+# 1. LISTADO (UI)
+# -------------------------
+if [[ "${ROFI_RETV:-0}" -eq 0 ]]; then
+    echo -en "\0use-hot-keys\x1ftrue\n"
+    list_images
+    exit 0
+fi
+
+# -------------------------
+# 2. SELECCIÓN
+# -------------------------
+selection="${1:-}"
+[[ -n "$selection" ]] || exit 0
+
+# -------------------------
+# 3. DELETE (Alt+Delete)
+# -------------------------
+if [[ "${ROFI_RETV:-0}" -eq 10 ]]; then
+    cliphist delete <<< "$selection"
+    notify-send "Cliphist" "Entrada eliminada" -t 1200
+    echo -en "\0use-hot-keys\x1ftrue\n\0keep-selection\x1ftrue\n"
+    list_images
+    exit 0
+fi
+
+# -------------------------
+# 4. COPY (Enter)
+# -------------------------
+cliphist decode <<< "$selection" | wl-copy
+notify-send "Cliphist" "Copiado al portapapeles" -t 1200
