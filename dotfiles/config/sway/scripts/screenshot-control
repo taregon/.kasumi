@@ -6,8 +6,9 @@
 #   swappy            - selecciona área y abre swappy para editar antes de guardar
 # Cancela con ESC. No guarda nada si no hay selección
 
-set -o pipefail
+set -uo pipefail
 
+EXIT_CANCEL=2
 OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}"
 
 # Argumentos para slurp (estilo visual)
@@ -21,11 +22,13 @@ KASUMI_SLURP_ARGS=(
 )
 
 MODE="${1:-region}" # Primer argumento: region (default)
+
+# Solo se necesita FILENAME si se guarda archivo (no en modo swappy)
 [ "$MODE" != "swappy" ] && FILENAME="$OUTPUT_DIR/shot-$(date +%Y%m%d-%H%M%S).png"
 
 # Función de captura
 # Flujo: slurp (selección) -> grim (captura) -> salida (guarda+copia, o swappy)
-# Retorna 0 éxito, 2 si el usuario cancela (sin selección), otro si error
+# Retorna 0 éxito, $EXIT_CANCEL si el usuario cancela (sin selección), otro si error
 capture() {
     local GEOMETRY
 
@@ -44,7 +47,7 @@ capture() {
             ;;
     esac
 
-    [ -z "$GEOMETRY" ] && return 2 # Sin selección -> cancelación
+    [ -z "$GEOMETRY" ] && return $EXIT_CANCEL # Sin selección -> cancelación
 
     case "$MODE" in
         swappy)
@@ -52,7 +55,7 @@ capture() {
             grim -g "$GEOMETRY" - | swappy -f -
             ;;
         region | window)
-            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy
+            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy -t image/png --paste-once
             ;;
     esac
 }
@@ -63,6 +66,6 @@ capture_status=$?
 if [ $capture_status -eq 0 ]; then
     # swappy maneja su propia notificación interna
     [ "$MODE" != "swappy" ] && notify-send "󰹗 Captura copiada y guardada" "$(basename "$FILENAME")"
-elif [ $capture_status -ne 2 ]; then
+elif [ $capture_status -ne $EXIT_CANCEL ]; then
     notify-send -u critical "Error en captura" "No se pudo capturar la región"
 fi
