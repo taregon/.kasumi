@@ -12,8 +12,9 @@ OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}"
 
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
-    -b '#a4084c4d' # color de fondo (transparente)
-    -c '#fc697c'   # color del borde
+    -b '#A4084C4D' # overlay global semitransparente fuera de la selección
+    -B '#2E383D94' # relleno de ventanas/regiones precargadas
+    -c '#FC697C'   # color del borde
     -w 2           # ancho del borde
     -F 'monospace' # fuente
     -d             # muestra dimensiones en tiempo real
@@ -35,7 +36,7 @@ capture() {
                 recurse(.nodes[]?, .floating_nodes[]?)
                 | select(.pid and .visible == true)
                 | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' \
-                    | slurp -f '%x,%y %wx%h' "${KASUMI_SLURP_ARGS[@]}"
+                    | slurp -r -f '%x,%y %wx%h' "${KASUMI_SLURP_ARGS[@]}"
             )
             ;;
         region | swappy)
