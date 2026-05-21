@@ -49,36 +49,81 @@ source "${ZINIT_HOME}/zinit.zsh"
 # elementos listados en el menú de completado.
 # zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-# Fuerza actualización automática de comandos recién instalados.
+# ── COMPLETADO GLOBAL DE ZSH ────────────────────────────────
+# Desactiva el menú interactivo nativo de zsh.
+# Requerido para que fzf-tab intercepte el prefijo unambiguous
+# y gestione su propio selector visual.
+zstyle ':completion:*' menu no
+
+# Reconstruye el caché de comandos automáticamente.
+# Garantiza que comandos recién instalados (apt, pip, npm, etc.)
+# estén disponibles sin recargar el shell.
 zstyle ':completion:*' rehash true
 
-# Coincidencia insensible a mayúsculas.
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+# Define reglas de coincidencia para el completado:
+#   'm:{a-zA-Z}={A-Za-z}'  — comparación case-insensitive
+#   'r:|=*'                — completado por prefijo parcial
+zstyle ':completion:*' matcher-list \
+    'm:{a-zA-Z}={A-Za-z}' 'r:|=*'
 
-# Proveedor de lista de procesos (para kill y similares).
-zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm,cmd -w -w'
+# Proveedor de lista de procesos para kill, killall, renice, etc.
+# Incluye PID, usuario, comando y argumentos completos.
+zstyle ':completion:*:*:*:*:processes' command \
+    'ps -u $USER -o pid,user,comm,cmd -w -w'
 
-# Habilita los valores por defecto de fzf en fzf-tab. https://github.com/Aloxaf/fzf-tab#configure
+# Desactiva el orden alfabético en git checkout.
+# Las ramas respetan el orden cronológico devuelto por git
+# (más recientes primero).
+zstyle ':completion:*:git-checkout:*' sort false
+
+# Formato de los encabezados de grupo en el menú de completado.
+# Requerido para que fzf-tab exponga la variable $group
+# en las expresiones de vista previa.
+zstyle ':completion:*:descriptions' format '󰩗  %d'
+
+# ── FZF-TAB - COMPORTAMIENTO GLOBAL ─────────────────────────
+# Habilita la lectura de FZF_DEFAULT_OPTS del entorno.
+# Nota: si FZF_DEFAULT_OPTS contiene --tmux, fzf-tab falla
+# (issue #455). En ese caso debe establecerse a no.
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
-# ────────────────────────────────────────────────────────────
-# AUTO COMPLETADO
-# Carga compinit: usa caché si tiene menos de 24h, sino lo crea
-# ╓
-# ║ zicompinit es una función de conveniencia
-# ║ proporcionada por Zinit que hace:
-# ║ autoload -Uz compinit
-# ║ compinit
-# ║
-# ║ Por lo que el siguiente codigo no hace falta
-# ╙
-# autoload -Uz compinit
-# ZCOMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump"
-# if [[ -n $ZCOMPDUMP(Nmh-24) ]]; then
-#     compinit -C -d "$ZCOMPDUMP"
-# else
-#     compinit -d "$ZCOMPDUMP"
-# fi
+# Banderas adicionales para la invocación interna de fzf.
+zstyle ':fzf-tab:*' fzf-flags \
+    --height=40%
+
+# Controla la visualización de encabezados de grupo:
+#   full  — siempre visibles (default)
+#   brief — solo si hay miembros duplicados entre grupos
+#   none  — ocultos, $group se establece a __hide__
+#   quiet — ocultos, $group conserva su valor original
+zstyle ':fzf-tab:*' show-group full
+
+# Colores ANSI 256 asignados cíclicamente a los encabezados
+# de grupo. Cuatro valores definidos; al agotarse se reinician.
+zstyle ':fzf-tab:*' group-colors \
+    $'\033[38;5;248m' $'\033[38;5;152m' $'\033[38;5;134m' $'\033[38;5;140m'
+
+# Teclas de navegación entre grupos activos.
+# Valores por defecto: F1 y F2. Se redefine a '<' y '>'.
+zstyle ':fzf-tab:*' switch-group '<' '>'
+
+# ── VARIABLES INTERNAS - REFERENCIA ─────────────────────────
+# $word     Valor que se inserta en la línea de comandos
+# $desc     Texto visible en fzf (incluye descripción)
+# $group    Categoría del candidato (ej: "[option]", "[filename]")
+# $realpath Ruta absoluta (solo en candidatos tipo archivo/directorio)
+# $words    Estado actual de la línea de comandos
+
+# ── FZF-TAB - VISTAS PREVIAS PERSONALIZADAS ─────────────────
+# Vista previa para cd: árbol de directorios con eza.
+# Opciones: solo directorios, profundidad 2, sin colores.
+zstyle ':fzf-tab:complete:cd:*' fzf-preview \
+    'eza --tree --level=2 --color=never --only-dirs $realpath'
+
+# Vista previa para git show: diff completo procesado por delta.
+# fzf-tab pasa automáticamente --ansi a fzf para preservar colores.
+zstyle ':fzf-tab:complete:git-show:*' \
+    fzf-preview 'git show --color=always "$word" | delta'
 
 # ┌───────────────────────────────────────────────────────────┐
 #   Configuración de TERM para habilitar
