@@ -30,7 +30,13 @@ capture() {
 
     case "$MODE" in
         window)
-            GEOMETRY=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp -f '%x,%y %wx%h')
+            GEOMETRY=$(
+                swaymsg -t get_tree | jq -r '
+                recurse(.nodes[]?, .floating_nodes[]?)
+                | select(.pid and .visible == true)
+                | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' \
+                    | slurp -f '%x,%y %wx%h' "${KASUMI_SLURP_ARGS[@]}"
+            )
             ;;
         region | swappy)
             GEOMETRY=$(slurp "${KASUMI_SLURP_ARGS[@]}")
