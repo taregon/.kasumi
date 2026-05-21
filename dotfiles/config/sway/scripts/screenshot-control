@@ -11,6 +11,17 @@ set -uo pipefail
 EXIT_CANCEL=2
 OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}"
 
+LOCKFILE="/tmp/screenshot-control.lock"
+
+# Abre/crea un archivo lock y lo asocia al descriptor 200.
+# flock -n intenta tomar el bloqueo sin esperar:
+# - Si el bloqueo ya existe, otra instancia está ejecutándose y se sale con exit 1.
+# - Si obtiene el bloqueo, el script continúa normalmente.
+# El trap elimina el archivo lock al finalizar el script.
+LOCKFILE="/tmp/screenshot-control.lock"
+exec 200> "$LOCKFILE"
+flock -n 200 && trap 'rm -f "$LOCKFILE"' EXIT || exit 1
+
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
     -b '#A4084C4D' # overlay global semitransparente fuera de la selección
@@ -55,7 +66,7 @@ capture() {
             grim -g "$GEOMETRY" - | swappy -f -
             ;;
         region | window)
-            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy -t image/png --paste-once
+            grim -g "$GEOMETRY" - | tee "$FILENAME" | wl-copy -t image/png
             ;;
     esac
 }
