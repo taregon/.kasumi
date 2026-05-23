@@ -1,0 +1,276 @@
+#!/usr/bin/env bash
+# Original: https://gist.github.com/telamon/23e5362757339bc8f22e9d40f9f1bd8e
+
+# -----------------------------------------------------------------------------
+# Comparte la pantalla de Wayland/Sway como cámara virtual V4L2.
+#
+# Requisitos:
+#   - wf-recorder
+#   - v4l2loopback
+#   - v4l-utils
+#   - jq
+#
+# Void Linux:
+#   sudo xbps-install -Su wf-recorder v4l2loopback v4l-utils jq
+#
+# Arch Linux:
+#   sudo pacman -S wf-recorder v4l2loopback-dkms v4l-utils jq
+#
+# Uso:
+#   ./sharescreen.sh /dev/video4
+#
+# Ejemplo:
+#   ./sharescreen.sh /dev/video2
+#
+# Notas:
+#   - Diseñado para wlroots/Sway/Wayland.
+#   - Discord, Chromium y clientes WebRTC suelen funcionar mejor con YUY2.
+#   - El dispositivo virtual debe existir previamente.
+#
+# Crear dispositivo virtual manualmente:
+#
+#   sudo modprobe v4l2loopback \
+#       devices=1 \
+#       video_nr=4 \
+#       card_label="Wayland Screen Share" \
+#       exclusive_caps=1
+#
+# Ver dispositivos disponibles:
+#   v4l2-ctl --list-devices
+# -----------------------------------------------------------------------------
+
+set -euo pipefail
+
+# -----------------------------------------------------------------------------
+# Constantes y defaults.
+# -----------------------------------------------------------------------------
+
+LOCKFILE="/tmp/screenshare.lock"
+SCREENSHARE_RUNNING=0
+DEFAULT_DEVICE="/dev/video8"
+
+# -----------------------------------------------------------------------------
+# Función de limpieza.
+# -----------------------------------------------------------------------------
+
+screenshare_cleanup() {
+    if [ "$SCREENSHARE_RUNNING" -eq 1 ]; then
+        notify-send "󰍺  Screenshare detenido" ""
+    fi
+    rm -f "$LOCKFILE"
+}
+
+# -----------------------------------------------------------------------------
+# Mostrar ayuda.
+# -----------------------------------------------------------------------------
+
+show_help() {
+    echo "Uso:"
+    echo "  $0 [opciones] [/dev/videoX]"
+    echo
+    echo "Opciones:"
+    echo "  --help, -h     Muestra esta ayuda"
+    echo "  --stop, -s     Detiene screenshare si está en ejecución"
+    echo
+    echo "Dispositivo por defecto:"
+    echo "  $DEFAULT_DEVICE"
+    echo
+    echo "Dispositivos V4L2 detectados:"
+    echo
+    v4l2-ctl --list-devices 2>/dev/null || true
+}
+
+# -----------------------------------------------------------------------------
+# Verificar dependencias.
+# -----------------------------------------------------------------------------
+
+check_deps() {
+    local deps=(wf-recorder jq v4l2-ctl v4l2loopback-ctl)
+    local missing=()
+
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing+=("$dep")
+        fi
+    done
+
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo "ERROR: Faltan dependencias:"
+        for dep in "${missing[@]}"; do
+            echo "  - $dep"
+        done
+        echo
+        echo "Instalar en Arch:"
+        echo "  sudo pacman -S wf-recorder v4l2loopback-dkms v4l-utils jq"
+        echo "  paru -S v4l2loopback-utils"
+        exit 1
+    fi
+}
+
+# -----------------------------------------------------------------------------
+# Parsear argumentos.
+# -----------------------------------------------------------------------------
+
+virtual_camera_device=""
+action=""
+
+for arg in "$@"; do
+    case "$arg" in
+        --help|-h)
+            action="help"
+            ;;
+        --stop|-s)
+            action="stop"
+            ;;
+        *)
+            if [ -z "$virtual_camera_device" ]; then
+                virtual_camera_device="$arg"
+            fi
+            ;;
+    esac
+done
+
+# -----------------------------------------------------------------------------
+# Ejecutar acción solicitada.
+# -----------------------------------------------------------------------------
+
+if [ "$action" = "help" ]; then
+    show_help
+    exit 0
+fi
+
+if [ "$action" = "stop" ]; then
+    # Verificar si hay lock (instancia corriendo)
+    if [ -f "$LOCKFILE" ]; then
+        # Enviar SIGINT a wf-recorder (como rofi_screenrecord)
+        if pkill -SIGINT -x wf-recorder; then
+            echo "Screenshare detenido."
+            notify-send "󰍺  Screenshare detenido" ""
+            rm -f "$LOCKFILE"
+        else
+            echo "ERROR: No se pudo detener wf-recorder."
+            notify-send -u critical "󰍺  Screenshare" "No se pudo detener"
+            exit 1
+        fi
+    else
+        echo "Screenshare no está en ejecución."
+    fi
+    exit 0
+fi
+
+# Usar dispositivo por defecto si no se especificó
+if [ -z "$virtual_camera_device" ]; then
+    virtual_camera_device="$DEFAULT_DEVICE"
+    echo "Usando dispositivo por defecto: $virtual_camera_device"
+fi
+
+# -----------------------------------------------------------------------------
+# Instancia única (evita múltiples wf-recorder al mismo tiempo).
+# -----------------------------------------------------------------------------
+
+exec 200> "$LOCKFILE"
+if ! flock -n 200; then
+    echo "ERROR: Otra instancia de screenshare ya está en ejecución."
+    notify-send -u critical "󰍺  Screenshare" "Ya hay una instancia en ejecución"
+    exit 1
+fi
+trap screenshare_cleanup EXIT
+
+# Verificar dependencias después del lock para no fallar sin razón
+check_deps
+
+# -----------------------------------------------------------------------------
+# Detecta automáticamente la resolución del monitor enfocado en Sway.
+# -----------------------------------------------------------------------------
+
+read -r screen_width screen_height < <(
+    swaymsg -t get_outputs -r \
+        | jq -r '
+        .[]
+        | select(.focused == true)
+        | "\(.current_mode.width) \(.current_mode.height)"
+      '
+)
+
+# Fallback conservador si la detección falla.
+screen_width="${screen_width:-1920}"
+screen_height="${screen_height:-1080}"
+
+# -----------------------------------------------------------------------------
+# Verifica que el dispositivo exista.
+# -----------------------------------------------------------------------------
+
+if [[ ! -e "$virtual_camera_device" ]]; then
+    echo "ERROR: El dispositivo no existe:"
+    echo "  $virtual_camera_device"
+    exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# Carga automáticamente el módulo v4l2loopback si aún no está activo.
+# -----------------------------------------------------------------------------
+
+if lsmod | grep -q '^v4l2loopback'; then
+    echo "Módulo v4l2loopback detectado."
+else
+    echo "Cargando módulo v4l2loopback..."
+    echo "Puede solicitar privilegios sudo."
+
+    sudo modprobe v4l2loopback \
+        exclusive_caps=1
+fi
+
+# -----------------------------------------------------------------------------
+# Configura capacidades del dispositivo virtual.
+#
+# YUY2/YUYV:
+#   - Mejor compatibilidad con Chromium/WebRTC/Discord.
+#   - Reduce problemas de pantalla negra o cámara inválida.
+#
+# keep_format:
+#   Evita que aplicaciones cambien dinámicamente el formato.
+#
+# sustain_framerate:
+#   Mantiene FPS más estables para clientes WebRTC sensibles.
+# -----------------------------------------------------------------------------
+
+echo "Configurando formato del dispositivo virtual..."
+
+v4l2loopback-ctl set-caps \
+    "video/x-raw, format=YUY2, width=${screen_width}, height=${screen_height}" \
+    "$virtual_camera_device"
+
+v4l2-ctl -d "$virtual_camera_device" -c keep_format=1
+v4l2-ctl -d "$virtual_camera_device" -c sustain_framerate=1
+
+# -----------------------------------------------------------------------------
+# Inicia captura Wayland y envía frames al dispositivo V4L2 virtual.
+#
+# --muxer=v4l2
+#   Envía video directamente al dispositivo V4L2.
+#
+# -c rawvideo
+#   Evita compresión para mejorar compatibilidad.
+#
+# -x yuyv422
+#   Mantiene coherencia con las capacidades YUY2 configuradas.
+#
+# Consideraciones:
+#   - El consumo CPU/ancho de banda puede ser alto.
+#   - Resoluciones elevadas aumentan latencia y uso de memoria.
+# -----------------------------------------------------------------------------
+
+echo
+echo "Compartiendo pantalla:"
+echo "  Resolución : ${screen_width}x${screen_height}"
+echo "  Dispositivo: ${virtual_camera_device}"
+echo
+
+SCREENSHARE_RUNNING=1
+notify-send "󰍺  Compartiendo pantalla" "${screen_width}x${screen_height} • ${virtual_camera_device}"
+
+wf-recorder \
+    --muxer=v4l2 \
+    --file="$virtual_camera_device" \
+    -c rawvideo \
+    -x yuyv422

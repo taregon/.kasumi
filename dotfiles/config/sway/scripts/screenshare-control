@@ -42,6 +42,144 @@
 set -euo pipefail
 
 # -----------------------------------------------------------------------------
+# Constantes y defaults.
+# -----------------------------------------------------------------------------
+
+LOCKFILE="/tmp/screenshare.lock"
+SCREENSHARE_RUNNING=0
+DEFAULT_DEVICE="/dev/video8"
+
+# -----------------------------------------------------------------------------
+# Función de limpieza.
+# -----------------------------------------------------------------------------
+
+screenshare_cleanup() {
+    if [ "$SCREENSHARE_RUNNING" -eq 1 ]; then
+        notify-send "󰍺  Screenshare detenido" ""
+    fi
+    rm -f "$LOCKFILE"
+}
+
+# -----------------------------------------------------------------------------
+# Mostrar ayuda.
+# -----------------------------------------------------------------------------
+
+show_help() {
+    echo "Uso:"
+    echo "  $0 [opciones] [/dev/videoX]"
+    echo
+    echo "Opciones:"
+    echo "  --help, -h     Muestra esta ayuda"
+    echo "  --stop, -s     Detiene screenshare si está en ejecución"
+    echo
+    echo "Dispositivo por defecto:"
+    echo "  $DEFAULT_DEVICE"
+    echo
+    echo "Dispositivos V4L2 detectados:"
+    echo
+    v4l2-ctl --list-devices 2> /dev/null || true
+}
+
+# -----------------------------------------------------------------------------
+# Verificar dependencias.
+# -----------------------------------------------------------------------------
+
+check_deps() {
+    local deps=(wf-recorder jq v4l2-ctl v4l2loopback-ctl)
+    local missing=()
+
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing+=("$dep")
+        fi
+    done
+
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo "ERROR: Faltan dependencias:"
+        for dep in "${missing[@]}"; do
+            echo "  - $dep"
+        done
+        echo
+        echo "Instalar en Arch:"
+        echo "  sudo pacman -S wf-recorder v4l2loopback-dkms v4l-utils jq"
+        echo "  paru -S v4l2loopback-utils"
+        exit 1
+    fi
+}
+
+# -----------------------------------------------------------------------------
+# Parsear argumentos.
+# -----------------------------------------------------------------------------
+
+virtual_camera_device=""
+action=""
+
+for arg in "$@"; do
+    case "$arg" in
+        --help | -h)
+            action="help"
+            ;;
+        --stop | -s)
+            action="stop"
+            ;;
+        *)
+            if [ -z "$virtual_camera_device" ]; then
+                virtual_camera_device="$arg"
+            fi
+            ;;
+    esac
+done
+
+# -----------------------------------------------------------------------------
+# Ejecutar acción solicitada.
+# -----------------------------------------------------------------------------
+
+if [ "$action" = "help" ]; then
+    show_help
+    exit 0
+fi
+
+if [ "$action" = "stop" ]; then
+    # Verificar si hay lock (instancia corriendo)
+    if [ -f "$LOCKFILE" ]; then
+        # Enviar SIGINT a wf-recorder (como rofi_screenrecord)
+        if pkill -SIGINT -x wf-recorder; then
+            echo "Screenshare detenido."
+            notify-send "󰍺  Screenshare detenido" ""
+            rm -f "$LOCKFILE"
+        else
+            echo "ERROR: No se pudo detener wf-recorder."
+            notify-send -u critical "󰍺  Screenshare" "No se pudo detener"
+            exit 1
+        fi
+    else
+        echo "Screenshare no está en ejecución."
+    fi
+    exit 0
+fi
+
+# Usar dispositivo por defecto si no se especificó
+if [ -z "$virtual_camera_device" ]; then
+    virtual_camera_device="$DEFAULT_DEVICE"
+    echo "Usando dispositivo por defecto: $virtual_camera_device"
+fi
+
+# -----------------------------------------------------------------------------
+# Instancia única (evita múltiples wf-recorder al mismo tiempo).
+# -----------------------------------------------------------------------------
+
+exec 200> "$LOCKFILE"
+if ! flock -n 200; then
+    echo "ERROR: Otra instancia de screenshare ya está en ejecución."
+    notify-send -u critical "󰍺  Screenshare" "Ya hay una instancia en ejecución"
+    exit 1
+fi
+trap screenshare_cleanup EXIT
+
+# Verificar dependencias después del lock para no fallar sin razón
+check_deps
+
+# -----------------------------------------------------------------------------
 # Detecta automáticamente la resolución del monitor enfocado en Sway.
 # -----------------------------------------------------------------------------
 
@@ -149,6 +287,9 @@ echo "Compartiendo pantalla:"
 echo "  Resolución : ${screen_width}x${screen_height}"
 echo "  Dispositivo: ${virtual_camera_device}"
 echo
+
+SCREENSHARE_RUNNING=1
+notify-send "󰍺  Compartiendo pantalla" "${screen_width}x${screen_height} • ${virtual_camera_device}"
 
 wf-recorder \
     --muxer=v4l2 \
