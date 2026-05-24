@@ -20,7 +20,7 @@ DEFAULT_DEVICE="/dev/video8"
 # ────────────────────────────────────────────────────────────
 screenshare_cleanup() {
     rm -f "$LOCKFILE"
-    notify-send "󰍺  Screenshare" "Detenido"
+    notify-send -t 1200 "󰍺  Screenshare" "Detenido"
 }
 
 virtual_camera_device=""
@@ -30,9 +30,9 @@ case "${1:-}" in
         if [ -f "$LOCKFILE" ]; then
             pkill -SIGINT -x wf-recorder 2> /dev/null || true
             rm -f "$LOCKFILE"
-            notify-send "󰍺  Screenshare" "Detenido"
+            notify-send -t 1200 "󰍺  Screenshare" "Detenido"
         else
-            notify-send "󰍺  Screenshare" "No está en ejecución"
+            notify-send -t 1200 "󰍺  Screenshare" "No está en ejecución"
         fi
         exit 0
         ;;
@@ -42,7 +42,7 @@ case "${1:-}" in
         ;;
 
     *)
-        notify-send -u critical "󰍺  Screenshare" "Subcomando no reconocido: ${1:-}"
+        notify-send -t 1200 -u critical "󰍺  Screenshare" "Subcomando no reconocido: ${1:-}"
         exit 1
         ;;
 esac
@@ -51,7 +51,7 @@ esac
 # Instancia única (evita múltiples wf-recorder al mismo tiempo).
 exec 200> "$LOCKFILE"
 if ! flock -n 200; then
-    notify-send -u critical "󰍺  Screenshare" "Ya está en ejecución"
+    notify-send -t 1200 -u critical "󰍺  Screenshare" "Ya está en ejecución"
     exit 1
 fi
 trap screenshare_cleanup EXIT
@@ -73,7 +73,7 @@ screen_height="${screen_height:-1080}"
 # ────────────────────────────────────────────────────────────
 # Verifica que el dispositivo V4L2 exista.
 if [[ ! -e "$virtual_camera_device" ]]; then
-    notify-send -u critical "󰍺  Screenshare" "Dispositivo no encontrado: $virtual_camera_device"
+    notify-send -t 1200 -u critical "󰍺  Screenshare" "Dispositivo no encontrado: $virtual_camera_device"
     exit 1
 fi
 
@@ -95,7 +95,7 @@ v4l2loopback-ctl set-caps \
 v4l2-ctl -d "$virtual_camera_device" -c sustain_framerate=1 # Mantiene FPS estables (WebRTC)
 
 # ────────────────────────────────────────────────────────────
-notify-send "󰍺  Screenshare" "Iniciando: ${screen_width}x${screen_height} @ ${virtual_camera_device}"
+notify-send -t 5000 "󰍺  Screenshare" "Iniciando: ${screen_width}x${screen_height} @ ${virtual_camera_device}"
 
 # Nota sobre hflip:
 #   - Corrige espejado horizontal para quien comparte.
