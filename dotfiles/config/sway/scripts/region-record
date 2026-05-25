@@ -42,7 +42,7 @@ watchdog_loop() {
 
     file="$1"
     start_time=$(date +%s)
-    interval="${KASUMI_WATCHDOG_INTERVAL:-12}"
+    interval="${KASUMI_WATCHDOG_INTERVAL:-120}"
 
     # cleanup() elimina el lock al finalizar; eso detiene el watchdog.
     while [ -f "$LOCKFILE" ]; do
