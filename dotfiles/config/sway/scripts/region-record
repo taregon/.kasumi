@@ -4,9 +4,8 @@
 #
 # Uso: region-record start | stop
 #
-# Mejora posible: usar VAAPI para reducir drásticamente el uso de CPU
-#   wf-recorder -c h264_vaapi -d /dev/dri/renderD128 ...
-#   (requiere wf-recorder compilado con soporte VAAPI)
+# Si VAAPI está disponible (dispositivo /dev/dri/renderD128 + vainfo),
+# se usa h264_vaapi para reducir drásticamente el uso de CPU.
 
 set -euo pipefail
 
@@ -27,12 +26,13 @@ cleanup() {
         kill "$WATCHDOG_PID" 2> /dev/null || true
     fi
 
-    notify-send -t 1200 \
+    notify-send -t 2500 \
         "󰿏  Grabación" \
         "Finalizada"
 }
 
 watchdog_loop() {
+    local file
     local elapsed
     local interval
     local message
@@ -40,6 +40,7 @@ watchdog_loop() {
     local size
     local start_time
 
+    file="$1"
     start_time=$(date +%s)
     interval="${KASUMI_WATCHDOG_INTERVAL:-12}"
 
@@ -47,7 +48,7 @@ watchdog_loop() {
     while [ -f "$LOCKFILE" ]; do
         sleep "$interval"
 
-        size=$(stat -c%s "$filename" 2> /dev/null || echo 0)
+        size=$(stat -c%s "$file" 2> /dev/null || echo 0)
 
         # wf-recorder aún no escribió datos útiles.
         [ "$size" -gt 0 ] || continue
@@ -58,20 +59,20 @@ watchdog_loop() {
         )
 
         message="$(
-            basename "$filename"
-        ) · $elapsed · $(numfmt --to=iec "$size")"
+            basename "${file%.mkv}"
+        ) ◆ $elapsed ◆ $(numfmt --to=iec "$size")"
 
         if [ -n "${notify_id:-}" ]; then
             notify-send \
                 --replace-id="$notify_id" \
-                -t 0 \
+                -t 6000 \
                 "󰿏  Grabación" \
                 "$message"
         else
             notify_id=$(
                 notify-send \
                     -p \
-                    -t 0 \
+                    -t 6000 \
                     "󰿏  Grabación" \
                     "$message"
             )
@@ -87,7 +88,7 @@ stop_recording() {
 
         cleanup
     else
-        notify-send -t 1200 \
+        notify-send -t 2500 \
             "󰿏  Grabación" \
             "No hay ninguna activa"
     fi
@@ -107,7 +108,7 @@ start_recording() {
     exec 200> "$LOCKFILE"
 
     if ! flock -n 200; then
-        notify-send -t 1200 -u critical \
+        notify-send -t 2500 -u critical \
             "󰿏  Grabación" \
             "Ya hay una activa"
 
@@ -121,19 +122,35 @@ start_recording() {
 
     filename="$OUTPUT_DIR/rec-$(date +%Y%m%d-%H%M%S).mkv"
 
-    notify-send -t 3000 \
+    notify-send -t 4000 \
         "󰿏  Grabación" \
-        "Región → $filename"
+        "Región: $filename"
 
     # Watchdog en background:
     # muestra duración y tamaño del archivo cada
     # KASUMI_WATCHDOG_INTERVAL segundos.
-    watchdog_loop &
+    watchdog_loop "$filename" &
     WATCHDOG_PID=$!
+
+    # VAAPI auto-detection: si el dispositivo y los drivers están
+    # operativos, se usa h264_vaapi para descargar la codificación
+    # en la GPU (mucho menos uso de CPU).
+    local encoder_args
+    encoder_args=()
+    if [ -e /dev/dri/renderD128 ] \
+        && command -v vainfo &> /dev/null \
+        && vainfo \
+            --display drm \
+            --device /dev/dri/renderD128 \
+            &> /dev/null; then
+
+        encoder_args=(-c h264_vaapi -d /dev/dri/renderD128)
+    fi
 
     wf-recorder \
         -g "$geometry" \
-        --file="$filename"
+        --file="$filename" \
+        "${encoder_args[@]+"${encoder_args[@]}"}"
 }
 
 case "${1:-start}" in
@@ -144,7 +161,7 @@ case "${1:-start}" in
         stop_recording
         ;;
     *)
-        notify-send -t 1200 -u critical \
+        notify-send -t 2500 -u critical \
             "󰿏  Grabación" \
             "Subcomando no reconocido: ${1:-}"
 
