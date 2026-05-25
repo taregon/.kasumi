@@ -13,17 +13,11 @@ set -euo pipefail
 LOCKFILE="/tmp/region-record.lock"
 OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
 
-recording_started=0 # Flag que distingue entre proceso start (wf-recorder activo) y proceso stop (solo limpieza)
-
 cleanup() {
-    # Si el lock ya fue removido por otro proceso (stop), esta llamada no hace nada.
     [ -f "$LOCKFILE" ] || return 0
 
     rm -f "$LOCKFILE"
-
-    if [ "$recording_started" -eq 1 ]; then
-        notify-send -t 1200 "󰿏  Grabación" "Detenida"
-    fi
+    notify-send -t 1200 "󰿏  Grabación" "Finalizada"
 }
 
 stop_recording() {
@@ -33,7 +27,7 @@ stop_recording() {
 
         cleanup
     else
-        notify-send -t 1200 "󰿏  Grabación" "No hay grabación activa"
+        notify-send -t 1200 "󰿏  Grabación" "No hay ninguna activa"
     fi
 
     exit 0
@@ -52,7 +46,7 @@ start_recording() {
     if ! flock -n 200; then
         notify-send -t 1200 -u critical \
             "󰿏  Grabación" \
-            "Ya hay una grabación activa"
+            "Ya hay una activa"
         exit 1
     fi
 
@@ -62,9 +56,7 @@ start_recording() {
 
     notify-send -t 3000 \
         "󰿏  Grabación" \
-        "Grabando región → $(basename "$filename")"
-
-    recording_started=1
+        "Región: $(basename "$filename")"
 
     wf-recorder \
         -g "$geometry" \
