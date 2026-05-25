@@ -11,42 +11,60 @@
 set -euo pipefail
 
 LOCKFILE="/tmp/region-record.lock"
-OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}" # override vía entorno
+OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
 
-# Idempotente: si el lock ya fue limpiado (stop desde otro proceso), no notifica de nuevo.
+recording_started=0 # Flag que distingue entre proceso start (wf-recorder activo) y proceso stop (solo limpieza)
+
 cleanup() {
-    if [ -f "$LOCKFILE" ]; then
-        rm -f "$LOCKFILE"
+    # Si el lock ya fue removido por otro proceso (stop), esta llamada no hace nada.
+    [ -f "$LOCKFILE" ] || return 0
+
+    rm -f "$LOCKFILE"
+
+    if [ "$recording_started" -eq 1 ]; then
         notify-send -t 1200 "󰿏  Grabación" "Detenida"
     fi
 }
 
 stop_recording() {
     if [ -f "$LOCKFILE" ]; then
-        pkill -SIGINT -x wf-recorder 2> /dev/null || true # || true por set -e
+        # SIGINT cierra limpiamente el contenedor/video
+        pkill -SIGINT -x wf-recorder 2> /dev/null || true # Si wf-recorder ya no existe (crash previo), pkill falla; || true mantiene la ejecucion
+
         cleanup
     else
         notify-send -t 1200 "󰿏  Grabación" "No hay grabación activa"
     fi
+
     exit 0
 }
 
 start_recording() {
     local geometry
+    local filename
 
-    # slurp antes del lock → cancelar con ESC sale sin adquirir lock ni disparar trap.
+    # Slurp se ejecuta antes de adquirir el lock: si se cancela la seleccion (ESC), el script termina
+    # sin adquirir el lock ni disparar el trap de limpieza.
     geometry=$(slurp -w 0 -f '%x,%y %wx%h') || exit 0
 
-    exec 200> "$LOCKFILE" # fd para flock
+    exec 200> "$LOCKFILE"
+
     if ! flock -n 200; then
-        notify-send -t 1200 -u critical "󰿏  Grabación" "Ya hay una grabación activa"
+        notify-send -t 1200 -u critical \
+            "󰿏  Grabación" \
+            "Ya hay una grabación activa"
         exit 1
     fi
-    trap cleanup EXIT # Ctrl+C, error, o stop externo → limpia lock y notifica
 
-    local filename
-    filename="$OUTPUT_DIR/rec-$(date +%Y%m%d-%H%M%S).mp4"
-    notify-send -t 3000 "󰿏  Grabación" "Grabando región → $(basename "$filename")"
+    trap cleanup EXIT INT TERM # Garantiza limpieza del lock sin importar como termine: stop externo, error interno, o Ctrl+C
+
+    filename="$OUTPUT_DIR/rec-$(date +%Y%m%d-%H%M%S).mkv"
+
+    notify-send -t 3000 \
+        "󰿏  Grabación" \
+        "Grabando región → $(basename "$filename")"
+
+    recording_started=1
 
     wf-recorder \
         -g "$geometry" \
@@ -54,10 +72,16 @@ start_recording() {
 }
 
 case "${1:-start}" in
-    stop) stop_recording ;;
-    start) start_recording ;;
+    start)
+        start_recording
+        ;;
+    stop)
+        stop_recording
+        ;;
     *)
-        notify-send -t 1200 -u critical "󰿏  Grabación" "Subcomando no reconocido: ${1:-}"
+        notify-send -t 1200 -u critical \
+            "󰿏  Grabación" \
+            "Subcomando no reconocido: ${1:-}"
         exit 1
         ;;
 esac
