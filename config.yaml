@@ -102,6 +102,10 @@ dotfiles:
     src: wallpapers
     dst: ~/.local/share/kasumi/wallpapers
     link: absolute
+  d_sounds:
+    src: sounds
+    dst: ~/.local/share/kasumi/sounds
+    link: absolute
   d_scripts:
     src: scripts
     dst: ~/.local/bin/kasumi
@@ -170,6 +174,10 @@ dotfiles:
     src: config/cliphist
     dst: ~/.config/cliphist
     link: absolute
+  d_rmpc:
+    src: config/rmpc
+    dst: ~/.config/rmpc
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -181,6 +189,7 @@ profiles:
       - d_mako
       - d_rofi
       - d_scripts
+      - d_sounds
       - d_starship
       - d_vivid
       - d_wallpapers
@@ -202,6 +211,7 @@ profiles:
       - d_mpd
       - d_neovim
       - d_opencode_theme
+      - d_rmpc
       - d_zsh
       - f_fonts
       - f_lnav
