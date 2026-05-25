@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# region-record
+# Graba una región de pantalla en Sway/Wayland como archivo de video.
+#
+# Uso: region-record [archivo.mp4] | stop
+#
+# Mejora posible: usar VAAPI para reducir drásticamente el uso de CPU
+#   wf-recorder -c h264_vaapi -d /dev/dri/renderD128 ...
+#   (requiere wf-recorder compilado con soporte VAAPI)
+
+set -euo pipefail
+
+LOCKFILE="/tmp/region-record.lock"
+OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
+
+region_record_cleanup() {
+    rm -f "$LOCKFILE"
+    notify-send -t 1200 "󰿏  Grabación" "Detenida"
+}
+
+case "${1:-}" in
+    stop)
+        if [ -f "$LOCKFILE" ]; then
+            pkill -SIGINT -x wf-recorder 2> /dev/null || true
+            rm -f "$LOCKFILE"
+            notify-send -t 1200 "󰿏  Grabación" "Detenida"
+        else
+            notify-send -t 1200 "󰿏  Grabación" "No hay grabación activa"
+        fi
+        exit 0
+        ;;
+
+    *)
+        filename="${1:-}"
+        ;;
+esac
+
+# ────────────────────────────────────────────────────────────
+# Selecciona región con slurp (antes del lock para que cancelar no dispare cleanup).
+geometry=$(slurp -w 0 -f '%x,%y %wx%h') || exit 0
+
+[ -z "$geometry" ] && exit 0
+
+# ────────────────────────────────────────────────────────────
+# Instancia única.
+exec 200> "$LOCKFILE"
+if ! flock -n 200; then
+    notify-send -t 1200 -u critical "󰿏  Grabación" "Ya hay una grabación activa"
+    exit 1
+fi
+trap region_record_cleanup EXIT
+
+# ────────────────────────────────────────────────────────────
+# Genera nombre de archivo si no se especificó.
+if [ -z "$filename" ]; then
+    filename="$OUTPUT_DIR/rec-$(date +%Y%m%d-%H%M%S).mp4"
+fi
+
+# ────────────────────────────────────────────────────────────
+notify-send -t 3000 "󰿏  Grabación" "Grabando región → $(basename "$filename")"
+
+wf-recorder \
+    -g "$geometry" \
+    --file="$filename"
