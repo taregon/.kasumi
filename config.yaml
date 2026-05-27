@@ -178,6 +178,10 @@ dotfiles:
     src: config/rmpc
     dst: ~/.config/rmpc
     link: absolute
+  d_paru:
+    src: config/paru
+    dst: ~/.config/paru
+    link: absolute
 profiles:
   kasumi:
     dotfiles:
@@ -211,6 +215,7 @@ profiles:
       - d_mpd
       - d_neovim
       - d_opencode_theme
+      - d_paru
       - d_rmpc
       - d_zsh
       - f_fonts
