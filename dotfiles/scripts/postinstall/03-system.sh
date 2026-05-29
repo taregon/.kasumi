@@ -161,7 +161,6 @@ install_app_cli_fm() {
         python-chardet      # Detección de codificación de texto
         python-pillow       # Procesamiento de imágenes en Python (PIL)
         ranger              # Gestor de archivos en terminal (estilo VI)
-        transmission-cli    # Cliente BitTorrent en línea de comandos
         trash-cli           # Envía archivos a la papelera desde CLI
     )
     instalar "${pkgs[@]}"
@@ -181,11 +180,12 @@ install_app_pdf() {
 install_app_general() {
     echo ">> Instalando aplicaciones generales"
     local pkgs=(
-        keepassxc     # Gestor de contraseñas local con base de datos cifrada
-        localsend-bin # Compartir archivos en red local sin configuración compleja
-        spek-x-git    # Analizador visual de frecuencias en archivos de audio
-        syncthing     # Sincronización privada y cifrada entre dispositivos
-        upscayl-bin   # Mejora y reescalado de imágenes con IA
+        keepassxc        # Gestor de contraseñas local con base de datos cifrada
+        localsend-bin    # Compartir archivos en red local sin configuración compleja
+        transmission-cli # Cliente BitTorrent en línea de comandos
+        spek-x-git       # Analizador visual de frecuencias en archivos de audio
+        syncthing        # Sincronización privada y cifrada entre dispositivos
+        upscayl-bin      # Mejora y reescalado de imágenes con IA
         # Libre Office
         hyphen-es            # Reglas de separación silábica en español
         libreoffice-fresh    # Suite ofimática con nuevas funciones
@@ -232,6 +232,13 @@ install_sys_network() {
         networkmanager         # Servicio principal para gestionar redes
         networkmanager-openvpn # Soporte para conexiones VPN (OpenVPN)
         network-manager-applet # Indicador gráfico para entornos GTK
+
+        # Herramientas de red
+        iputils # Herramientas de red (ping, traceroute, etc.)
+        iw      # Configuración avanzada de Wi-Fi
+        iwd     # Demonio de Wi-Fi para Linux
+        openssh # Cliente y servidor SSH
+        sshfs   # Montaje de sistemas remotos vía SSH
     )
     instalar "${pkgs[@]}"
 
@@ -241,16 +248,14 @@ install_sys_network() {
 install_sys_theme() {
     echo ">> Instalando temas y elementos de estética"
     local pkgs=(
-        arc-gtk-theme             # Tema GTK Arc
-        gsettings-desktop-schemas # Esquemas GSettings para escritorio
-        gtk-engine-murrine        # Motor de temas GTK clásico
-        gtk-engines               # Motores de temas GTK adicionales
-        matcha-gtk-theme          # Tema GTK Matcha
-        nwg-look                  # Gestor de temas e iconos NWG
-        qt5-wayland               # Bibliotecas Qt5 para Wayland
-        xdg-desktop-portal        # Portal de escritorio (interfaz de especificaciones)
-        xdg-desktop-portal-gtk    # Portal GTK
-        xdg-desktop-portal-wlr    # Portal parawlr (sway, river)
+        # Temas y motores GTK
+        arc-gtk-theme             # Tema GTK plano con transparencias (Arc)
+        gnome-themes-extra        # Temas adicionales de GNOME (Adwaita, etc.)
+        gsettings-desktop-schemas # Esquemas GSettings para configuración de escritorio
+        gtk-engine-murrine        # Motor de temas GTK2 clásico (Murrine)
+        gtk-engines               # Colección de motores de temas GTK
+        nwg-look                  # Gestor gráfico de temas GTK/Qt desde CLI
+        sassc                     # Compilador de Sass a CSS (CLI)
         zukitwo-themes-git        # Temas GTK Zukitwo (AUR)
     )
     instalar "${pkgs[@]}"
@@ -259,6 +264,13 @@ install_sys_theme() {
 install_sys_wayland() {
     echo ">> Instalando herramientas del sistema"
     local pkgs=(
+
+        # Compositor Wayland
+        swayfx        # Gestor de ventanas Wayland con efectos y animaciones
+        swayidle      # Demonio de gestión de inactividad para Wayland
+        xdg-utils     # Utilidades CLI de integración con el escritorio (xdg-open, xdg-mime, etc.)
+        xorg-xwayland # Servidor X para Wayland (XWayland)
+        qt5-wayland   # Bibliotecas Qt5 para integración con Wayland
 
         # Monitoreo y sensores
         btop       # Monitor del sistema en tiempo real (TUI)
@@ -269,8 +281,9 @@ install_sys_wayland() {
         wluma      # Ajuste automático de brillo según luz ambiental
 
         # Audio y visualización
-        cava # Visualizador de espectro de audio en terminal
-        wev  # Visor de eventos de entrada en Wayland
+        cava     # Visualizador de espectro de audio en terminal
+        pipewire # Servicio de audio/video de baja latencia (reemplaza PulseAudio/JACK)
+        wev      # Visor de eventos de entrada en Wayland
 
         # Conectividad y Bluetooth
         # blueman # Gestor gráfico de Bluetooth
@@ -278,12 +291,20 @@ install_sys_wayland() {
 
         # Seguridad y permisos
         polkit-gnome # Interfaz para autenticación de privilegios (Polkit)
+        xorg-xhost   # Control acceso servidor X (X11)
+
+        # Portales de escritorio
+        xdg-desktop-portal     # API unificada para portals de escritorio
+        xdg-desktop-portal-gtk # Implementación GTK de xdg-desktop-portal
+        xdg-desktop-portal-wlr # Implementación wlroots de xdg-desktop-portal
 
         # Entorno gráfico (Wayland)
         awww         # Gestor de fondos animados para Wayland
         grim         # Captura de pantalla en Wayland
         hyprpicker   # Selector de color en Wayland
         mako         # Demonio de notificaciones para Wayland
+        cliphist     # Gestor de historial del portapapeles para Wayland
+        rofi-calc    # Plugin de calculadora para rofi con lenguaje natural
         rofi         # Lanzador de aplicaciones y selector interactivo
         slurp        # Selección de región en Wayland
         swappy       # Editor interactivo para capturas de pantalla en Wayland
@@ -302,12 +323,6 @@ install_utils_compress() {
         unrar    # .rar
         unzip    # Descomprimir .zip
         zip      # Comprimir archivos .zip
-        # Otros
-        cjpeg         # Codificador de imagen a JPEG
-        djpeg         # Decodificador de JPEG a imagen
-        jpegoptim     # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
-        libwebp-utils # Utilidades CLI de WebP (incluye dwebp, cwebp, gif2webp)
-        oxipg         # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
     )
     instalar "${pkgs[@]}"
 }
@@ -327,11 +342,18 @@ install_utils_files() {
         nilfs-utils       # Herramientas para NILFS2
         ntfs-3g           # Soporte lectura/escritura NTFS
         playerctl         # Control de reproductores multimedia desde CLI
-        thunar            # Explorador de archivos GTK
-        thunar-volman     # Gestión volúmenes en Thunar
-        tumbler           # Generador de miniaturas
-        udisks2           # Gestión discos y montaje automático
-        xorg-xhost        # Control acceso servidor X (X11)
+
+        # Optimización de imágenes
+        cjpeg         # Codificador de imagen a JPEG
+        djpeg         # Decodificador de JPEG a imagen
+        jpegoptim     # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
+        libwebp-utils # Utilidades CLI de WebP (incluye dwebp, cwebp, gif2webp)
+        oxipg         # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
+
+        thunar        # Explorador de archivos GTK
+        thunar-volman # Gestión volúmenes en Thunar
+        tumbler       # Generador de miniaturas
+        udisks2       # Gestión discos y montaje automático
     )
     instalar "${pkgs[@]}"
 }
@@ -353,16 +375,12 @@ install_utils_terminal() {
         fzf                # Buscador fuzzy interactivo
         git-delta          # Mejorador de diffs para Git
         grc                # Colorea automáticamente la salida de comandos
-        iputils            # Herramientas de red (ping, traceroute, etc.)
-        iw                 # Configuración avanzada de Wi-Fi
-        iwd                # Demonio de Wi-Fi para Linux
         jq                 # Procesador de JSON en CLI
         kitty              # Emulador de terminal acelerado por GPU
         less               # Paginador de texto para terminal
         lnav               # Visor avanzado de logs (TUI)
         lsd                # ls con iconos y colores
         mlr                # Procesador de datos estilo awk (Miller)
-        openssh            # Cliente y servidor SSH
         pacman-contrib     # Utilidades adicionales para pacman
         pamixer            # Control de volumen para PulseAudio en terminal
         pandoc             # Conversor de documentos markup entre formatos
@@ -370,7 +388,6 @@ install_utils_terminal() {
         ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
         source-highlight   # Resaltado de sintaxis para less y otros
-        sshfs              # Montaje de sistemas remotos vía SSH
         toilet             # Generador de texto ASCII estilizado
         vivid              # Generador de LS_COLORS con soporte de temas (reemplazo moderno de dircolors)
         xan                # Utilidad para procesamiento de tablas CSV
