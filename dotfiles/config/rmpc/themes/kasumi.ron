@@ -82,20 +82,25 @@
             prop: (kind: Property(Artist),
                 default: (kind: Text("Unknown"))
             ),
-            width: "33%",
+            width: "20%",
         ),
         (
             prop: (kind: Property(Title),
                 default: (kind: Text("Unknown"))
             ),
-            width: "33%",
-            alignment: Center,
+            width: "35%",
+        ),
+        (
+            prop: (kind: Property(Album), style: (fg: "#8598B2"),
+                default: (kind: Text("Unknown Album"), style: (fg: "#8598B2"))
+            ),
+            width: "30%",
         ),
         (
             prop: (kind: Property(Duration),
                 default: (kind: Text("-"))
             ),
-            width: "33%",
+            width: "15%",
             alignment: Right,
         ),
     ],
@@ -198,6 +203,11 @@
                 size: "100%",
                 borders: "ALL",
                 pane: Pane(TabContent),
+            ),
+            (
+                size: "20%",
+                borders: "ALL",
+                pane: Pane(Cava),
             ),
             (
                 size: "3",
