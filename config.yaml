@@ -106,6 +106,10 @@ dotfiles:
     src: sounds
     dst: ~/.local/share/kasumi/sounds
     link: absolute
+  d_state:
+    src: state
+    dst: ~/.local/share/kasumi/state
+    link: absolute
   d_scripts:
     src: scripts
     dst: ~/.local/bin/kasumi
@@ -195,6 +199,7 @@ profiles:
       - d_scripts
       - d_sounds
       - d_starship
+      - d_state
       - d_vivid
       - d_wallpapers
       - d_zathura

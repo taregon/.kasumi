@@ -2,6 +2,6 @@
 
 # Backup manual del crontab para versionado y restauración
 
-crontab -l > ~/.local/bin/kasumi/kronos/crontab.bak \
+crontab -l > ~/.local/bin/kasumi/state/crontab.bak \
     && echo "[cron]   backup creado correctamente" \
     || echo "[cron]   error al generar backup"

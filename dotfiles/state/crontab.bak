@@ -3,10 +3,12 @@
 #  ▀▀▀▀ ▀   ▀  ▀▀▀  ▀   ▀   ▀   ▀   ▀ ▀▀▀▀
 # Tareas programadas en entorno mínimo
 # Debe respaldarse manualmente
-# crontab -l >| ~/.local/bin/kasumi/kronos/crontab.bak
+# crontab -l >| ~/.local/share/kasumi/state/crontab.bak
 
-KASUMI_KRONOS=/home/ixos/.local/bin/kasumi/helpers
+# Ajusta según el directorio del usuario; cron no expande '~',
+# por lo que se utiliza la ruta absoluta
+HELPERS=/home/ixos/.local/bin/kasumi/helpers
 
 # Actualización de plugins (core + all)
 # Frecuencia: cada 2 días 20:45
-45 20 */2 * *       $KASUMI_KRONOS/update-zinit >> $HOME/.cache/zinit-update.log 2>&1
+45 20 */2 * *       $HELPERS/update-zinit >> $HOME/.cache/zinit-update.log 2>&1
