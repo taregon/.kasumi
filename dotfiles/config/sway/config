@@ -6,6 +6,7 @@
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 # Los atajos de teclado se encuentran en modules/
 # PEND: https://swaywm.com/sway_wiki/
+# https://man.freebsd.org/cgi/man.cgi?query=sway&apropos=0&sektion=5&manpath=FreeBSD+15.0-RELEASE+and+Ports&format=html
 # ╒═════════════════════════════════════════════════════════════╕
 # │         NOTA: SINCRONIZACIÓN DE VARIABLES DE ENTORNO        │
 # ╘═════════════════════════════════════════════════════════════╛
@@ -56,12 +57,36 @@
   input type:keyboard {
   xkb_layout  latam,us
   xkb_options grp:alt_shift_toggle
+# repeat_delay 300   PEND: cuando halla mejor teclado
+# repeat_rate 50
   }
 
-  input "type:touchpad" {
-  dwt enabled
-  tap enabled
-  middle_emulation enabled
+# ── Touchpad / Click ──────────────────────────────────────────
+  input type:touchpad {
+  scroll_method edge
+# dwt enabled
+# tap enabled
+# middle_emulation enabled
+  }
+
+# ── Output Scaling ────────────────────────────────────────────
+# Lista las salidas detectadas por Sway y sus propiedades
+# Permite obtener el identificador exacto requerido en directivas `output`
+# Ejemplo:
+# swaymsg -t get_outputs
+# output "BOE 0x0852 Unknown" scale 1.25
+
+# ── GTK Theme ─────────────────────────────────────────────────
+  set $gnome-schema org.gnome.desktop.interface
+  exec_always {
+#    gsettings set $gnome-schema gtk-theme 'Nightfox-Dusk-B'
+#    gsettings set $gnome-schema icon-theme 'Flat-Remix-Blue-Dark'
+#    gsettings set $gnome-schema cursor-theme 'Bibata-Modern-Ice'
+#    gsettings set $gnome-schema font-name 'SF Pro Display'
+
+# Recomendados para dark mode y Firefox
+#    gsettings $gnome-schema color-scheme 'prefer-dark'
+#    gsettings $gnome-schema gtk-application-prefer-dark-theme true
   }
 
 # ── CONFIGURACIONES ADICIONALES ───────────────────────────────
@@ -73,3 +98,4 @@
   include ~/.config/sway/modules/keybinds.conf
   include ~/.config/sway/modules/shortcuts.conf
   include ~/.config/sway/modules/window-rules.conf
+  include ~/.config/sway/modules/fx.conf
