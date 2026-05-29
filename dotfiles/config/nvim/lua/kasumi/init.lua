@@ -41,6 +41,7 @@ require("kasumi/plugins/markview")
 require("kasumi/plugins/todo")
 require("kasumi/plugins/scrollbar")
 require("kasumi/plugins/treesj")
+require("kasumi/plugins/alternate-toggler")
 
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                     PLUGS (inactivos)                     │
