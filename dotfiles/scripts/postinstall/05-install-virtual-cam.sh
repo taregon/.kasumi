@@ -13,12 +13,12 @@ virtual_camera_number=8
 virtual_camera_name="Wayland Screen Share"
 
 # ── Colores ────────────────────────────────────────────────
-BLUE="\033[0;34m"
-GREEN="\033[0;32m"
-YELLOW="\033[0;33m"
-NC="\033[0m"
+fg_blue="\033[0;34m"
+fg_green="\033[0;32m"
+fg_yellow="\033[0;33m"
+fg_reset="\033[0m"
 
-echo -e "\n${BLUE}  Instalando dependencias...${NC}\n"
+echo -e "\n${fg_blue}  Instalando dependencias...${fg_reset}\n"
 
 paru -S --needed --noconfirm \
     wf-recorder \
@@ -29,15 +29,15 @@ paru -S --needed --noconfirm \
 
 # ── Carga automática del módulo ─────────────────────────────
 
-echo -e "\n${BLUE}  Configurando persistencia del módulo...${NC}\n"
+echo -e "\n${fg_blue}  Configurando persistencia del módulo...${fg_reset}\n"
 
-echo -e "   ${YELLOW}  /etc/modules-load.d/v4l2loopback.conf${NC}"
+echo -e "   ${fg_yellow}  /etc/modules-load.d/v4l2loopback.conf${fg_reset}"
 
 sudo tee /etc/modules-load.d/v4l2loopback.conf > /dev/null << EOF
 v4l2loopback
 EOF
 
-echo -e "   ${YELLOW}  /etc/modprobe.d/v4l2loopback.conf${NC}"
+echo -e "   ${fg_yellow}  /etc/modprobe.d/v4l2loopback.conf${fg_reset}"
 
 sudo tee /etc/modprobe.d/v4l2loopback.conf > /dev/null << EOF
 options v4l2loopback \
@@ -48,27 +48,21 @@ options v4l2loopback \
 EOF
 
 # ────────────────────────────────────────────────────────────
-echo -e "\n${BLUE}  Reiniciando módulo v4l2loopback...${NC}\n"
+echo -e "\n${fg_blue}  Reiniciando módulo v4l2loopback...${fg_reset}\n"
 
-sudo modprobe -r v4l2loopback 2> /dev/null || true
+sudo modprobe -r v4l2loopback 2> /dev/null || true # módulo podría no estar cargado aún
 sudo modprobe v4l2loopback
 
 sleep 1
 if [[ ! -e /dev/video${virtual_camera_number} ]]; then
-    echo -e "   ${YELLOW}  No se detectó /dev/video${virtual_camera_number}${NC}"
+    echo -e "   ${fg_yellow}  No se detectó /dev/video${virtual_camera_number}${fg_reset}"
     echo "     Revisa dmesg para más detalles."
     exit 1
 fi
 
 v4l2-ctl --list-devices
 
-echo -e "\n${GREEN}  Configuración completada.${NC}\n"
-echo "Dispositivo esperado:"
-echo "  /dev/video${virtual_camera_number}"
-echo
-echo "Siguiente paso:"
-echo "  ejecutar el script de captura de pantalla"
-echo
-echo "Ejemplo:"
-echo "  sharescreen /dev/video${virtual_camera_number}"
-echo
+echo -e "\n${fg_green}  Configuración completada.${fg_reset}\n"
+echo -e "Dispositivo esperado:\n  /dev/video${virtual_camera_number}\n"
+echo -e "Siguiente paso:\n  ejecutar el script de captura de pantalla\n"
+echo -e "Ejemplo:\n  sharescreen /dev/video${virtual_camera_number}\n"
