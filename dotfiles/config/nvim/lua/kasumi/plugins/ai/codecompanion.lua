@@ -56,7 +56,7 @@ codecompanion.setup({
 					name = "Gemma-4-it",
 					-- stylua: ignore
 					schema = {
-						model          = { default = "hf.co/dahus/gemma-4-e2b-it-Q5_K_M-GGUF:latest" },
+						model          = { default = "hf.co/DuoNeural/Gemma-4-E2B-Abliterated-GGUF:Q4_K_M" },
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
 						repeat_penalty = { default = 1.01 },
@@ -80,8 +80,8 @@ codecompanion.setup({
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
 						repeat_penalty = { default = 1.02 },
-						temperature    = { default = 0.46 },
-						top_p          = { default = 0.84 },
+						temperature    = { default = 0.76 },
+						top_p          = { default = 0.94 },
 						top_k          = { default = 40 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
@@ -95,7 +95,7 @@ codecompanion.setup({
 	-- "strategies" fue renombrado a "interactions" en versiones recientes
 	-- stylua: ignore
 	interactions = {
-		chat   = { adapter = "qwen3" },
+		chat   = { adapter = "gemma4_itq5" },
 		inline = { adapter = "gemma4" },
 	},
 	display = {
