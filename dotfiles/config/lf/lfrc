@@ -103,3 +103,47 @@ cmd fzf_ripgrep ${{
 }}
 
   map <c-g> :fzf_ripgrep
+
+# ─[ FOLLOW LINK ]──────────────────────────────────────────
+# Sigue el enlace simbólico y selecciona su destino.
+cmd follow_link %{{
+	lf -remote "send ${id} select \"$(readlink $f)\""
+}}
+
+map gl follow_link
+
+# ─[ EXTRACT ]─────────────────────────────────────────────
+# Extrae archivos comprimidos con atool.
+cmd extract ${{
+	clear
+	tput cup $(($(tput lines)/3))
+	tput bold
+	set -f
+
+	printf '%s\n' $fx
+	printf "\t¿Extraer? [s/N] "
+
+	read -r reply
+    clear
+	case "$reply" in
+		[yYsS])
+			aunpack $fx >/dev/null 2>&1
+			lf -remote "send $id echo Extracción completada"
+			;;
+	esac
+}}
+
+map E extract
+
+# ─[ ZOXIDE ]─────────────────────────────────────────────
+# Navega a directorios con zoxide.
+# cmd zoxide %{{
+#     dir="$(zoxide query -- "$*")"
+#
+#     [ -n "$dir" ] && \
+#         lf -remote "send ${id} cd \"$dir\""
+# }}
+#
+# map z<space> push :zoxide<space>
+
+# ────────────────────────────────────────────────────────────
