@@ -270,7 +270,7 @@
   "custom/clipboard": {
     "format": "󰅍 Clip",
     "tooltip": false,
-    "on-click": "~/.config/sway/scripts/clip"
+    "on-click": "~/.config/sway/scripts/clipboard text"
   },
   "custom/power": {
     "format": "⏻",
