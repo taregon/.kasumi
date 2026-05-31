@@ -28,10 +28,10 @@
 set -euo pipefail
 
 # ── Colores ────────────────────────────────────────────────
-BLUE="\033[0;34m"
-GREEN="\033[0;32m"
-YELLOW="\033[0;33m"
-NC="\033[0m"
+C_STEP="\033[0;34m"   # blue
+C_OK="\033[0;32m"     # green
+C_ACTION="\033[0;33m" # yellow
+C_RST="\033[0m"       # reset
 
 CONFIG_FILE="/etc/default/btrfsmaintenance"
 BACKUP_FILE="${CONFIG_FILE}-$(date +%Y%m%d-%H%M%S).bak"
@@ -47,9 +47,9 @@ TEMP_CONFIG_FILE="$TEMP_DIR/btrfsmaintenance.tmp"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 # ────────────────────────────────────────────────────────────
-echo -e "${BLUE}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS${NC}"
-echo -e "${BLUE}Evita bloqueos por falta de espacio${NC}"
-echo -e "${BLUE}para nuevos chunks de metadata${NC}"
+echo -e "${C_STEP}OPTIMIZACIÓN Y MANTENIMIENTO PROACTIVO DE BTRFS${C_RST}"
+echo -e "${C_STEP}Evita bloqueos por falta de espacio${C_RST}"
+echo -e "${C_STEP}para nuevos chunks de metadata${C_RST}"
 
 # ── Privilegios ────────────────────────────────────────────
 if [[ $EUID -ne 0 ]]; then
@@ -108,7 +108,7 @@ EOF
 # ── BACKUP PREVIO ───────────────────────────────────────────
 if [[ ! -f "$CONFIG_FILE" ]]; then
     echo
-    echo "${YELLOW}  Creando archivo de configuración ${NC}"
+    echo -e "${C_ACTION}  Creando archivo de configuración ${C_RST}"
     mv "$TEMP_CONFIG_FILE" "$CONFIG_FILE" || {
         echo "Error moviendo temporal"
         exit 1
@@ -119,14 +119,14 @@ elif cmp -s "$CONFIG_FILE" "$TEMP_CONFIG_FILE"; then
     rm "$TEMP_CONFIG_FILE"
 else
     echo
-    echo "${YELLOW}  Cambios detectados.${NC} Creando respaldo..."
+    echo -e "${C_ACTION}  Cambios detectados.${C_RST} Creando respaldo..."
     cp "$CONFIG_FILE" "$BACKUP_FILE"
     mv "$TEMP_CONFIG_FILE" "$CONFIG_FILE"
 fi
 
 # ── REFRESH ────────────────────────────────────────────────
 echo
-echo -e "${YELLOW}  Refrescando configuración de btrfsmaintenance…${NC}"
+echo -e "${C_ACTION}  Refrescando configuración de btrfsmaintenance…${C_RST}"
 
 if [ -x /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh ]; then
     /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh 2> /dev/null
@@ -145,22 +145,22 @@ for timer in \
     if systemctl list-unit-files --type=timer --all | grep -qx "$timer"; then
         if systemctl is-enabled --quiet "$timer"; then
             if systemctl is-active --quiet "$timer"; then
-                echo -e "   ${GREEN} ${NC} $timer activo"
+                echo -e "   ${C_OK} ${C_RST} $timer activo"
             else
-                echo -e "   ${YELLOW} ${NC} $timer habilitado, iniciando…"
+                echo -e "   ${C_ACTION} ${C_RST} $timer habilitado, iniciando…"
                 systemctl start "$timer"
             fi
         else
-            echo -e "   ${YELLOW} ${NC} $timer habilitando y arrancando…"
+            echo -e "   ${C_ACTION} ${C_RST} $timer habilitando y arrancando…"
             systemctl enable --now "$timer"
         fi
     else
-        echo -e "   ${YELLOW} ${NC} $timer no existe en este sistema"
+        echo -e "   ${C_ACTION} ${C_RST} $timer no existe en este sistema"
     fi
 done
 
 echo
-echo -e "${YELLOW}  Próxima ejecución de mantenimiento Btrfs:${NC}"
+echo -e "${C_ACTION}  Próxima ejecución de mantenimiento Btrfs:${C_RST}"
 systemctl list-timers | grep btrfs || true
 
 # ─[ PURGAR CACHE ]───────────────────────────────────────────
@@ -224,7 +224,7 @@ fi
 
 declare -A PROCESSED_UUIDS
 echo
-echo -e "${YELLOW}  REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS${NC}"
+echo -e "${C_ACTION}  REDISTRIBUCIÓN DE BLOQUES DE DATOS Y METADATOS${C_RST}"
 
 while read -r MOUNTPOINT BTRFS_UUID; do
     [[ -z "$BTRFS_UUID" ]] && continue
@@ -235,13 +235,13 @@ while read -r MOUNTPOINT BTRFS_UUID; do
     PROCESSED_UUIDS[$BTRFS_UUID]=1
 
     echo
-    echo -e "${BLUE}BALANCE DE BTRFS:${NC} $BTRFS_UUID (UUID)"
-    echo -e "${YELLOW}Mountpoint : $MOUNTPOINT${NC}"
+    echo -e "${C_STEP}BALANCE DE BTRFS:${C_RST} $BTRFS_UUID (UUID)"
+    echo -e "${C_ACTION}Mountpoint : $MOUNTPOINT${C_RST}"
     echo "    Estado :"
 
-    printf '%b' "$BLUE"
+    printf '%b' "$C_STEP"
     df -h "$MOUNTPOINT"
-    printf '%b' "$NC"
+    printf '%b' "$C_RST"
 
     btrfs filesystem usage "$MOUNTPOINT" | grep -E \
         "Device allocated|Unallocated|Free \(statfs|Data.*Used|Metadata.*Used"
@@ -250,11 +250,11 @@ while read -r MOUNTPOINT BTRFS_UUID; do
 
     echo
     if ((USAGE_PERCENT > THRESHOLD)); then
-        echo "${YELLOW}  Uso alto (${USAGE_PERCENT}%).${NC} Ejecutando balance suave…"
+        echo -e "${C_ACTION}  Uso alto (${USAGE_PERCENT}%).${C_RST} Ejecutando balance suave…"
         btrfs balance start -musage=65 -dusage=65 "$MOUNTPOINT"
         echo "  Balance finalizado."
     else
-        echo -e "${GREEN}  Uso bajo (${USAGE_PERCENT}%).${NC} No se ejecuta balance."
+        echo -e "${C_OK}  Uso bajo (${USAGE_PERCENT}%).${C_RST} No se ejecuta balance."
     fi
 done < <(findmnt -rn -t btrfs -o TARGET,UUID | sort -u)
 
