@@ -1,0 +1,39 @@
+/* Estilo para rofi-calc: prioriza legibilidad del resultado y del historial. */
+
+@import "~/.config/rofi/kasumi-full.rasi"
+
+window {
+    width: 420px;
+}
+
+inputbar {
+    padding: 10px;
+}
+
+listview {
+    columns: 1;
+}
+
+entry {
+    font: "JetBrainsMono Nerd Font 18";
+}
+
+message {
+    padding: 8px;
+}
+
+mainbox {
+    children: [inputbar, message, listview];
+}
+
+configuration {
+    calc {
+        hint-result: "  ";
+        hint-welcome: "...";
+    }
+}
+
+/*
+Comando para pruebas
+rofi -show calc -modi calc -theme ~/.config/rofi/themes/calc-modi.rasi -calc-command "printf '%s' '{result}' | wl-copy"
+*/
