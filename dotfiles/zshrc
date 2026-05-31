@@ -47,7 +47,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 # Usa los colores definidos en LS_COLORS para colorear los
 # elementos listados en el menú de completado.
-# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # ── COMPLETADO GLOBAL DE ZSH ────────────────────────────────
 # Desactiva el menú interactivo nativo de zsh.
