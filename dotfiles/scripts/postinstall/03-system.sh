@@ -265,6 +265,9 @@ install_sys_wayland() {
     echo ">> Instalando herramientas del sistema"
     local pkgs=(
 
+        # Bibliotecas gráficas base
+        mesa # Implementación de OpenGL/Vulkan para renderizado
+
         # Compositor Wayland
         swayfx        # Gestor de ventanas Wayland con efectos y animaciones
         swayidle      # Demonio de gestión de inactividad para Wayland
@@ -281,9 +284,11 @@ install_sys_wayland() {
         wluma      # Ajuste automático de brillo según luz ambiental
 
         # Audio y visualización
-        cava     # Visualizador de espectro de audio en terminal
-        pipewire # Servicio de audio/video de baja latencia (reemplaza PulseAudio/JACK)
-        wev      # Visor de eventos de entrada en Wayland
+        cava           # Visualizador de espectro de audio en terminal
+        pipewire       # Servicio de audio/video de baja latencia (reemplaza PulseAudio/JACK)
+        pipewire-pulse # Capa de compatibilidad con PulseAudio sobre PipeWire
+        wev            # Visor de eventos de entrada en Wayland
+        wireplumber    # Session manager moderno para PipeWire (reemplaza pipewire-media-session)
 
         # Conectividad y Bluetooth
         # blueman # Gestor gráfico de Bluetooth
@@ -300,15 +305,16 @@ install_sys_wayland() {
 
         # Entorno gráfico (Wayland)
         awww         # Gestor de fondos animados para Wayland
+        cliphist     # Gestor de historial del portapapeles para Wayland
         grim         # Captura de pantalla en Wayland
         hyprpicker   # Selector de color en Wayland
         mako         # Demonio de notificaciones para Wayland
-        cliphist     # Gestor de historial del portapapeles para Wayland
-        rofi-calc    # Plugin de calculadora para rofi con lenguaje natural
         rofi         # Lanzador de aplicaciones y selector interactivo
+        rofi-calc    # Plugin de calculadora para rofi con lenguaje natural
         slurp        # Selección de región en Wayland
         swappy       # Editor interactivo para capturas de pantalla en Wayland
         swaylock     # Pantalla de bloqueo para Sway/Wayland
+        waybar       # Barra de estado altamente personalizable para Wayland
         wl-clipboard # Utilidades de portapapeles en Wayland
         wlogout      # Menú minimalista de cierre de sesión
     )
