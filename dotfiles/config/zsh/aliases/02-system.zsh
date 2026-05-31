@@ -54,3 +54,17 @@ alias pac-cleancache="cdu -B /var/cache/pacman/pkg && paccache -r -k 1 && cdu /v
 alias paz="paru -Sua --noconfirm"
 alias q="exit"
 alias servicios="systemctl list-units --type=service --all"
+alias zf='zoxide query -l | fzf \
+    --header "Directorios frecuentes" \
+    --header-first \
+    --preview '\''lsd --color always --icon always --tree --depth 3 --group-dirs first {} 2>/dev/null'\'''
+
+alias fr='rga --max-depth 1 --line-number --smart-case . 2>/dev/null | \
+fzf --delimiter : \
+    --nth 3.. \
+    --preview '\''bat --style=numbers --color=always --highlight-line {2} {1}'\'' \
+    --preview-window '\''~4,+{2}/2'\'''
+
+# alias swtree='swaymsg -t get_tree | jq '\''.. | objects | select(.type=="con" and (.app_id? or .window?)) | {name, app_id, class:.window_properties.class, focused, urgent}'\'''
+
+alias ppk='ps -eo pid,user,comm,cmd --sort=-%cpu | fzf --multi --header="Selecciona proceso(s) a matar" | awk "{print \$1}" | xargs -r kill'
