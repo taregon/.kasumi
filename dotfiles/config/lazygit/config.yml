@@ -14,9 +14,11 @@ gui:
       - green
       - bold
     inactiveBorderColor:
-      - '#73848c'
+      - '#60707a'
     selectedLineBgColor:
-      - '#5c775f'
+      - '#477f5a'
+    searchingActiveBorderColor:
+      - yellow
 git:
   pagers:
     - colorArg: always

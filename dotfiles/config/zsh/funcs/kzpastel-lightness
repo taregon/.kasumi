@@ -1,0 +1,43 @@
+# vim: filetype=zsh
+# Genera escalas y gradientes de color en los espacios OkLab y OkLCh.
+# La luminosidad se distribuye uniformemente entre cada paso para producir transiciones suaves
+# y una percepción de brillo más equilibrada. Resulta útil para temas de terminal,
+# interfaces y paletas donde se busca una representación del color más cercana a la percepción humana.
+# También admite transparencia (canal alpha).
+
+# Color base desde el cual se generará la escala.
+local base="$1"
+
+# Cantidad de colores a generar.
+local steps="$2"
+
+# Validar argumentos requeridos.
+if [[ -z "$base" || -z "$steps" ]]; then
+    echo "Uso: palette <color> <pasos>"
+    return 1
+fi
+
+# Generar cada color de la escala.
+for ((i = 0; i < steps; i++)); do
+
+    # Límite inferior de luminosidad.
+    start=30
+
+    # Límite superior de luminosidad.
+    end=96
+
+    # Interpolar la luminosidad entre start y end.
+    # Se utiliza bc para conservar precisión decimal.
+    lightness=$(bc -l <<< "scale=4; $start + $i * ($end - $start) / ($steps - 1)")
+
+    # Crear una variante del color base ajustando
+    # la propiedad lightness y convertir el resultado
+    # a formato hexadecimal.
+    color=$(
+        pastel set lightness "$lightness" "$base" \
+            | pastel format hex
+    )
+
+    # Mostrar una muestra visual junto al valor hexadecimal.
+    pastel paint "$color" "▋     ├─── Lorem Ipsum ─── $color"
+done
