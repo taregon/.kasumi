@@ -84,5 +84,5 @@ for ((i = 0; i < steps; i++)); do
 
     # Mostrar una muestra visual junto con el valor hexadecimal generado.
     pastel paint "$hex_color" \
-        "▋     ├─── Lorem Ipsum ─── $label $hex_color"
+        "▋     ├─── Lorem Ipsum ─── $label $hex_color ───┤  🮍███🮌"
 done
