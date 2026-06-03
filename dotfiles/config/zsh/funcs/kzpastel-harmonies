@@ -1,30 +1,189 @@
 # vim: filetype=zsh
-# Rotaciones de matiz utilizadas para generar armonías cromáticas
-# comunes en teoría del color y arte digital.
+# Rotación del canal HSL de un color para generar armonías cromáticas.
+# Mantiene constantes la saturación y la luminosidad en HSL,
+# modificando únicamente el matiz (hue).
 #
-#  30°  Análogo.
-#       Variación cercana al color original con contraste suave.
+# La rotación opera exclusivamente en el espacio HSL, por lo que no
+# garantiza preservación de luminancia ni croma en espacios perceptuales.
 #
-#  60°  Análogo amplio.
-#       Incrementa la separación cromática manteniendo coherencia visual.
+# Las variaciones observadas en otros espacios de color (como OkLab u OkLCh)
+# son consecuencia de las transformaciones entre modelos de color con
+# diferentes propiedades geométricas y perceptuales.
 #
-# 120°  Triádico.
-#       Distribuye tres colores de forma equilibrada en la rueda cromática.
-#
-# 150°  Split-complementario.
-#       Ofrece contraste elevado sin llegar al complementario puro.
-#
-# 180°  Complementario.
-#       Produce el color opuesto para obtener el máximo contraste cromático.
+# Esto implica que rotaciones simétricas en HSL pueden producir trayectorias
+# no uniformes en espacios perceptuales, generando variaciones de “energía
+# visual” y contraste dependiendo del ángulo aplicado.
+
+# 15°       Variación mínima.
+#           Mantiene casi la misma identidad cromática.
+#           Útil para estados hover, bordes o matices sutiles.
+# 22.5°     Análogo estrecho.
+#           Introduce una diferencia perceptible sin romper la cohesión.
+#           Adecuado para variantes suaves de un mismo color.
+# 30°       Análogo.
+#           Relación clásica de colores vecinos en la rueda cromática.
+#           Produce transiciones naturales y armoniosas.
+# 45°       Análogo extendido.
+#           Incrementa la separación cromática manteniendo afinidad visual.
+#           Suele funcionar bien para acentos secundarios.
+# 60°       Análogo amplio.
+#           Aporta mayor diversidad sin perder coherencia.
+#           Frecuente en paletas modernas de interfaz.
+# 68.754°   Medio ángulo áureo.
+#           Derivado de la proporción áurea.
+#           Genera relaciones menos predecibles que las armonías clásicas.
+# 75°       Contraste moderado.
+#           Se aproxima a una relación complementaria suave.
+#           Útil cuando 60° resulta conservador y 90° demasiado marcado.
+# 90°       Contraste ortogonal.
+#           Produce diferenciación clara sin llegar al complementario.
+#           Común en dashboards, gráficos y temas de interfaz.
+# 105°      Cuasi-triádico.
+#           Cercano al triádico pero con una tensión visual ligeramente mayor.
+#           Puede aportar carácter sin perder equilibrio.
+# 120°      Triádico.
+#           Distribuye tres colores de forma uniforme en la rueda cromática.
+#           Proporciona equilibrio y variedad cromática.
+# 135°      Triádico expandido.
+#           Situado entre la armonía triádica y la complementaria.
+#           Ofrece contraste elevado conservando cierta estabilidad.
+# 137.508°  Ángulo áureo.
+#           Basado en la proporción áurea.
+#           Favorece distribuciones uniformes al generar múltiples colores.
+# 150°      Split-complementario cercano.
+#           Contraste fuerte con menor agresividad que el complementario puro.
+#           Muy útil para acentos destacados.
+# 165°      Casi complementario.
+#           Conserva gran parte del contraste del opuesto cromático.
+#           Reduce ligeramente la tensión visual.
+# 180°      Complementario.
+#           Produce el color opuesto en la rueda cromática.
+#           Maximiza el contraste cromático.
+# 210°      Split-complementario.
+#           Complementario desplazado 30°.
+#           Mantiene contraste elevado con mayor riqueza cromática.
+# 240°      Triádico inverso.
+#           Segundo vértice de una armonía triádica clásica.
+#           Equivalente a una rotación de -120°.
+# 270°      Ortogonal inverso.
+#           Equivalente a una rotación de -90°.
+#           Genera contrastes similares a 90° desde el lado opuesto.
+# 300°      Análogo amplio inverso.
+#           Equivalente a una rotación de -60°.
+#           Conserva coherencia cromática desde la dirección opuesta.
+# 330°      Análogo inverso.
+#           Equivalente a una rotación de -30°.
+#           Variante clásica para explorar vecinos cromáticos opuestos.
+# -180°     Equivale a 180° (Complementario), rotación opuesta.
+# -165°     Casi complementario inverso.
+#           Complementario desplazado 15° en sentido inverso.
+#           Contraste fuerte desde la dirección opuesta al complementario puro.
+# -150°     Equivale a 210° (Split-complementario).
+# -137.508° Áureo inverso.
+#           Ángulo áureo desde el recorrido negativo.
+#           Genera distribuciones uniformes en sentido inverso al áureo clásico.
+# -135°     Triádico expandido inverso.
+#           Similar a 135° pero en dirección opuesta.
+#           Contraste elevado desde la otra cara del círculo cromático.
+# -120°     Equivale a 240° (Triádico inverso).
+# -105°     Cuasi-triádico inverso.
+#           Cercano al triádico con tensión visual desde el lado opuesto.
+#           Aporta carácter sin perder equilibrio cromático.
+# -90°      Equivale a 270° (Ortogonal inverso).
+# -75°      Contraste moderado inverso.
+#           Se aproxima al complementario desde la rotación negativa.
+#           Alternativa cuando 90° resulta demasiado marcado.
+# -68.754   Medio ángulo áureo inverso.
+#           Relación menos predecible desde el recorrido negativo.
+#           Complementa a 68.754° en sentido opuesto.
+# -60°      Equivale a 300° (Análogo amplio inverso).
+# -45°      Análogo medio inverso.
+#           Separación cromática moderada en dirección negativa.
+#           Alternativa a 45° para acentos secundarios.
+# -30°      Equivale a 330° (Análogo inverso).
+# -22.5°    Análogo estrecho inverso.
+#           Diferencia perceptible desde la rotación negativa.
+#           Complementa a 22.5° para pares simétricos.
+# -15°      Variación mínima inversa.
+#           Cambio sutil en dirección opuesta a 15°.
+#           Útil para micro-variantes que exploran ambos lados del matiz.
+# -10°      Micro-desplazamiento inverso.
+#           Ajuste fino de tono en dirección negativa.
+#           Gradientes ultrasuaves con dos direcciones de rotación.
+# -7.5°     Micro-variación inversa.
+#           Cambio casi imperceptible en sentido opuesto.
+#           Para pares de color casi idénticos con deriva opuesta.
+# -5°       Micro-ajuste inverso.
+#           Diferencia mínima en zona amarillo estable.
+#           Variante especular de 5° para correcciones finas.
+# -2.5°     Micro-ajuste inverso extremo.
+#           Variación prácticamente imperceptible.
+#           Útil para calibrar bordes cromáticos.
+# 2.5°      Micro-ajuste.
+#           Variación casi imperceptible desde el matiz base.
+#           Corrección fina de tono sin alterar la identidad del color.
+# 5°        Micro-ajuste.
+#           Diferencia mínima apreciable con atención.
+#           Adecuado para separar elementos casi idénticos.
+# 7.5°      Micro-variación.
+#           Comienza a percibirse un desplazamiento cromático.
+#           Útil para gradientes muy sutiles o brillos especulares.
+# 10°       Variación leve.
+#           Cambio cromático visible pero menor que 15°.
+#           Funciona para jerarquías sutiles en interfaces monocromáticas.
 
 local base=$1
+local angles=(
+    # -180° y 180° son equivalentes (mismo color resultante);
+    # se incluyen ambos para cubrir la notación simétrica.
+    -180 -165 -150 -137.508 -135 -120 -105 -90 -75 -68.754 -60 -45 -30 -22.5 -15 -10 -7.5 -5 -2.5
+    2.5 5 7.5 10 15 22.5 30 45 60 68.754 75 90 105 120 135 137.508 150 165 180
+)
 
-for degrees in 30 60 120 150 180; do
+[ -z "$base" ] && {
+    echo "Uso: kzpastel-harmonies <color>"
+    return 1
+}
+
+for degrees in "${angles[@]}"; do
+    # Rotación del matiz en el espacio HSL.
     color=$(
-        pastel rotate "$degrees" "$base" \
+        pastel rotate -- "$degrees" "$base" \
             | pastel format hex
     )
 
+    # Representaciones del color en espacios perceptuales:
+    # - oklch: representación polar (L = luminosidad, C = croma, h = matiz)
+    # - oklab: representación cartesiana (L, a, b) para análisis y cálculos
+    oklch_val=$(pastel format oklch "$color")
+    oklab_l=$(pastel format oklab-l "$color")
+    oklab_a=$(pastel format oklab-a "$color")
+    oklab_b=$(pastel format oklab-b "$color")
+
+    # ── Score perceptual ──────────────────────────────────────────────
+    #   0.6·L + 0.4·√(a² + b²)
+    #   L           ->  Luminosidad en OkLab (0–1). Claridad percibida
+    #                   del color, independiente del matiz.
+    #   √(a² + b²)  ->  Croma en OkLab. Distancia desde el gris neutro
+    #                   en el plano cromático; a mayor valor, mayor
+    #                   intensidad cromática.
+    #   Pesos:
+    #     0.6·L     ->  Prioriza la contribución de luminosidad a la
+    #                   percepción visual global.#
+    #     0.4·croma ->  Añade intensidad cromática sin dominar la claridad.
+    #
+    #   El resultado es una medida de “intensidad visual percibida”,
+    #   útil para comparar colores dentro de paletas y evaluar
+    #   estabilidad en transformaciones de hue.
+    oklab_score=$(
+        bc -l <<< "
+        scale=10;
+        x = (0.6 * $oklab_l) + (0.4 * sqrt(($oklab_a*$oklab_a) + ($oklab_b*$oklab_b)));
+        scale=4;
+        x/1
+        "
+    )
+
     pastel paint "$color" \
-        "▋  Rotate ${degrees}° ─── $color"
+        "$color ◖████◗   Score OkLab: $oklab_score ┃ $oklch_val - Rotate HSL: ${degrees}°"
 done
