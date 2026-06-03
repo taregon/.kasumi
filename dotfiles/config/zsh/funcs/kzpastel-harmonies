@@ -1,0 +1,30 @@
+# vim: filetype=zsh
+# Rotaciones de matiz utilizadas para generar armonías cromáticas
+# comunes en teoría del color y arte digital.
+#
+#  30°  Análogo.
+#       Variación cercana al color original con contraste suave.
+#
+#  60°  Análogo amplio.
+#       Incrementa la separación cromática manteniendo coherencia visual.
+#
+# 120°  Triádico.
+#       Distribuye tres colores de forma equilibrada en la rueda cromática.
+#
+# 150°  Split-complementario.
+#       Ofrece contraste elevado sin llegar al complementario puro.
+#
+# 180°  Complementario.
+#       Produce el color opuesto para obtener el máximo contraste cromático.
+
+local base=$1
+
+for degrees in 30 60 120 150 180; do
+    color=$(
+        pastel rotate "$degrees" "$base" \
+            | pastel format hex
+    )
+
+    pastel paint "$color" \
+        "▋  Rotate ${degrees}° ─── $color"
+done
