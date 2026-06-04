@@ -49,7 +49,7 @@ for ((i = 0; i < steps; i++)); do
             light_level=$(bc -l <<< \
                 "scale=4; $light_min + $i * ($light_max - $light_min) / ($steps - 1)")
 
-            light_pct=$(printf "%.1f" "$light_level")
+            light_pct=$(printf "%4.1f" "$light_level")
 
             property="lightness"
             label="Light"
@@ -63,7 +63,7 @@ for ((i = 0; i < steps; i++)); do
             light_level=$(bc -l <<< \
                 "scale=4; ($light_min + $i * ($light_max - $light_min) / ($steps - 1)) / 100")
 
-            light_pct=$(printf "%.1f" "$(bc -l <<< "$light_level * 100")")
+            light_pct=$(printf "%4.1f" "$(bc -l <<< "$light_level * 100")")
 
             property="oklab-l"
             label="Oklab"
@@ -76,7 +76,7 @@ for ((i = 0; i < steps; i++)); do
             light_level=$(bc -l <<< \
                 "scale=4; ($light_min + $i * ($light_max - $light_min) / ($steps - 1)) / 100")
 
-            light_pct=$(printf "%.1f" "$(bc -l <<< "$light_level * 100")")
+            light_pct=$(printf "%4.1f" "$(bc -l <<< "$light_level * 100")")
 
             property="hsl-lightness"
             label="HSL L"
