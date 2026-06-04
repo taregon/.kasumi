@@ -3,46 +3,40 @@
 # transformaciones perceptuales disponibles en Pastel.
 #
 # Modos disponibles:
-#   l : ajusta la propiedad 'lightness' de pastel (escala tonal tradicional)
-#   o : ajusta la componente L de OkLab (escala tonal perceptual)
+#   l : ajusta la propiedad 'lightness' (escala tonal tradicional)
+#   o : ajusta la componente L de OkLab (escala tonal perceptual, default)
+#   h : ajusta la luminosidad en espacio HSL
 #
 # La luminosidad se interpola linealmente entre valores mínimos y máximos
 # definidos para cada modo, produciendo transiciones progresivas entre
 # tonos oscuros y claros del mismo color base.
 #
+# Uso: kzpastel-tones <color> <min> <max> <pasos> [modo]
+#   modo — l | o | h (default: o)
+#
 # El resultado se convierte a hexadecimal y se muestra como una muestra
 # coloreada directamente en la terminal.
 
-# Color base desde el cual se generará la escala.
 local base="$1"
+local light_min="${2:-30}"
+local light_max="${3:-96}"
+local steps="${4:-20}"
+local mode="${5:-o}"
 
-# Cantidad de colores que tendrá la escala.
-local steps="$2"
-
-# Rango de luminosidad empleado para la interpolación. Los límites
-# fueron ajustados experimentalmente para producir una transición
-# visual equilibrada entre tonos oscuros y claros.
-local light_min=30
-local light_max=96
-
-# Validar argumentos requeridos.
-if [[ -z "$base" || -z "$steps" ]]; then
-    echo "Uso: palette <hex_color> <pasos> <propiedad>"
+[[ -z "$base" || -z "$steps" ]] && {
+    echo "Uso: kzpastel-tones <color> <min> <max> <pasos> [modo]"
     return 1
-fi
+}
 
-# Evitar división por cero durante la interpolación.
 ((steps > 1)) || {
     echo "Se requieren al menos 2 pasos"
     return 1
 }
 
-# Modo de cálculo:
-#   l = lightness
-#   o = oklab-l
-#
-# Si no se especifica, se utiliza Oklab.
-local mode="${3:-o}"
+((light_min >= 0 && light_max <= 100)) || {
+    echo "min y max deben estar entre 0 y 100"
+    return 1
+}
 
 # Generar cada color de la escala.
 for ((i = 0; i < steps; i++)); do
@@ -73,6 +67,19 @@ for ((i = 0; i < steps; i++)); do
 
             property="oklab-l"
             label="Oklab"
+            ;;
+
+        h)
+            # HSL-lightness es una transformación geométrica sobre RGB,
+            # no un modelo perceptual. Incrementos iguales de lightness
+            # no producen saltos visuales uniformes de claridad.
+            light_level=$(bc -l <<< \
+                "scale=4; ($light_min + $i * ($light_max - $light_min) / ($steps - 1)) / 100")
+
+            light_pct=$(printf "%.1f" "$(bc -l <<< "$light_level * 100")")
+
+            property="hsl-lightness"
+            label="HSL L"
             ;;
 
         *)
