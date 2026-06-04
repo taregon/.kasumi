@@ -3,8 +3,8 @@
 # transformaciones perceptuales disponibles en Pastel.
 #
 # Modos disponibles:
-#   l : ajusta la propiedad genérica 'lightness'
-#   o : ajusta explícitamente la componente L del espacio Oklab
+#   l : ajusta la propiedad 'lightness' de pastel (escala tonal tradicional)
+#   o : ajusta la componente L de OkLab (escala tonal perceptual)
 #
 # La luminosidad se interpola linealmente entre valores mínimos y máximos
 # definidos para cada modo, produciendo transiciones progresivas entre
@@ -54,6 +54,9 @@ for ((i = 0; i < steps; i++)); do
             # a la componente L de Oklab.
             light_level=$(bc -l <<< \
                 "scale=4; $light_min + $i * ($light_max - $light_min) / ($steps - 1)")
+
+            light_pct=$(printf "%.1f" "$light_level")
+
             property="lightness"
             label="Light"
             ;;
@@ -65,6 +68,9 @@ for ((i = 0; i < steps; i++)); do
             # a un valor decimal (0.0–1.0).
             light_level=$(bc -l <<< \
                 "scale=4; ($light_min + $i * ($light_max - $light_min) / ($steps - 1)) / 100")
+
+            light_pct=$(printf "%.1f" "$(bc -l <<< "$light_level * 100")")
+
             property="oklab-l"
             label="Oklab"
             ;;
@@ -84,5 +90,6 @@ for ((i = 0; i < steps; i++)); do
 
     # Mostrar una muestra visual junto con el valor hexadecimal generado.
     pastel paint "$hex_color" \
-        "▋     ├─── Lorem Ipsum ─── $label $hex_color ───┤  🮍███🮌"
+        "▋     Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ──┤  🮍███🮌"
+
 done
