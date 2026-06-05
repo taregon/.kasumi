@@ -1,21 +1,25 @@
 # vim: filetype=zsh
-# Genera una escala tonal a partir de un color base utilizando las
-# transformaciones perceptuales disponibles en Pastel.
+# Genera una rampa de color a partir de un color base variando su nivel
+# de claridad mediante distintas propiedades de luminosidad disponibles
+# en Pastel.
 #
 # Modos disponibles:
-#   l : ajusta la propiedad 'lightness' (escala tonal tradicional)
-#   o : ajusta la componente L de OkLab (escala tonal perceptual, default)
-#   h : ajusta la luminosidad en espacio HSL
+#   l : ajusta la propiedad 'lightness', conservando bien la croma y el
+#       matiz a lo largo de la rampa
+#   o : ajusta la componente L de OkLab, produciendo una progresión de
+#       luminosidad perceptualmente uniforme (default)
+#   h : ajusta la luminosidad en espacio HSL, manteniendo estable el
+#       matiz pero con mayores variaciones de croma
 #
-# La luminosidad se interpola linealmente entre valores mínimos y máximos
-# definidos para cada modo, produciendo transiciones progresivas entre
-# tonos oscuros y claros del mismo color base.
+# La propiedad seleccionada se interpola linealmente entre los valores
+# mínimo y máximo indicados, generando una secuencia de colores desde
+# tonos más oscuros hasta tonos más claros del mismo color base.
 #
-# Uso: kzpastel-tones <color> <min> <max> <pasos> [modo]
+# Uso: kzpastel-ramp <color> <min> <max> <pasos> [modo]
 #   modo — l | o | h (default: o)
 #
-# El resultado se convierte a hexadecimal y se muestra como una muestra
-# coloreada directamente en la terminal.
+# Cada color generado se convierte a hexadecimal y se muestra como una
+# muestra coloreada directamente en la terminal.
 
 local base="$1"
 local light_min="${2:-30}"
@@ -24,7 +28,8 @@ local steps="${4:-20}"
 local mode="${5:-o}"
 
 [[ -z "$base" || -z "$steps" ]] && {
-    echo "Uso: kzpastel-tones <color> <min> <max> <pasos> [modo]"
+    echo "Uso: kzpastel-ramp <color> <min> <max> <pasos> [modo]"
+    echo "  modo: l | o | h (default: o)"
     return 1
 }
 
