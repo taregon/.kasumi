@@ -48,8 +48,8 @@ require("catppuccin").setup({
 			surface0  = "#414E55", -- Barra: master, pestaña actual, flechas del tab, fondo menu desplegable lsp, ┊
 			surface1  = "#4A585F", -- Numero de linea, resaltado linea horizontal, (end-of-line)
 			base      = "#2E383D", -- A. Fondo
-			mantle    = "#343E43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, fondo scrollbar, letras lualine de los extremos, fondo menu
-			crust     = "#49575E", -- C. Divisor de paneles, fondo pestañas,
+			mantle    = "#343E43", -- B. Barra centro, neotree, wichkey, pestañas inactivas, letras lualine de los extremos, fondo menu
+			crust     = "#49575E", -- C. Divisor de paneles, fondo pestañas, fondo scrollbar.
 		},
 	},
 
