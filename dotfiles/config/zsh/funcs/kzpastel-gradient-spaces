@@ -76,9 +76,9 @@ done
 # de línea al final de cada fila.
 
 for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
-    pastel paint -n "${hsl_gradient[i]}" " █ HSL   ${hsl_gradient[i]} "
-    pastel paint -n "${rgb_gradient[i]}" " █ RGB   ${rgb_gradient[i]} "
-    pastel paint -n "${lab_gradient[i]}" " █ Lab   ${lab_gradient[i]} "
-    pastel paint -n "${oklab_gradient[i]}" " █ OkLab ${oklab_gradient[i]} "
+    pastel paint -n "${hsl_gradient[i]}" "🮍███🮌 HSL ${hsl_gradient[i]} "
+    pastel paint -n "${rgb_gradient[i]}" "🮍███🮌 RGB ${rgb_gradient[i]} "
+    pastel paint -n "${lab_gradient[i]}" "🮍███🮌 Lab ${lab_gradient[i]} "
+    pastel paint -n "${oklab_gradient[i]}" "🮍███🮌 OkLab ${oklab_gradient[i]} "
     echo # <- único responsable del salto de línea en este ciclo.
 done
