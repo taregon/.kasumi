@@ -1,18 +1,26 @@
 # vim: filetype=zsh
-# Rotación del canal HSL de un color para generar armonías cromáticas.
-# Mantiene constantes la saturación y la luminosidad en HSL,
-# modificando únicamente el matiz (hue).
-#
-# La rotación opera exclusivamente en el espacio HSL, por lo que no
-# garantiza preservación de luminancia ni croma en espacios perceptuales.
-#
-# Las variaciones observadas en otros espacios de color (como OkLab u OkLCh)
-# son consecuencia de las transformaciones entre modelos de color con
-# diferentes propiedades geométricas y perceptuales.
-#
-# Esto implica que rotaciones simétricas en HSL pueden producir trayectorias
-# no uniformes en espacios perceptuales, generando variaciones de “energía
-# visual” y contraste dependiendo del ángulo aplicado.
+# Genera armonías cromáticas mediante rotaciones predefinidas del matiz
+# (hue) en espacio HSL.
+
+# Mantiene constantes la saturación y la luminosidad de HSL y modifica
+# únicamente el matiz, produciendo colores distribuidos alrededor de la
+# rueda cromática a partir de un color base.
+
+# La operación se realiza exclusivamente en HSL. Como consecuencia,
+# propiedades perceptuales como luminosidad (OkLab L) y croma (OkLCh C)
+# no permanecen constantes tras la conversión a otros espacios de color.
+
+# Debido a las diferencias geométricas entre HSL y los espacios
+# perceptuales modernos, rotaciones angulares simétricas pueden generar
+# resultados perceptualmente asimétricos. En particular, algunos matices
+# (como amarillos y amarillo-verdes) suelen presentar mayor luminosidad
+# aparente, mientras que otros (como azules y violetas) tienden a
+# percibirse más oscuros aun conservando los mismos valores HSL de
+# saturación y luminosidad.
+
+# Estas variaciones son inherentes al modelo utilizado y permiten explorar
+# cómo una misma configuración HSL recorre regiones visualmente distintas
+# dentro de espacios perceptuales como OkLab y OkLCh.
 
 # 15°       Variación mínima.
 #           Mantiene casi la misma identidad cromática.
@@ -178,7 +186,7 @@ for degrees in "${angles[@]}"; do
 
         i)
             pastel paint "$color" \
-                "$color ───   ─── Score OkLab: $oklab_score ◖████◗ $oklch_val Rotate HSL: ${degrees}°"
+                "$color ◖████◗ ─ ScoreOkLab: $oklab_score ─ $oklch_val ─ RotateHSL: ${degrees}°"
             ;;
         d)
             # Pts: puntuación perceptual derivada de coordenadas OkLab.
