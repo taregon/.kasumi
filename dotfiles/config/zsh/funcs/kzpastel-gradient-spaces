@@ -5,7 +5,24 @@
 
 local color1="$1"
 local color2="$2"
-local steps="${3:-20}"
+local steps="${3:-10}"
+local view="${4:-d}"
+local gradient
+local -a rgb_gradient hsl_gradient lab_gradient oklab_gradient
+
+[ -z "$color1" ] || [ -z "$color2" ] && {
+    echo "Uso: kzpastel-gradient-spaces <color1> <color2> [pasos] [vista]"
+    echo ""
+    echo "  Vistas:"
+    echo "    d|default  Default — bloques compactos"
+    echo "    t|table    Tabla   — bloques anchos"
+    return 1
+}
+
+((steps > 1)) || {
+    echo "Se requieren al menos 2 pasos"
+    return 1
+}
 
 local spaces=(
     RGB
@@ -14,26 +31,20 @@ local spaces=(
     OkLab
 )
 
-# Genera cuatro gradientes entre los mismos colores de origen y destino,
-# variando únicamente el espacio de interpolación (RGB, HSL, Lab y OkLab).
+# Genera cuatro gradientes entre los mismos colores variando únicamente
+# el espacio de interpolación (RGB, HSL, Lab y OkLab).
 #
-# pastel gradient devuelve una lista de colores, uno por línea. La salida
-# se normaliza a formato hexadecimal mediante 'pastel format hex' para que
-# todos los espacios puedan compararse con la misma representación.
+# pastel gradient devuelve un color por línea. La salida se normaliza a
+# hexadecimal mediante 'pastel format hex' para que todos los espacios
+# puedan compararse con la misma representación.
 #
-# La expansión zsh '${(@f)...}' divide la cadena multilínea en un array,
-# usando cada salto de línea como separador. Así, cada posición del array
-# representa el mismo paso dentro del gradiente.
-#
-# Ejemplo:
+# La expansión '${(@f)...}' divide la cadena multilínea en un array; cada
+# posición del array representa el mismo paso dentro del gradiente:
 #
 #   rgb_gradient[1]   → primer color RGB
 #   hsl_gradient[1]   → primer color HSL
 #   lab_gradient[1]   → primer color Lab
 #   oklab_gradient[1] → primer color OkLab
-#
-# Esto permite comparar visualmente el paso N de cada espacio de color
-# imprimiendo los cuatro colores en una misma fila.
 
 for space in "${spaces[@]}"; do
     gradient=$(
@@ -75,10 +86,33 @@ done
 # imprimiendo varios bloques consecutivos y emitiendo un único salto
 # de línea al final de cada fila.
 
-for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
-    pastel paint -n "${hsl_gradient[i]}" "🮍███🮌 HSL ${hsl_gradient[i]} "
-    pastel paint -n "${rgb_gradient[i]}" "🮍███🮌 RGB ${rgb_gradient[i]} "
-    pastel paint -n "${lab_gradient[i]}" "🮍███🮌 Lab ${lab_gradient[i]} "
-    pastel paint -n "${oklab_gradient[i]}" "🮍███🮌 OkLab ${oklab_gradient[i]} "
-    echo # <- único responsable del salto de línea en este ciclo.
-done
+case "$view" in
+    d | default)
+        for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
+            pastel paint -n "${hsl_gradient[i]}" "🮍███🮌 HSL ${hsl_gradient[i]} "
+            pastel paint -n "${rgb_gradient[i]}" "🮍███🮌 RGB ${rgb_gradient[i]} "
+            pastel paint -n "${lab_gradient[i]}" "🮍███🮌 Lab ${lab_gradient[i]} "
+            pastel paint -n "${oklab_gradient[i]}" "🮍███🮌 OkLab ${oklab_gradient[i]} "
+            echo # <- único responsable del salto de línea en este ciclo.
+        done
+        ;;
+
+    t | table)
+        for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
+            pastel paint -n "${hsl_gradient[i]}" \
+                " 🮔 ╠═════   ═════╣ HSL ${hsl_gradient[i]} "
+            pastel paint -n "${rgb_gradient[i]}" \
+                " 🮔 ╠═════   ═════╣ RGB ${rgb_gradient[i]} "
+            pastel paint -n "${lab_gradient[i]}" \
+                " 🮔 ╠═════   ═════╣ Lab ${lab_gradient[i]} "
+            pastel paint -n "${oklab_gradient[i]}" \
+                " 🮔 ╠═════   ═════╣ OkLab ${oklab_gradient[i]} "
+            echo
+        done
+        ;;
+    *)
+        echo "Vista inválida: $view"
+        return 1
+        ;;
+
+esac
