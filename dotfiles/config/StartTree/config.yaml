@@ -186,6 +186,7 @@ tree_7:
     web-color-tool: https://color.joelb.dev/
     webgradients: https://webgradients.com/
     color-opacity-tool: https://utilitytoolshub.com/color-opacity/
+    oklch-color-picker: https://github.com/eero-lehtinen/oklch-color-picker
   ColorNames:
     colorxs: https://www.colorxs.com/
     encycolorpedia: https://encycolorpedia.com/
