@@ -8,47 +8,48 @@
 # configuración: kasumi-kitty.conf
 
   [delta "kasumi"]
+
+# ── General ─────────────────────────────────────────────────
   dark                          = true
-  commit-decoration-style       = dim yellow ul
-  commit-style                  = raw
-  file-decoration-style         = none
-  file-style                    = omit
-  hunk-header-file-style        = yellow
-  hunk-header-decoration-style  = 240 ol ul
-  hunk-header-line-number-style = dim yellow
-  hunk-header-style             = file line-number syntax
-
-# whitespace-error-style = 22 reverse
-# zero-style = syntax
-
-  line-numbers                  = true
-  line-numbers-zero-style       = 240
-
-  line-numbers-minus-style      = 210
-  line-numbers-plus-style       = 194
-
-  line-numbers-left-format      = "{nm:>4}🮍"
-  line-numbers-left-style       = 240
-
-  line-numbers-right-format     = "{np:>4}🮍 "
-  line-numbers-right-style      = 240
-
-  minus-emph-style              = bold black 210
-  plus-emph-style               = bold black 157
-
-  minus-non-emph-style          = dim red
-  plus-non-emph-style           = dim green
-
-  minus-style                   = bold red
-  plus-style                    = bold green
-
   syntax-theme                  = none
-  zero-style                    = 240
-
+  whitespace-error-style        = 240 reverse
   map-styles                    = \
   bold purple                   => italic 166, \
   bold cyan                     => italic 108
 
-# ────────────────────────────────────────────────────────────
-# Esto solo afecta a la presentación de git blame
+# ── Commit ──────────────────────────────────────────────────
+  commit-style                  = raw
+  commit-decoration-style       = dim yellow ul
+
+# ── File ────────────────────────────────────────────────────
+  file-style                    = yellow
+  file-decoration-style         = none
+  file-transformation           = s|.*/||
+
+# ── Hunk ────────────────────────────────────────────────────
+  hunk-header-style             = line-number syntax
+  hunk-header-decoration-style  = 240 ol ul
+  hunk-header-file-style        = yellow
+  hunk-header-line-number-style = dim yellow
+
+# ── Line numbers ────────────────────────────────────────────
+  line-numbers                  = true
+  line-numbers-left-format      = "{nm:>4}🮍"
+  line-numbers-left-style       = 240
+  line-numbers-right-format     = "{np:>4}🮍 "
+  line-numbers-right-style      = 240
+  line-numbers-minus-style      = 210
+  line-numbers-plus-style       = 194
+  line-numbers-zero-style       = 240
+
+# ── Diff content ────────────────────────────────────────────
+  minus-style                   = bold red
+  minus-emph-style              = bold black 210
+  minus-non-emph-style          = dim red
+  plus-style                    = bold green
+  plus-emph-style               = bold black 157
+  plus-non-emph-style           = dim green
+  zero-style                    = 240
+
+# ── Blame ───────────────────────────────────────────────────
   blame-format = "{author:<18} ({commit:>7}) ┊{timestamp:^16}┊ "
