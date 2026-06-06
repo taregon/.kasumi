@@ -26,6 +26,7 @@ local light_min="${2:-30}"
 local light_max="${3:-96}"
 local steps="${4:-20}"
 local mode="${5:-o}"
+local hex_color property label light_level light_pct
 
 [[ -z "$base" || -z "$steps" ]] && {
     echo "Uso: kzpastel-ramp <color> <min> <max> <pasos> [modo]"

@@ -1,0 +1,22 @@
+# vim: filetype=zsh
+
+local color1="#a0cdf1"
+local color2="$1"
+local color3="#2c363c"
+local steps="$2"
+
+if [[ -z "$color2" || -z "$steps" ]]; then
+    echo "Uso: gradient <color> <pasos>"
+    return 1
+fi
+
+pastel gradient \
+    --colorspace OkLab \
+    "$color1" \
+    "$color2" \
+    "$color3" \
+    -n "$steps" \
+    | pastel format hex \
+    | while read -r color; do
+        pastel paint "$color" " 🮔 ╠═════   ═════╣ $color"
+    done

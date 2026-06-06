@@ -202,7 +202,7 @@ for degrees in "${angles[@]}"; do
                 "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct"
             ;;
         *)
-            echo "Modo invalido: $mode"
+            echo "Modo inválido: $mode"
             return 1
             ;;
     esac
