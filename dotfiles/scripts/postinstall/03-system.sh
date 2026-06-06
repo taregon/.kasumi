@@ -390,6 +390,7 @@ install_utils_terminal() {
         pacman-contrib     # Utilidades adicionales para pacman
         pamixer            # Control de volumen para PulseAudio en terminal
         pandoc             # Conversor de documentos markup entre formatos
+        pastel             # pastel: CLI para conversión y transformación de colores en espacios RGB, HSL y perceptuales (Lab/OkLab/OkLCh).
         python-pip         # Gestor de paquetes Python
         ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
