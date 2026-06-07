@@ -80,31 +80,31 @@ require("which-key").add({
 	{ "<leader>tb", ":ToggleAlternate<CR>", desc = "Toggle Boolean" },
 	{ "<leader>tc", ":ConformInfo<CR>", desc = "Toggle ConformInfo" },
 	{ "<leader>ti", ":set invlist! | Gitsigns toggle_signs<CR>", desc = "Toggle Special Chars" },
-	{ "<leader>tm", ":Markview splitToggle<CR>", desc = "Markview toggle split" },
+	{ "<leader>tm", ":Markview splitToggle<CR>", desc = "Toggle Markview Split" },
 	{ "<leader>tn", ":set invnumber! invrelativenumber!<CR>", desc = "Toggle Line Numbers" },
-	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show diagnostic" },
+	{ "<leader>tr", vim.diagnostic.open_float, desc = "Show Diagnostic" },
 	{ "<leader>ts", k.toggle_spell, desc = "Toggle Spell" },
 	{ "<leader>tt", toggle_virtual_text, desc = "Toggle Virtual Text" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>g", group = "  Hunks", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
-	{ "h", ":Gitsigns next_hunk<CR>", desc = "Next hunk" }, -- Experimental
-	{ "<leader>gb", ":Gitsigns stage_buffer<CR>", desc = "Stage entire buffer" },
-	{ "<leader>gc", ":Git commit<CR>", desc = "Create commit" },
-	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select hunk" },
-	{ "<leader>gp", ":Gitsigns preview_hunk<CR>", desc = "Preview hunk" },
-	{ "<leader>gi", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview hunk inline" },
-	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset current hunk", mode = { "n", "v" } },
-	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage current hunk", mode = { "n", "v" } },
-	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk", mode = "v" },
+	{ "h", ":Gitsigns next_hunk<CR>", desc = "Next Hunk" }, -- Experimental
+	{ "<leader>gS", ":Gitsigns stage_buffer<CR>", desc = "Stage Buffer" },
+	{ "<leader>gc", ":Git commit<CR>", desc = "Create Commit" },
+	{ "<leader>gh", ":Gitsigns select_hunk<CR>", desc = "Select Hunk" },
+	{ "<leader>gp", ":Gitsigns preview_hunk_inline<CR>", desc = "Preview Hunk Inline" },
+	{ "<leader>gb", ":Gitsigns blame_line<CR>", desc = "Blame Inline" },
+	{ "<leader>gr", ":Gitsigns reset_hunk<CR>", desc = "Reset Hunk", mode = { "n", "v" } },
+	{ "<leader>gs", ":Gitsigns stage_hunk<CR>", desc = "Stage Hunk", mode = { "n", "v" } },
+	{ "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", desc = "Undo Stage Hunk", mode = "v" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>q", group = "󰚔  QuickFix", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	-- { "<leader>qt", ":TodoQuickFix<CR>", desc = "TODOs" },
 	{ "<leader>qd", k.show_todos_dir, desc = "Show TODOs directory" },
 	{ "<leader>qf", k.show_todos_file, desc = "Show TODOs file" },
-	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo changes" },
-	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer changes" },
+	{ "<leader>qQ", ":lua require('gitsigns').setqflist('all')<CR>", desc = "Repo Changes" },
+	{ "<leader>qq", ":lua require('gitsigns').setqflist()<CR>", desc = "Buffer Changes" },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>s", group = "  Search", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
