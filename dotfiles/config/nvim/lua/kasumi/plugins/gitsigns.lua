@@ -46,7 +46,7 @@ require("gitsigns").setup({
 		relative = "cursor", -- Posición relativa al editor
 		row = 1, -- Ajusta posición vertical
 		col = 3, -- Ajusta posición horizontal
-		width = 36, -- Ancho de la ventana
+		-- width = 36, -- Ancho de la ventana
 		-- height = 20, -- Alto de la ventana
 	},
 })
