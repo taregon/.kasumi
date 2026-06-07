@@ -1,11 +1,17 @@
-# Más temas en https://github.com/dandavison/delta/blob/main/themes.gitconfig
-# Descargas, luego indicas la ruta en: .gitconfig
+# ██████╗ ███████╗██╗  ████████╗ █████╗
+# ██╔══██╗██╔════╝██║  ╚══██╔══╝██╔══██╗
+# ██║  ██║█████╗  ██║     ██║   ███████║
+# ██║  ██║██╔══╝  ██║     ██║   ██╔══██║
+# ██████╔╝███████╗███████╗██║   ██║  ██║
+# ╚═════╝ ╚══════╝╚══════╝╚═╝   ╚═╝  ╚═╝
+# Configuración visual de delta: pager para diff, grep y blame.
+# Tema oscuro con line-numbers, whitespace-error y labels compactos.
+# Los colores corresponden a la paleta definida en kasumi-kitty.conf.
 # ┌─────────────────────────────────────┐
 #   [include]
 #   path = ~/baka_test/themes.gitconfig
 # └─────────────────────────────────────┘
-# Los colores están indicados en el archivo
-# configuración: kasumi-kitty.conf
+# Más temas en https://github.com/dandavison/delta/blob/main/themes.gitconfig
 
   [delta "kasumi"]
 
@@ -25,6 +31,13 @@
   file-style                    = yellow
   file-decoration-style         = none
   file-transformation           = s|.*/||
+
+# ── File labels ─────────────────────────────────────────────
+  file-added-label              =［   ］
+  file-copied-label             =［   ］
+  file-modified-label           =［ 󰫣  ］
+  file-removed-label            =［ 󰯈  ］
+  file-renamed-label            =［ ➜  ］
 
 # ── Hunk ────────────────────────────────────────────────────
   hunk-header-style             = line-number syntax
