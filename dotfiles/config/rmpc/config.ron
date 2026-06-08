@@ -181,50 +181,92 @@
     // ── PESTAÑAS ──────────────────────────────────────────────
     tabs: [
         (
-            name: "Queue",
+            name: "󰫣  Queue",
             pane: Split(
                 direction: Horizontal,
                 panes: [
                     (
                         size: "60%",
                         pane: Split(
-                            direction: Vertical,
-                            borders: "RIGHT",
+                            direction: Horizontal,
                             panes: [
-                                (
-                                    size: "1",
-                                    pane: Pane(QueueHeader()),
-                                ),
-                                (
-                                    size: "100%",
-                                    pane: Pane(Queue),
-                                    borders: "TOP",
-                                ),
+                                (size: "1", pane: Pane(Empty())),
+                                (size: "100%", pane: Split(
+                                    direction: Vertical,
+                                    borders: "RIGHT",
+                                    panes: [
+                                        (
+                                            size: "1",
+                                            pane: Pane(QueueHeader()),
+                                        ),
+                                        (
+                                            size: "100%",
+                                            pane: Pane(Queue),
+                                            borders: "TOP",
+                                        ),
+                                    ],
+                                )),
+                                (size: "1", pane: Pane(Empty())),
                             ],
                         ),
                     ),
                     (
                         size: "40%",
-                        pane: Pane(AlbumArt),
+                        pane: Split(
+                            direction: Horizontal,
+                            panes: [
+                                (size: "1", pane: Pane(Empty())),
+                                (size: "100%", pane: Pane(AlbumArt)),
+                                (size: "1", pane: Pane(Empty())),
+                            ],
+                        ),
                     ),
                 ],
             ),
         ),
         (
-            name: "Playlists",
-            pane: Pane(Playlists),
+            name: "󰫣  Playlists",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (size: "1", pane: Pane(Empty())),
+                    (size: "100%", pane: Pane(Playlists)),
+                    (size: "1", pane: Pane(Empty())),
+                ],
+            ),
         ),
         (
-            name: "Artists",
-            pane: Pane(Artists),
+            name: "󰫣  Artists",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (size: "1", pane: Pane(Empty())),
+                    (size: "100%", pane: Pane(Artists)),
+                    (size: "1", pane: Pane(Empty())),
+                ],
+            ),
         ),
         (
-            name: "Albums",
-            pane: Pane(Albums),
+            name: "󰫣  Albums",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (size: "1", pane: Pane(Empty())),
+                    (size: "100%", pane: Pane(Albums)),
+                    (size: "1", pane: Pane(Empty())),
+                ],
+            ),
         ),
         (
-            name: "Search",
-            pane: Pane(Search),
+            name: "󰫣  Search",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (size: "1", pane: Pane(Empty())),
+                    (size: "100%", pane: Pane(Search)),
+                    (size: "1", pane: Pane(Empty())),
+                ],
+            ),
         ),
     ],
 )
