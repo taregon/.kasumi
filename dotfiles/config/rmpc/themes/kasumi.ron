@@ -168,7 +168,7 @@
                     (kind: Property(Widget(States(
                         active_style: (fg: "#FFCF94", modifiers: "Bold"),
                         separator_style: (fg: "#667688"),
-                    ))), style: (fg: "#504f4b")),
+                    ))), style: (fg: "#625c52")),
                 ],
             ),
         ],
