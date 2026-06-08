@@ -31,16 +31,16 @@
         ellipsis:                   "...",
         dir_current_style:          None,
         dir_highlighted_style:      None,
-        dir_style:                  None,
+        dir_style:                  (fg: "#8598B2"),
         marker_current_style:       None,
         marker_highlighted_style:   None,
         marker_style:               None,
         playlist_current_style:     None,
         playlist_highlighted_style: None,
-        playlist_style:             None,
+        playlist_style:             (fg: "#8598B2"),
         song_current_style:         None,
         song_highlighted_style:     None,
-        song_style:                 None,
+        song_style:                 (fg: "#8598B2"),
     ),
     level_styles: (
         info:  (fg: "#9EB7C6", bg: "#2E383D"),
@@ -138,9 +138,12 @@
         rows: [
             (
                 left: [
-                    (kind: Text("[ "), style: (fg: "#667688", modifiers: "Bold")),
-                    (kind: Property(Status(StateV2(playing_label: "Playing", paused_label: "󰽳  Paused", stopped_label: "󰽳  Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
-                    (kind: Text(" ]"), style: (fg: "#667688", modifiers: "Bold")),
+                    (kind: Property(Song(SampleRate())), style: (fg: "#667688"),
+                        default: (kind: Text("---"), style: (fg: "#667688"))),
+                    (kind: Text(" Hz   "), style: (fg: "#667688")),
+                    (kind: Property(Status(Bitrate)), style: (fg: "#667688"),
+                        default: (kind: Text("---"), style: (fg: "#667688"))),
+                    (kind: Text(" kbps"), style: (fg: "#667688")),
                 ],
                 center: [
                     (kind: Property(Song(Title)), style: (fg: "#FF9DCD", modifiers: "Bold"),
@@ -153,9 +156,9 @@
             ),
             (
                 left: [
-                    (kind: Property(Status(Elapsed))),
-                    (kind: Text(" / ")),
-                    (kind: Property(Status(Duration))),
+                    (kind: Text("[ "), style: (fg: "#667688", modifiers: "Bold")),
+                    (kind: Property(Status(StateV2(playing_label: "Playing", paused_label: "󰽳  Paused", stopped_label: "󰽳  Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
+                    (kind: Text(" ]"), style: (fg: "#667688", modifiers: "Bold")),
                 ],
                 center: [
                     (kind: Property(Song(Artist)), style: (fg: "#C0CDD3", modifiers: "Bold"),
@@ -205,6 +208,55 @@
                 ),
             ),
             (
+                size: "1",
+                borders: "NONE",
+                pane: Split(
+                    direction: Horizontal,
+                    panes: [
+                        (size: "1", pane: Pane(Empty())),
+                        (
+                            size: "30",
+                            pane: Pane(Property(
+                                content: [
+                                    (kind: Property(Status(QueueLength())), style: (fg: "#C0CDD3"),
+                                        default: (kind: Text("0"), style: (fg: "#667688"))),
+                                    (kind: Text(" songs"), style: (fg: "#667688")),
+                                    (kind: Text("    "), style: (fg: "#667688")),
+                                    (kind: Property(Status(QueueTimeTotal())), style: (fg: "#C0CDD3"),
+                                        default: (kind: Text("0:00"), style: (fg: "#667688"))),
+                                ],
+                                align: Left,
+                            )),
+                        ),
+                        (size: "100%", pane: Pane(Empty())),
+                        (
+                            size: "26",
+                            pane: Pane(Property(
+                                content: [
+                                    (kind: Transform(Truncate(
+                                        content: (kind: Property(Song(Other("date")))),
+                                        length: 4,
+                                        from_start: false,
+                                    )), style: (fg: "#667688"),
+                                        default: (kind: Text("----"), style: (fg: "#667688"))),
+                                    (kind: Text(" · "), style: (fg: "#667688")),
+                                    (kind: Property(Song(Bits())), style: (fg: "#667688"),
+                                        default: (kind: Text("-"), style: (fg: "#667688"))),
+                                    (kind: Text("bit · "), style: (fg: "#667688")),
+                                    (kind: Property(Song(Channels())), style: (fg: "#667688"),
+                                        default: (kind: Text("-"), style: (fg: "#667688"))),
+                                    (kind: Text("ch · "), style: (fg: "#667688")),
+                                    (kind: Property(Song(FileExtension)), style: (fg: "#667688"),
+                                        default: (kind: Text("-"), style: (fg: "#667688"))),
+                                ],
+                                align: Right,
+                            )),
+                        ),
+                        (size: "1", pane: Pane(Empty())),
+                    ],
+                ),
+            ),
+            (
                 size: "20%",
                 borders: "ALL",
                 pane: Pane(Cava),
@@ -215,9 +267,21 @@
                 pane: Split(
                     direction: Horizontal,
                     panes: [
-                        (size: "1", pane: Pane(Empty())),
+                        (size: "2", pane: Pane(Empty())),
                         (size: "100%", pane: Pane(ProgressBar)),
                         (size: "1", pane: Pane(Empty())),
+                        (
+                            size: "14",
+                            pane: Pane(Property(
+                                content: [
+                                    (kind: Property(Status(Elapsed)), style: (fg: "#667688")),
+                                    (kind: Text(" / "), style: (fg: "#667688")),
+                                    (kind: Property(Status(Duration)), style: (fg: "#667688")),
+                                ],
+                                align: Right,
+                            )),
+                        ),
+                        (size: "2", pane: Pane(Empty())),
                     ],
                 ),
             ),
