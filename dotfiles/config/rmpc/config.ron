@@ -181,7 +181,7 @@
     // ── PESTAÑAS ──────────────────────────────────────────────
     tabs: [
         (
-            name: "󰫣  Queue",
+            name: "󰎇  Queue",
             pane: Split(
                 direction: Horizontal,
                 panes: [
@@ -225,7 +225,7 @@
             ),
         ),
         (
-            name: "󰫣  Playlists",
+            name: "󰲸  Playlists",
             pane: Split(
                 direction: Horizontal,
                 panes: [
@@ -236,7 +236,7 @@
             ),
         ),
         (
-            name: "󰫣  Artists",
+            name: "󰳩  Artists",
             pane: Split(
                 direction: Horizontal,
                 panes: [
@@ -247,7 +247,7 @@
             ),
         ),
         (
-            name: "󰫣  Albums",
+            name: "󱍚  Albums",
             pane: Split(
                 direction: Horizontal,
                 panes: [
@@ -258,7 +258,7 @@
             ),
         ),
         (
-            name: "󰫣  Search",
+            name: "󰥩  Search",
             pane: Split(
                 direction: Horizontal,
                 panes: [
