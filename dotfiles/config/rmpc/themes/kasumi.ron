@@ -138,9 +138,9 @@
         rows: [
             (
                 left: [
-                    (kind: Text("|"), style: (fg: "#667688", modifiers: "Bold")),
-                    (kind: Property(Status(StateV2(playing_label: "Playing", paused_label: "Paused", stopped_label: "Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
-                    (kind: Text("|"), style: (fg: "#667688", modifiers: "Bold")),
+                    (kind: Text("[ "), style: (fg: "#667688", modifiers: "Bold")),
+                    (kind: Property(Status(StateV2(playing_label: "Playing", paused_label: "󰽳  Paused", stopped_label: "󰽳  Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
+                    (kind: Text(" ]"), style: (fg: "#667688", modifiers: "Bold")),
                 ],
                 center: [
                     (kind: Property(Song(Title)), style: (fg: "#FF9DCD", modifiers: "Bold"),
@@ -179,7 +179,14 @@
             (
                 size: "4",
                 borders: "ALL",
-                pane: Pane(Header),
+                pane: Split(
+                    direction: Horizontal,
+                    panes: [
+                        (size: "2", pane: Pane(Empty())),
+                        (size: "100%", pane: Pane(Header)),
+                        (size: "2", pane: Pane(Empty())),
+                    ],
+                ),
             ),
             (
                 size: "3",
@@ -188,7 +195,14 @@
             (
                 size: "100%",
                 borders: "ALL",
-                pane: Pane(TabContent),
+                pane: Split(
+                    direction: Horizontal,
+                    panes: [
+                        (size: "1", pane: Pane(Empty())),
+                        (size: "100%", pane: Pane(TabContent)),
+                        (size: "1", pane: Pane(Empty())),
+                    ],
+                ),
             ),
             (
                 size: "20%",
@@ -198,7 +212,14 @@
             (
                 size: "3",
                 borders: "ALL",
-                pane: Pane(ProgressBar),
+                pane: Split(
+                    direction: Horizontal,
+                    panes: [
+                        (size: "1", pane: Pane(Empty())),
+                        (size: "100%", pane: Pane(ProgressBar)),
+                        (size: "1", pane: Pane(Empty())),
+                    ],
+                ),
             ),
         ],
     ),
