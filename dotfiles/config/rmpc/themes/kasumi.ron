@@ -24,10 +24,10 @@
 
     // -- Widgets -----------------------------------------------------------
     symbols: (
-        song:                       "S",
-        dir:                        " ",
-        playlist:                   "󰲸 ",
-        marker:                     "󰘍 ",
+        song:                       "󰽴",
+        dir:                        "󰉖 ",
+        playlist:                   "󰲹 ",
+        marker:                     "🮌",
         ellipsis:                   "...",
         dir_current_style:          None,
         dir_highlighted_style:      None,
