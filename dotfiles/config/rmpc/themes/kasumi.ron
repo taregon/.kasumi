@@ -5,7 +5,7 @@
     // -- Global appearance ------------------------------------------------
     background_color:             "#2E383D",
     text_color:                   "#C0CDD3",
-    borders_style:                (fg: "#49575E"),
+    borders_style:                (fg: "#8598B2"),
     highlight_border_style:       (fg: "#A7D6FA"),
     modal_background_color:       None,
     modal_backdrop:               false,
@@ -117,8 +117,11 @@
     // -- Cava visualiser ---------------------------------------------------
     cava: (
         bar_symbols: ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'],
+        inverted_bar_symbols: ['▔', '🮂', '🮃', '▀', '🮄', '🮅', '🮆', '█'],
         bar_width: 2,
         bar_spacing: 1,
+        // Possible values are "Top", "Bottom" and "Horizontal".
+        orientation: Bottom,
         bar_color: Gradient({
               0: "#414E55",
              50: "#8598B2",
