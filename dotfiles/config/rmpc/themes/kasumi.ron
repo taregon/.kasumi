@@ -215,7 +215,7 @@
                     panes: [
                         (size: "1", pane: Pane(Empty())),
                         (
-                            size: "30",
+                            size: "52",
                             pane: Pane(Property(
                                 content: [
                                     (kind: Property(Status(QueueLength())), style: (fg: "#C0CDD3"),
@@ -224,6 +224,13 @@
                                     (kind: Text("    "), style: (fg: "#667688")),
                                     (kind: Property(Status(QueueTimeTotal())), style: (fg: "#C0CDD3"),
                                         default: (kind: Text("0:00"), style: (fg: "#667688"))),
+                                    (kind: Text(" · "), style: (fg: "#667688")),
+                                    (kind: Property(Status(Crossfade)), style: (fg: "#C0CDD3"),
+                                        default: (kind: Text("0"), style: (fg: "#667688"))),
+                                    (kind: Text("s crossfade"), style: (fg: "#667688")),
+                                    (kind: Text(" · #"), style: (fg: "#667688")),
+                                    (kind: Property(Song(Position)), style: (fg: "#C0CDD3"),
+                                        default: (kind: Text("-"), style: (fg: "#667688"))),
                                 ],
                                 align: Left,
                             )),
