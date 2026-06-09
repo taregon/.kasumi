@@ -1,0 +1,10 @@
+#!/bin/bash
+# rmpc on_song_change — Notificación de escritorio al cambiar de canción.
+# Dependencias: libnotify (notify-send), mpc, rmpc
+ART="/tmp/rmpc_albumart.png"
+rmpc albumart --output "$ART" 2>/dev/null || ART=""
+
+notify-send \
+    "󰽴  Now Playing" \
+    "$(mpc current -f "%title%" 2>/dev/null)" \
+    ${ART:+-i "$ART"}
