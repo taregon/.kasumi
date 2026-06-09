@@ -157,7 +157,7 @@
             (
                 left: [
                     (kind: Text("[ "), style: (fg: "#667688", modifiers: "Bold")),
-                    (kind: Property(Status(StateV2(playing_label: "Playing", paused_label: "󰽳  Paused", stopped_label: "󰽳  Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
+                    (kind: Property(Status(StateV2(playing_label: "󰫔  Playing", paused_label: "󰽳  Paused", stopped_label: "󰽳  Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
                     (kind: Text(" ]"), style: (fg: "#667688", modifiers: "Bold")),
                 ],
                 center: [
@@ -218,18 +218,17 @@
                             size: "52",
                             pane: Pane(Property(
                                 content: [
-                                    (kind: Property(Status(QueueLength())), style: (fg: "#C0CDD3"),
+                                    (kind: Property(Status(Crossfade)), style: (fg: "#667688"),
+                                        default: (kind: Text("0"), style: (fg: "#667688"))),
+                                    (kind: Text("s crossfade · "), style: (fg: "#667688")),
+                                    (kind: Property(Status(QueueLength())), style: (fg: "#667688"),
                                         default: (kind: Text("0"), style: (fg: "#667688"))),
                                     (kind: Text(" songs"), style: (fg: "#667688")),
-                                    (kind: Text("    "), style: (fg: "#667688")),
-                                    (kind: Property(Status(QueueTimeTotal())), style: (fg: "#C0CDD3"),
-                                        default: (kind: Text("0:00"), style: (fg: "#667688"))),
                                     (kind: Text(" · "), style: (fg: "#667688")),
-                                    (kind: Property(Status(Crossfade)), style: (fg: "#C0CDD3"),
-                                        default: (kind: Text("0"), style: (fg: "#667688"))),
-                                    (kind: Text("s crossfade"), style: (fg: "#667688")),
+                                    (kind: Property(Status(QueueTimeTotal())), style: (fg: "#667688"),
+                                        default: (kind: Text("0:00"), style: (fg: "#667688"))),
                                     (kind: Text(" · #"), style: (fg: "#667688")),
-                                    (kind: Property(Song(Position)), style: (fg: "#C0CDD3"),
+                                    (kind: Property(Song(Position)), style: (fg: "#667688"),
                                         default: (kind: Text("-"), style: (fg: "#667688"))),
                                 ],
                                 align: Left,
@@ -241,11 +240,10 @@
                             pane: Pane(Property(
                                 content: [
                                     (kind: Transform(Truncate(
-                                        content: (kind: Property(Song(Other("date")))),
+                                        content: (kind: Property(Song(Other("date"))), style: (fg: "#667688")),
                                         length: 4,
                                         from_start: false,
-                                    )), style: (fg: "#667688"),
-                                        default: (kind: Text("----"), style: (fg: "#667688"))),
+                                    )), default: (kind: Text("----"), style: (fg: "#667688"))),
                                     (kind: Text(" · "), style: (fg: "#667688")),
                                     (kind: Property(Song(Bits())), style: (fg: "#667688"),
                                         default: (kind: Text("-"), style: (fg: "#667688"))),
