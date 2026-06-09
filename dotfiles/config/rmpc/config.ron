@@ -13,11 +13,15 @@
     cache_dir: "~/.cache/rmpc",
 
     // ── GENERAL ───────────────────────────────────────────────
-    on_song_change: ["~/.config/rmpc/scripts/rmpc-song-notify"],
+    on_song_change: ["sh", "-c",
+        "~/.config/rmpc/scripts/rmpc-song-notify && ~/.config/rmpc/scripts/rmpc-fetch-lyrics",
+    ],
+    lyrics_dir: Some("~/.config/rmpc/lyrics"),
+    lyrics_offset_ms: 600,
     volume_step: 5,
-    max_fps: 30,
+    max_fps: 60, // Limit UI redraws to 60 fps (cava must match)
     scrolloff: 4,
-    wrap_navigation: false,
+    wrap_navigation: true,
     enable_mouse: true,
     scroll_amount: 1,
     enable_config_hot_reload: true,
@@ -43,7 +47,7 @@
 
     // ── AJUSTES CAVA ──────────────────────────────────────────
     cava: (
-        framerate: 120,
+        framerate: 60, // Must match max_fps: 60 for smooth rendering
         autosens: true,
         sensitivity: 160,
         lower_cutoff_freq: 0,
@@ -95,6 +99,7 @@
             "3":          SwitchToTab("󰳩  Artists"),
             "4":          SwitchToTab("󱍚  Albums"),
             "5":          SwitchToTab("󰥩  Search"),
+            "6":          SwitchToTab("󱚓  Lyrics"),
             "<C-u>":      Update,
             "<C-U>":      Rescan,
             "R":          AddRandom,
@@ -264,6 +269,17 @@
                 panes: [
                     (size: "1", pane: Pane(Empty())),
                     (size: "100%", pane: Pane(Search)),
+                    (size: "1", pane: Pane(Empty())),
+                ],
+            ),
+        ),
+        (
+            name: "󱚓  Lyrics",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (size: "1", pane: Pane(Empty())),
+                    (size: "100%", pane: Pane(Lyrics)),
                     (size: "1", pane: Pane(Empty())),
                 ],
             ),
