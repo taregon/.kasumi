@@ -105,16 +105,32 @@
             prop: (kind: Property(Album), style: (fg: "#8598B2"),
                 default: (kind: Text("Unknown Album"), style: (fg: "#8598B2"))
             ),
-            width: "30%",
+            width: "25%",
             label: "Album",
         ),
         (
             prop: (kind: Property(Duration), style: (fg: "#667688"),
                 default: (kind: Text("-"), style: (fg: "#667688"))
             ),
-            width: "15%",
-            alignment: Right,
-            label: "Duration",
+            width: "10%",
+            label: "Time",
+            alignment: Left,
+        ),
+        (
+            prop: (kind: Transform(Replace(
+                content: (kind: Sticker("rating")),
+                replacements: [
+                    (match: "0", replace: (kind: Text("󰔒"), style: (fg: "#a16f8c"))),
+                    (match: "1", replace: (kind: Text(""), style: (fg: "#667688"))),
+                    (match: "2", replace: (kind: Text(" "), style: (fg: "#C0CDD3"))),
+                    (match: "3", replace: (kind: Text("  "), style: (fg: "#A7D6FA"))),
+                ],
+            )), style: (fg: "#C0CDD3"),
+                default: (kind: Text("−"), style: (fg: "#625c52"))
+            ),
+            width: "10%",
+            label: "Rate",
+            alignment: Left,
         ),
     ],
 
