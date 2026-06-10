@@ -369,6 +369,7 @@ install_utils_terminal() {
     local pkgs=(
         aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
         ast-grep-bin       # Herramienta de búsqueda y lint de código
+        opencode-bin       # Asistente interactivo de IA para desarrollo de software
         bat                # Visor tipo cat con resaltado y soporte Git
         bc                 # Calculadora CLI con soporte para decimales de alta precisión
         brightnessctl      # Control de brillo de pantalla desde terminal
