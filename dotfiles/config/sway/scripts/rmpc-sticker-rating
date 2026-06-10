@@ -5,11 +5,34 @@ set -euo pipefail
 file=$(mpc current --format '%file%')
 [ -n "$file" ] || exit 0
 
+title=$(mpc current --format '%title%')
+song="${title:-$file}"
+
 mpc sticker "$file" set rating "$1"
 
 case "$1" in
-    0) notify-send "󱙝  Descartada" ;;
-    1) notify-send "  Regular" ;;
-    2) notify-send "   Buena" ;;
-    3) notify-send "    Excelente" ;;
+    0)
+        notify-send -a "rmpc" \
+            -h string:x-canonical-private-synchronous:rmpc \
+            -h int:value:0 \
+            "Rating: Descartada  " "$song"
+        ;;
+    1)
+        notify-send -a "rmpc" \
+            -h string:x-canonical-private-synchronous:rmpc \
+            -h int:value:20 \
+            "Rating: Regular  " "$song"
+        ;;
+    2)
+        notify-send -a "rmpc" \
+            -h string:x-canonical-private-synchronous:rmpc \
+            -h int:value:60 \
+            "Rating: Buena   " "$song"
+        ;;
+    3)
+        notify-send -a "rmpc" \
+            -h string:x-canonical-private-synchronous:rmpc \
+            -h int:value:100 \
+            "Rating: Excelente    " "$song"
+        ;;
 esac
