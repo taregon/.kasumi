@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Stickers de rating para filtrar canciones por calidad en rmpc
+set -euo pipefail
+
+file=$(mpc current --format '%file%')
+[ -n "$file" ] || exit 0
+
+mpc sticker "$file" set rating "$1"
+
+case "$1" in
+    0) notify-send "󱙝  Descartada" ;;
+    1) notify-send "  Regular" ;;
+    2) notify-send "   Buena" ;;
+    3) notify-send "    Excelente" ;;
+esac
