@@ -14,14 +14,14 @@
 
     // ── GENERAL ───────────────────────────────────────────────
     on_song_change: ["sh", "-c",
-        "~/.config/rmpc/scripts/rmpc-song-notify && ~/.config/rmpc/scripts/rmpc-fetch-lyrics",
+        "~/.config/rmpc/scripts/rmpc-song-notify && ~/.config/rmpc/scripts/rmpc-fetch-lyrics"
     ],
     lyrics_dir: Some("~/.config/rmpc/lyrics"),
     lyrics_offset_ms: 600,
     volume_step: 5,
     max_fps: 60, // Limit UI redraws to 60 fps (cava must match)
     scrolloff: 4,
-    wrap_navigation: true,
+    wrap_navigation: false,
     enable_mouse: true,
     scroll_amount: 1,
     enable_config_hot_reload: true,
@@ -149,6 +149,9 @@
             "<C-s>s":     Save(kind: Modal(all: false, duplicates_strategy: Ask)),
             "<C-s>a":     Save(kind: Modal(all: true, duplicates_strategy: Ask)),
             "r":          Rate(),
+            "[":          Rate(kind: Dislike()),
+            "_":          Rate(kind: Neutral()),
+            "]":          Rate(kind: Like()),
         },
         queue: {
             "d":          Delete,
