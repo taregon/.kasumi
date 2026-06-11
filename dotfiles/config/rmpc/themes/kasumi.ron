@@ -247,26 +247,35 @@
                     panes: [
                         (size: "1", pane: Pane(Empty())),
                         (
-                            size: "52",
+                            size: "34",
                             pane: Pane(Property(
                                 content: [
+                                    (kind: Text("XFADE "), style: (fg: "#667688")),
                                     (kind: Property(Status(Crossfade)), style: (fg: "#667688"),
                                         default: (kind: Text("0"), style: (fg: "#667688"))),
-                                    (kind: Text("s crossfade · "), style: (fg: "#667688")),
+                                    (kind: Text("s · "), style: (fg: "#667688")),
                                     (kind: Property(Status(QueueLength())), style: (fg: "#667688"),
                                         default: (kind: Text("0"), style: (fg: "#667688"))),
-                                    (kind: Text(" songs"), style: (fg: "#667688")),
-                                    (kind: Text(" · "), style: (fg: "#667688")),
-                                    (kind: Property(Status(QueueTimeTotal())), style: (fg: "#667688"),
-                                        default: (kind: Text("0:00"), style: (fg: "#667688"))),
-                                    (kind: Text(" · #"), style: (fg: "#667688")),
-                                    (kind: Property(Song(Position)), style: (fg: "#667688"),
+                                    (kind: Text(" SONGS · "), style: (fg: "#667688")),
+                                    (kind: Text("TRK "), style: (fg: "#667688")),
+                                    (kind: Property(Song(Track)), style: (fg: "#667688"),
                                         default: (kind: Text("-"), style: (fg: "#667688"))),
                                 ],
                                 align: Left,
                             )),
                         ),
-                        (size: "100%", pane: Pane(Empty())),
+                        (size: "100%", pane: Pane(Property(
+                            content: [
+                                (kind: Text("["), style: (fg: "#667688")),
+                                (kind: Text("−"), style: (fg: "#a16f8c")),
+                                (kind: Property(Status(QueueTimeRemaining())), style: (fg: "#a16f8c"),
+                                    default: (kind: Text("0:00"), style: (fg: "#a16f8c"))),
+                                (kind: Text("]  "), style: (fg: "#667688")),
+                                (kind: Property(Status(QueueTimeTotal())), style: (fg: "#667688"),
+                                    default: (kind: Text("0:00"), style: (fg: "#667688"))),
+                            ],
+                            align: Center,
+                        ))),
                         (
                             size: "26",
                             pane: Pane(Property(
