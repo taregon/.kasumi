@@ -8,9 +8,12 @@
 # └──────────────────────────────────────────────────────────┘
 
 # ─[ CONFIGURACIÓN GENERAL ]──────────────────────────────────
-set -e          # Detiene el script si ocurre un error
-set -u          # Error si se usa una variable no declarada
-set -o pipefail # Propaga errores en tuberías
+set -euo pipefail
+
+C_STEP="\033[0;34m"   # blue
+C_OK="\033[0;32m"    # green
+C_ACTION="\033[0;33m" # yellow
+C_RST="\033[0m"      # reset
 
 # Determina el usuario real que ejecuta el script:
 # - Usa SUDO_USER si se invocó con sudo
@@ -19,7 +22,7 @@ set -o pipefail # Propaga errores en tuberías
 # Elevación automática de privilegios:
 # relanza con sudo si no es root
 if [[ $EUID -ne 0 ]]; then
-    echo "  Elevando privilegios..."
+    echo -e "${C_ACTION}  Elevando privilegios...${C_RST}"
     exec sudo -- "$0" "$@"
 fi
 
@@ -27,7 +30,7 @@ fi
 # - Usa SUDO_USER si se invocó con sudo
 # - Si no, recurre a logname (usuario de sesión)
 # - Como último recurso, toma la variable $USER
-REAL_USER="${SUDO_USER:-$(logname 2> /dev/null || echo "$USER")}"
+real_user="${SUDO_USER:-$(logname 2> /dev/null || echo "$USER")}"
 
 # Mantiene activa la sesión sudo mientras el script se ejecuta:
 # - Lanza un proceso en segundo plano que renueva sudo cada 60s
@@ -46,14 +49,15 @@ trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
 confirmar() {
     read -rp "¿Desea proceder con la instalación? [s/N]: " respuesta
     [[ "$respuesta" =~ ^[sS]$ ]] || {
-        echo "  Cancelado."
+        echo -e "${C_ACTION}  Cancelado.${C_RST}"
         exit 0
     }
 }
 
 # Comprueba que las listas que entren en paru no estén vacías
 instalar() {
-    local paquetes=("$@")
+    local paquetes
+    paquetes=("$@")
     if [[ ${#paquetes[@]} -gt 0 ]]; then
         paru -S --needed --noconfirm "${paquetes[@]}"
     fi
@@ -63,11 +67,11 @@ instalar() {
 # │                         REFLECTOR                          │
 # ╘════════════════════════════════════════════════════════════╛
 update_mirror() {
-    echo ">> Estableciendo los 20 mirrors más rápidos"
+    echo -e "${C_STEP}  Estableciendo los 20 mirrors más rápidos${C_RST}"
     pacman -S --needed reflector
     reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
     pacman -Syy
-    echo ">> ACTUALIZACIÓN DE MIRRORS COMPLETADA"
+    echo -e "${C_OK}  ACTUALIZACIÓN DE MIRRORS COMPLETADA${C_RST}"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -75,40 +79,41 @@ update_mirror() {
 # ╘════════════════════════════════════════════════════════════╛
 # Verificación del entorno y condiciones previas de instalación
 prepare_system() {
-    echo "  Comprobando conexión a Internet"
+    echo -e "${C_STEP}  Comprobando conexión a Internet${C_RST}"
     if ping -c 1 archlinux.org &> /dev/null; then
-        echo "  Conexión activa"
+        echo -e "${C_OK}  Conexión activa${C_RST}"
     else
-        echo "  No hay conexión a Internet. Revisa tu red antes de continuar."
+        echo -e "${C_ACTION}  No hay conexión a Internet. Revisa tu red antes de continuar.${C_RST}"
         return 1
     fi
 
-    echo "  Actualizando el sistema"
+    echo -e "${C_STEP}  Actualizando el sistema${C_RST}"
     pacman -Syu
 
-    echo "  Verificando configuración de idioma y teclado"
+    echo -e "${C_STEP}  Verificando configuración de idioma y teclado${C_RST}"
     localectl status
 
-    echo "  Verificando disponibilidad de paru"
+    echo -e "${C_STEP}  Verificando disponibilidad de paru${C_RST}"
     if ! command -v paru &> /dev/null; then
-        echo "  Paru no está instalado. Se recomienda instalarlo antes de continuar."
+        echo -e "${C_ACTION}  Paru no está instalado. Se recomienda instalarlo antes de continuar.${C_RST}"
         return 1
     fi
 
-    echo "  Comprobando sincronización de reloj"
+    echo -e "${C_OK}  Comprobando sincronización de reloj${C_RST}"
     timedatectl show | grep "NTPSynchronized=yes" &> /dev/null || {
-        echo "  NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true"
+        echo -e "${C_ACTION}  NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true${C_RST}"
     }
 
-    echo "  VERIFICACIÓN DEL SISTEMA COMPLETADA"
+    echo -e "${C_OK}  VERIFICACIÓN DEL SISTEMA COMPLETADA${C_RST}"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                    FUNCIONES POR ÁREAS                     │
 # ╘════════════════════════════════════════════════════════════╛
 install_app_browser() {
-    echo ">> Instalando navegador y complementos multimedia"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando navegador y complementos multimedia${C_RST}"
+    local pkgs
+    pkgs=(
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
         gst-plugins-bad  # Plugins GStreamer menos comunes, algunos experimentales
         gst-plugins-good # Plugins GStreamer recomendados
@@ -122,8 +127,9 @@ install_app_browser() {
 }
 
 install_app_docs() {
-    echo ">> Instalando documentación y manuales"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando documentación y manuales${C_RST}"
+    local pkgs
+    pkgs=(
         man          # Comando man
         man-db       # Base de datos de man
         man-pages-es # Páginas de manual en español
@@ -132,8 +138,9 @@ install_app_docs() {
 }
 
 install_app_editor() {
-    echo ">> Instalando editores de texto"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando editores de texto${C_RST}"
+    local pkgs
+    pkgs=(
         luarocks        # Gestor de paquetes para Lua (plugins de nvim)
         neovim          # Editor de texto/IDE ligero
         neovim-symlinks # vim y vi se redirigen a Neovim
@@ -151,8 +158,9 @@ install_app_editor() {
 }
 
 install_app_cli_fm() {
-    echo ">> Instalando gestor de archivos CLI"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando gestor de archivos CLI${C_RST}"
+    local pkgs
+    pkgs=(
         atool               # Manejo de archivos comprimidos desde CLI
         imagemagick         # Conversión y procesamiento de imágenes
         mediainfo           # Muestra metadatos de audio y video
@@ -167,8 +175,9 @@ install_app_cli_fm() {
 }
 
 install_app_pdf() {
-    echo ">> Instalando visor PDF y complementos OCR"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando visor PDF y complementos OCR${C_RST}"
+    local pkgs
+    pkgs=(
         tesseract-data-eng # Datos de reconocimiento OCR en inglés
         tesseract-data-spa # Datos de reconocimiento OCR en español
         zathura            # Visor de documentos ligero
@@ -178,8 +187,9 @@ install_app_pdf() {
 }
 
 install_app_general() {
-    echo ">> Instalando aplicaciones generales"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando aplicaciones generales${C_RST}"
+    local pkgs
+    pkgs=(
         keepassxc        # Gestor de contraseñas local con base de datos cifrada
         localsend-bin    # Compartir archivos en red local sin configuración compleja
         transmission-cli # Cliente BitTorrent en línea de comandos
@@ -193,12 +203,13 @@ install_app_general() {
     )
     instalar "${pkgs[@]}"
 
-    sudo -u "$REAL_USER" systemctl --user enable --now syncthing.service
+    sudo -u "$real_user" systemctl --user enable --now syncthing.service
 }
 
 install_sys_fonts() {
-    echo ">> Instalando fuentes y tipografías"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando fuentes y tipografías${C_RST}"
+    local pkgs
+    pkgs=(
         noto-fonts                  # Fuentes noto (sans, serif, mono)
         noto-fonts-cjk              # Fuentes noto para chino, japonés, coreano
         noto-fonts-emoji            # Fuentes noto con emojis
@@ -227,8 +238,9 @@ install_sys_fonts() {
 }
 
 install_sys_network() {
-    echo ">> Instalando NetworkManager y complementos"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando NetworkManager y complementos${C_RST}"
+    local pkgs
+    pkgs=(
         networkmanager         # Servicio principal para gestionar redes
         networkmanager-openvpn # Soporte para conexiones VPN (OpenVPN)
         network-manager-applet # Indicador gráfico para entornos GTK
@@ -246,8 +258,9 @@ install_sys_network() {
 }
 
 install_sys_theme() {
-    echo ">> Instalando temas y elementos de estética"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando temas y elementos de estética${C_RST}"
+    local pkgs
+    pkgs=(
         # Temas y motores GTK
         arc-gtk-theme             # Tema GTK plano con transparencias (Arc)
         gnome-themes-extra        # Temas adicionales de GNOME (Adwaita, etc.)
@@ -262,8 +275,9 @@ install_sys_theme() {
 }
 
 install_sys_wayland() {
-    echo ">> Instalando herramientas del sistema"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando herramientas del sistema${C_RST}"
+    local pkgs
+    pkgs=(
 
         # Bibliotecas gráficas base
         mesa # Implementación de OpenGL/Vulkan para renderizado
@@ -322,8 +336,9 @@ install_sys_wayland() {
 }
 
 install_utils_compress() {
-    echo ">> Instalando herramientas de compresión"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando herramientas de compresión${C_RST}"
+    local pkgs
+    pkgs=(
         engrampa # GUI MATE para archivos comprimidos
         p7zip    # .7z
         unrar    # .rar
@@ -334,8 +349,9 @@ install_utils_compress() {
 }
 
 install_utils_files() {
-    echo ">> Instalando herramientas de archivos y multimedia"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando herramientas de archivos y multimedia${C_RST}"
+    local pkgs
+    pkgs=(
         exfatprogs        # Herramientas para exFAT (moderno)
         f2fs-tools        # Herramientas para F2FS
         ffmpegthumbnailer # Generador de miniaturas de video con FFmpeg
@@ -365,8 +381,9 @@ install_utils_files() {
 }
 
 install_utils_terminal() {
-    echo ">> Instalando utilidades de terminal"
-    local pkgs=(
+    echo -e "${C_STEP}  Instalando utilidades de terminal${C_RST}"
+    local pkgs
+    pkgs=(
         aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
         ast-grep-bin       # Herramienta de búsqueda y lint de código
         opencode-bin       # Asistente interactivo de IA para desarrollo de software
@@ -405,24 +422,24 @@ install_utils_terminal() {
     )
     instalar "${pkgs[@]}"
 
-    sudo -u "$REAL_USER" systemctl --user enable --now ssh-agent.service
+    sudo -u "$real_user" systemctl --user enable --now ssh-agent.service
     systemctl enable --now cronie
 
-    echo "  Cambiando shell predeterminada a zsh..."
-    sudo -u "$REAL_USER" chsh -s "$(which zsh)"
+    echo -e "${C_STEP}  Cambiando shell predeterminada a zsh...${C_RST}"
+    sudo -u "$real_user" chsh -s "$(which zsh)"
 
-    echo "  Usuario $REAL_USER agregado al grupo input" # requerido para módulos de waybar
-    usermod -aG input "$REAL_USER"
+    echo -e "${C_STEP}  Usuario $real_user agregado al grupo input${C_RST}" # requerido para módulos de waybar
+    usermod -aG input "$real_user"
 
     # Verificar que el grupo fuse exista
     if ! getent group fuse > /dev/null; then
         groupadd fuse
     fi
 
-    echo "  Usuario $REAL_USER agregado al grupo fuse" # requerido para módulos de waybar
-    usermod -aG fuse "$REAL_USER"
+    echo -e "${C_STEP}  Usuario $real_user agregado al grupo fuse${C_RST}" # requerido para módulos de waybar
+    usermod -aG fuse "$real_user"
 
-    echo "  Reinicia la sesión para aplicar el cambio de shell"
+    echo -e "${C_ACTION}  Reinicia la sesión para aplicar el cambio de shell${C_RST}"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -430,19 +447,17 @@ install_utils_terminal() {
 # ╘════════════════════════════════════════════════════════════╛
 mostrar_menu() {
 
-    # Título en cian
     echo
-    echo -e "\e[36m = = = Instalador de Paquetes (con paru) = = =\e[0m"
-    # Opciones en amarillo + texto normal
-    echo -e "\e[33m1)\e[0m Preparar sistema (\e[31mObligatorio\e[0m)"
-    echo -e "\e[33m2)\e[0m Utilidades del sistema"
-    echo -e "\e[33m3)\e[0m Editores de texto"
-    echo -e "\e[33m4)\e[0m Navegador, archivos y multimedia"
-    echo -e "\e[33m5)\e[0m Fuentes y temas"
-    echo -e "\e[33m6)\e[0m Redes e Internet"
-    echo -e "\e[33m7)\e[0m Terminal y documentación"
-    echo -e "\e[33m8)\e[0m INSTALAR TODO"
-    echo -e "\e[33m0)\e[0m Salir"
+    echo -e "${C_STEP} = = = Instalador de Paquetes (con paru) = = =${C_RST}"
+    echo -e "${C_ACTION}1)${C_RST} Preparar sistema (${C_STEP}Obligatorio${C_RST})"
+    echo -e "${C_ACTION}2)${C_RST} Utilidades del sistema"
+    echo -e "${C_ACTION}3)${C_RST} Editores de texto"
+    echo -e "${C_ACTION}4)${C_RST} Navegador, archivos y multimedia"
+    echo -e "${C_ACTION}5)${C_RST} Fuentes y temas"
+    echo -e "${C_ACTION}6)${C_RST} Redes e Internet"
+    echo -e "${C_ACTION}7)${C_RST} Terminal y documentación"
+    echo -e "${C_ACTION}8)${C_RST} INSTALAR TODO"
+    echo -e "${C_ACTION}0)${C_RST} Salir"
     echo
 }
 
