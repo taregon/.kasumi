@@ -11,9 +11,9 @@
 set -euo pipefail
 
 C_STEP="\033[0;34m"   # blue
-C_OK="\033[0;32m"    # green
+C_OK="\033[0;32m"     # green
 C_ACTION="\033[0;33m" # yellow
-C_RST="\033[0m"      # reset
+C_RST="\033[0m"       # reset
 
 # Determina el usuario real que ejecuta el script:
 # - Usa SUDO_USER si se invocó con sudo
@@ -26,11 +26,10 @@ if [[ $EUID -ne 0 ]]; then
     exec sudo -- "$0" "$@"
 fi
 
-# Determina el usuario real que ejecuta el script:
-# - Usa SUDO_USER si se invocó con sudo
-# - Si no, recurre a logname (usuario de sesión)
-# - Como último recurso, toma la variable $USER
-real_user="${SUDO_USER:-$(logname 2> /dev/null || echo "$USER")}"
+# Determina el usuario que inició la ejecución:
+# - Usa SUDO_USER cuando el script fue invocado mediante sudo.
+# - En caso contrario, utiliza el nombre del usuario efectivo actual.
+real_user="${SUDO_USER:-$(id -un)}"
 
 # Mantiene activa la sesión sudo mientras el script se ejecuta:
 # - Lanza un proceso en segundo plano que renueva sudo cada 60s
@@ -46,7 +45,7 @@ SUDO_KEEPALIVE_PID=$!
 trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
 
 # Confirmación interactiva antes de aplicar cambios en el sistema
-confirmar() {
+confirm() {
     read -rp "¿Desea proceder con la instalación? [s/N]: " respuesta
     [[ "$respuesta" =~ ^[sS]$ ]] || {
         echo -e "${C_ACTION}  Cancelado.${C_RST}"
@@ -55,12 +54,21 @@ confirmar() {
 }
 
 # Comprueba que las listas que entren en paru no estén vacías
-instalar() {
+install_pkgs() {
     local paquetes
     paquetes=("$@")
     if [[ ${#paquetes[@]} -gt 0 ]]; then
         paru -S --needed --noconfirm "${paquetes[@]}"
     fi
+}
+
+# Inyecta XDG_RUNTIME_DIR para systemctl --user desde sudo
+run_as_user() {
+    local uid
+    uid=$(id -u "$real_user")
+    sudo -u "$real_user" \
+        XDG_RUNTIME_DIR="/run/user/$uid" \
+        systemctl --user "$@" 2> /dev/null || true
 }
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -79,16 +87,11 @@ update_mirror() {
 # ╘════════════════════════════════════════════════════════════╛
 # Verificación del entorno y condiciones previas de instalación
 prepare_system() {
-    echo -e "${C_STEP}  Comprobando conexión a Internet${C_RST}"
-    if ping -c 1 archlinux.org &> /dev/null; then
-        echo -e "${C_OK}  Conexión activa${C_RST}"
-    else
-        echo -e "${C_ACTION}  No hay conexión a Internet. Revisa tu red antes de continuar.${C_RST}"
+    echo -e "${C_STEP}  Sincronizando bases de datos${C_RST}"
+    pacman -Sy || {
+        echo -e "${C_ACTION}  Error al sincronizar. Verifica conexión a Internet y DNS.${C_RST}"
         return 1
-    fi
-
-    echo -e "${C_STEP}  Actualizando el sistema${C_RST}"
-    pacman -Syu
+    }
 
     echo -e "${C_STEP}  Verificando configuración de idioma y teclado${C_RST}"
     localectl status
@@ -119,11 +122,12 @@ install_app_browser() {
         gst-plugins-good # Plugins GStreamer recomendados
         gst-plugins-ugly # Plugins GStreamer con licencias restrictivas
         hunspell         # Corrector ortográfico
+        hunspell-es      # Diccionario español general para Hunspell
         hunspell-es_pa   # Diccionario español (Panamá) para Hunspell
         luakit           # Navegador web minimalista basado en WebKit
         libwebp          # Biblioteca WebP (formato de imagen moderno)
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_app_docs() {
@@ -134,7 +138,7 @@ install_app_docs() {
         man-db       # Base de datos de man
         man-pages-es # Páginas de manual en español
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_app_editor() {
@@ -154,7 +158,7 @@ install_app_editor() {
         visual-studio-code-bin # Editor/IDE completo y extensible (AUR)
         xed                    # Editor de texto simple y ligero (MATE)
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_app_cli_fm() {
@@ -171,19 +175,20 @@ install_app_cli_fm() {
         ranger              # Gestor de archivos en terminal (estilo VI)
         trash-cli           # Envía archivos a la papelera desde CLI
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_app_pdf() {
     echo -e "${C_STEP}  Instalando visor PDF y complementos OCR${C_RST}"
     local pkgs
     pkgs=(
+        tesseract          # Motor OCR base
         tesseract-data-eng # Datos de reconocimiento OCR en inglés
         tesseract-data-spa # Datos de reconocimiento OCR en español
         zathura            # Visor de documentos ligero
         zathura-pdf-mupdf  # Backend para abrir archivos PDF en Zathura
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_app_general() {
@@ -201,9 +206,7 @@ install_app_general() {
         libreoffice-fresh    # Suite ofimática con nuevas funciones
         libreoffice-fresh-es # Paquete de idioma español para LibreOffice
     )
-    instalar "${pkgs[@]}"
-
-    sudo -u "$real_user" systemctl --user enable --now syncthing.service
+    install_pkgs "${pkgs[@]}"
 }
 
 install_sys_fonts() {
@@ -234,7 +237,7 @@ install_sys_fonts() {
         ttf-signika               # Fuente Signika
         ttf-sofia-sans            # Fuente Sofia Sans
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_sys_network() {
@@ -252,9 +255,7 @@ install_sys_network() {
         openssh # Cliente y servidor SSH
         sshfs   # Montaje de sistemas remotos vía SSH
     )
-    instalar "${pkgs[@]}"
-
-    systemctl enable --now NetworkManager
+    install_pkgs "${pkgs[@]}"
 }
 
 install_sys_theme() {
@@ -271,7 +272,7 @@ install_sys_theme() {
         sassc                     # Compilador de Sass a CSS (CLI)
         zukitwo-themes-git        # Temas GTK Zukitwo (AUR)
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_sys_wayland() {
@@ -332,7 +333,7 @@ install_sys_wayland() {
         wl-clipboard # Utilidades de portapapeles en Wayland
         wlogout      # Menú minimalista de cierre de sesión
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_utils_compress() {
@@ -345,7 +346,7 @@ install_utils_compress() {
         unzip    # Descomprimir .zip
         zip      # Comprimir archivos .zip
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_utils_files() {
@@ -366,18 +367,16 @@ install_utils_files() {
         playerctl         # Control de reproductores multimedia desde CLI
 
         # Optimización de imágenes
-        cjpeg         # Codificador de imagen a JPEG
-        djpeg         # Decodificador de JPEG a imagen
         jpegoptim     # Optimiza imágenes JPEG reduciendo peso con mínima pérdida.
         libwebp-utils # Utilidades CLI de WebP (incluye dwebp, cwebp, gif2webp)
-        oxipg         # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
+        oxipng        # Optimizador de imágenes PNG sin pérdida (recompresión eficiente)
 
         thunar        # Explorador de archivos GTK
         thunar-volman # Gestión volúmenes en Thunar
         tumbler       # Generador de miniaturas
         udisks2       # Gestión discos y montaje automático
     )
-    instalar "${pkgs[@]}"
+    install_pkgs "${pkgs[@]}"
 }
 
 install_utils_terminal() {
@@ -406,7 +405,7 @@ install_utils_terminal() {
         lsd                # ls con iconos y colores
         mlr                # Procesador de datos estilo awk (Miller)
         pacman-contrib     # Utilidades adicionales para pacman
-        pamixer            # Control de volumen para PulseAudio en terminal
+        pamixer            # Control de volumen desde terminal (compatible con PipeWire)
         pandoc             # Conversor de documentos markup entre formatos
         pastel             # pastel: CLI para conversión y transformación de colores en espacios RGB, HSL y perceptuales (Lab/OkLab/OkLCh).
         python-pip         # Gestor de paquetes Python
@@ -420,10 +419,7 @@ install_utils_terminal() {
         zsh                # Shell interactivo avanzada
         zsh-completions    # Autocompletado adicional para zsh
     )
-    instalar "${pkgs[@]}"
-
-    sudo -u "$real_user" systemctl --user enable --now ssh-agent.service
-    systemctl enable --now cronie
+    install_pkgs "${pkgs[@]}"
 
     echo -e "${C_STEP}  Cambiando shell predeterminada a zsh...${C_RST}"
     sudo -u "$real_user" chsh -s "$(which zsh)"
@@ -442,10 +438,21 @@ install_utils_terminal() {
     echo -e "${C_ACTION}  Reinicia la sesión para aplicar el cambio de shell${C_RST}"
 }
 
+# ─[ SERVICIOS ]──────────────────────────────────────────────
+enable_services() {
+    # System services — infrastructure
+    systemctl enable --now NetworkManager
+    systemctl enable --now cronie
+
+    # User services — session
+    run_as_user enable --now ssh-agent.service
+    run_as_user enable --now syncthing.service
+}
+
 # ╒════════════════════════════════════════════════════════════╕
 # │                       MENÚ PRINCIPAL                       │
 # ╘════════════════════════════════════════════════════════════╛
-mostrar_menu() {
+show_menu() {
 
     echo
     echo -e "${C_STEP} = = = Instalador de Paquetes (con paru) = = =${C_RST}"
@@ -463,25 +470,25 @@ mostrar_menu() {
 
 main() {
     while true; do
-        mostrar_menu
+        show_menu
         read -rp "Seleccione una opción: " opcion
         case "$opcion" in
             1)
-                confirmar
+                confirm
                 prepare_system
                 update_mirror
                 ;;
             2)
-                confirmar
+                confirm
                 install_app_general
                 install_sys_wayland
                 ;;
             3)
-                confirmar
+                confirm
                 install_app_editor
                 ;;
             4)
-                confirmar
+                confirm
                 install_app_browser
                 install_app_cli_fm
                 install_app_pdf
@@ -489,21 +496,21 @@ main() {
                 install_utils_compress
                 ;;
             5)
-                confirmar
+                confirm
                 install_sys_fonts
                 install_sys_theme
                 ;;
             6)
-                confirmar
+                confirm
                 install_sys_network
                 ;;
             7)
-                confirmar
+                confirm
                 install_app_docs
                 install_utils_terminal
                 ;;
             8)
-                confirmar
+                confirm
                 prepare_system
                 update_mirror
                 install_app_browser
@@ -519,6 +526,7 @@ main() {
                 install_utils_compress
                 install_utils_files
                 install_utils_terminal
+                enable_services
                 ;;
             0)
                 echo "Saliendo..."
