@@ -17,10 +17,6 @@ C_OK="\033[0;32m"     # green
 C_ACTION="\033[0;33m" # yellow
 C_RST="\033[0m"       # reset
 
-# Determina el usuario real que ejecuta el script:
-# - Usa SUDO_USER si se invocó con sudo
-# - Si no, recurre a logname (usuario de sesión)
-# - Como último recurso, toma la variable $USER
 # Elevación automática de privilegios:
 # relanza con sudo si no es root
 if [[ $EUID -ne 0 ]]; then
@@ -43,7 +39,7 @@ real_user="${SUDO_USER:-$(id -un)}"
         sleep 60
     done
 ) 2> /dev/null &
-SUDO_KEEPALIVE_PID=$!
+readonly SUDO_KEEPALIVE_PID=$!
 trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
 
 # ─[ UTILIDADES ]──────────────────────────────────────────────
@@ -88,7 +84,7 @@ prepare_system() {
 
     echo -e "${C_STEP}  Verificando disponibilidad de paru${C_RST}"
     if ! command -v paru &> /dev/null; then
-        echo -e "${C_ACTION}  Paru no está instalado. Se recomienda instalarlo antes de continuar.${C_RST}"
+        echo -e "${C_ACTION}  Paru no instalado. Instálalo antes de continuar.${C_RST}"
         return 1
     fi
 
@@ -151,7 +147,7 @@ install_sys_wayland() {
         cava           # Visualizador de espectro de audio en terminal
         pipewire       # Servicio de audio/video de baja latencia (reemplaza PulseAudio/JACK)
         pipewire-pulse # Capa de compatibilidad con PulseAudio sobre PipeWire
-        wiremix       # Mezclador de audio TUI nativo PipeWire
+        wiremix        # Mezclador de audio TUI nativo PipeWire
         wev            # Visor de eventos de entrada en Wayland
         wireplumber    # Session manager moderno para PipeWire (reemplaza pipewire-media-session)
 
@@ -261,7 +257,7 @@ install_app_editor() {
         nodejs          # Requerido por VSCode y plugins de nvim
         npm             # Gestor de paquetes para Node.js
         tree-sitter     # Biblioteca para parsing incremental y reutilizable
-        tree-sitter-cli # Herramienta de línea de comandos para generar, probar y depurar parsers de Tree-sitter.
+        tree-sitter-cli # Desarrollo, prueba y uso de parsers Tree-sitter
 
         # Editores adicionales
         obsidian               # Editor de notas en Markdown enfocado en conocimiento (AUR)
@@ -398,15 +394,14 @@ install_utils_terminal() {
         lnav               # Visor avanzado de logs (TUI)
         mlr                # Procesador de datos estilo awk (Miller)
         pacman-contrib     # Utilidades adicionales para pacman
-
         pandoc             # Conversor de documentos markup entre formatos
-        pastel             # pastel: CLI para conversión y transformación de colores en espacios RGB, HSL y perceptuales (Lab/OkLab/OkLCh).
+        pastel             # Generación, análisis, conversión y manipulación de colores
         python-pip         # Gestor de paquetes Python
         ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
         source-highlight   # Resaltado de sintaxis para less y otros
         toilet             # Generador de texto ASCII estilizado
-        vivid              # Generador de LS_COLORS con soporte de temas (reemplazo moderno de dircolors)
+        vivid              # Generador moderno de LS_COLORS con temas
         xan                # Utilidad para procesamiento de tablas CSV
         zoxide             # Navegación inteligente entre directorios
         zsh                # Shell interactivo avanzada
@@ -417,7 +412,7 @@ install_utils_terminal() {
     echo -e "${C_STEP}  Cambiando shell predeterminada a zsh${C_RST}"
     sudo -u "$real_user" chsh -s "$(which zsh)"
 
-    echo -e "${C_STEP}  Grupo input: $real_user agregado${C_RST}" # requerido para módulos de waybar
+    echo -e "${C_STEP}  Grupo input: $real_user agregado${C_RST}" # módulos waybar
     usermod -aG input "$real_user"
 
     # Verificar que el grupo fuse exista
@@ -425,7 +420,7 @@ install_utils_terminal() {
         groupadd fuse
     fi
 
-    echo -e "${C_STEP}  Grupo fuse: $real_user agregado${C_RST}" # requerido para módulos de waybar
+    echo -e "${C_STEP}  Grupo fuse: $real_user agregado${C_RST}" # módulos waybar
     usermod -aG fuse "$real_user"
 
     echo -e "${C_ACTION}  Reinicia la sesión para aplicar el cambio de shell${C_RST}"
