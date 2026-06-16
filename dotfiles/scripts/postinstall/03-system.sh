@@ -24,7 +24,7 @@ C_RST="\033[0m"       # reset
 # Elevación automática de privilegios:
 # relanza con sudo si no es root
 if [[ $EUID -ne 0 ]]; then
-    echo -e "${C_ACTION}  Elevando privilegios...${C_RST}"
+    echo -e "${C_ACTION}  Elevando privilegios${C_RST}"
     exec sudo -- "$0" "$@"
 fi
 
@@ -51,7 +51,7 @@ trap 'kill $SUDO_KEEPALIVE_PID 2>/dev/null' EXIT
 confirm() {
     read -rp "¿Desea proceder con la instalación? [s/N]: " respuesta
     [[ "$respuesta" =~ ^[sS]$ ]] || {
-        echo -e "${C_ACTION}  Cancelado.${C_RST}"
+        echo -e "${C_ACTION}  Cancelado${C_RST}"
         exit 0
     }
 }
@@ -97,7 +97,7 @@ prepare_system() {
         echo -e "${C_ACTION}  NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true${C_RST}"
     }
 
-    echo -e "${C_OK}  VERIFICACIÓN DEL SISTEMA COMPLETADA${C_RST}"
+    echo -e "${C_OK}  Verificación del sistema completada${C_RST}"
 }
 
 update_mirror() {
@@ -105,7 +105,7 @@ update_mirror() {
     pacman -S --needed reflector
     reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
     pacman -Syy
-    echo -e "${C_OK}  ACTUALIZACIÓN DE MIRRORS COMPLETADA${C_RST}"
+    echo -e "${C_OK}  Actualización de mirrors completada${C_RST}"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -130,7 +130,7 @@ install_sys_network() {
 }
 
 install_sys_wayland() {
-    echo -e "${C_STEP}  Instalando herramientas del sistema${C_RST}"
+    echo -e "${C_STEP}  Instalando entorno Wayland${C_RST}"
     local pkgs
     pkgs=(
 
@@ -240,7 +240,7 @@ install_sys_theme() {
 
 # ─[ APLICACIONES ]────────────────────────────────────────────
 install_app_browser() {
-    echo -e "${C_STEP}  Instalando navegador y complementos multimedia${C_RST}"
+    echo -e "${C_STEP}  Instalando navegador y herramientas multimedia${C_RST}"
     local pkgs
     pkgs=(
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
@@ -310,8 +310,7 @@ install_app_docs() {
     echo -e "${C_STEP}  Instalando documentación y manuales${C_RST}"
     local pkgs
     pkgs=(
-        man          # Comando man
-        man-db       # Base de datos de man
+        man-db       # Comando man y base de datos
         man-pages-es # Páginas de manual en español
     )
     install_pkgs "${pkgs[@]}"
@@ -421,10 +420,10 @@ install_utils_terminal() {
     )
     install_pkgs "${pkgs[@]}"
 
-    echo -e "${C_STEP}  Cambiando shell predeterminada a zsh...${C_RST}"
+    echo -e "${C_STEP}  Cambiando shell predeterminada a zsh${C_RST}"
     sudo -u "$real_user" chsh -s "$(which zsh)"
 
-    echo -e "${C_STEP}  Usuario $real_user agregado al grupo input${C_RST}" # requerido para módulos de waybar
+    echo -e "${C_STEP}  Grupo input: $real_user agregado${C_RST}" # requerido para módulos de waybar
     usermod -aG input "$real_user"
 
     # Verificar que el grupo fuse exista
@@ -432,7 +431,7 @@ install_utils_terminal() {
         groupadd fuse
     fi
 
-    echo -e "${C_STEP}  Usuario $real_user agregado al grupo fuse${C_RST}" # requerido para módulos de waybar
+    echo -e "${C_STEP}  Grupo fuse: $real_user agregado${C_RST}" # requerido para módulos de waybar
     usermod -aG fuse "$real_user"
 
     echo -e "${C_ACTION}  Reinicia la sesión para aplicar el cambio de shell${C_RST}"
