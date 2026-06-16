@@ -151,6 +151,7 @@ install_sys_wayland() {
         cava           # Visualizador de espectro de audio en terminal
         pipewire       # Servicio de audio/video de baja latencia (reemplaza PulseAudio/JACK)
         pipewire-pulse # Capa de compatibilidad con PulseAudio sobre PipeWire
+        wiremix       # Mezclador de audio TUI nativo PipeWire
         wev            # Visor de eventos de entrada en Wayland
         wireplumber    # Session manager moderno para PipeWire (reemplaza pipewire-media-session)
 
@@ -397,7 +398,7 @@ install_utils_terminal() {
         lnav               # Visor avanzado de logs (TUI)
         mlr                # Procesador de datos estilo awk (Miller)
         pacman-contrib     # Utilidades adicionales para pacman
-        pamixer            # Control de volumen desde terminal (compatible con PipeWire)
+
         pandoc             # Conversor de documentos markup entre formatos
         pastel             # pastel: CLI para conversión y transformación de colores en espacios RGB, HSL y perceptuales (Lab/OkLab/OkLCh).
         python-pip         # Gestor de paquetes Python
@@ -451,13 +452,14 @@ show_menu() {
     echo
     echo -e "${C_STEP} = = = Instalador de Paquetes (con paru) = = =${C_RST}"
     echo -e "${C_ACTION}1)${C_RST} Preparar sistema (${C_STEP}Obligatorio${C_RST})"
-    echo -e "${C_ACTION}2)${C_RST} Utilidades del sistema"
-    echo -e "${C_ACTION}3)${C_RST} Editores de texto"
-    echo -e "${C_ACTION}4)${C_RST} Navegador, archivos y multimedia"
-    echo -e "${C_ACTION}5)${C_RST} Fuentes y temas"
-    echo -e "${C_ACTION}6)${C_RST} Redes e Internet"
-    echo -e "${C_ACTION}7)${C_RST} Terminal y documentación"
-    echo -e "${C_ACTION}8)${C_RST} INSTALAR TODO"
+    echo -e "${C_ACTION}2)${C_RST} Entorno gráfico"
+    echo -e "${C_ACTION}3)${C_RST} Aplicaciones generales"
+    echo -e "${C_ACTION}4)${C_RST} Editores de texto"
+    echo -e "${C_ACTION}5)${C_RST} Navegador y multimedia"
+    echo -e "${C_ACTION}6)${C_RST} Fuentes y temas"
+    echo -e "${C_ACTION}7)${C_RST} Redes e Internet"
+    echo -e "${C_ACTION}8)${C_RST} Terminal y utilidades"
+    echo -e "${C_ACTION}9)${C_RST} INSTALAR TODO"
     echo -e "${C_ACTION}0)${C_RST} Salir"
     echo
 }
@@ -474,52 +476,55 @@ main() {
                 ;;
             2)
                 confirm
-                install_app_general
                 install_sys_wayland
                 ;;
             3)
                 confirm
-                install_app_editor
+                install_app_general
                 ;;
             4)
                 confirm
-                install_app_browser
-                install_app_cli_fm
-                install_app_pdf
-                install_utils_files
-                install_utils_compress
+                install_app_editor
                 ;;
             5)
                 confirm
-                install_sys_fonts
-                install_sys_theme
+                install_app_browser
+                install_app_cli_fm
+                install_app_pdf
                 ;;
             6)
                 confirm
-                install_sys_network
+                install_sys_fonts
+                install_sys_theme
                 ;;
             7)
                 confirm
-                install_app_docs
-                install_utils_terminal
+                install_sys_network
                 ;;
             8)
                 confirm
-                prepare_system
-                update_mirror
-                install_app_browser
-                install_app_docs
-                install_app_editor
-                install_app_cli_fm
-                install_app_pdf
-                install_app_general
-                install_sys_fonts
-                install_sys_network
-                install_sys_theme
-                install_sys_wayland
                 install_utils_compress
                 install_utils_files
                 install_utils_terminal
+                install_app_docs
+                ;;
+            9)
+                confirm
+                prepare_system
+                update_mirror
+                install_sys_wayland
+                install_app_general
+                install_app_editor
+                install_app_browser
+                install_app_cli_fm
+                install_app_pdf
+                install_sys_fonts
+                install_sys_theme
+                install_sys_network
+                install_utils_compress
+                install_utils_files
+                install_utils_terminal
+                install_app_docs
                 enable_services
                 ;;
             0)
