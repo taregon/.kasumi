@@ -176,11 +176,11 @@
   // Connectivity
   // --------------------------------------------------
   "network": {
-    "format": "⚠ Disabled",
+    "format": "󰖪 Disabled",
     "format-wifi": " {essid}",
     "format-ethernet": "󱙴 Wired",
     "format-disconnected": "󰌙 Disconnected",
-    "on-click": "nm-connection-editor"
+    "on-click": "iwctl"
   },
   "wireplumber": {
     "format": "{icon} {volume: >2}%",
