@@ -97,18 +97,18 @@ prepare_system() {
 }
 
 update_mirror() {
-    echo -e "${C_STEP}  Estableciendo los 20 mirrors más rápidos${C_RST}"
+    echo -e "${C_STEP}  Estableciendo los 20 mirrors más rápidos${C_RST}"
     pacman -S --needed reflector
     reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
     pacman -Syy
-    echo -e "${C_OK}  Actualización de mirrors completada${C_RST}"
+    echo -e "${C_OK}  Actualización de mirrors completada${C_RST}"
 }
 
 # ╒════════════════════════════════════════════════════════════╕
 # │                          SISTEMA                           │
 # ╘════════════════════════════════════════════════════════════╛
 install_sys_network() {
-    echo -e "${C_STEP}  Instalando herramientas de red${C_RST}"
+    echo -e "${C_STEP}  Instalando herramientas de red${C_RST}"
     local pkgs
     pkgs=(
         # Herramientas de red
@@ -410,7 +410,7 @@ install_utils_terminal() {
     install_pkgs "${pkgs[@]}"
 
     echo -e "${C_STEP}  Cambiando shell predeterminada a zsh${C_RST}"
-    sudo -u "$real_user" chsh -s "$(which zsh)"
+    sudo -u "$real_user" chsh -s "$(command -v zsh)"
 
     echo -e "${C_STEP}  Grupo input: $real_user agregado${C_RST}" # módulos waybar
     usermod -aG input "$real_user"
@@ -455,7 +455,7 @@ show_menu() {
     echo -e "${C_ACTION}7)${C_RST} Redes e Internet"
     echo -e "${C_ACTION}8)${C_RST} Terminal y utilidades"
     echo -e "${C_ACTION}9)${C_RST} INSTALAR TODO"
-    echo -e "${C_ACTION}0)${C_RST} Salir"
+    echo -e "${C_ACTION}0)${C_RST} Salir ${C_ACTION}${C_RST}"
     echo
 }
 
