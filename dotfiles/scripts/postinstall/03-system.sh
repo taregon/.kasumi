@@ -112,13 +112,9 @@ update_mirror() {
 # │                          SISTEMA                           │
 # ╘════════════════════════════════════════════════════════════╛
 install_sys_network() {
-    echo -e "${C_STEP}  Instalando NetworkManager y complementos${C_RST}"
+    echo -e "${C_STEP}  Instalando herramientas de red${C_RST}"
     local pkgs
     pkgs=(
-        networkmanager         # Servicio principal para gestionar redes
-        networkmanager-openvpn # Soporte para conexiones VPN (OpenVPN)
-        network-manager-applet # Indicador gráfico para entornos GTK
-
         # Herramientas de red
         iputils # Herramientas de red (ping, traceroute, etc.)
         iw      # Configuración avanzada de Wi-Fi
@@ -147,7 +143,6 @@ install_sys_wayland() {
         # Monitoreo y sensores
         btop       # Monitor del sistema en tiempo real (TUI)
         fastfetch  # Info del sistema, rápido y ligero
-        gotop      # Monitor del sistema en tiempo real (TUI)
         lm_sensors # Lectura de sensores de hardware
         nvtop      # Monitor de GPU en tiempo real (TUI)
         wluma      # Ajuste automático de brillo según luz ambiental
@@ -240,7 +235,7 @@ install_sys_theme() {
 
 # ─[ APLICACIONES ]────────────────────────────────────────────
 install_app_browser() {
-    echo -e "${C_STEP}  Instalando navegador y herramientas multimedia${C_RST}"
+    echo -e "${C_STEP}  Instalando navegador luakit y complementos${C_RST}"
     local pkgs
     pkgs=(
         gst-libav        # Soporte para códecs FFmpeg en GStreamer
@@ -251,7 +246,6 @@ install_app_browser() {
         hunspell-es      # Diccionario español general para Hunspell
         hunspell-es_pa   # Diccionario español (Panamá) para Hunspell
         luakit           # Navegador web minimalista basado en WebKit
-        libwebp          # Biblioteca WebP (formato de imagen moderno)
     )
     install_pkgs "${pkgs[@]}"
 }
@@ -352,6 +346,7 @@ install_utils_files() {
     echo -e "${C_STEP}  Instalando herramientas de archivos y multimedia${C_RST}"
     local pkgs
     pkgs=(
+        # mtpfs           # MTP CLI — innecesario con Thunar + gvfs-mtp
         exfatprogs        # Herramientas para exFAT (moderno)
         f2fs-tools        # Herramientas para F2FS
         ffmpegthumbnailer # Generador de miniaturas de video con FFmpeg
@@ -360,7 +355,6 @@ install_utils_files() {
         gvfs-mtp          # Soporte MTP (Android, etc.)
         imv               # Visor de imágenes ligero
         mpv               # Reproductor multimedia
-        mtpfs             # Montaje MTP vía FUSE
         nilfs-utils       # Herramientas para NILFS2
         ntfs-3g           # Soporte lectura/escritura NTFS
         playerctl         # Control de reproductores multimedia desde CLI
@@ -401,7 +395,6 @@ install_utils_terminal() {
         kitty              # Emulador de terminal acelerado por GPU
         less               # Paginador de texto para terminal
         lnav               # Visor avanzado de logs (TUI)
-        lsd                # ls con iconos y colores
         mlr                # Procesador de datos estilo awk (Miller)
         pacman-contrib     # Utilidades adicionales para pacman
         pamixer            # Control de volumen desde terminal (compatible con PipeWire)
@@ -440,7 +433,9 @@ install_utils_terminal() {
 # ─[ SERVICIOS ]──────────────────────────────────────────────
 enable_services() {
     # System services — infrastructure
-    systemctl enable --now NetworkManager
+    systemctl enable --now iwd
+    systemctl enable --now systemd-networkd
+    systemctl enable --now systemd-resolved
     systemctl enable --now cronie
 
     # User services — session
