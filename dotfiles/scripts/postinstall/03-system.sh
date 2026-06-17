@@ -4,7 +4,9 @@
 #   Descripción: Instala grupos de aplicaciones usando paru,
 #   abarcando tanto repos oficiales como AUR.
 #   Sistema: Arch Linux / Manjaro
-#   Requiere: paru instalado previamente
+#   Requiere: paru instalado y configurado previamente por el usuario
+#   Nota: install_pkgs ejecuta paru como usuario real ($real_user) vía sudo -u
+#   para permitir instalación de paquetes AUR (paru bloquea AUR como root).
 # └──────────────────────────────────────────────────────────┘
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -53,11 +55,11 @@ confirm() {
 }
 
 # Comprueba que las listas que entren en paru no estén vacías
+# Ejecuta paru como usuario real para permitir paquetes AUR
 install_pkgs() {
-    local paquetes
-    paquetes=("$@")
+    local paquetes=("$@")
     if [[ ${#paquetes[@]} -gt 0 ]]; then
-        paru -S --needed --noconfirm "${paquetes[@]}"
+        sudo -u "$real_user" paru -S --needed --noconfirm "${paquetes[@]}"
     fi
 }
 
@@ -67,7 +69,13 @@ run_as_user() {
     uid=$(id -u "$real_user")
     sudo -u "$real_user" \
         XDG_RUNTIME_DIR="/run/user/$uid" \
-        systemctl --user "$@" 2> /dev/null || true
+        systemctl --user "$@" 2> /dev/null
+}
+
+# Habilita e inicia servicio de usuario (systemctl --user no soporta --now)
+enable_now_user() {
+    run_as_user enable "$@"
+    run_as_user start "$@"
 }
 
 # ─[ PREPARACIÓN ]─────────────────────────────────────────────
@@ -83,13 +91,13 @@ prepare_system() {
     localectl status
 
     echo -e "${C_STEP}  Verificando disponibilidad de paru${C_RST}"
-    if ! command -v paru &> /dev/null; then
+    if ! command -v paru > /dev/null 2>&1; then
         echo -e "${C_ACTION}  Paru no instalado. Instálalo antes de continuar.${C_RST}"
         return 1
     fi
 
     echo -e "${C_OK}  Comprobando sincronización de reloj${C_RST}"
-    timedatectl show | grep "NTPSynchronized=yes" &> /dev/null || {
+    timedatectl show | grep "NTPSynchronized=yes" &> /dev/null || { # esperado: NTP puede no estar sincronizado aún
         echo -e "${C_ACTION}  NTP no sincronizado. Ejecuta: sudo timedatectl set-ntp true${C_RST}"
     }
 
@@ -98,7 +106,7 @@ prepare_system() {
 
 update_mirror() {
     echo -e "${C_STEP}  Estableciendo los 20 mirrors más rápidos${C_RST}"
-    pacman -S --needed reflector
+    install_pkgs reflector
     reflector --verbose --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
     pacman -Syy
     echo -e "${C_OK}  Actualización de mirrors completada${C_RST}"
@@ -342,8 +350,8 @@ install_utils_compress() {
 install_utils_files() {
     echo -e "${C_STEP}  Instalando herramientas de archivos y multimedia${C_RST}"
     local pkgs
+    # mtpfs omitido: innecesario con Thunar + gvfs-mtp (gvfs provee MTP)
     pkgs=(
-        # mtpfs           # MTP CLI — innecesario con Thunar + gvfs-mtp
         exfatprogs        # Herramientas para exFAT (moderno)
         f2fs-tools        # Herramientas para F2FS
         ffmpegthumbnailer # Generador de miniaturas de video con FFmpeg
@@ -412,18 +420,18 @@ install_utils_terminal() {
     echo -e "${C_STEP}  Cambiando shell predeterminada a zsh${C_RST}"
     sudo -u "$real_user" chsh -s "$(command -v zsh)"
 
-    echo -e "${C_STEP}  Grupo input: $real_user agregado${C_RST}" # módulos waybar
+    # Añadir usuario a grupo input (requerido por módulos waybar)
+    echo -e "${C_STEP}  Grupo input: $real_user agregado${C_RST}"
     usermod -aG input "$real_user"
 
-    # Verificar que el grupo fuse exista
-    if ! getent group fuse > /dev/null; then
-        groupadd fuse
-    fi
+    # Verificar que el grupo fuse exista (crear si no, -f ignora si ya existe)
+    groupadd -f fuse
 
-    echo -e "${C_STEP}  Grupo fuse: $real_user agregado${C_RST}" # módulos waybar
+    # Añadir usuario a grupo fuse (requerido por módulos waybar)
+    echo -e "${C_STEP}  Grupo fuse: $real_user agregado${C_RST}"
     usermod -aG fuse "$real_user"
 
-    echo -e "${C_ACTION}  Reinicia la sesión para aplicar el cambio de shell${C_RST}"
+    echo -e "${C_ACTION}  Reinicia la sesión para aplicar el cambio de shell${C_RST}"
 }
 
 # ─[ SERVICIOS ]──────────────────────────────────────────────
@@ -435,8 +443,8 @@ enable_services() {
     systemctl enable --now cronie
 
     # User services — session
-    run_as_user enable --now ssh-agent.service
-    run_as_user enable --now syncthing.service
+    enable_now_user ssh-agent.service
+    enable_now_user syncthing.service
 }
 
 # ╒════════════════════════════════════════════════════════════╕
@@ -446,16 +454,16 @@ show_menu() {
 
     echo
     echo -e "${C_STEP} = = = Instalador de Paquetes (con paru) = = =${C_RST}"
-    echo -e "${C_ACTION}1)${C_RST} Preparar sistema (${C_STEP}Obligatorio${C_RST})"
-    echo -e "${C_ACTION}2)${C_RST} Entorno gráfico"
-    echo -e "${C_ACTION}3)${C_RST} Aplicaciones generales"
-    echo -e "${C_ACTION}4)${C_RST} Editores de texto"
-    echo -e "${C_ACTION}5)${C_RST} Navegador y multimedia"
-    echo -e "${C_ACTION}6)${C_RST} Fuentes y temas"
-    echo -e "${C_ACTION}7)${C_RST} Redes e Internet"
+    echo -e "${C_ACTION}1)${C_RST} Preparar sistema ${C_STEP}(Obligatorio)${C_RST}"
+    echo -e "${C_ACTION}2)${C_RST} Redes e Internet"
+    echo -e "${C_ACTION}3)${C_RST} Entorno gráfico"
+    echo -e "${C_ACTION}4)${C_RST} Aplicaciones generales"
+    echo -e "${C_ACTION}5)${C_RST} Editores de texto"
+    echo -e "${C_ACTION}6)${C_RST} Navegador y multimedia"
+    echo -e "${C_ACTION}7)${C_RST} Fuentes y temas"
     echo -e "${C_ACTION}8)${C_RST} Terminal y utilidades"
     echo -e "${C_ACTION}9)${C_RST} INSTALAR TODO"
-    echo -e "${C_ACTION}0)${C_RST} Salir ${C_ACTION}${C_RST}"
+    echo -e "${C_ACTION}0)${C_RST} Salir ${C_ACTION} ${C_RST}"
     echo
 }
 
@@ -466,35 +474,35 @@ main() {
         case "$opcion" in
             1)
                 confirm
-                prepare_system
+                prepare_system || return 1
                 update_mirror
                 ;;
             2)
                 confirm
-                install_sys_wayland
+                install_sys_network
                 ;;
             3)
                 confirm
-                install_app_general
+                install_sys_wayland
                 ;;
             4)
                 confirm
-                install_app_editor
+                install_app_general
                 ;;
             5)
+                confirm
+                install_app_editor
+                ;;
+            6)
                 confirm
                 install_app_browser
                 install_app_cli_fm
                 install_app_pdf
                 ;;
-            6)
+            7)
                 confirm
                 install_sys_fonts
                 install_sys_theme
-                ;;
-            7)
-                confirm
-                install_sys_network
                 ;;
             8)
                 confirm
@@ -505,7 +513,7 @@ main() {
                 ;;
             9)
                 confirm
-                prepare_system
+                prepare_system || return 1
                 update_mirror
                 install_sys_wayland
                 install_app_general
