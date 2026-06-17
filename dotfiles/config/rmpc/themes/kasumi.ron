@@ -51,9 +51,14 @@
     ),
     progress_bar: (
         symbols: ["█", "█", "🮍", "▒", "▒"],
+        // symbols: ["█", "█", "🮍", "▒", "▒"],
+        // symbols: ["", "", "█", "▒", ""],
+        // symbols: ["🭨", "█", "🭬", "▒", "🭬"],
+        // symbols: ["𜰯", "𜰯", "𜰯", "𜰯", "𜰯"],
+
         track_style:   (fg: "#3f4e57"),
         elapsed_style: (fg: "#A7D6FA"),
-        thumb_style:   (fg: "#A7D6FA", bg: "#3f4e57"),
+        thumb_style:   (fg: "#A7D6FA"),
     ),
     scrollbar: (
         symbols: ["┊", "█", "┯", "┷"],
@@ -152,7 +157,8 @@
 
     // -- Cava visualiser ---------------------------------------------------
     cava: (
-        bar_symbols: ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'],
+        bar_symbols: ['▁', '▂', '▃', '▄', '▅', '▆', '▒', '▒'],
+        // bar_symbols: ['𜺀', '𜰬', '𜺌', '𜰯'],
         inverted_bar_symbols: ['▔', '🮂', '🮃', '▀', '🮄', '🮅', '🮆', '█'],
         bar_width: 2,
         bar_spacing: 1,
@@ -200,9 +206,32 @@
                         default: (kind: Text("Unknown Album"), style: (fg: "#8598B2"))),
                 ],
                 right: [
-                    (kind: Property(Widget(States(
-                        active_style: (fg: "#FFCF94", modifiers: "Bold"),
-                        separator_style: (fg: "#667688"),
+                    (kind: Property(Status(RepeatV2(
+                        on_label: "RPT ON", off_label: "RPT --",
+                        on_style: (fg: "#FFCF94", modifiers: "Bold"),
+                        off_style: (fg: "#625c52"),
+                    ))), style: (fg: "#625c52")),
+                    (kind: Text(" ╱ "), style: (fg: "#667688")),
+                    (kind: Property(Status(RandomV2(
+                        on_label: "RAND ON", off_label: "RAND --",
+                        on_style: (fg: "#FFCF94", modifiers: "Bold"),
+                        off_style: (fg: "#625c52"),
+                    ))), style: (fg: "#625c52")),
+                    (kind: Text(" ╱ "), style: (fg: "#667688")),
+                    (kind: Property(Status(ConsumeV2(
+                        on_label: "CONS ON", off_label: "CONS --",
+                        oneshot_label: "CONS!",
+                        on_style: (fg: "#FFCF94", modifiers: "Bold"),
+                        off_style: (fg: "#625c52"),
+                        oneshot_style: (fg: "#a16f8c", modifiers: "Bold"),
+                    ))), style: (fg: "#625c52")),
+                    (kind: Text(" ╱ "), style: (fg: "#667688")),
+                    (kind: Property(Status(SingleV2(
+                        on_label: "SGL ON", off_label: "SGL --",
+                        oneshot_label: "SGL!",
+                        on_style: (fg: "#FFCF94", modifiers: "Bold"),
+                        off_style: (fg: "#625c52"),
+                        oneshot_style: (fg: "#a16f8c", modifiers: "Bold"),
                     ))), style: (fg: "#625c52")),
                 ],
             ),
@@ -254,10 +283,11 @@
                                     (kind: Property(Status(Crossfade)), style: (fg: "#667688"),
                                         default: (kind: Text("0"), style: (fg: "#667688"))),
                                     (kind: Text("s · "), style: (fg: "#667688")),
+                                    (kind: Text("SONGS "), style: (fg: "#667688")),
                                     (kind: Property(Status(QueueLength())), style: (fg: "#667688"),
                                         default: (kind: Text("0"), style: (fg: "#667688"))),
-                                    (kind: Text(" SONGS · "), style: (fg: "#667688")),
-                                    (kind: Text("TRK "), style: (fg: "#667688")),
+                                    (kind: Text(" · "), style: (fg: "#667688")),
+                                    (kind: Text("INDEX "), style: (fg: "#667688")),
                                     (kind: Property(Song(Track)), style: (fg: "#667688"),
                                         default: (kind: Text("-"), style: (fg: "#667688"))),
                                 ],
@@ -267,7 +297,7 @@
                         (size: "100%", pane: Pane(Property(
                             content: [
                                 (kind: Text("["), style: (fg: "#667688")),
-                                (kind: Text("−"), style: (fg: "#a16f8c")),
+                                (kind: Text("REM -"), style: (fg: "#a16f8c")),
                                 (kind: Property(Status(QueueTimeRemaining())), style: (fg: "#a16f8c"),
                                     default: (kind: Text("0:00"), style: (fg: "#a16f8c"))),
                                 (kind: Text("]  "), style: (fg: "#667688")),
