@@ -49,9 +49,9 @@
     cava: (
         framerate: 60, // Must match max_fps: 60 for smooth rendering
         autosens: true,
-        sensitivity: 160,
-        lower_cutoff_freq: 0,
-        higher_cutoff_freq: 18000,
+        sensitivity: 125,
+        lower_cutoff_freq: 20,
+        higher_cutoff_freq: 20000,
         input: (
             method: Fifo,
             source: "/tmp/mpd.fifo",
@@ -60,7 +60,7 @@
             sample_bits: 16,
         ),
         smoothing: (
-            noise_reduction: 80,
+            noise_reduction: 45,
             monstercat: true,
             waves: false,
         ),
