@@ -1,10 +1,17 @@
-#!/bin/bash
-# rmpc on_song_change — Notificación de escritorio al cambiar de canción.
-# Dependencias: libnotify (notify-send), mpc, rmpc
-ART="/tmp/rmpc_albumart.png"
-rmpc albumart --output "$ART" 2>/dev/null || ART=""
+#!/usr/bin/env bash
+set -euo pipefail
+# Notificación de escritorio al cambiar de canción.
+# Dependencias: libnotify (notify-send), rmpc
+
+ALBUM_ART_PATH="/tmp/rmpc_albumart.png"
+rmpc albumart --output "$ALBUM_ART_PATH" 2> /dev/null || ALBUM_ART_PATH=""
+
+# Mostrar título o "Unknown" si está vacío
+TITLE_DISPLAY="${TITLE:-Unknown}"
+ARTIST_DISPLAY="${ARTIST:-Unknown}"
 
 notify-send \
-    "󰽴  Now Playing" \
-    "$(mpc current -f "%title%" 2>/dev/null)" \
-    ${ART:+-i "$ART"}
+    "Now Playing 󰽴" \
+    "$TITLE_DISPLAY - $ARTIST_DISPLAY" \
+    ${ALBUM_ART_PATH:+-i "$ALBUM_ART_PATH"} \
+    || true # Notificación puede fallar en headless o sin display
