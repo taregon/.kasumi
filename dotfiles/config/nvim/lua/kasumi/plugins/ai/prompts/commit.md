@@ -18,28 +18,28 @@ explicaciones irrelevantes
 - Reglas generales
   - Genera UN SOLO commit
   - Commits en español neutro
-  - Sintetiza la idea general, no listes cada cambio
-  - Formato:
-    `type(scope): descripción + cuerpo opcional +
-    breaking change opcional`
-  - Lineas `@@ -a,b +c,d` indican rango afectado: inicio, longitud, izquierda
-    original vs derecha nueva
+  - Sintetizar, no repetir palabras del encabezado. Cada línea = cambio distinto
+  - Evalúa y elige solo un type adecuado:
+    - Cambiar valor u opción de archivo → chore
+    - Cambiar apariencia o estilo visual → style
+    - Agregar funcionalidad o módulo → feat
+    - Corregir error o bug → fix
+    - Reestructurar sin cambiar comportamiento → refactor
+    - Documentar o actualizar ayuda → docs
+  - Formato: `type(scope): descripción`
+  - Cuerpo y breaking change son opcionales
+  - @@ separa cada cambio. Solo usar como scope el nombre de función
   - Prefijos -- # // / procesarlos como comentarios, solo aportan contexto
   - Si el diff afecta 1-2 archivos: solo encabezado, sin cuerpo
-  - Evalúa y elige solo un type adecuado: style, feat, fix, chore, refactor,
-    docs
-  - style = formato/texto, feat = funcionalidad nueva, fix = error, chore =
-    mantenimiento, refactor = reestructurar, docs = documentación
   - Prohibido mencionar: nombres de funciones, variables, rutas de archivo o
     código.
 - Reglas del encabezado
-  - Máx. 8 palabras
+  - Máx. 8 palabras, una sola idea
   - Verbos en infinitivo, en minúscula, sin punto final
   - Scope en kebab-case: palabra clave que indique módulo afectado
   - `!` En type: solo si breaking change
 
 - Reglas del cuerpo
-  - Prohibido repetir palabras o ideas. Cada línea = información nueva
   - En infinitivo
   - Prohibido formas pasivas o impersonales
   - Máx. 5 líneas
