@@ -56,7 +56,7 @@ codecompanion.setup({
 					name = "Gemma-4-it",
 					-- stylua: ignore
 					schema = {
-						model          = { default = "hf.co/DuoNeural/Gemma-4-E2B-Abliterated-GGUF:Q4_K_M" },
+						model          = { default = "hf.co/mradermacher/gemma-4-E2B-it-uncensored-GGUF:Q4_K_M" },
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
 						repeat_penalty = { default = 1.01 },
