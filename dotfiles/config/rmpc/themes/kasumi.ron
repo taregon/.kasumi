@@ -50,13 +50,15 @@
         trace: (fg: "#FFCF94", bg: "#2E383D"),
     ),
     progress_bar: (
-        symbols: ["🯎", "█", "🮍", "▒", "▒"],
+        symbols: ["🯎", "█", "🮉", "░", ""],
+        // symbols: ["┥", "▓", "🮋", "░", "█"],
+        // symbols: ["▌", "█" , "🭬", "▒", "▒"],
         // symbols: ["█", "█", "🮍", "▒", "▒"],
         // symbols: ["", "", "█", "▒", ""],
         // symbols: ["🭨", "█", "🭬", "▒", "🭬"],
         // symbols: ["𜰯", "𜰯", "𜰯", "𜰯", "𜰯"],
 
-        track_style:   (fg: "#3f4e57"),
+        track_style:   (fg: "#495d68"),
         elapsed_style: (fg: "#A7D6FA"),
         thumb_style:   (fg: "#A7D6FA"),
     ),
@@ -125,13 +127,13 @@
             prop: (kind: Transform(Replace(
                 content: (kind: Sticker("rating")),
                 replacements: [
-                    (match: "0", replace: (kind: Text("󰜺"), style: (fg: "#667688"))),
-                    (match: "1", replace: (kind: Text(""), style: (fg: "#8d9ba8"))),
-                    (match: "2", replace: (kind: Text(" "), style: (fg: "#C0CDD3"))),
-                    (match: "3", replace: (kind: Text("  "), style: (fg: "#A7D6FA"))),
+                    (match: "0", replace: (kind: Text("﹍✕ ﹍"), style: (fg: "#667688"))),
+                    (match: "1", replace: (kind: Text(" "), style: (fg: "#8d9ba8"))),
+                    (match: "2", replace: (kind: Text("  "), style: (fg: "#C0CDD3"))),
+                    (match: "3", replace: (kind: Text("   "), style: (fg: "#A7D6FA"))),
                 ],
             )), style: (fg: "#C0CDD3"),
-                default: (kind: Text("−"), style: (fg: "#625c52"))
+                default: (kind: Text("﹍﹍﹍"), style: (fg: "#4e4e4a"))
             ),
             width: "10%",
             label: "Rate",
@@ -141,13 +143,12 @@
             prop: (kind: Transform(Replace(
                 content: (kind: Sticker("like")),
                 replacements: [
-                    (match: "0", replace: (kind: Text("󱎘"), style: (fg: "#625c52"))),
-                    (match: "1", replace: (kind: Text("󱥳"), style: (fg: "#FFCF94"))),
-                    (match: "2", replace: (kind: Text("󱇐"), style: (fg: "#FFCF94"))),
-                    (match: "3", replace: (kind: Text(""), style: (fg: "#FFCF94"))),
+                    (match: "0", replace: (kind: Text("✕ "), style: (fg: "#4e4e4a"))),
+                    (match: "1", replace: (kind: Text("󰻃 "), style: (fg: "#c2a27b"))),
+                    (match: "2", replace: (kind: Text("󰫥 "), style: (fg: "#FFCF94"))),
                 ],
             )), style: (fg: "#FFCF94"),
-                default: (kind: Text("−"), style: (fg: "#625c52"))
+                default: (kind: Text("﹍"), style: (fg: "#4e4e4a"))
             ),
             width: "6%",
             label: "Love",
@@ -198,7 +199,12 @@
             (
                 left: [
                     (kind: Text("[ "), style: (fg: "#667688", modifiers: "Bold")),
-                    (kind: Property(Status(StateV2(playing_label: "  Playing", paused_label: "󰽳  Paused", stopped_label: "󰽳  Stopped"))), style: (fg: "#A7D6FA", modifiers: "Bold")),
+                    (kind: Property(Status(StateV2(
+                        playing_label: "PLAYING", paused_label: "PAUSED", stopped_label: "STOPPED",
+                        playing_style: (fg: "#FFCF94", modifiers: "Bold"),
+                        paused_style: (fg: "#FFCF94"),
+                        stopped_style: (fg: "#4e4e4a"),
+                    ))), style: (fg: "#4e4e4a")),
                     (kind: Text(" ]"), style: (fg: "#667688", modifiers: "Bold")),
                 ],
                 center: [
@@ -210,32 +216,32 @@
                 ],
                 right: [
                     (kind: Property(Status(RepeatV2(
-                        on_label: "RPT ON", off_label: "RPT --",
+                        on_label: "REPEAT", off_label: "REPEAT",
                         on_style: (fg: "#FFCF94", modifiers: "Bold"),
-                        off_style: (fg: "#625c52"),
-                    ))), style: (fg: "#625c52")),
+                        off_style: (fg: "#4e4e4a"),
+                    ))), style: (fg: "#4e4e4a")),
                     (kind: Text(" ╱ "), style: (fg: "#667688")),
                     (kind: Property(Status(RandomV2(
-                        on_label: "RAND ON", off_label: "RAND --",
+                        on_label: "RANDOM", off_label: "RANDOM",
                         on_style: (fg: "#FFCF94", modifiers: "Bold"),
-                        off_style: (fg: "#625c52"),
-                    ))), style: (fg: "#625c52")),
+                        off_style: (fg: "#4e4e4a"),
+                    ))), style: (fg: "#4e4e4a")),
                     (kind: Text(" ╱ "), style: (fg: "#667688")),
                     (kind: Property(Status(ConsumeV2(
-                        on_label: "CONS ON", off_label: "CONS --",
-                        oneshot_label: "CONS!",
-                        on_style: (fg: "#FFCF94", modifiers: "Bold"),
-                        off_style: (fg: "#625c52"),
-                        oneshot_style: (fg: "#a16f8c", modifiers: "Bold"),
-                    ))), style: (fg: "#625c52")),
+                        on_label: "CONSUME", off_label: "CONSUME",
+                        oneshot_label: "CONSUME",
+                                on_style: (fg: "#FFCF94", modifiers: "Bold"),
+                        off_style: (fg: "#4e4e4a"),
+                        oneshot_style: (fg: "#c2a27b"),
+                    ))), style: (fg: "#4e4e4a")),
                     (kind: Text(" ╱ "), style: (fg: "#667688")),
                     (kind: Property(Status(SingleV2(
-                        on_label: "SGL ON", off_label: "SGL --",
-                        oneshot_label: "SGL!",
+                        on_label: "SINGLE", off_label: "SINGLE",
+                        oneshot_label: "SINGLE",
                         on_style: (fg: "#FFCF94", modifiers: "Bold"),
-                        off_style: (fg: "#625c52"),
-                        oneshot_style: (fg: "#a16f8c", modifiers: "Bold"),
-                    ))), style: (fg: "#625c52")),
+                        off_style: (fg: "#4e4e4a"),
+                        oneshot_style: (fg: "#c2a27b"),
+                    ))), style: (fg: "#4e4e4a")),
                 ],
             ),
         ],
