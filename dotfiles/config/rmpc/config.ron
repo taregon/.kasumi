@@ -14,7 +14,7 @@
 
     // ── GENERAL ───────────────────────────────────────────────
     on_song_change: ["sh", "-c",
-        "~/.config/rmpc/scripts/rmpc-song-notify && ~/.config/rmpc/scripts/rmpc-fetch-lyrics"
+        "~/.config/rmpc/scripts/rmpc-song-notify ; ~/.config/rmpc/scripts/rmpc-fetch-lyrics"
     ],
     lyrics_dir: Some("~/.config/rmpc/lyrics"),
     lyrics_offset_ms: 600,
