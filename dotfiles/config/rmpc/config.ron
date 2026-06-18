@@ -49,9 +49,9 @@
     cava: (
         framerate: 60, // Must match max_fps: 60 for smooth rendering
         autosens: true,
-        sensitivity: 125,
-        lower_cutoff_freq: 20,
-        higher_cutoff_freq: 20000,
+        sensitivity: 130,
+        lower_cutoff_freq: 40,
+        higher_cutoff_freq: 18000,
         input: (
             method: Fifo,
             source: "/tmp/mpd.fifo",
@@ -60,11 +60,16 @@
             sample_bits: 16,
         ),
         smoothing: (
-            noise_reduction: 45,
+            noise_reduction: 42,
             monstercat: true,
             waves: false,
         ),
-        eq: [],
+        eq: [
+            0.9, 0.9, 1.0, 1.1,
+            1.2, 1.2, 1.2, 1.2,
+            1.1, 1.1, 1.0, 1.0,
+            1.0, 1.0, 0.9, 0.9,
+        ],
     ),
 
     // ── ATAJOS ────────────────────────────────────────────────
