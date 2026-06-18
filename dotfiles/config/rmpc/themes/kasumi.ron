@@ -2,7 +2,7 @@
 #![enable(unwrap_newtypes)]
 #![enable(unwrap_variant_newtypes)]
 (
-    // -- Global appearance ------------------------------------------------
+    // ── Global appearance ──────────────────────────────────────────────
     background_color:             "#2E383D",
     text_color:                   "#C0CDD3",
     borders_style:                (fg: "#667688"),
@@ -10,19 +10,19 @@
     modal_background_color:       None,
     modal_backdrop:               false,
 
-    // -- Item styles -------------------------------------------------------
+    // ── Item styles ────────────────────────────────────────────────────
     current_item_style:           (fg: "#2E383D", bg: "#A7D6FA", modifiers: "Bold"),
     highlighted_item_style:       (fg: "#FF9DCD"),
     preview_label_style:          (fg: "#667688"),
     preview_metadata_group_style: (fg: "#a16f8c", modifiers: "Bold"),
 
-    // -- Misc config -------------------------------------------------------
+    // ── Misc config ────────────────────────────────────────────────────
     default_album_art_path:       None,
     format_tag_separator:         " | ",
     browser_column_widths:        [20, 38, 42],
     header_background_color:      None,
 
-    // -- Widgets -----------------------------------------------------------
+    // ── Widgets ────────────────────────────────────────────────────────
     symbols: (
         song:                       "󰽴",
         dir:                        "󰉖 ",
@@ -50,7 +50,7 @@
         trace: (fg: "#FFCF94", bg: "#2E383D"),
     ),
     progress_bar: (
-        symbols: ["█", "█", "🮍", "▒", "▒"],
+        symbols: ["🯎", "█", "🮍", "▒", "▒"],
         // symbols: ["█", "█", "🮍", "▒", "▒"],
         // symbols: ["", "", "█", "▒", ""],
         // symbols: ["🭨", "█", "🭬", "▒", "🭬"],
@@ -74,7 +74,7 @@
         timestamp: false
     ),
 
-    // -- Song list & browser formats --------------------------------------
+    // ── Song list & browser formats ────────────────────────────────────
     browser_song_format: [
         (
             kind: Group([
@@ -125,8 +125,8 @@
             prop: (kind: Transform(Replace(
                 content: (kind: Sticker("rating")),
                 replacements: [
-                    (match: "0", replace: (kind: Text("󰔒"), style: (fg: "#a16f8c"))),
-                    (match: "1", replace: (kind: Text(""), style: (fg: "#667688"))),
+                    (match: "0", replace: (kind: Text("󰜺"), style: (fg: "#667688"))),
+                    (match: "1", replace: (kind: Text(""), style: (fg: "#8d9ba8"))),
                     (match: "2", replace: (kind: Text(" "), style: (fg: "#C0CDD3"))),
                     (match: "3", replace: (kind: Text("  "), style: (fg: "#A7D6FA"))),
                 ],
@@ -155,9 +155,10 @@
         ),
     ],
 
-    // -- Cava visualiser ---------------------------------------------------
+    // ── Cava visualiser ────────────────────────────────────────────────
     cava: (
-        bar_symbols: ['▁', '▂', '▃', '▄', '▅', '▆', '▒', '▒'],
+        // bar_symbols: ['▁', '▂', '▃', '▄', '▅', '▆', '▒', '▒'],
+        bar_symbols: ['𜺀',  '𜺌', '𜺏' ],
         // bar_symbols: ['𜺀', '𜰬', '𜺌', '𜰯'],
         inverted_bar_symbols: ['▔', '🮂', '🮃', '▀', '🮄', '🮅', '🮆', '█'],
         bar_width: 2,
@@ -165,13 +166,15 @@
         // Possible values are "Top", "Bottom" and "Horizontal".
         orientation: Bottom,
         bar_color: Gradient({
-              0: "#414E55",
-             50: "#8598B2",
-            100: "#A7D6FA",
+                 5: "#495d68",
+                35: "#84abc5",
+                55: "#a3d1f3",
+                75: "#a7d6fa",
+                90: "#FF9DCD",
         })
     ),
 
-    // -- Header rows & layout ---------------------------------------------
+    // ── Header rows & layout ───────────────────────────────────────────
     header: (
         rows: [
             (
