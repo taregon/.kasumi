@@ -29,7 +29,7 @@ alias ip="ip --color=auto"
 alias ports="netstat -tunalp"
 alias info-eth="mii-tool -v eno1"
 alias ip-wan="dig @resolver1.opendns.com myip.opendns.com +short"
-alias wifi="nmcli dev wifi list --rescan yes"
+alias wifi="iwctl station wlan0 get-networks"
 
 # ── Sistema ────────────────────────────────────────────────────
 alias neofetch="neofetch --size 220px --kitty --source ~/Dropbox/profile_pics/"
