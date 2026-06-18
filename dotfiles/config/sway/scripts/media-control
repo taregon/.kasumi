@@ -21,25 +21,25 @@ notify() {
 case "$1" in
     volume_up)
         # Aumenta volumen y notifica
-        pamixer -i "$STEP_VOL"
-        LEVEL_VOL=$(pamixer --get-volume)
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ "$STEP_VOL"%+
+        LEVEL_VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}')
         notify "Volumen: ${LEVEL_VOL}%" "$LEVEL_VOL" "volume"
         ;;
 
     volume_down)
         # Disminuye volumen y notifica
-        pamixer -d "$STEP_VOL"
-        LEVEL_VOL=$(pamixer --get-volume)
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ "$STEP_VOL"%-
+        LEVEL_VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}')
         notify "Volumen: ${LEVEL_VOL}%" "$LEVEL_VOL" "volume"
         ;;
 
     mute)
         # Alterna silencio
-        pamixer -t
-        if pamixer --get-mute | grep -q true; then
+        wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+        if wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED; then
             notify "Audio: mute" 0 "volume"
         else
-            LEVEL_VOL=$(pamixer --get-volume)
+            LEVEL_VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}')
             notify "Volumen: ${LEVEL_VOL}%" "$LEVEL_VOL" "volume"
         fi
         ;;
