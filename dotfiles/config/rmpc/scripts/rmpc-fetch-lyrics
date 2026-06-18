@@ -4,21 +4,21 @@ set -euo pipefail
 # Dependencias: curl, jq
 
 # Song metadata
-readonly rmpc_artist="$ARTIST"
-readonly rmpc_title="$TITLE"
-readonly rmpc_album="$ALBUM"
+readonly rmpc_artist="${ARTIST:-}"
+readonly rmpc_title="${TITLE:-}"
+readonly rmpc_album="${ALBUM:-}"
 
 # LRC state
-readonly rmpc_has_lrc="$HAS_LRC"
-readonly rmpc_lrc_file="$LRC_FILE"
+readonly rmpc_has_lrc="${HAS_LRC:-}"
+readonly rmpc_lrc_file="${LRC_FILE:-}"
 
 # rmpc runtime
-readonly rmpc_pid="$PID"
-readonly rmpc_version="$VERSION"
+readonly rmpc_pid="${PID:-}"
+readonly rmpc_version="${VERSION:-}"
 
 if [ "$rmpc_has_lrc" = "false" ] && [ -n "$rmpc_artist" ] && [ -n "$rmpc_title" ]; then
     mkdir -p "$(dirname "$rmpc_lrc_file")" 2> /dev/null \
-        || true  # La carpeta padre puede existir
+        || true # La carpeta padre puede existir
 
     lyrics=$(curl -X GET -sG \
         -H "Lrclib-Client: rmpc-$rmpc_version" \
@@ -26,7 +26,7 @@ if [ "$rmpc_has_lrc" = "false" ] && [ -n "$rmpc_artist" ] && [ -n "$rmpc_title" 
         --data-urlencode "track_name=$rmpc_title" \
         --data-urlencode "album_name=$rmpc_album" \
         "https://lrclib.net/api/get" | jq -r '.syncedLyrics' 2> /dev/null) \
-        || true  # curl/jq fallan si no hay conexion o la cancion no existe
+        || true # curl/jq fallan si no hay conexion o la cancion no existe
 
     if [ -z "$lyrics" ] || [ "$lyrics" = "null" ]; then
         exit
@@ -40,5 +40,5 @@ if [ "$rmpc_has_lrc" = "false" ] && [ -n "$rmpc_artist" ] && [ -n "$rmpc_title" 
     } > "$rmpc_lrc_file"
 
     rmpc remote --pid "$rmpc_pid" indexlrc --path "$rmpc_lrc_file" \
-        || true  # rmpc pudo haber muerto
+        || true # rmpc pudo haber muerto
 fi
