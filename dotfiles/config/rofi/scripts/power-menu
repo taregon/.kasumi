@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+#
+# Menú de acciones de sistema (lock, logout, suspend, hibernate, reboot,
+# shutdown) lanzado vía rofi dmenu. Confirma acciones destructivas antes de
+# ejecutarlas.
+
+set -euo pipefail
+
+# ── Constantes ──────────────────────────────────────────────────────────────
+
+# Rutas de temas de rofi — se referencian en menu_show y confirm_show
+readonly config_dir="$HOME/.config"
+readonly rofi_theme_powermenu="$config_dir/rofi/themes/powermenu.rasi"
+readonly rofi_theme_confirm="$config_dir/rofi/themes/confirm.rasi"
+
+# Personalización del mensaje: hostname visible y uptime como contexto rápido
+host="$(cat /proc/sys/kernel/hostname 2> /dev/null || echo "sway")"
+readonly rofi_prompt="${host} (sway)"
+uptime_msg="Uptime : $(uptime -p | sed -e 's/up //g')"
+readonly uptime_msg
+
+readonly opt_lock="  Lock"
+readonly opt_logout="  Logout"
+readonly opt_suspend="  Suspend"
+readonly opt_hibernate="  Hibernate"
+readonly opt_reboot="  Reboot"
+readonly opt_shutdown="⏻  Shutdown"
+
+readonly confirm_yes='  Yes'
+readonly confirm_no='  No'
+
+# ── Capa de presentación (rofi) ─────────────────────────────────────────────
+
+menu_show() {
+    rofi -dmenu \
+        -p "$rofi_prompt" \
+        -mesg "$uptime_msg" \
+        -markup-rows \
+        -theme "${rofi_theme_powermenu}"
+}
+
+confirm_show() {
+    rofi -dmenu \
+        -p 'Confirmation' \
+        -mesg 'Are you Sure?' \
+        -theme "${rofi_theme_confirm}"
+}
+
+# ── Capa de interacción ─────────────────────────────────────────────────────
+
+confirm_prompt() {
+    echo -e "$confirm_yes\n$confirm_no" | confirm_show
+}
+
+# Lee la selección del usuario y ejecuta el comando si confirma
+confirm_exec() {
+    selected="$(confirm_prompt)"
+    if [[ "$selected" == "$confirm_yes" ]]; then
+        "$@" && exit 0
+    else
+        exit 1
+    fi
+}
+
+# Las opciones se pasan como líneas a menu_show; el orden coincide con cmd_dispatch
+menu_prompt() {
+    echo -e "$opt_lock\n$opt_logout\n$opt_suspend\n$opt_hibernate\n$opt_reboot\n$opt_shutdown" | menu_show
+}
+
+# ── Capa de acciones ────────────────────────────────────────────────────────
+
+cmd_dispatch() {
+    case "$1" in
+        --lock)
+            "$HOME/.config/sway/scripts/sway-idle" lock
+            ;;
+        --logout)
+            confirm_exec swaymsg exit
+            ;;
+        --suspend)
+            confirm_exec systemctl suspend
+            ;;
+        --hibernate)
+            confirm_exec systemctl hibernate
+            ;;
+        --reboot)
+            confirm_exec systemctl reboot
+            ;;
+        --shutdown)
+            confirm_exec systemctl poweroff
+            ;;
+    esac
+}
+
+# ── Punto de entrada ────────────────────────────────────────────────────────
+
+chosen_option="$(menu_prompt)"
+case "${chosen_option}" in
+    "$opt_lock")
+        cmd_dispatch --lock
+        ;;
+    "$opt_logout")
+        cmd_dispatch --logout
+        ;;
+    "$opt_suspend")
+        cmd_dispatch --suspend
+        ;;
+    "$opt_hibernate")
+        cmd_dispatch --hibernate
+        ;;
+    "$opt_reboot")
+        cmd_dispatch --reboot
+        ;;
+    "$opt_shutdown")
+        cmd_dispatch --shutdown
+        ;;
+esac
