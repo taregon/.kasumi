@@ -8,17 +8,17 @@ set -euo pipefail
 
 # ── Constantes ──────────────────────────────────────────────────────────────
 
-# Rutas de temas de rofi — se referencian en menu_show y confirm_show
-readonly config_dir="$HOME/.config"
-readonly rofi_theme_powermenu="$config_dir/rofi/themes/powermenu.rasi"
-readonly rofi_theme_confirm="$config_dir/rofi/themes/confirm.rasi"
+# Rutas de temas de rofi
+readonly rofi_theme_powermenu="$HOME/.config/rofi/themes/powermenu.rasi"
+readonly rofi_theme_confirm="$HOME/.config/rofi/themes/confirm.rasi"
 
-# Personalización del mensaje: hostname visible y uptime como contexto rápido
+# Texto del mensaje principal
 host="$(cat /proc/sys/kernel/hostname 2> /dev/null || echo "sway")"
 readonly rofi_prompt="${host} (sway)"
 uptime_msg="Uptime : $(uptime -p | sed -e 's/up //g')"
 readonly uptime_msg
 
+# Opciones del menú de acciones
 readonly opt_lock="  Lock"
 readonly opt_logout="  Logout"
 readonly opt_suspend="  Suspend"
@@ -26,6 +26,7 @@ readonly opt_hibernate="  Hibernate"
 readonly opt_reboot="  Reboot"
 readonly opt_shutdown="⏻  Shutdown"
 
+# Opciones de confirmación
 readonly confirm_yes='  Yes'
 readonly confirm_no='  No'
 
