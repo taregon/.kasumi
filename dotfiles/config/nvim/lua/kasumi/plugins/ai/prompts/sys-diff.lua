@@ -8,19 +8,19 @@
 local M = {}
 
 function M.staged_diff()
-	-- 1. Archivo del buffer actual
+	-- Archivo asociado al buffer actual.
 	local buf_path = vim.api.nvim_buf_get_name(0)
 	if buf_path == "" then
 		return "  No hay archivo abierto en el buffer actual."
 	end
 
-	-- 2. Resolver symlink -> path real
+	-- Resolver symlinks evita diffs vacíos en repositorios enlazados desde dotfiles.
 	local abs_path = vim.uv.fs_realpath(buf_path)
 	if not abs_path then
 		return "  No se pudo resolver el path real del archivo."
 	end
 
-	-- 3. Detectar root del repo desde el archivo real
+	-- Root del repositorio calculado desde el archivo real.
 	local file_dir = vim.fn.fnamemodify(abs_path, ":h")
 	local root_res = vim.system({
 		"git",
@@ -37,10 +37,10 @@ function M.staged_diff()
 	local repo_root = vim.trim(root_res.stdout)
 	local file_name = vim.fn.fnamemodify(abs_path, ":t") -- nombre del archivo seguro
 
-	-- 4. Calcular path relativo
+	-- Path relativo requerido por git diff dentro del repo.
 	local rel_path = abs_path:sub(#repo_root + 2)
 
-	-- 5. Obtener diff staged (crudo, sin color ni contexto)
+	-- Diff staged del archivo actual, sin color ni herramientas externas.
 	local diff_res = vim.system({
 		"git",
 		"--no-pager",
@@ -63,24 +63,23 @@ function M.staged_diff()
 		return "  No hay cambios staged en este archivo."
 	end
 
-	-- 6. Filtrar líneas relevantes
+	-- El prompt solo necesita el cuerpo del diff, no metadatos ni encabezados.
 	local lines = vim.split(diff_out, "\n", { plain = true })
 	local filtered = {}
-	local start_processing = false
 
 	for _, line in ipairs(lines) do
-		if not start_processing and line:match("^@@ ") then
-			start_processing = true
-		end
+		local is_header = line:match("^@@ ")
+			or line:match("^diff ")
+			or line:match("^index ")
+			or line:match("^--- ")
+			or line:match("^%+%+%+ ")
 
-		if start_processing then
-			if not line:match("^@@ ") then
-				table.insert(filtered, line)
-			end
+		if not is_header then
+			table.insert(filtered, line)
 		end
 	end
 
-	-- 7. Mostrar nombre del repo antes del diff
+	-- Cabecera compacta para ubicar el origen del diff en el prompt.
 	local parent_dir = file_dir:match("([^/]+)$") or ""
 	local header = "de: " .. parent_dir .. "/" .. file_name .. "\n\n"
 	return header .. table.concat(filtered, "\n")
