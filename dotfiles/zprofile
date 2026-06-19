@@ -21,10 +21,13 @@
 # ─[ WALLPAPER ]──────────────────────────────────────────────
 # Directorio estándar en $HOME para almacenar los
 # fondos de pantalla gestionados por el dotfile kasumi
-export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general/"
+export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general"
 
 # ─[ SCREENSHOTS ]────────────────────────────────────────────
-export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots/"
+export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots"
+
+# ─[ RMPC ]───────────────────────────────────────────────────
+export KASUMI_LYRICS_DIR="$HOME/Syncthing/OsiriaFS/PlayBack/Lyrics"
 
 # ─[ QT FIXES ]───────────────────────────────────────────────
 # Forzar backend XCB -> mejor compatibilidad y Auto-Type en Wayland
