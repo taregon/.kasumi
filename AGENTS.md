@@ -5,13 +5,45 @@
 Estas reglas aplican a este repositorio de dotfiles Kasumi. El sistema objetivo
 es Arch Linux con pacman/paru/AUR, Sway/Wayland, Kitty, rmpc y despliegue via
 dotdrop. No asumir convenciones de Debian, Ubuntu, Fedora, GNOME, KDE, X11 u
-otros gestores de paquetes salvo que el archivo lo indique.
+otros gestores de paquetes.
 
 - Scripts bash en `dotfiles/scripts/`, `dotfiles/config/*/scripts/` y helpers
   ejecutables similares.
 - Helpers zsh en `dotfiles/config/zsh/funcs/`.
 - Configuracion rmpc y temas RON.
 - Configuracion de terminal y salida pensada para Kitty.
+
+## Idioma
+
+- Usar español neutro, con tono impersonal y tecnico.
+- Mantener sin traducir terminos tecnicos, nombres de herramientas, flags,
+  paquetes, APIs, URLs y sintaxis de codigo.
+- Conservar tokens estandar del area: `TODO`, `FIXME`, `NOTE`, `PEND`, `WARN` y
+  similares.
+
+## Gestor de paquetes
+
+- `paru` es el helper AUR estandar del repo; no reemplazarlo por `yay`.
+- Usar `pacman` cuando el script ya opere solo con repos oficiales o tareas del
+  sistema.
+- Usar `paru` cuando el script ya maneje AUR o listas mixtas.
+- No proponer `apt`, `dnf`, `brew`, `snap` ni `flatpak`.
+- Usar `--needed` en instalaciones cuando aplique.
+
+## Sway y Wayland
+
+- El entorno grafico objetivo es Sway sobre Wayland.
+- Tratar X11 como legado y XWayland como capa de compatibilidad para
+  aplicaciones, no como base para scripts nuevos.
+- Preferir herramientas nativas Wayland: `swaymsg`, `grim`, `slurp`, `wl-copy`,
+  `wl-paste`, `wf-recorder`, `mako`, `cliphist` y `wlr-*` cuando aplique.
+- No proponer herramientas X11 como `xrandr`, `xdotool`, `xclip`, `xsel` o
+  `xprop`.
+- Mantener `rofi` como launcher/selector estandar del repo porque se usa en modo
+  Wayland; no reemplazarlo por `wofi`, `wmenu` u otro launcher sin peticion
+  explicita.
+- Usar `systemctl --user` y variables de entorno Wayland cuando el servicio
+  pertenezca a la sesion grafica.
 
 ## Helpers zsh
 
@@ -103,10 +135,27 @@ echo -e "   ${C_ACTION}  /ruta${C_RST}"
   producir el estado esperado.
 - Usar `|| true` solo en fallos esperados, con comentario inline que explique el
   motivo.
-- Usar `--needed` en gestores de paquetes cuando aplique.
-- Separar limpieza de recursos de efectos secundarios usando flags de estado o
-  condiciones.
 - No sobredimensionar validaciones si el comportamiento es predecible.
+
+## Operaciones destructivas y Git
+
+- Usar Git para inspeccion es permitido: `git status`, `git diff`, `git show` y
+  `git log`.
+- No usar Git para modificar worktree, staging o historial sin peticion
+  explicita: `git add`, `git commit`, `git reset`, `git restore`,
+  `git checkout`, `git clean`, `git revert` o `git stash`.
+- Antes de modificar archivos existentes, revisar `git status --short` y asumir
+  que cambios no relacionados pertenecen al usuario.
+- Para revertir cambios propios, preferir patch puntual que deshaga solo las
+  lineas afectadas.
+- Si la reversion requiere descartar archivos completos o cambios ajenos, pedir
+  confirmacion antes.
+- No ejecutar comandos destructivos sobre el repo o el sistema sin peticion
+  explicita: `rm`, `mv`, `unlink`, `rmdir`, `chmod`, `chown` o equivalentes.
+- En scripts, permitir `rm` solo para recursos temporales propios, locks o
+  archivos creados por el mismo script.
+- En scripts, preferir `mktemp`, `trap` y rutas acotadas antes de limpiar por
+  patrones amplios.
 
 ## Salida, colores e iconos
 
@@ -152,6 +201,17 @@ Kitty.
 
 - Usar prefijo `NN-` para scripts con orden de ejecucion.
 - Omitir prefijo en scripts opcionales.
+
+## Codigo legacy
+
+- `scripts-legacy/`, `.bk` y `.old` existen como referencia para migracion y
+  homologacion.
+- No tomarlos como patron principal para codigo nuevo si existe una version
+  activa equivalente.
+- Usarlos para entender intencion, opciones, textos, flujos o comportamiento que
+  deba portarse.
+- Al homologar, conservar el comportamiento util y adaptar herramientas
+  obsoletas a equivalentes actuales del repo.
 
 ## rmpc y temas RON
 
