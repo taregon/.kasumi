@@ -30,13 +30,12 @@ explicaciones irrelevantes
   - Cuerpo y breaking change son opcionales
   - @@ separa cada cambio. Solo usar como scope el nombre de función
   - Prefijos -- # // / procesarlos como comentarios, solo aportan contexto
-  - Si el diff afecta 1-2 archivos: solo encabezado, sin cuerpo
   - Prohibido mencionar: nombres de funciones, variables, rutas de archivo o
     código.
 - Reglas del encabezado
   - Máx. 8 palabras, una sola idea
   - Verbos en infinitivo, en minúscula, sin punto final
-  - Scope en kebab-case: palabra clave que indique módulo afectado
+  - Scope = nombre del archivo sin extensión, en minúscula
   - `!` En type: solo si breaking change
 
 - Reglas del cuerpo
