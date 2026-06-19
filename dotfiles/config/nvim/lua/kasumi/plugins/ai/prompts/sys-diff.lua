@@ -1,8 +1,7 @@
 -- Helper para el prompt "Commit en Español"
 -- Expone staged_diff(), que obtiene el diff staged del archivo actual
--- y descarta metadatos previos (diff, index, rutas, etc.) comenzando
--- a procesar desde el primer encabezado de hunk (@@).
--- A partir de ese punto conserva únicamente el contenido real del cambio.
+-- descartando metadatos y encabezados de hunk (@@).
+-- Conserva únicamente las líneas de cambio reales (+/-).
 -- Comportamiento equivalente (aplicado a un solo archivo) a:
 -- git diff --cached --no-ext-diff --no-prefix --unified=1 --color=never
 
@@ -75,7 +74,9 @@ function M.staged_diff()
 		end
 
 		if start_processing then
-			table.insert(filtered, line)
+			if not line:match("^@@ ") then
+				table.insert(filtered, line)
+			end
 		end
 	end
 
