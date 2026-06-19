@@ -40,9 +40,6 @@ function M.staged_diff()
 
 	-- 4. Calcular path relativo
 	local rel_path = abs_path:sub(#repo_root + 2)
-	if rel_path == abs_path or rel_path == "" then
-		return "  El archivo no pertenece al repositorio Git."
-	end
 
 	-- 5. Obtener diff staged (crudo, sin color ni contexto)
 	local diff_res = vim.system({
@@ -85,7 +82,7 @@ function M.staged_diff()
 	-- 7. Mostrar nombre del repo antes del diff
 	local parent_dir = file_dir:match("([^/]+)$") or ""
 	local header = "de: " .. parent_dir .. "/" .. file_name .. "\n\n"
-	return #filtered > 0 and header .. table.concat(filtered, "\n") or "  No hay cambios staged en este archivo"
+	return header .. table.concat(filtered, "\n")
 end
 
 return M
