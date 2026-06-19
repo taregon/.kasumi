@@ -20,7 +20,8 @@ explicaciones irrelevantes
   - Commits en español neutro
   - Sintetizar, no repetir palabras del encabezado. Cada línea = cambio distinto
   - Evalúa y elige solo un type adecuado:
-    - Cambiar valor u opción de archivo → chore
+    - Cambiar configuración, limpiar código o remover elementos obsoletos →
+      chore
     - Cambiar apariencia o estilo visual → style
     - Agregar funcionalidad o módulo → feat
     - Corregir error o bug → fix
@@ -28,7 +29,6 @@ explicaciones irrelevantes
     - Documentar o actualizar ayuda → docs
   - Formato: `type(scope): descripción`
   - Cuerpo y breaking change son opcionales
-  - @@ separa cada cambio. Solo usar como scope el nombre de función
   - Prefijos -- # // / procesarlos como comentarios, solo aportan contexto
   - Prohibido mencionar: nombres de funciones, variables, rutas de archivo o
     código.
