@@ -13,6 +13,8 @@ readonly OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
 # ── Funciones ─────────────────────────────────────────────────────────
 
 stop_recording() {
+    # SIGINT permite que wf-recorder cierre limpiamente
+    # el contenedor y finalice correctamente el video.
     pkill -SIGINT -x wf-recorder 2> /dev/null || true
     rm -f "$LOCKFILE"
     notify-send -t 2500 "󰿏  Grabación" "Finalizada"
@@ -21,6 +23,9 @@ stop_recording() {
 
 start_recording() {
     local geometry
+    # slurp se ejecuta antes de adquirir el lock:
+    # si el usuario cancela la seleccion (ESC),
+    # el script termina sin dejar estado parcial.
     geometry=$(slurp -w 0 -f '%x,%y %wx%h') || exit 0
 
     [ -f "$LOCKFILE" ] && {
@@ -34,12 +39,15 @@ start_recording() {
 
     notify-send -t 4000 "󰿏  Grabación" "Región: $filename"
 
+    # Si VAAPI esta disponible, se descarga la codificacion en la GPU
+    # para reducir el uso de CPU.
     local encoder_args=()
     if [ -e /dev/dri/renderD128 ] && command -v vainfo &> /dev/null; then
         encoder_args=(-c h264_vaapi -d /dev/dri/renderD128)
     fi
 
-    wf-recorder -g "$geometry" --file="$filename" "${encoder_args[@]}"
+    # Limite de 120s; timeout o el toggle manual detienen wf-recorder
+    timeout -s INT 120 wf-recorder -g "$geometry" --file="$filename" "${encoder_args[@]}" || true
     rm -f "$LOCKFILE"
     notify-send -t 2500 "󰿏  Grabación" "Finalizada"
 }
