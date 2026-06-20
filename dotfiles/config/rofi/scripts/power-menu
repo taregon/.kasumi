@@ -13,8 +13,8 @@ readonly rofi_theme_powermenu="$HOME/.config/rofi/themes/powermenu.rasi"
 readonly rofi_theme_confirm="$HOME/.config/rofi/themes/confirm.rasi"
 
 # Texto del mensaje principal
-host="$(cat /proc/sys/kernel/hostname 2> /dev/null || echo "sway")"
-readonly rofi_prompt="${host} (sway)"
+host="$(cat /proc/sys/kernel/hostname 2> /dev/null || echo "Unknown")"
+readonly rofi_prompt="${host}: "
 uptime_msg="Uptime : $(uptime -p | sed -e 's/up //g')"
 readonly uptime_msg
 
@@ -34,6 +34,7 @@ readonly confirm_no='  No'
 
 menu_show() {
     rofi -dmenu \
+        -i \
         -p "$rofi_prompt" \
         -mesg "$uptime_msg" \
         -markup-rows \
