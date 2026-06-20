@@ -29,6 +29,9 @@ export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots"
 # ─[ RMPC ]───────────────────────────────────────────────────
 export KASUMI_LYRICS_DIR="$HOME/Syncthing/OsiriaFS/PlayBack/Lyrics"
 
+# ─[ REGION RECORD ]──────────────────────────────────────────
+export KASUMI_RECORDING_DIR="$HOME/Documentos"
+
 # ─[ QT FIXES ]───────────────────────────────────────────────
 # Forzar backend XCB -> mejor compatibilidad y Auto-Type en Wayland
 # Ajustar el DPI de las fuentes para que se vean mejor sin necesidad de escalar demasiado
