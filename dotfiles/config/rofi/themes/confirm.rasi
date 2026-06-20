@@ -1,0 +1,26 @@
+/** Tema de confirmacion para power-menu
+ *  Dialogo si/no usado por power-menu antes de ejecutar acciones destructivas
+ *  (logout, suspend, hibernate, reboot, shutdown).
+ *  Script padre: rofi/scripts/power-menu **/
+@import "~/.config/rofi/kasumi-full.rasi"
+
+window {
+    location: center;
+    anchor: center;
+    width: 300px;
+}
+
+mainbox {
+    children: [message, listview];
+}
+
+message {
+    padding: 20px;
+    text-color: @prompt-text;
+}
+
+listview {
+    columns: 2;
+    spacing: 20px;
+    lines: 1;
+}
