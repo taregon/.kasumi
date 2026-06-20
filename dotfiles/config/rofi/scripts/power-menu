@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #
 # Menú de acciones de sistema (lock, logout, suspend, hibernate, reboot,
-# shutdown) lanzado vía rofi dmenu. Confirma acciones destructivas antes de
-# ejecutarlas.
+# shutdown) lanzado vía rofi dmenu. El filtro acepta coincidencias parciales
+# y tolera errores de tipeo (fuzzy matching). Confirma acciones destructivas
+# antes de ejecutarlas.
 
 set -euo pipefail
 
@@ -35,6 +36,7 @@ readonly confirm_no='  No'
 menu_show() {
     rofi -dmenu \
         -i \
+        -matching fuzzy \
         -p "$rofi_prompt" \
         -mesg "$uptime_msg" \
         -markup-rows \
