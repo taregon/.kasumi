@@ -124,6 +124,19 @@ incluyendo explicaciones de que hace una funcion.
   linea.
 - Mantener Markdown envuelto de forma consistente.
 
+## Diagramas ASCII
+
+- Usar diagramas ASCII para ilustrar layouts, jerarquias y estructura de
+  configuracion cuando la representacion visual sea mas clara que una
+  descripcion textual.
+- Mantener alineacion y jerarquia visual consistentes usando espacios y
+  caracteres Unicode visibles: `─`, `│`, `┌`, `┐`, `└`, `┘`, `├`, `┤`, `┬`, `┴`,
+  `┼`.
+- Incluir nombres de widgets, bloques o archivos dentro del diagrama cuando
+  aporte contexto.
+- Los diagramas son opcionales; utilizarlos cuando mejoren claridad o
+  mantenibilidad.
+
 ## Entrada, salida y archivos
 
 - Preferir heredoc con `tee` sobre pipelines con `echo`.
