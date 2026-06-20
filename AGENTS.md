@@ -181,12 +181,11 @@ C_STEP="\033[0;34m"   # blue
 
 ### Iconos
 
-Preferir variantes outline. Los sets recomendados son:
+Preferir variantes outline y mantener consistencia segun el contexto:
 
 - Octicons (`nf-oct-*`, rango ``-``) para scripts de instalacion.
-- Material Design Outline (`nf-md-*_outline`) para `notify-send` en scripts
-  interactivos.
-- Codicon (`nf-cod-*`) para iconos de terminal y acciones en scripts ligeros.
+- Material Design Outline (`nf-md-*_outline`) y Codicon (`nf-cod-*`) para
+  terminal, `notify-send` y scripts interactivos o ligeros.
 
 Usar 2 espacios entre icono y texto para evitar problemas de renderizado en
 Kitty.
