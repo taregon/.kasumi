@@ -10,7 +10,7 @@ window {
 }
 
 mainbox {
-    margin:                      27% 32%;
+    margin:                      28% 32%;
     padding:                     22px;
     children:                    [inputbar, message, listview];
 }
@@ -23,7 +23,7 @@ listview {
 }
 
 element {
-    padding:                     20px 28px;
+    padding:                     19px 28px;
 }
 
 element-text {
