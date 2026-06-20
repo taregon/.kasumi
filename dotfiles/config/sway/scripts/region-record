@@ -1,160 +1,50 @@
 #!/usr/bin/env bash
 # region-record
 # Graba una región de pantalla en Sway/Wayland como archivo de video.
-#
-# Uso: region-record (toggle; sin argumentos)
-#
-# Si VAAPI está disponible (dispositivo /dev/dri/renderD128 + vainfo),
-# se usa h264_vaapi para reducir drásticamente el uso de CPU.
+# Toggle: sin argumentos inicia o detiene según estado.
 
 set -euo pipefail
 
-LOCKFILE="/tmp/region-record.lock"
-OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
+# ── Setup ─────────────────────────────────────────────────────────────
 
-# PID del watchdog para finalizarlo explícitamente durante cleanup().
-WATCHDOG_PID=""
+readonly LOCKFILE="/tmp/region-record.lock"
+readonly OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
 
-cleanup() {
-    [ -f "$LOCKFILE" ] || return 0
-
-    rm -f "$LOCKFILE"
-
-    # Finaliza el watchdog si aún sigue activo.
-    # `|| true` evita abortar si el proceso ya no existe.
-    if [ -n "$WATCHDOG_PID" ]; then
-        kill "$WATCHDOG_PID" 2> /dev/null || true
-    fi
-
-    notify-send -t 2500 \
-        "󰿏  Grabación" \
-        "Finalizada"
-}
-
-watchdog_loop() {
-    local file
-    local elapsed
-    local interval
-    local message
-    local notify_id
-    local size
-    local start_time
-
-    file="$1"
-    start_time=$(date +%s)
-    interval="${KASUMI_WATCHDOG_INTERVAL:-120}"
-
-    # cleanup() elimina el lock al finalizar; eso detiene el watchdog.
-    while [ -f "$LOCKFILE" ]; do
-        sleep "$interval"
-
-        size=$(stat -c%s "$file" 2> /dev/null || echo 0)
-
-        # wf-recorder aún no escribió datos útiles.
-        [ "$size" -gt 0 ] || continue
-
-        elapsed=$(
-            date -d "@$(($(date +%s) - start_time))" \
-                -u +%H:%M:%S
-        )
-
-        message="$(
-            basename "${file%.mkv}"
-        ) ◆ $elapsed ◆ $(numfmt --to=iec "$size")"
-
-        if [ -n "${notify_id:-}" ]; then
-            notify-send \
-                --replace-id="$notify_id" \
-                -t 6000 \
-                "󰿏  Grabación" \
-                "$message"
-        else
-            notify_id=$(
-                notify-send \
-                    -p \
-                    -t 6000 \
-                    "󰿏  Grabación" \
-                    "$message"
-            )
-        fi
-    done
-}
+# ── Funciones ─────────────────────────────────────────────────────────
 
 stop_recording() {
-    if [ -f "$LOCKFILE" ]; then
-        # SIGINT permite que wf-recorder cierre limpiamente
-        # el contenedor y finalice correctamente el video.
-        pkill -SIGINT -x wf-recorder 2> /dev/null || true
-
-        cleanup
-    else
-        notify-send -t 2500 \
-            "󰿏  Grabación" \
-            "No hay ninguna activa"
-    fi
-
+    pkill -SIGINT -x wf-recorder 2> /dev/null || true
+    rm -f "$LOCKFILE"
+    notify-send -t 2500 "󰿏  Grabación" "Finalizada"
     exit 0
 }
 
 start_recording() {
     local geometry
-    local filename
-
-    # slurp se ejecuta antes de adquirir el lock:
-    # si el usuario cancela la selección (ESC),
-    # el script termina sin dejar estado parcial.
     geometry=$(slurp -w 0 -f '%x,%y %wx%h') || exit 0
 
-    exec 200> "$LOCKFILE"
-
-    if ! flock -n 200; then
-        notify-send -t 2500 -u critical \
-            "󰿏  Grabación" \
-            "Ya hay una activa"
-
+    [ -f "$LOCKFILE" ] && {
+        notify-send -t 2500 -u critical "󰿏  Grabación" "Ya hay una activa"
         exit 1
-    fi
+    }
+    touch "$LOCKFILE"
 
-    # Garantiza limpieza del lock y procesos auxiliares
-    # sin importar cómo termine el script:
-    # error interno, señal externa o Ctrl+C.
-    trap cleanup EXIT INT TERM
-
+    local filename
     filename="$OUTPUT_DIR/rec-$(date +%Y%m%d-%H%M%S).mkv"
 
-    notify-send -t 4000 \
-        "󰿏  Grabación" \
-        "Región: $filename"
+    notify-send -t 4000 "󰿏  Grabación" "Región: $filename"
 
-    # Watchdog en background:
-    # muestra duración y tamaño del archivo cada
-    # KASUMI_WATCHDOG_INTERVAL segundos.
-    watchdog_loop "$filename" &
-    WATCHDOG_PID=$!
-
-    # VAAPI auto-detection: si el dispositivo y los drivers están
-    # operativos, se usa h264_vaapi para descargar la codificación
-    # en la GPU (mucho menos uso de CPU).
-    local encoder_args
-    encoder_args=()
-    if [ -e /dev/dri/renderD128 ] \
-        && command -v vainfo &> /dev/null \
-        && vainfo \
-            --display drm \
-            --device /dev/dri/renderD128 \
-            &> /dev/null; then
-
+    local encoder_args=()
+    if [ -e /dev/dri/renderD128 ] && command -v vainfo &> /dev/null; then
         encoder_args=(-c h264_vaapi -d /dev/dri/renderD128)
     fi
 
-    wf-recorder \
-        -g "$geometry" \
-        --file="$filename" \
-        "${encoder_args[@]+"${encoder_args[@]}"}"
+    wf-recorder -g "$geometry" --file="$filename" "${encoder_args[@]}"
+    rm -f "$LOCKFILE"
+    notify-send -t 2500 "󰿏  Grabación" "Finalizada"
 }
 
-if [ -f "$LOCKFILE" ]; then
-    stop_recording
-else
-    start_recording
-fi
+# ── Entry point ───────────────────────────────────────────────────────
+
+[ -f "$LOCKFILE" ] && stop_recording
+start_recording
