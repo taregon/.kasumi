@@ -1,0 +1,27 @@
+/** Tema del menu principal de power-menu
+ *  Lista de acciones de sistema: lock, logout, suspend, hibernate, reboot,
+ *  shutdown. Invocado desde rofi/scripts/power-menu via dmenu.
+ *  Script padre: rofi/scripts/power-menu **/
+@import "~/.config/rofi/kasumi-full.rasi"
+
+window {
+    width: 420px;
+}
+
+mainbox {
+    children: [inputbar, message, listview];
+}
+
+listview {
+    columns: 2;
+    spacing: 8px;
+    lines: 3;
+}
+
+element {
+    padding: 12px;
+}
+
+element-text {
+    font: "JetBrainsMono Nerd Font 14";
+}
