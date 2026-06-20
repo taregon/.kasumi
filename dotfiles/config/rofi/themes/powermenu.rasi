@@ -7,23 +7,25 @@
 window {
     transparency:                "real";
     fullscreen:                  true;
-    padding:                     20%;
 }
 
 mainbox {
+    margin:                      27% 32%;
+    padding:                     22px;
     children:                    [inputbar, message, listview];
 }
 
 listview {
+    expand:                      false;
     columns:                     2;
-    spacing:                     8px;
+    spacing:                     14px;
     lines:                       3;
 }
 
 element {
-    padding: 12px;
+    padding:                     20px 28px;
 }
 
 element-text {
-    font: "JetBrainsMono Nerd Font 14";
+    font:                        "JetBrainsMono Nerd Font 20";
 }
