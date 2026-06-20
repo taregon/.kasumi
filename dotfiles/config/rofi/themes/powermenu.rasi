@@ -5,17 +5,19 @@
 @import "~/.config/rofi/kasumi-full.rasi"
 
 window {
-    width: 420px;
+    transparency:                "real";
+    fullscreen:                  true;
+    padding:                     20%;
 }
 
 mainbox {
-    children: [inputbar, message, listview];
+    children:                    [inputbar, message, listview];
 }
 
 listview {
-    columns: 2;
-    spacing: 8px;
-    lines: 3;
+    columns:                     2;
+    spacing:                     8px;
+    lines:                       3;
 }
 
 element {
