@@ -96,13 +96,20 @@ Unicode invisibles no.
 
 ### Bash
 
-- Comentar solo lo no obvio: explicar por que, no repetir que hace el codigo.
+- Comentar solo lo no obvio: priorizar explicar el por que, contexto o
+  restricciones del bloque, evitando repetir literalmente lo que el codigo ya
+  expresa.
 - Preferir comentarios inline breves sobre bloques largos.
 - Evitar comentarios en codigo autoexplicativo.
 - Usar tono impersonal y tecnico.
 - Empezar comentarios con mayuscula.
 - No repetir lineas visibles del codigo.
 - Escribir contexto durable, util para mantenimiento futuro.
+- Si un bloque requiere aunque sea un breve analisis para comprender su
+  proposito, contexto o motivo de existencia, probablemente merece un
+  comentario. Ser conservador al asumir que algo es "obvio"; una buena señal es
+  si al reabrir el archivo meses despues tendrias que detenerte a pensar por que
+  ese bloque existe o que problema evita.
 
 ### zsh
 
@@ -179,6 +186,7 @@ Preferir variantes outline. Los sets recomendados son:
 - Octicons (`nf-oct-*`, rango ``-``) para scripts de instalacion.
 - Material Design Outline (`nf-md-*_outline`) para `notify-send` en scripts
   interactivos.
+- Codicon (`nf-cod-*`) para iconos de terminal y acciones en scripts ligeros.
 
 Usar 2 espacios entre icono y texto para evitar problemas de renderizado en
 Kitty.
