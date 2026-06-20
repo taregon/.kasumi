@@ -2,7 +2,7 @@
 # region-record
 # Graba una región de pantalla en Sway/Wayland como archivo de video.
 #
-# Uso: region-record start | stop
+# Uso: region-record (toggle; sin argumentos)
 #
 # Si VAAPI está disponible (dispositivo /dev/dri/renderD128 + vainfo),
 # se usa h264_vaapi para reducir drásticamente el uso de CPU.
@@ -153,18 +153,8 @@ start_recording() {
         "${encoder_args[@]+"${encoder_args[@]}"}"
 }
 
-case "${1:-start}" in
-    start)
-        start_recording
-        ;;
-    stop)
-        stop_recording
-        ;;
-    *)
-        notify-send -t 2500 -u critical \
-            "󰿏  Grabación" \
-            "Subcomando no reconocido: ${1:-}"
-
-        exit 1
-        ;;
-esac
+if [ -f "$LOCKFILE" ]; then
+    stop_recording
+else
+    start_recording
+fi
