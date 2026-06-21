@@ -96,25 +96,32 @@ Unicode invisibles no.
 
 ### Bash
 
-- Comentar solo lo no obvio: priorizar explicar el por que, contexto o
-  restricciones del bloque, evitando repetir literalmente lo que el codigo ya
-  expresa.
-- Preferir comentarios inline breves sobre bloques largos.
-- Evitar comentarios en codigo autoexplicativo.
-- Usar tono impersonal y tecnico.
-- Empezar comentarios con mayuscula.
-- No repetir lineas visibles del codigo.
-- Escribir contexto durable, util para mantenimiento futuro.
-- Si un bloque requiere aunque sea un breve analisis para comprender su
-  proposito, contexto o motivo de existencia, probablemente merece un
-  comentario. Ser conservador al asumir que algo es "obvio"; una buena señal es
-  si al reabrir el archivo meses despues tendrias que detenerte a pensar por que
-  ese bloque existe o que problema evita.
+- Comentar el por qué, no el qué.
+- Contexto o restricciones del bloque; nunca repetir el código.
+- Inline sobre bloques; omitir código autoexplicativo.
+- Tono impersonal y técnico; empezar con mayúscula.
+- Contexto durable para mantenimiento futuro.
+- Señal práctica: si al reabrir el archivo meses después tendrías que detenerte
+  a pensar por qué existe o qué problema evita, merece comentario.
 
 ### zsh
 
 Los helpers zsh son interactivos y pueden usar comentarios mas directos,
 incluyendo explicaciones de que hace una funcion.
+
+### Bloques técnicos
+
+Cuando se documenten módulos o secciones de configuración:
+
+- Usar encabezados decorativos ASCII (líneas `───`) para separar bloques.
+- Formato compacto de 2 columnas: izquierda = acción/evento, derecha =
+  comando/efecto.
+- Separar columnas con espacios alineados; no usar tablas formales.
+- Viñeta implícita por línea (sin bullets visibles si ya hay alineación).
+- Flecha ASCII `->` como operador estándar de mapeo.
+- Una sola línea por acción; evitar descripciones largas o párrafos.
+- Agrupar por categorías funcionales bajo subtítulos claros.
+- Priorizar legibilidad escaneable en terminal sobre exhaustividad narrativa.
 
 ## Formato
 
@@ -151,31 +158,24 @@ echo -e "   ${C_ACTION}  /ruta${C_RST}"
 
 ## Robustez y seguridad
 
-- Verificar efectos secundarios cuando el comando pueda aparentar exito sin
-  producir el estado esperado.
-- Usar `|| true` solo en fallos esperados, con comentario inline que explique el
-  motivo.
+- Verificar efectos secundarios: un comando puede aparentar éxito sin producir
+  el estado esperado.
+- `|| true` solo en fallos esperados, con comentario inline del motivo.
 - No sobredimensionar validaciones si el comportamiento es predecible.
 
 ## Operaciones destructivas y Git
 
-- Usar Git para inspeccion es permitido: `git status`, `git diff`, `git show` y
-  `git log`.
-- No usar Git para modificar worktree, staging o historial sin peticion
-  explicita: `git add`, `git commit`, `git reset`, `git restore`,
-  `git checkout`, `git clean`, `git revert` o `git stash`.
-- Antes de modificar archivos existentes, revisar `git status --short` y asumir
-  que cambios no relacionados pertenecen al usuario.
-- Para revertir cambios propios, preferir patch puntual que deshaga solo las
-  lineas afectadas.
-- Si la reversion requiere descartar archivos completos o cambios ajenos, pedir
-  confirmacion antes.
-- No ejecutar comandos destructivos sobre el repo o el sistema sin peticion
-  explicita: `rm`, `mv`, `unlink`, `rmdir`, `chmod`, `chown` o equivalentes.
-- En scripts, permitir `rm` solo para recursos temporales propios, locks o
-  archivos creados por el mismo script.
-- En scripts, preferir `mktemp`, `trap` y rutas acotadas antes de limpiar por
-  patrones amplios.
+- Lectura Git permitida: `git status`, `git diff`, `git show`, `git log`.
+- Escritura Git prohibida sin petición explícita: `git add`, `commit`, `reset`,
+  `restore`, `checkout`, `clean`, `revert`, `stash`.
+- Antes de modificar archivos, revisar `git status --short`; asumir que cambios
+  no relacionados pertenecen al usuario.
+- Revertir cambios propios con patch puntual sobre líneas afectadas. Pedir
+  confirmación si requiere descartar archivos completos o cambios ajenos.
+- Comandos destructivos prohibidos sin petición explícita: `rm`, `mv`, `unlink`,
+  `rmdir`, `chmod`, `chown` o equivalentes.
+- En scripts: `rm` solo para recursos temporales propios; preferir `mktemp`,
+  `trap` y rutas acotadas sobre limpieza por patrones amplios.
 
 ## Salida, colores e iconos
 
