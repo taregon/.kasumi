@@ -94,12 +94,19 @@
   //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
   // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
   "mpris": {
-    "format": "{status_icon} {dynamic}",
-    "format-paused": "{status_icon} <i>{dynamic}</i>",
-    "status-icons": {
-      "playing": " ",
-      "paused": "󰏤"
+    "format": "{player_icon} {status_icon} {dynamic}",
+    "format-paused": "{player_icon} {status_icon} <i>{dynamic}</i>",
+    "player-icons": {
+      "mpd": "󰎆",
+      "firefox": "󰌀",
+      "default": "_music"
     },
+    "status-icons": {
+      "playing": "",
+      "paused": "",
+      "stopped": ""
+    },
+    "dynamic-order": ["title", "artist"],
     "on-click-right": "",
     "on-click-middle": "",
     "on-scroll-up": "playerctl position 5+",
