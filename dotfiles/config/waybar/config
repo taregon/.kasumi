@@ -27,10 +27,7 @@
     "tray",
     "sway/mode",
     "custom/cava-internal",
-    "mpd#2",
-    "mpd#3",
-    "mpd#4",
-    "mpd"
+    "mpris"
   ],
   "modules-center": [
     "keyboard-state",
@@ -91,51 +88,24 @@
     "tooltip": false
   },
 
-  // --------------------------------------------------
-  // Media (MPD + Cava)
-  // --------------------------------------------------
-  "mpd": {
-    "tooltip": true,
-    "tooltip-format": "{artist} - {album} - {title} - Total Time : {totalTime:%M:%S}",
-    "format": " {elapsedTime:%M:%S}",
-    "format-disconnected": "⚠ Disconnected",
-    "format-stopped": " Not Playing",
-    "on-click": "mpc toggle",
-    "state-icons": {
-      "playing": "",
-      "paused": ""
-    }
-  },
-  "mpd#2": {
-    "format": "",
-    "format-disconnected": "",
-    "format-paused": "",
-    "format-stopped": "",
-    "on-click": "mpc -q pause && mpc -q prev && mpc -q start"
-  },
-  "mpd#3": {
-    "interval": 1,
-    "format": "{stateIcon}",
-    "format-disconnected": "",
-    "format-paused": "{stateIcon}",
-    "format-stopped": "",
-    "state-icons": {
-      "paused": "",
-      "playing": ""
+  // ── Media (MPRIS nativo) ──────────────────────────────────────
+  // Acciones built-in:
+  //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
+  //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
+  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
+  "mpris": {
+    "format": "{status_icon} {dynamic}",
+    "format-paused": "{status_icon} <i>{dynamic}</i>",
+    "status-icons": {
+      "playing": " ",
+      "paused": "󰏤"
     },
-    "on-click": "mpc toggle"
-  },
-  "mpd#4": {
-    "format": "",
-    "format-disconnected": "",
-    "format-paused": "",
-    "format-stopped": "",
-    "on-click": "mpc -q pause && mpc -q next && mpc -q start"
-  },
-  "custom/mpd": {
-    "format": " {title} - {artist}",
-    "interval": 5,
-    "exec": "mpc current --format='\"title\":\"%title%\",\"artist\":\"%artist%\"'"
+    "on-click-right": "",
+    "on-click-middle": "",
+    "on-scroll-up": "playerctl position 5+",
+    "on-scroll-down": "playerctl position 5-",
+    "tooltip": true,
+    "max-length": 45
   },
   "custom/cava-internal": {
     "format": "{}",
