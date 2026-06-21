@@ -27,6 +27,7 @@
     "tray",
     "sway/mode",
     "custom/cava-internal",
+    "mpd",
     "mpris"
   ],
   "modules-center": [
@@ -59,10 +60,7 @@
       "4": [],
       "5": [],
       "6": [],
-      "7": [],
-      "8": [],
-      "9": [],
-      "10": []
+      "7": []
     },
     "all-outputs": true,
     "format": "{icon}",
@@ -118,6 +116,27 @@
     "format": "{}",
     "exec": "~/.config/sway/scripts/cava-bar",
     "on-click": "swaymsg reload & pkill waybar & waybar"
+  },
+
+  // ── Media (MPD — tiempo) ─────────────────────────────────────
+  // Exclusivo para mostrar tiempo de reproducción. Sin acciones;
+  // todos los controles (play, prev, next) están en mpris.
+  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPD
+  "mpd": {
+    "format": "{stateIcon} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+    "format-paused": " {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+    "format-stopped": "",
+    "format-disconnected": "",
+    "tooltip-format": "{artist} - {title}",
+    "state-icons": {
+      "playing": "",
+      "paused": ""
+    },
+    "on-click": "",
+    "on-click-right": "",
+    "on-click-middle": "",
+    "on-scroll-up": "",
+    "on-scroll-down": ""
   },
 
   // ╒═══════════════════════════════════════════════════════════╕
