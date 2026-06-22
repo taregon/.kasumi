@@ -6,9 +6,9 @@
 // ╚███╔███╔╝██║  ██║   ██║   ██████╔╝██║  ██║██║  ██║
 //  ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
 {
-  // ╒═══════════════════════════════════════════════════════════╕
-  // │                  CONFIGURACIÓN DE BARRA                   │
-  // ╘═══════════════════════════════════════════════════════════╛
+  // ╒═══════════════════════════════════════════════════════╕
+  // │                 CONFIGURACIÓN DE BARRA                │
+  // ╘═══════════════════════════════════════════════════════╛
   // Mas ajuste: https://github.com/Alexays/Waybar/wiki/Configuration
   //
   // "width": 1350,                      // (Opcional) Ancho de la barra
@@ -17,16 +17,16 @@
   "height": 20, // Altura de la barra
   "margin": "0 0 0 0", // Márgenes exteriores
 
-  // ── Distribución de módulos ──────────────────────────────────────
+  // ── Distribución de módulos ──────────────────────────────
   "modules-left": [
     "custom/launcher",
     "clock",
-    "custom/swap",
     "tray",
     "sway/mode",
     "custom/cava-internal",
     "mpd",
-    "mpris"
+    "mpris",
+    "idle_inhibitor"
   ],
   "modules-center": [
     "keyboard-state",
@@ -47,7 +47,7 @@
     "custom/power"
   ],
 
-  // ── Módulos de Sway ──────────────────────────────────────────────
+  // ── Módulos de Sway ──────────────────────────────────────
   "sway/workspaces": {
     "persistent-workspaces": {
       "1": [],
@@ -73,16 +73,13 @@
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>"
   },
-  "sway/window": {
-    "format": "~ {app_id}"
-  },
   "sway/language": {
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "format": "{}",
     "tooltip": false
   },
 
-  // ── Media (MPRIS nativo) ─────────────────────────────────────────
+  // ── Media (MPRIS nativo) ─────────────────────────────────
   // Acciones built-in:
   //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
   //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
@@ -111,10 +108,10 @@
   "custom/cava-internal": {
     "format": "{}",
     "exec": "~/.config/sway/scripts/cava-bar",
-    "on-click": "swaymsg reload & pkill waybar & waybar"
+    "on-click": "swaymsg reload && pkill waybar; waybar"
   },
 
-  // ── Media (MPD — tiempo) ─────────────────────────────────────────
+  // ── Media (MPD — tiempo) ─────────────────────────────────
   // Exclusivo para mostrar tiempo de reproducción. Sin acciones;
   // todos los controles (play, prev, next) están en mpris.
   // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPD
@@ -135,14 +132,13 @@
     "on-scroll-down": ""
   },
 
-  // ╒═══════════════════════════════════════════════════════════╕
-  // │                     System resources                      │
-  // ╘═══════════════════════════════════════════════════════════╛
+  // ╒═══════════════════════════════════════════════════════╕
+  // │                 RECURSOS DEL SISTEMA                  │
+  // ╘═══════════════════════════════════════════════════════╛
   "backlight": {
     "format": "{icon} {percent: >1}%",
     "format-icons": ["", ""],
-    "on-scroll-down": "brightnessctl -c backlight set 5%-",
-    "on-scroll-up": "brightnessctl -c backlight set +5%"
+    "scroll-step": 5
   },
   "battery": {
     "states": { "warning": 30, "critical": 15 },
@@ -164,7 +160,7 @@
     "on-click": "kitty -e sensors"
   },
 
-  // ── Conectividad ─────────────────────────────────────────────────
+  // ── Conectividad ─────────────────────────────────────────
   "network": {
     "format": "󰖪 Disabled",
     "format-wifi": " {essid}",
@@ -190,7 +186,7 @@
     "tooltip-format": "Dispositivo(s): {device_alias}",
     "on-click": "blueberry"
   },
-  // ── Utilidades ───────────────────────────────────────────────────
+  // ── Utilidades ───────────────────────────────────────────
   "keyboard-state": {
     "numlock": true,
     "capslock": true,
@@ -238,11 +234,6 @@
       "deactivated": ""
     }
   },
-  "custom/swap": {
-    "on-click": "~/.config/waybar/scripts/swap.sh",
-    "tooltip": "Cambiar entre configuraciones de waybar",
-    "format": "Bg  "
-  },
   "custom/pacman": {
     "format": " {}",
     "interval": 300,
@@ -262,7 +253,7 @@
   },
   "custom/power": {
     "format": "⏻",
-    "on-click": "nwg-bar",
+    "on-click": "~/.config/rofi/scripts/power-menu",
     "tooltip": false
   }
 }
