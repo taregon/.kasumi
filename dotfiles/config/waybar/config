@@ -17,9 +17,7 @@
   "height": 20, // Altura de la barra
   "margin": "0 0 0 0", // Márgenes exteriores
 
-  // --------------------------------------------------
-  // Modules placement
-  // --------------------------------------------------
+  // ── Distribución de módulos ──────────────────────────────────────
   "modules-left": [
     "custom/launcher",
     "clock",
@@ -49,9 +47,7 @@
     "custom/power"
   ],
 
-  // --------------------------------------------------
-  // Sway modules
-  // --------------------------------------------------
+  // ── Módulos de Sway ──────────────────────────────────────────────
   "sway/workspaces": {
     "persistent-workspaces": {
       "1": [],
@@ -86,7 +82,7 @@
     "tooltip": false
   },
 
-  // ── Media (MPRIS nativo) ──────────────────────────────────────
+  // ── Media (MPRIS nativo) ─────────────────────────────────────────
   // Acciones built-in:
   //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
   //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
@@ -118,7 +114,7 @@
     "on-click": "swaymsg reload & pkill waybar & waybar"
   },
 
-  // ── Media (MPD — tiempo) ─────────────────────────────────────
+  // ── Media (MPD — tiempo) ─────────────────────────────────────────
   // Exclusivo para mostrar tiempo de reproducción. Sin acciones;
   // todos los controles (play, prev, next) están en mpris.
   // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPD
@@ -168,9 +164,7 @@
     "on-click": "kitty -e sensors"
   },
 
-  // --------------------------------------------------
-  // Connectivity
-  // --------------------------------------------------
+  // ── Conectividad ─────────────────────────────────────────────────
   "network": {
     "format": "󰖪 Disabled",
     "format-wifi": " {essid}",
@@ -196,9 +190,7 @@
     "tooltip-format": "Dispositivo(s): {device_alias}",
     "on-click": "blueberry"
   },
-  // --------------------------------------------------
-  // Utilities
-  // --------------------------------------------------
+  // ── Utilidades ───────────────────────────────────────────────────
   "keyboard-state": {
     "numlock": true,
     "capslock": true,
