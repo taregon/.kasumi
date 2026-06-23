@@ -144,7 +144,13 @@
   "battery": {
     "states": { "warning": 30, "critical": 15 },
     "format": "{icon} {capacity: >3}%",
-    "format-icons": ["", "", "", "", ""]
+    "format-icons": ["", "", "", "", ""],
+    "interval": 15,
+    "events": {
+      "on-discharging-warning": "notify-send -u normal '󱇏  Batería baja' 'Queda poco...'",
+      "on-discharging-critical": "notify-send -u critical '󰯈  Batería crítica' 'Conectá el cargador'"
+    }
+    // "on-click": "kitty --title powertop -e sudo powertop"
   },
   "cpu": {
     "format": " {usage}%",
