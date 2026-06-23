@@ -70,6 +70,19 @@
       "focused": "  ",
       "default": "  "
     }
+    // "window-rewrite-default": "",
+    // "window-rewrite": {
+    //   "class<kitty>": "",
+    //   "class<firefox>": "",
+    //   "class<zen>": "",
+    //   "class<thunar>": "",
+    //   "class<obsidian>": "󰠮",
+    //   "class<telegramdesktop>": "󰙯",
+    //   "class<mpv>": "",
+    //   "class<libreoffice-writer>": "",
+    //   "class<keepassxc>": "",
+    //   "class<zathura>": ""
+    // }
   },
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>"
