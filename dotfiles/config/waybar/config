@@ -169,10 +169,13 @@
 
   // ── Conectividad ─────────────────────────────────────────
   "network": {
-    "format": "󰖪 Disabled",
-    "format-wifi": " {essid}",
+    "format": "󰤮 Disabled",
+    "format-wifi": "{icon} {essid}",
     "format-ethernet": "󱙴 Wired",
-    "format-disconnected": "󰌙 Disconnected",
+    "format-linked": "󱘖 No IP",
+    "format-disconnected": "󰌙 Off",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "tooltip-format-wifi": "{essid}  ({signalStrength}%)  {frequency}GHz",
     "on-click": "iwctl"
   },
   "wireplumber": {
