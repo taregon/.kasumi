@@ -179,6 +179,18 @@
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "tooltip": false
   },
+  // ── Wireplumber mic (comentado) ────────────────────────────
+  // "wireplumber#mic": {
+  //   "node-type": "Audio/Source",
+  //   "format": "{icon} {volume: >2}%",
+  //   "format-icons": {
+  //     "mute": "",
+  //     "default": ["", "", ""]
+  //   },
+  //   "scroll-step": 2,
+  //   "on-click": "kitty --title wiremix -e wiremix",
+  //   "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+  // },
   "bluetooth": {
     "format": "󰂯 {status}", // Encendido sin conexión
     "format-disabled": "󰂲", // Apagado
