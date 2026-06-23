@@ -37,6 +37,7 @@
   "modules-right": [
     "custom/clipboard",
     "wireplumber",
+    // "wireplumber#mic",
     "temperature",
     "cpu",
     "memory",
@@ -175,9 +176,10 @@
       "default": ["", "", ""]
     },
     "scroll-step": 2,
+    "format-muted": "{icon} MUTED",
+    "max-volume": 150,
     "on-click": "kitty --title wiremix -e wiremix",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-    "tooltip": false
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   // ── Wireplumber mic (comentado) ────────────────────────────
   // "wireplumber#mic": {
