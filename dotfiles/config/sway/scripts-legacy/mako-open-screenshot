@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+id="$1"
+
+dir="$(xdg-user-dir PICTURES)/Screenshots"
+
+shopt -s nullglob
+
+files=("$dir"/Screenshot_*.png)
+
+if ((${#files[@]} > 0)); then
+    latest="$(printf '%s\n' "${files[@]}" | sort -r | head -n1)"
+
+    if [[ -f "$latest" ]]; then
+        gwenview "$latest" &
+    fi
+fi
+
+[[ -n "$id" ]] && makoctl dismiss --id "$id"
+
+# Configuracion que debe ir en mako
+# [app-name=screenshot]
+# on-button-left=exec ~/.config/hypr/hyprland/scripts/open-scrot.sh $id
