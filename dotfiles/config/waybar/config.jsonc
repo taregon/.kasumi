@@ -171,19 +171,25 @@
     "format-icons": ["", ""],
     "scroll-step": 5
   },
+
   "battery": {
     "states": { "warning": 30, "critical": 15 },
-    "format": "{icon} {capacity: >3}%",
+    "format": "{icon} {capacity: >3}% 󰚥",
+    "format-charging": "{icon} {capacity: >3}% 󱐥",
+    "format-discharging": "{icon} {capacity: >3}% 󱐤 ",
+    "format-time": "{H}h {M}m",
     "format-icons": ["", "", "", "", ""],
     "interval": 15,
+    "design-capacity": true,
     "tooltip": true,
-    "tooltip-format": "{timeTo}   {cycles}   {health}%",
+    "tooltip-format": "{timeTo}    {cycles}    {health}%",
     "events": {
       "on-discharging-warning": "notify-send -u normal '󱇏  Batería baja' 'Queda poco...'",
       "on-discharging-critical": "notify-send -u critical '󰯈  Batería crítica' 'Conectá el cargador'"
     }
     // "on-click": "kitty --title powertop -e sudo powertop"
   },
+
   "cpu": {
     "states": { "warning": 70, "critical": 85 },
     "format": " {usage}%",
