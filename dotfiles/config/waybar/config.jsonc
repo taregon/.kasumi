@@ -269,7 +269,14 @@
     "spacing": 5
   },
   "clock": {
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "timezones": [
+      "",
+      "Asia/Tokyo",
+      "Europe/Vatican",
+      "UTC"
+    ],
+    "timezone-tooltip-format": "{:%H:%M %Z}",
+    "tooltip-format": "{tz_list}\n<tt><small>{calendar}</small></tt>",
     "calendar": {
       "mode": "month",
       "mode-mon-col": 3,
