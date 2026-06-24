@@ -1,15 +1,29 @@
 #!/bin/bash
+# cava-bar — Cava audio visualizer para Waybar
 
-pkill -f "cava -p" 2> /dev/null
+set -euo pipefail
 
-bar_symbol="▁▂▃▄▅▆▇█"
-char_map="s/;//g;"
+# ── Setup ─────────────────────────────────────────────────────────────────
+
+# Guardia de instancia única vía PID file
+pid_file="/tmp/waybar-cava.pid"
+kill "$(cat "$pid_file" 2> /dev/null)" 2> /dev/null || true
+printf '%d' $$ > "$pid_file"
+
+# Glifos de barra: 0..7 -> ▁▂▃▄▅▆▇█
+bar_glyphs="▁▂▃▄▅▆▇█"
+sed_script="s/;//g"
+bar_length=${#bar_glyphs}
+for ((i = 0; i < bar_length; i++)); do
+    sed_script+=";s/$i/${bar_glyphs:$i:1}/g"
+done
+sed_script+=";s/./& /g"
 
 config_file=$HOME/.config/cava/cava-waybar.conf
 cat > "$config_file" << 'EOF'
 [general]
 bars = 12
-framerate = 60
+framerate = 30
 sensitivity = 250
 
 [smoothing]
@@ -24,17 +38,6 @@ data_format = ascii
 ascii_max_range = 7
 EOF
 
-# Crear char_map para reemplazar numeros con simbolos de barra
-idx=0
-while [ $idx -lt ${#bar_symbol} ]; do
-    char_map="${char_map}s/$idx/${bar_symbol:$idx:1}/g;"
-    ((idx++))
-done
+# ── Pipeline ──────────────────────────────────────────────────────────────
 
-# Agregar espacio después de cada caracter
-char_map="${char_map}s/./& /g;"
-
-# Transformar salida de cava usando char_map y mostrar resultado
-cava -p "$config_file" | while read -r line; do
-    echo "$line" | sed "$char_map"
-done
+cava -p "$config_file" | sed -u "$sed_script"
