@@ -114,10 +114,19 @@ incluyendo explicaciones de que hace una funcion.
 Cuando se documenten módulos o secciones de configuración:
 
 - Usar encabezados decorativos ASCII (líneas `───`) para separar bloques.
+- Preservar arte ASCII en headers de archivos cuando exista. No reemplazarlo
+  por cajas decorativas estándar sin petición explícita.
 - Formato compacto de 2 columnas: izquierda = acción/evento, derecha =
-  comando/efecto.
-- Separar columnas con espacios alineados; no usar tablas formales.
-- Viñeta implícita por línea (sin bullets visibles si ya hay alineación).
+  comando/efecto. Ejemplo:
+
+  ```
+  # Acciones built-in:
+  #   • click izq  -> play_pause        • botones 8/9 -> prev/next
+  #   • scroll     -> position +/-5     • click der   -> deshabilitado
+  ```
+
+- Separar columnas con espacios alineados (~28 chars); no usar tablas formales.
+- Usar `•` (U+2022) como viñeta por cada ítem en formato 2 columnas.
 - Flecha ASCII `->` como operador estándar de mapeo.
 - Una sola línea por acción; evitar descripciones largas o párrafos.
 - Agrupar por categorías funcionales bajo subtítulos claros.
