@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # cava-bar — Cava audio visualizer para Waybar
 
 set -euo pipefail
@@ -24,13 +24,18 @@ sed_script+=";s/./& /g"
 cat > "$config_file" << 'EOF'
 [general]
 bars = 12
-framerate = 30
+framerate = 45
 sensitivity = 250
+lower_cutoff_freq = 70
+higher_cutoff_freq = 9000
 
 [smoothing]
 monstercat = 0
 gravity = 200
 noise_reduction = 0.3
+
+[input]
+method = pipewire
 
 [output]
 method = raw
