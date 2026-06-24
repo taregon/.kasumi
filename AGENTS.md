@@ -20,6 +20,15 @@ otros gestores de paquetes.
   paquetes, APIs, URLs y sintaxis de codigo.
 - Conservar tokens estandar del area: `TODO`, `FIXME`, `NOTE`, `PEND`, `WARN` y
   similares.
+- Usar español neutro latinoamericano. Evitar regionalismos lexicos o
+  morfosintacticos marcados de paises o regiones concretas (argentinismos,
+  chilenismos, brasilenismos, etc.).
+
+## Zona horaria
+
+- La zona horaria local del sistema es UTC-5.
+- Esta es la referencia para configuracion de hora en notificaciones y cualquier
+  funcionalidad que dependa de tiempo local.
 
 ## Gestor de paquetes
 
@@ -114,8 +123,8 @@ incluyendo explicaciones de que hace una funcion.
 Cuando se documenten módulos o secciones de configuración:
 
 - Usar encabezados decorativos ASCII (líneas `───`) para separar bloques.
-- Preservar arte ASCII en headers de archivos cuando exista. No reemplazarlo
-  por cajas decorativas estándar sin petición explícita.
+- Preservar arte ASCII en headers de archivos cuando exista. No reemplazarlo por
+  cajas decorativas estándar sin petición explícita.
 - Formato compacto de 2 columnas: izquierda = acción/evento, derecha =
   comando/efecto. Ejemplo:
 
