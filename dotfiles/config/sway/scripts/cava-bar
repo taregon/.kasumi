@@ -5,12 +5,14 @@ set -euo pipefail
 
 # ── Setup ─────────────────────────────────────────────────────────────────
 
-# Guardia de instancia única vía PID file
-pid_file="/tmp/waybar-cava.pid"
-kill "$(cat "$pid_file" 2> /dev/null)" 2> /dev/null || true
-printf '%d' $$ > "$pid_file"
+config_file="$HOME/.config/cava/cava-waybar.conf"
 
-# Glifos de barra: 0..7 -> ▁▂▃▄▅▆▇█
+# Evita múltiples instancias de cava compitiendo por el dispositivo de audio
+pkill -f "cava -p $config_file" 2> /dev/null || true
+sleep 0.1
+
+# Cava emite dígitos 0-7; sed los reemplaza por glifos de barra en la salida:
+# 0→▁ 1→▂ 2→▃ 3→▄ 4→▅ 5→▆ 6→▇ 7→█
 bar_glyphs="▁▂▃▄▅▆▇█"
 sed_script="s/;//g"
 bar_length=${#bar_glyphs}
@@ -19,7 +21,6 @@ for ((i = 0; i < bar_length; i++)); do
 done
 sed_script+=";s/./& /g"
 
-config_file=$HOME/.config/cava/cava-waybar.conf
 cat > "$config_file" << 'EOF'
 [general]
 bars = 12
