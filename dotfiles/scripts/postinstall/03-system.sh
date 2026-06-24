@@ -138,11 +138,11 @@ install_sys_wayland() {
         mesa # Implementación de OpenGL/Vulkan para renderizado
 
         # Compositor Wayland
+        qt5-wayland   # Bibliotecas Qt5 para integración con Wayland
         swayfx        # Gestor de ventanas Wayland con efectos y animaciones
         swayidle      # Demonio de gestión de inactividad para Wayland
         xdg-utils     # Utilidades CLI de integración con el escritorio (xdg-open, xdg-mime, etc.)
         xorg-xwayland # Servidor X para Wayland (XWayland)
-        qt5-wayland   # Bibliotecas Qt5 para integración con Wayland
 
         # Monitoreo y sensores
         btop       # Monitor del sistema en tiempo real (TUI)
@@ -153,10 +153,11 @@ install_sys_wayland() {
 
         # Audio y visualización
         cava           # Visualizador de espectro de audio en terminal
+        mpdris2-rs     # Puente MPRIS2 para MPD (control multimedia desde el escritorio)
         pipewire       # Servicio de audio/video de baja latencia (reemplaza PulseAudio/JACK)
         pipewire-pulse # Capa de compatibilidad con PulseAudio sobre PipeWire
-        wiremix        # Mezclador de audio TUI nativo PipeWire
         wev            # Visor de eventos de entrada en Wayland
+        wiremix        # Mezclador de audio TUI nativo PipeWire
         wireplumber    # Session manager moderno para PipeWire (reemplaza pipewire-media-session)
 
         # Conectividad y Bluetooth
@@ -321,9 +322,9 @@ install_app_general() {
     pkgs=(
         keepassxc        # Gestor de contraseñas local con base de datos cifrada
         localsend-bin    # Compartir archivos en red local sin configuración compleja
-        transmission-cli # Cliente BitTorrent en línea de comandos
         spek-x-git       # Analizador visual de frecuencias en archivos de audio
         syncthing        # Sincronización privada y cifrada entre dispositivos
+        transmission-cli # Cliente BitTorrent en línea de comandos
         upscayl-bin      # Mejora y reescalado de imágenes con IA
         # Libre Office
         hyphen-es            # Reglas de separación silábica en español
@@ -383,7 +384,6 @@ install_utils_terminal() {
     pkgs=(
         aria2              # Gestor de descargas multiprotocolo (HTTP, FTP, BitTorrent)
         ast-grep-bin       # Herramienta de búsqueda y lint de código
-        opencode-bin       # Asistente interactivo de IA para desarrollo de software
         bat                # Visor tipo cat con resaltado y soporte Git
         bc                 # Calculadora CLI con soporte para decimales de alta precisión
         brightnessctl      # Control de brillo de pantalla desde terminal
@@ -401,6 +401,7 @@ install_utils_terminal() {
         less               # Paginador de texto para terminal
         lnav               # Visor avanzado de logs (TUI)
         mlr                # Procesador de datos estilo awk (Miller)
+        opencode-bin       # Asistente interactivo de IA para desarrollo de software
         pacman-contrib     # Utilidades adicionales para pacman
         pandoc             # Conversor de documentos markup entre formatos
         pastel             # Generación, análisis, conversión y manipulación de colores
