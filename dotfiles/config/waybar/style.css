@@ -200,7 +200,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin-right: 10px;
+  margin-right: 0;
 }
 
 #battery.charging {
@@ -243,7 +243,8 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin: 8px 0;
+  margin: 8px 0 8px 0;
+  padding: 5px 10px;
 }
 
 #disk.warning {
@@ -331,7 +332,8 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin-right: 10px;
+  margin: 8px 0;
+  padding: 5px 10px;
 }
 
 #memory.warning {
@@ -345,8 +347,9 @@ window#waybar {
 #mpd {
   border-radius: 4px;
   color: @mauve;
-  margin-left: 5px;
+  margin: 8px 0;
   background-color: shade(@base, 1.1);
+  padding: 5px 10px;
 }
 
 #mpd.2,
@@ -361,7 +364,8 @@ window#waybar {
   border-radius: 4px;
   background-color: shade(@base, 1.1);
   color: @mauve;
-  margin-left: 5px;
+  margin: 8px 0;
+  padding: 5px 10px;
 }
 
 #mpris.playing {
@@ -378,7 +382,6 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin-right: 10px;
 }
 
 #network.disabled,
@@ -422,7 +425,17 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin-right: 10px;
+  margin: 8px 0;
+  padding: 5px 10px;
+}
+
+#wireplumber#mic {
+  color: @flamingo;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  margin: 8px 0;
+  padding: 5px 10px;
 }
 
 #wireplumber.muted {
