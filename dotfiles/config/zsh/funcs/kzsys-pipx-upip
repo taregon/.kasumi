@@ -1,0 +1,9 @@
+# vim: filetype=zsh
+# Actualiza pip dentro del entorno virtual de un paquete pipx
+
+if [[ -z "$1" ]]; then
+    echo "Uso: kzsys-pipx-upip <paquete>"
+    return 1
+fi
+
+pipx runpip "$1" install --upgrade pip
