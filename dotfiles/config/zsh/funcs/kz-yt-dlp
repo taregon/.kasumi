@@ -1,0 +1,38 @@
+# vim: filetype=zsh
+# Wrapper de yt-dlp con flags unificados del sistema.
+# Aplica formato estandar de archivo y opciones de red.
+# Si el primer argumento es 720 o 1080, selecciona calidad de video.
+#
+# Uso: kz-yt-dlp [720|1080|-h] <url>
+
+local -a base_flags=(
+    --windows-filenames
+    --write-url-link
+    --geo-bypass
+    --trim-filenames 125
+    -o '%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s'
+)
+
+case "$1" in
+    720 | 1080)
+        local height="$1"
+        shift
+        yt-dlp "${base_flags[@]}" \
+            -f "bv[height=${height}][ext=mp4]+ba[ext=m4a]" --merge-output-format mp4 \
+            "$@"
+        ;;
+    -h | --help)
+        echo "Uso: kz-yt-dlp [720|1080|-h] <url>"
+        echo ""
+        echo "Opciones:"
+        echo "  720        Video 720p MP4"
+        echo "  1080       Video 1080p MP4"
+        echo "  -h, --help Muestra esta ayuda"
+        echo ""
+        echo "  Sin calidad, descarga en default activo."
+        return 0
+        ;;
+    *)
+        yt-dlp "${base_flags[@]}" "$@"
+        ;;
+esac
