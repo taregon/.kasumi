@@ -242,14 +242,18 @@ window#waybar {
   color: @green;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  margin: 8px 0;
 }
 
 #disk.warning {
   color: @yellow;
+  border: 1px solid @yellow;
 }
 
 #disk.critical {
   color: @red;
+  border: 1px solid @red;
 }
 
 #custom-launcher {
@@ -258,7 +262,7 @@ window#waybar {
   color: @mauve;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
-  padding: 5px 16px;
+  padding: 5px 8px;
 }
 
 #custom-power {
@@ -267,7 +271,7 @@ window#waybar {
   background-color: shade(@base, 1.1);
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
-  padding: 5px 16px;
+  padding: 5px 8px;
 }
 
 #idle_inhibitor {
@@ -306,7 +310,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin: 8px 0;
+  margin-right: 10px;
 }
 
 #keyboard-state label {
@@ -327,7 +331,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin: 8px 0;
+  margin-right: 10px;
 }
 
 #memory.warning {
@@ -418,7 +422,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin: 8px 0;
+  margin-right: 10px;
 }
 
 #wireplumber.muted {
