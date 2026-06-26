@@ -1,25 +1,30 @@
-@import "color.css";
-
 /*
+ * vim: filetype=scss
  * ╒═══════════════════════════════════════════════════════════╕
  * │                        ESTILO BASE                        │
  * ╘═══════════════════════════════════════════════════════════╛
 */
 
-* {
+@import "color.css";
+
+tooltip {
+  background: @base;
+  border: 1px solid @overlay0;
+  border-color: @overlay0;
+  border-radius: 0px;
+}
+tooltip label {
+  color: @text;
+  padding: 4px 8px;
+}
+
+#waybar * {
   color: @lavender;
-  border: 0;
   padding: 0;
   font-family: "JetbrainsMono Nerd Font";
   font-size: 14px;
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
 }
-
-/* #window { */
-/*   border-style: hidden; */
-/*   margin: 0 10px; */
-/*   color: #eceff4; */
-/* } */
 
 window#waybar {
   border-bottom: 4px solid shade(@base, 1.1);
@@ -28,7 +33,8 @@ window#waybar {
 
 #mode {
   color: @mauve;
-  border-radius: 10px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
   margin-right: 5px;
 }
 
@@ -37,19 +43,19 @@ window#waybar {
 }
 
 #workspaces {
-  border-style: solid;
-  background-color: @base;
+  border: 1px solid shade(@base, 1.4);
+  background-color: shade(@base, 1.1);
   opacity: 1;
-  border-radius: 10px;
-  margin: 8px 0px 8px 10px;
+  border-radius: 4px;
+  margin: 8px 0px 8px 0px;
 }
 
 #workspaces button {
   color: @base;
-  border-radius: 50%;
+  border-radius: 0px;
   margin-left: 1px;
   margin-right: 1px;
-  padding: 2 6 2 0;
+  padding: 2px 6px 2px 0;
 }
 
 #workspaces button.focused * {
@@ -58,7 +64,7 @@ window#waybar {
 
 #workspaces button.focused {
   color: @mauve;
-  border-radius: 20px;
+  border-radius: 0px;
 }
 
 #workspaces button:hover * {
@@ -73,33 +79,102 @@ window#waybar {
   background: none;
 }
 
-/* -----------------------------------------------------------------------------
- * Estilo base de todos los módulos de Waybar
- *
- * Este bloque define propiedades comunes (padding, borde, fondo, opacidad, margen)
- * para mantener consistencia visual. Los módulos individuales pueden sobrescribir
- * estas propiedades más abajo para ajustes específicos de color, bordes o espaciado.
- * =========================================================================== */
+#custom-workspaces {
+  color: @overlay1;
+  border: 1px solid shade(@base, 1.4);
+  background-color: shade(@base, 1.1);
+  opacity: 1;
+  border-radius: 4px;
+  margin: 8px 0px 8px 0px;
+  padding: 0 8px;
+}
+
+#custom-workspaces.urgent {
+  border-color: @red;
+}
+
+/* ╒═══════════════════════════════════════════════════════════════╕
+ * │                    ESTILOS BASE MÓDULOS                       │
+ * ╘═══════════════════════════════════════════════════════════════╛ */
 #backlight,
 #battery,
 #bluetooth,
 #clock,
 #cpu,
-#custom-background,
 #custom-clipboard,
-#custom-swap,
 #idle_inhibitor,
 #keyboard-state,
 #memory,
-#mpd #network,
+#mpd,
+#mpris,
+#network,
+#privacy,
 #temperature,
 #tray,
 #wireplumber {
   padding: 5px 8px;
-  border-style: solid;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
   background-color: shade(@base, 1.1);
   opacity: 1;
   margin: 8px 0;
+}
+
+/* ╒═══════════════════════════════════════════════════════════════╕
+ * │                   GRUPO MEDIA (DRAWER)                        │
+ * ╘═══════════════════════════════════════════════════════════════╛ */
+#group-media {
+  padding: 0;
+  margin: 0;
+}
+
+#group-media .media-hidden {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+#group-media:hover .media-hidden {
+  opacity: 1;
+}
+
+/* ╒═══════════════════════════════════════════════════════════════╕
+ * │                   GRUPO AUDIO (DRAWER)                        │
+ * ╘═══════════════════════════════════════════════════════════════╛ */
+#group-audio {
+  padding: 0;
+  margin: 0;
+}
+
+#group-audio .audio-hidden {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+#group-audio:hover .audio-hidden {
+  opacity: 1;
+}
+
+/* ╒═══════════════════════════════════════════════════════════════╕
+ * │                   GRUPO HARDWARE (DRAWER)                     │
+ * ╘═══════════════════════════════════════════════════════════════╛ */
+#group-hardware {
+  padding: 0;
+  margin: 0;
+}
+
+#group-hardware .hardware-hidden {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+#group-hardware:hover .hardware-hidden {
+  opacity: 1;
 }
 
 /*
@@ -116,12 +191,12 @@ window#waybar {
 
 #backlight {
   color: @yellow;
-  border-radius: 10px 0 0 10px;
+  border-radius: 0px;
 }
 
 #battery {
   color: #d8dee9;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0px;
   margin-right: 10px;
 }
 
@@ -140,52 +215,88 @@ window#waybar {
 
 #clock {
   color: @sky;
-  border-radius: 10px;
-  margin: 8px 10px;
+  border-radius: 0px;
+  margin: 8px 0;
 }
 
-#cpu,
-#cpu #cpu-icon {
+#cpu {
   color: @sky;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
 }
 
-#custom-background {
-  border-radius: 0px 10px 10px 0px;
-  background-color: @base;
-  color: white;
-  padding: 5px 14px 5px 5px;
+#cpu.warning {
+  color: @yellow;
+}
+
+#cpu.critical {
+  color: @red;
+}
+
+#disk {
+  color: @green;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+}
+
+#disk.warning {
+  color: @yellow;
+}
+
+#disk.critical {
+  color: @red;
 }
 
 #custom-launcher {
   font-size: 20px;
   background-color: shade(@base, 1.1);
   color: @mauve;
-  border-radius: 0px 15px 0px 0px;
-  padding: 5px 10px 5px 10px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  padding: 5px 16px;
 }
 
 #custom-power {
   font-size: 20px;
   color: @red;
   background-color: shade(@base, 1.1);
-  border-radius: 15px 0px 0px 0px;
-  padding: 10px 5px 10px 5px;
-}
-
-#custom-swap {
-  border-radius: 10px;
-  color: @mauve;
-  margin-left: 10px;
-  background-color: @base;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  padding: 5px 16px;
 }
 
 #idle_inhibitor {
-  background-color: #ebcb8b;
-  color: @base;
+  border-radius: 0px;
+  margin-right: 10px;
+}
+
+#idle_inhibitor.deactivated {
+  color: @overlay1;
+}
+
+#idle_inhibitor.activated {
+  color: @yellow;
+}
+
+#custom-pacman.has-updates {
+  color: @yellow;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  margin: 8px 10px 8px 0;
+  padding: 5px 8px;
+  background-color: shade(@base, 1.1);
+}
+
+#custom-pacman.uptodate {
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  margin: 8px 10px 8px 0;
+  padding: 5px 8px;
+  background-color: shade(@base, 1.1);
 }
 
 #keyboard-state {
-  border-radius: 10px;
+  border-radius: 0px;
   margin-right: 10px;
 }
 
@@ -204,15 +315,23 @@ window#waybar {
 
 #memory {
   color: @sky;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0px;
   margin-right: 10px;
 }
 
+#memory.warning {
+  color: @yellow;
+}
+
+#memory.critical {
+  color: @red;
+}
+
 #mpd {
-  border-radius: 10px;
+  border-radius: 4px;
   color: @mauve;
   margin-left: 5px;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: shade(@base, 1.1);
 }
 
 #mpd.2,
@@ -222,9 +341,24 @@ window#waybar {
   font-size: 14px;
 }
 
+#mpris {
+  border-radius: 0px;
+  color: @mauve;
+  margin-left: 5px;
+}
+
+#mpris.playing {
+  color: @green;
+}
+
+#mpris.paused {
+  color: @overlay1;
+  font-style: italic;
+}
+
 #network {
   color: @green;
-  border-radius: 10px;
+  border-radius: 0px;
   margin-right: 10px;
 }
 
@@ -235,21 +369,36 @@ window#waybar {
 
 #temperature {
   color: @teal;
-  border-radius: 10px 0 0 10px;
+  border-radius: 0px;
+}
+
+#temperature.warning {
+  color: @yellow;
 }
 
 #temperature.critical {
   color: @red;
 }
 
+#scratchpad {
+  color: @mauve;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+}
+
+#scratchpad.empty {
+  color: @overlay1;
+}
+
 #tray {
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
   margin: 8px 10px;
-  border-radius: 10px;
 }
 
 #wireplumber {
   color: @flamingo;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0px;
   margin-right: 10px;
 }
 
