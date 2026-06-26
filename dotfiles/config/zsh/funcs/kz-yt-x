@@ -2,6 +2,8 @@
 # yt-dlp para X/Twitter con cookies del navegador.
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A con thumbnail y metadata embebida.
+# Incluye sleep 0.5s y reintentos para evitar rate-limit.
+# Trunca titulo a 120 bytes (~40 caracteres CJK) para filesystem.
 #
 # Uso: kz-yt-x <url>
 
@@ -13,9 +15,10 @@ yt-dlp \
     --embed-metadata \
     --embed-thumbnail \
     --windows-filenames \
-    --trim-filenames 70 \
+    --sleep-requests 0.5 \
+    --retries 3 \
     --write-desktop-link \
     --xff default \
     -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
-    -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title)s.%(ext)s" \
+    -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s" \
     "$@"
