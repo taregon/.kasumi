@@ -11,7 +11,7 @@ tooltip {
   background: @base;
   border: 1px solid @overlay0;
   border-color: @overlay0;
-  border-radius: 0px;
+  border-radius: 4px;
 }
 tooltip label {
   color: @text;
@@ -52,7 +52,7 @@ window#waybar {
 
 #workspaces button {
   color: @base;
-  border-radius: 0px;
+  border-radius: 4px;
   margin-left: 1px;
   margin-right: 1px;
   padding: 2px 6px 2px 0;
@@ -64,7 +64,7 @@ window#waybar {
 
 #workspaces button.focused {
   color: @mauve;
-  border-radius: 0px;
+  border-radius: 4px;
 }
 
 #workspaces button:hover * {
@@ -191,12 +191,15 @@ window#waybar {
 
 #backlight {
   color: @yellow;
-  border-radius: 0px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
 }
 
 #battery {
   color: #d8dee9;
-  border-radius: 0px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
   margin-right: 10px;
 }
 
@@ -215,7 +218,9 @@ window#waybar {
 
 #clock {
   color: @sky;
-  border-radius: 0px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
   margin: 8px 0;
 }
 
@@ -266,8 +271,10 @@ window#waybar {
 }
 
 #idle_inhibitor {
-  border-radius: 0px;
-  margin-right: 10px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  margin: 8px 0;
 }
 
 #idle_inhibitor.deactivated {
@@ -296,8 +303,10 @@ window#waybar {
 }
 
 #keyboard-state {
-  border-radius: 0px;
-  margin-right: 10px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  margin: 8px 0;
 }
 
 #keyboard-state label {
@@ -315,8 +324,10 @@ window#waybar {
 
 #memory {
   color: @sky;
-  border-radius: 0px;
-  margin-right: 10px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  margin: 8px 0;
 }
 
 #memory.warning {
@@ -342,7 +353,9 @@ window#waybar {
 }
 
 #mpris {
-  border-radius: 0px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
   color: @mauve;
   margin-left: 5px;
 }
@@ -358,7 +371,9 @@ window#waybar {
 
 #network {
   color: @green;
-  border-radius: 0px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
   margin-right: 10px;
 }
 
@@ -369,7 +384,9 @@ window#waybar {
 
 #temperature {
   color: @teal;
-  border-radius: 0px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
 }
 
 #temperature.warning {
@@ -398,8 +415,10 @@ window#waybar {
 
 #wireplumber {
   color: @flamingo;
-  border-radius: 0px;
-  margin-right: 10px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  margin: 8px 0;
 }
 
 #wireplumber.muted {
