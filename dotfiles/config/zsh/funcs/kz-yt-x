@@ -17,7 +17,7 @@ yt-dlp \
     --windows-filenames \
     --sleep-requests 0.5 \
     --retries 3 \
-    --write-desktop-link \
+    --ignore-errors \
     --xff default \
     -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
     -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s" \
