@@ -360,13 +360,11 @@
     "interval": 1
   },
   "idle_inhibitor": {
-    "format": "{icon} {windows}",
-    "format-window-separator": " ",
+    "format": "{icon} Idle",
     "format-icons": {
-      "activated": "",
-      "deactivated": ""
+      "activated": "",
+      "deactivated": ""
     },
-    "timeout": 30,
     "tooltip-format-activated": "Inhibición activa (30 min)",
     "tooltip-format-deactivated": "Click para inhibir idle"
   },
