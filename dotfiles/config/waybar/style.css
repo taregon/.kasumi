@@ -65,6 +65,7 @@ window#waybar {
 #custom-clipboard,
 #idle_inhibitor,
 #keyboard-state,
+#language,
 #memory,
 #mpd,
 #mpris,
@@ -336,7 +337,7 @@ window#waybar {
   border-radius: 4px;
   background-color: shade(@base, 1.1);
   padding: 5px 8px;
-  margin: 8px 0;
+  margin: 8px 0 8px 12px;
 }
 
 #scratchpad.empty {
