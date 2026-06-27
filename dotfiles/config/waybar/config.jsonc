@@ -16,6 +16,8 @@
   "height": 20, // Altura de la barra
   "exclusive": true,
   "margin": "4 8 0 8", // Márgenes exteriores
+  "spacing": 12, // px entre módulos adyacentes
+  "reload_style_on_change": true, // recarga style.css en disco automáticamente
 
   // ── Distribución de módulos ──────────────────────────────
   "modules-left": [
@@ -23,25 +25,22 @@
     "clock",
     "tray",
     "sway/mode",
-    "custom/cava-internal",
-    // "cava",
-    "mpd",
-    "mpris",
+    // "custom/cava-internal",
+    "group/media",
     "idle_inhibitor"
   ],
   "modules-center": [
     "keyboard-state",
     "sway/language",
-    "sway/workspaces",
+    "custom/workspaces",
     "backlight"
   ],
   "modules-right": [
+    "sway/scratchpad",
     "custom/clipboard",
-    "wireplumber",
-    // "wireplumber#mic",
-    "temperature",
-    "cpu",
-    "memory",
+    "privacy",
+    "group/audio",
+    "group/hardware",
     "battery",
     "custom/pacman",
     "bluetooth",
@@ -50,41 +49,6 @@
   ],
 
   // ── Módulos de Sway ──────────────────────────────────────
-  "sway/workspaces": {
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": [],
-      "6": [],
-      "7": []
-    },
-    "all-outputs": true,
-    "format": "{icon}",
-    "format-icons": {
-      "code": "",
-      "browser": "",
-      "terminal": "",
-      "files": "",
-      "urgent": "  ",
-      "focused": "  ",
-      "default": "  "
-    }
-    // "window-rewrite-default": "",
-    // "window-rewrite": {
-    //   "class<kitty>": "",
-    //   "class<firefox>": "",
-    //   "class<zen>": "",
-    //   "class<thunar>": "",
-    //   "class<obsidian>": "󰠮",
-    //   "class<telegramdesktop>": "󰙯",
-    //   "class<mpv>": "",
-    //   "class<libreoffice-writer>": "",
-    //   "class<keepassxc>": "",
-    //   "class<zathura>": ""
-    // }
-  },
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>"
   },
@@ -103,9 +67,9 @@
     "format": "{player_icon} {status_icon} {dynamic}",
     "format-paused": "{player_icon} {status_icon} <i>{dynamic}</i>",
     "player-icons": {
-      "mpd": "󰎆",
-      "firefox": "󰌀",
-      "default": "_music"
+      //   "mpd": "󰎆",
+      //   "firefox": "󰌀",
+      //   "default": "_music"
     },
     "status-icons": {
       "playing": "",
@@ -120,6 +84,64 @@
     "tooltip": true,
     "max-length": 45
   },
+
+  // ── Grupo media (drawer) ─────────────────────────────────
+  "group/media": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "media-hidden",
+      "click-to-reveal": false
+    },
+    "modules": [
+      "mpris",
+      "mpd"
+    ]
+  },
+
+  // ── Grupo audio (drawer) ──────────────────────────────────
+  "group/audio": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "audio-hidden",
+      "click-to-reveal": false,
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "wireplumber",
+      "wireplumber#mic"
+    ]
+  },
+
+  "disk": {
+    "path": "/",
+    "interval": 60,
+    "format": " {percentage_used}%",
+    "tooltip-format": "{used} / {total}  ({percentage_used}%)",
+    "states": {
+      "warning": 80,
+      "critical": 90
+    },
+    "on-click": "kitty -e ncdu /"
+  },
+
+  // ── Grupo hardware (drawer) ──────────────────────────────
+  "group/hardware": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "hardware-hidden",
+      "click-to-reveal": true
+    },
+    "modules": [
+      "temperature",
+      "cpu",
+      "memory",
+      "disk"
+    ]
+  },
+
   // "cava": {
   //   "cava_config": "$HOME/.config/cava/cava-waybarv2.conf",
   //
@@ -136,6 +158,7 @@
   //     "on-click-right": "mode"
   //   }
   // },
+
   "custom/cava-internal": {
     "format": "{}",
     "exec": "~/.config/sway/scripts/cava-bar",
@@ -204,9 +227,9 @@
     "thermal-zone": 9,
     "warning-threshold": 70,
     "critical-threshold": 80,
-    "format-critical": " {temperatureC}°C",
-    "format": " {temperatureC}°C",
-    "on-click": "kitty -e sensors"
+    "format-critical": "  {temperatureC}°C",
+    "format": " {temperatureC}°C"
+    // "on-click": "kitty -e sensors"
   },
 
   // ── Conectividad ─────────────────────────────────────────
@@ -219,12 +242,13 @@
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "tooltip": true,
     "tooltip-format-wifi": "{essid}  ({signalStrength}%)  {frequency}GHz\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
+    "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
     "on-click": "iwctl"
   },
+
   "wireplumber": {
     "format": "{icon} {volume: >2}%",
     "format-icons": {
-      "mute": "",
       "default": ["", "", ""]
     },
     "scroll-step": 2,
@@ -255,7 +279,25 @@
     "tooltip-format": "Dispositivo(s): {device_alias}",
     "on-click": "blueberry"
   },
+
   // ── Utilidades ───────────────────────────────────────────
+  "custom/workspaces": {
+    "exec": "~/indicator/orbit-ws/target/release/orbit-ws",
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "swaymsg workspace next",
+    "on-scroll-up": "swaymsg workspace prev",
+    "on-scroll-down": "swaymsg workspace next"
+  },
+
+  "sway/scratchpad": {
+    "format": "{icon} {count}",
+    "show-empty": false,
+    "format-icons": ["󰆣", ""],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
+
   "keyboard-state": {
     "numlock": true,
     "capslock": true,
@@ -268,6 +310,20 @@
   "tray": {
     "icon-size": 18,
     "spacing": 5
+  },
+  "privacy": {
+    "modules": [
+      { "type": "screenshare", "tooltip": true },
+      { "type": "audio-in", "tooltip": true }
+    ],
+    "icon-size": 16,
+    // cava captura audio del sink (monitor_FL/monitor_FR) para visualización
+    // pero no etiqueta sus streams con stream.monitor, por lo que PipeWire
+    // los clasifica como audio-in y el módulo privacy los detecta como falso
+    // positivo. Ignorar por nombre es el mecanismo oficial documentado.
+    "ignore": [
+      { "type": "audio-in", "name": "cava" }
+    ]
   },
   "clock": {
     "timezones": [
@@ -304,17 +360,22 @@
     "interval": 1
   },
   "idle_inhibitor": {
-    "format": "{icon}",
+    "format": "{icon} {windows}",
+    "format-window-separator": " ",
     "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    }
+      "activated": "",
+      "deactivated": ""
+    },
+    "timeout": 30,
+    "tooltip-format-activated": "Inhibición activa (30 min)",
+    "tooltip-format-deactivated": "Click para inhibir idle"
   },
   // ── Verificador de actualizaciones ────────────────────────────
   // exec-if evita ejecutar checkupdates/paru sin conectividad,
   // previniendo timeouts y errores al cerrar sesion.
   "custom/pacman": {
-    "format": " {}",
+    "return-type": "json",
+    "format": " PKG {}",
     "interval": 300,
     "exec-if": "ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1",
     "exec": "~/.config/sway/scripts/check-updates",
@@ -322,7 +383,7 @@
     "signal": 8
   },
   "custom/launcher": {
-    "format": " ",
+    "format": "",
     "on-click": "rofi -show drun",
     "tooltip": false
   },
@@ -332,7 +393,7 @@
     "on-click": "~/.config/sway/scripts/clipboard text"
   },
   "custom/power": {
-    "format": "⏻",
+    "format": "󰤆",
     "on-click": "~/.config/rofi/scripts/power-menu",
     "tooltip": false
   }
