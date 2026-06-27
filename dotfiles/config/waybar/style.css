@@ -1,8 +1,8 @@
 /*
  * vim: filetype=scss
- * ╒═══════════════════════════════════════════════════════════╕
- * │                        ESTILO BASE                        │
- * ╘═══════════════════════════════════════════════════════════╛
+ * ╒═════════════════════════════════════════════════════════╕
+ * │                   CONFIGURACIÓN BASE                    │
+ * ╘═════════════════════════════════════════════════════════╛
 */
 
 @import "color.css";
@@ -47,7 +47,7 @@ window#waybar {
   background-color: shade(@base, 1.1);
   opacity: 1;
   border-radius: 4px;
-  margin: 8px 0px 8px 0px;
+  margin: 8px 0;
 }
 
 #workspaces button {
@@ -84,7 +84,7 @@ window#waybar {
   background-color: shade(@base, 1.1);
   opacity: 1;
   border-radius: 4px;
-  margin: 8px 0px 8px 0px;
+  margin: 8px 0;
   padding: 0 8px;
 }
 
@@ -92,9 +92,11 @@ window#waybar {
   border-color: @red;
 }
 
-/* ╒═══════════════════════════════════════════════════════════════╕
- * │                    ESTILOS BASE MÓDULOS                       │
- * ╘═══════════════════════════════════════════════════════════════╛ */
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │                 ESTILOS DE MÓDULOS BASE                 │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
 #backlight,
 #battery,
 #bluetooth,
@@ -119,9 +121,11 @@ window#waybar {
   margin: 8px 0;
 }
 
-/* ╒═══════════════════════════════════════════════════════════════╕
- * │                   GRUPO MEDIA (DRAWER)                        │
- * ╘═══════════════════════════════════════════════════════════════╛ */
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │                GRUPO DE MEDIOS (DRAWER)                 │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
 #group-media {
   padding: 0;
   margin: 0;
@@ -138,9 +142,11 @@ window#waybar {
   opacity: 1;
 }
 
-/* ╒═══════════════════════════════════════════════════════════════╕
- * │                   GRUPO AUDIO (DRAWER)                        │
- * ╘═══════════════════════════════════════════════════════════════╛ */
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │                 GRUPO DE AUDIO (DRAWER)                 │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
 #group-audio {
   padding: 0;
   margin: 0;
@@ -157,9 +163,11 @@ window#waybar {
   opacity: 1;
 }
 
-/* ╒═══════════════════════════════════════════════════════════════╕
- * │                   GRUPO HARDWARE (DRAWER)                     │
- * ╘═══════════════════════════════════════════════════════════════╛ */
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │               GRUPO DE HARDWARE (DRAWER)                │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
 #group-hardware {
   padding: 0;
   margin: 0;
@@ -177,10 +185,10 @@ window#waybar {
 }
 
 /*
- * ╒═══════════════════════════════════════════════════════════╕
- * │                      ESTILOS MÓDULOS                      │
- * ╘═══════════════════════════════════════════════════════════╛
-*/
+ * ╒═════════════════════════════════════════════════════════╕
+ * │             ESTILOS DE MÓDULOS INDIVIDUALES             │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
 
 @keyframes blink {
   to {
@@ -190,16 +198,10 @@ window#waybar {
 
 #backlight {
   color: @yellow;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
 }
 
 #battery {
   color: #d8dee9;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  margin-right: 0;
 }
 
 #battery.charging {
@@ -217,16 +219,10 @@ window#waybar {
 
 #clock {
   color: @sky;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  margin: 8px 0;
 }
 
 #cpu {
   color: @sky;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
 }
 
 #cpu.warning {
@@ -242,7 +238,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
-  margin: 8px 0 8px 0;
+  margin: 8px 0;
   padding: 5px 10px;
 }
 
@@ -263,6 +259,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   padding: 5px 8px;
+  margin: 8px 0;
 }
 
 #custom-power {
@@ -272,12 +269,6 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   padding: 5px 8px;
-}
-
-#idle_inhibitor {
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
   margin: 8px 0;
 }
 
@@ -306,19 +297,13 @@ window#waybar {
   background-color: shade(@base, 1.1);
 }
 
-#keyboard-state {
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-}
-
 #keyboard-state label {
   color: @overlay1;
   margin-right: 4px;
 }
 
 #keyboard-state label.capslock.locked {
-  color: @yellow; /* cyan para Caps Lock */
+  color: @yellow; /* amarillo para Caps Lock */
 }
 
 #keyboard-state label.numlock.locked {
@@ -327,10 +312,6 @@ window#waybar {
 
 #memory {
   color: @sky;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  margin: 8px 0;
   padding: 5px 10px;
 }
 
@@ -343,10 +324,7 @@ window#waybar {
 }
 
 #mpd {
-  border-radius: 4px;
   color: @mauve;
-  margin: 8px 0;
-  background-color: shade(@base, 1.1);
   padding: 5px 10px;
 }
 
@@ -358,11 +336,7 @@ window#waybar {
 }
 
 #mpris {
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
   color: @mauve;
-  margin: 8px 0;
   padding: 5px 10px;
 }
 
@@ -377,9 +351,6 @@ window#waybar {
 
 #network {
   color: @green;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
 }
 
 #network.disabled,
@@ -389,9 +360,6 @@ window#waybar {
 
 #temperature {
   color: @teal;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
 }
 
 #temperature.warning {
@@ -406,6 +374,8 @@ window#waybar {
   color: @mauve;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  padding: 5px 8px;
   margin: 8px 0;
 }
 
@@ -413,27 +383,13 @@ window#waybar {
   color: @overlay1;
 }
 
-#tray {
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  margin: 8px 0;
-}
-
 #wireplumber {
   color: @flamingo;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  margin: 8px 0;
   padding: 5px 10px;
 }
 
 #wireplumber#mic {
   color: @flamingo;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  margin: 8px 0;
   padding: 5px 10px;
 }
 
