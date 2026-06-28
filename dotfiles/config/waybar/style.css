@@ -97,9 +97,8 @@ window#waybar {
  * ╘═════════════════════════════════════════════════════════╛
  */
 #group-media {
-  border-left: 2px solid @overlay0;
-  margin: 8px 0;
-  padding-left: 4px;
+  padding: 0;
+  margin: 0;
 }
 
 #group-media .media-hidden {
@@ -114,9 +113,8 @@ window#waybar {
 }
 
 #group-audio {
-  border-left: 2px solid @overlay0;
-  margin: 8px 0;
-  padding-left: 4px;
+  padding: 0;
+  margin: 0;
 }
 
 #group-audio .audio-hidden {
@@ -131,9 +129,8 @@ window#waybar {
 }
 
 #group-hardware {
-  border-left: 2px solid @overlay0;
-  margin: 8px 0;
-  padding-left: 4px;
+  padding: 0;
+  margin: 0;
 }
 
 #group-hardware .hardware-hidden {
