@@ -61,19 +61,28 @@ window#waybar {
 #battery,
 #bluetooth,
 #clock,
-#cpu,
 #custom-clipboard,
 #idle_inhibitor,
 #keyboard-state,
 #language,
-#memory,
 #mpd,
 #mpris,
 #network,
 #privacy,
-#temperature,
 #tray,
 #wireplumber {
+  padding: 5px 8px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
+  background-color: shade(@base, 1.1);
+  opacity: 1;
+  margin: 8px 0;
+}
+
+#cpu,
+#disk,
+#memory,
+#temperature {
   padding: 5px 8px;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
@@ -189,11 +198,6 @@ window#waybar {
 
 #disk {
   color: @green;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  margin: 8px 0;
-  padding: 5px 10px;
 }
 
 #disk.warning {
