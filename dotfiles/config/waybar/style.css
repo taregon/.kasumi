@@ -31,6 +31,16 @@ window#waybar {
   background-color: shade(#1e1e2e, 0.95);
 }
 
+@keyframes blink {
+  to { color: @overlay1; }
+}
+
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │               MÓDULOS SIN FONDO DE BASE                 │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
+
 #mode {
   color: @mauve;
   border: 1px solid shade(@base, 1.4);
@@ -54,35 +64,33 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │                 ESTILOS DE MÓDULOS BASE                 │
+ * │              ESTILO BASE DE MÓDULOS                     │
+ * │  Borde, fondo, padding y radio unificados              │
  * ╘═════════════════════════════════════════════════════════╛
  */
+
 #backlight,
 #battery,
 #bluetooth,
 #clock,
+#cpu,
 #custom-clipboard,
+#custom-launcher,
+#custom-pacman,
+#custom-power,
+#disk,
 #idle_inhibitor,
 #keyboard-state,
 #language,
+#memory,
 #mpd,
 #mpris,
 #network,
 #privacy,
+#scratchpad,
+#temperature,
 #tray,
 #wireplumber {
-  padding: 5px 8px;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  opacity: 1;
-  margin: 8px 0;
-}
-
-#cpu,
-#disk,
-#memory,
-#temperature {
   padding: 5px 8px;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
@@ -96,19 +104,20 @@ window#waybar {
  * │                   GRUPOS (DRAWER)                       │
  * ╘═════════════════════════════════════════════════════════╛
  */
-#group-media {
+
+#group-hardware {
   padding: 0;
   margin: 0;
 }
 
-#group-media .media-hidden {
+#group-hardware .hardware-hidden {
   opacity: 0;
   margin: 0;
   padding: 0;
   transition: opacity 0.3s ease;
 }
 
-#group-media:hover .media-hidden {
+#group-hardware:hover .hardware-hidden {
   opacity: 1;
 }
 
@@ -128,32 +137,47 @@ window#waybar {
   opacity: 1;
 }
 
-#group-hardware {
+#group-media {
   padding: 0;
   margin: 0;
 }
 
-#group-hardware .hardware-hidden {
+#group-media .media-hidden {
   opacity: 0;
   margin: 0;
   padding: 0;
   transition: opacity 0.3s ease;
 }
 
-#group-hardware:hover .hardware-hidden {
+#group-media:hover .media-hidden {
+  opacity: 1;
+}
+
+#group-status {
+  padding: 0;
+  margin: 0;
+}
+
+#group-status .status-hidden {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+#group-status:hover .status-hidden {
   opacity: 1;
 }
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │             ESTILOS DE MÓDULOS INDIVIDUALES             │
+ * │      IZQUIERDA — Lanzador, sistema, hardware            │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
-@keyframes blink {
-  to {
-    color: @overlay1;
-  }
+#custom-launcher {
+  font-size: 20px;
+  color: @mauve;
 }
 
 #backlight {
@@ -177,10 +201,6 @@ window#waybar {
   animation-direction: alternate;
 }
 
-#clock {
-  color: @sky;
-}
-
 #cpu {
   color: @sky;
 }
@@ -190,6 +210,18 @@ window#waybar {
 }
 
 #cpu.critical {
+  color: @red;
+}
+
+#memory {
+  color: @sky;
+}
+
+#memory.warning {
+  color: @yellow;
+}
+
+#memory.critical {
   color: @red;
 }
 
@@ -207,24 +239,46 @@ window#waybar {
   border: 1px solid @red;
 }
 
-#custom-launcher {
-  font-size: 20px;
-  background-color: shade(@base, 1.1);
-  color: @mauve;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  padding: 5px 8px;
-  margin: 8px 0;
+#temperature {
+  color: @teal;
 }
 
-#custom-power {
-  font-size: 20px;
+#temperature.warning {
+  color: @yellow;
+}
+
+#temperature.critical {
   color: @red;
-  background-color: shade(@base, 1.1);
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  padding: 5px 8px;
-  margin: 8px 0;
+}
+
+#custom-pacman.has-updates {
+  color: @yellow;
+}
+
+#network {
+  color: @green;
+}
+
+#network.disabled,
+#network.disconnected {
+  color: #bf616a;
+}
+
+#bluetooth {
+  color: @green;
+}
+
+#keyboard-state label {
+  color: @overlay1;
+  margin-right: 4px;
+}
+
+#keyboard-state label.capslock.locked {
+  color: @yellow;
+}
+
+#keyboard-state label.numlock.locked {
+  color: @yellow;
 }
 
 #idle_inhibitor.deactivated {
@@ -235,59 +289,40 @@ window#waybar {
   color: @yellow;
 }
 
-#custom-pacman.has-updates {
-  color: @yellow;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  margin: 8px 0;
-  padding: 5px 8px;
-  background-color: shade(@base, 1.1);
-}
-
-#custom-pacman.uptodate {
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  margin: 8px 0;
-  padding: 5px 8px;
-  background-color: shade(@base, 1.1);
-}
-
-#keyboard-state label {
-  color: @overlay1;
-  margin-right: 4px;
-}
-
-#keyboard-state label.capslock.locked {
-  color: @yellow; /* amarillo para Caps Lock */
-}
-
-#keyboard-state label.numlock.locked {
-  color: @yellow; /* amarillo para Num Lock */
-}
-
-#memory {
-  color: @sky;
-  padding: 5px 10px;
-}
-
-#memory.warning {
-  color: @yellow;
-}
-
-#memory.critical {
-  color: @red;
-}
-
-#mpd {
+#scratchpad {
   color: @mauve;
-  padding: 5px 10px;
 }
 
-#mpd.2,
-#mpd.3,
-#mpd.4 {
-  background-color: @base;
-  font-size: 14px;
+#scratchpad.empty {
+  color: @overlay1;
+}
+
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │      CENTRO — Reloj                                    │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
+
+#clock {
+  color: @sky;
+}
+
+/*
+ * ╒═════════════════════════════════════════════════════════╕
+ * │      DERECHA — Mode, bandeja, media, audio, sesión      │
+ * ╘═════════════════════════════════════════════════════════╛
+ */
+
+#wireplumber {
+  color: @flamingo;
+}
+
+#wireplumber#mic {
+  color: @flamingo;
+}
+
+#wireplumber.muted {
+  color: @overlay1;
 }
 
 #mpris {
@@ -310,50 +345,18 @@ window#waybar {
   padding-left: 6px;
 }
 
-#network {
-  color: @green;
-}
-
-#network.disabled,
-#network.disconnected {
-  color: #bf616a;
-}
-
-#temperature {
-  color: @teal;
-}
-
-#temperature.warning {
-  color: @yellow;
-}
-
-#temperature.critical {
-  color: @red;
-}
-
-#scratchpad {
+#mpd {
   color: @mauve;
-  border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
-  background-color: shade(@base, 1.1);
-  padding: 5px 8px;
-  margin: 8px 0 8px 12px;
 }
 
-#scratchpad.empty {
-  color: @overlay1;
+#mpd.2,
+#mpd.3,
+#mpd.4 {
+  background-color: @base;
+  font-size: 14px;
 }
 
-#wireplumber {
-  color: @flamingo;
-  padding: 5px 10px;
-}
-
-#wireplumber#mic {
-  color: @flamingo;
-  padding: 5px 10px;
-}
-
-#wireplumber.muted {
-  color: @overlay1;
+#custom-power {
+  font-size: 20px;
+  color: @red;
 }

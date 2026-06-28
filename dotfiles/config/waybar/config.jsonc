@@ -15,115 +15,122 @@
   "position": "top", // Posición: top | bottom | left | right
   "height": 20, // Altura de la barra
   "exclusive": true,
-  "margin": "4 8 0 8", // Márgenes exteriores
+  "margin": "4 0 0 0", // Ancho completo, solo margen superior
   "spacing": 12, // px entre módulos adyacentes
   "reload_style_on_change": true, // recarga style.css en disco automáticamente
 
   // ── Distribución de módulos ──────────────────────────────
   "modules-left": [
     "custom/launcher",
-    "clock",
-    "tray",
-    "sway/mode",
-    // "custom/cava-internal",
-    "group/media",
-    "idle_inhibitor"
-  ],
-  "modules-center": [
-    "keyboard-state",
-    "sway/language",
     "custom/workspaces",
+    "group/status",
+    "sway/mode",
+    "sway/scratchpad",
+    "tray",
+    "group/hardware",
+    "custom/pacman",
     "backlight"
   ],
+  "modules-center": [
+    "clock"
+  ],
   "modules-right": [
-    "sway/scratchpad",
     "custom/clipboard",
     "privacy",
     "group/audio",
-    "group/hardware",
-    "battery",
-    "custom/pacman",
+    "group/media",
+    "custom/cava-internal",
     "bluetooth",
     "network",
+    "battery",
     "custom/power"
   ],
 
-  // ── Módulos de Sway ──────────────────────────────────────
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
+  // ╒═══════════════════════════════════════════════════════╕
+  // │              MÓDULOS — IZQUIERDA                      │
+  // │  Lanzador, workspaces, estado, hardware, sistema       │
+  // ╘═══════════════════════════════════════════════════════╛
+
+  "custom/launcher": {
+    "format": "",
+    "on-click": "rofi -show drun",
+    "tooltip": false
   },
+
+  // ── Workspaces (orbit-ws) ─────────────────────────────────
+  "custom/workspaces": {
+    "exec": "~/indicator/orbit-ws/target/release/orbit-ws ~/.kasumi/dotfiles/config/waybar/workspaces.toml",
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "swaymsg workspace next",
+    "on-scroll-up": "swaymsg workspace prev",
+    "on-scroll-down": "swaymsg workspace next"
+  },
+
+  // ── Grupo status (drawer) ──────────────────────────────────
+  // keyboard-state siempre visible como label; idle, language
+  // y mode se revelan al hover.
+  "group/status": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "status-hidden",
+      "click-to-reveal": false
+    },
+    "modules": [
+      "keyboard-state",
+      "idle_inhibitor",
+      "sway/language"
+    ]
+  },
+
+  "keyboard-state": {
+    "numlock": true,
+    "capslock": true,
+    "format": "{icon} {name}",
+    "format-icons": {
+      "locked": "",
+      "unlocked": "󱃓"
+    }
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon} Idle",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    },
+    "tooltip-format-activated": "Inhibición activa (30 min)",
+    "tooltip-format-deactivated": "Click para inhibir idle"
+  },
+
   "sway/language": {
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "format": "  {}",
     "tooltip": false
   },
 
-  // ── Media (MPRIS nativo) ─────────────────────────────────
-  // Acciones built-in:
-  //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
-  //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
-  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
-  "mpris": {
-    "format": "{player_icon} {status_icon} {dynamic}",
-    "format-paused": "{player_icon} {status_icon} <i>{dynamic}</i>",
-    "player-icons": {
-      //   "mpd": "󰎆",
-      //   "firefox": "󰌀",
-      //   "default": "_music"
-    },
-    "status-icons": {
-      "playing": "",
-      "paused": "",
-      "stopped": ""
-    },
-    "dynamic-order": ["title", "artist"],
-    "on-click-right": "",
-    "on-click-middle": "",
-    "on-scroll-up": "playerctl position 5+",
-    "on-scroll-down": "playerctl position 5-",
+  "sway/mode": {
+    "format": "<span style=\"italic\">{}</span>"
+  },
+
+  "sway/scratchpad": {
+    "format": "{icon} {count}",
+    "show-empty": false,
+    "format-icons": ["󰆣", ""],
     "tooltip": true,
-    "max-length": 45
+    "tooltip-format": "{app}: {title}"
   },
 
-  // ── Grupo media (drawer) ─────────────────────────────────
-  "group/media": {
-    "orientation": "horizontal",
-    "drawer": {
-      "transition-duration": 300,
-      "children-class": "media-hidden",
-      "click-to-reveal": false
-    },
-    "modules": [
-      "mpris",
-      "mpd"
-    ]
+  "tray": {
+    "icon-size": 18,
+    "spacing": 5
   },
 
-  // ── Grupo audio (drawer) ──────────────────────────────────
-  "group/audio": {
-    "orientation": "horizontal",
-    "drawer": {
-      "transition-duration": 300,
-      "children-class": "audio-hidden",
-      "click-to-reveal": false,
-      "transition-left-to-right": false
-    },
-    "modules": [
-      "wireplumber",
-      "wireplumber#mic"
-    ]
-  },
-
-  "disk": {
-    "path": "/",
-    "interval": 60,
-    "format": " {percentage_used}%",
-    "tooltip-format": "{used} / {total}  ({percentage_used}%)",
-    "states": {
-      "warning": 80,
-      "critical": 90
-    },
-    "on-click": "kitty -e ncdu /"
+  "backlight": {
+    "format": "{icon} {percent: >1}%",
+    "format-icons": ["", ""],
+    "scroll-step": 5
   },
 
   // ── Grupo hardware (drawer) ──────────────────────────────
@@ -142,77 +149,14 @@
     ]
   },
 
-  // "cava": {
-  //   "cava_config": "$HOME/.config/cava/cava-waybarv2.conf",
-  //
-  //   // ── Waybar-specific ───────────────────────────────────
-  //   "input_delay": 2,
-  //   // "bar_spacing": 2,
-  //   // "bar_width": 2,
-  //   "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-  //   "hide_on_silence": true,
-  //   "sleep_timer": 5,
-  //
-  //   // ── Actions ───────────────────────────────────────────
-  //   "actions": {
-  //     "on-click-right": "mode"
-  //   }
-  // },
-
-  "custom/cava-internal": {
-    "format": "{}",
-    "exec": "~/.config/sway/scripts/cava-bar",
-    "on-click": "pkill -x waybar; swaymsg reload"
+  "temperature": {
+    "thermal-zone": 9,
+    "warning-threshold": 70,
+    "critical-threshold": 80,
+    "format-critical": "  {temperatureC}°C",
+    "format": " {temperatureC}°C"
+    // "on-click": "kitty -e sensors"
   },
-
-  // ── Media (MPD — tiempo) ─────────────────────────────────
-  // Exclusivo para mostrar tiempo de reproducción. Sin acciones;
-  // todos los controles (play, prev, next) están en mpris.
-  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPD
-  "mpd": {
-    "format": "{stateIcon} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
-    "format-paused": " {elapsedTime:%M:%S}/{totalTime:%M:%S}",
-    "format-stopped": "",
-    "format-disconnected": "",
-    "tooltip-format": "{artist} - {title}",
-    "state-icons": {
-      "playing": "",
-      "paused": ""
-    },
-    "on-click": "",
-    "on-click-right": "",
-    "on-click-middle": "",
-    "on-scroll-up": "",
-    "on-scroll-down": ""
-  },
-
-  // ╒═══════════════════════════════════════════════════════╕
-  // │                 RECURSOS DEL SISTEMA                  │
-  // ╘═══════════════════════════════════════════════════════╛
-  "backlight": {
-    "format": "{icon} {percent: >1}%",
-    "format-icons": ["", ""],
-    "scroll-step": 5
-  },
-
-  "battery": {
-    "states": { "warning": 30, "critical": 15 },
-    "format": "{icon} {capacity: >3}% 󰚥",
-    "format-charging": "{icon} {capacity: >3}% 󱐥",
-    "format-discharging": "{icon} {capacity: >3}% 󱐤 ",
-    "format-time": "{H}h {M}m",
-    "format-icons": ["", "", "", "", ""],
-    "interval": 15,
-    "design-capacity": true,
-    "tooltip": true,
-    "tooltip-format": "{timeTo}    {cycles}    {health}%",
-    "events": {
-      "on-discharging-warning": "notify-send -u normal '󱇏  Batería baja' 'Queda poco...'",
-      "on-discharging-critical": "notify-send -u critical '󰯈  Batería crítica' 'Conectá el cargador'"
-    }
-    // "on-click": "kitty --title powertop -e sudo powertop"
-  },
-
   "cpu": {
     "states": { "warning": 70, "critical": 85 },
     "format": " {usage}%",
@@ -223,108 +167,36 @@
     "format": " {}%",
     "on-click": "kitty -e gotop"
   },
-  "temperature": {
-    "thermal-zone": 9,
-    "warning-threshold": 70,
-    "critical-threshold": 80,
-    "format-critical": "  {temperatureC}°C",
-    "format": " {temperatureC}°C"
-    // "on-click": "kitty -e sensors"
-  },
-
-  // ── Conectividad ─────────────────────────────────────────
-  "network": {
-    "format": "󰤮 Disabled",
-    "format-wifi": "{icon} {essid}",
-    "format-ethernet": "󱙴 Wired",
-    "format-linked": "󱘖 No IP",
-    "format-disconnected": "󰌙 Off",
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "tooltip": true,
-    "tooltip-format-wifi": "{essid}  ({signalStrength}%)  {frequency}GHz\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
-    "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
-    "on-click": "iwctl"
-  },
-
-  "wireplumber": {
-    "format": "{icon} {volume: >2}%",
-    "format-icons": {
-      "default": ["", "", ""]
+  "disk": {
+    "path": "/",
+    "interval": 60,
+    "format": " {percentage_used}%",
+    "tooltip-format": "{used} / {total}  ({percentage_used}%)",
+    "states": {
+      "warning": 80,
+      "critical": 90
     },
-    "scroll-step": 2,
-    "format-muted": "{icon} MUTED",
-    "max-volume": 150,
-    "tooltip": true,
-    "tooltip-format": "{node_name}  {volume}%",
-    "on-click": "kitty --title wiremix -e wiremix",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    "on-click": "kitty -e ncdu /"
   },
 
-  "wireplumber#mic": {
-    "node-type": "Audio/Source",
-    "format": "{icon} {volume: >2}%",
-    "format-muted": "{icon} MUTED",
-    "format-icons": {
-      "default": ["󰍮", "󰍮", "󰍬"]
-    },
-    "scroll-step": 2,
-    "on-click": "kitty --title wiremix -e wiremix",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-  },
-
-  "bluetooth": {
-    "format": "󰂯 {status}", // Encendido sin conexión
-    "format-disabled": "󰂲", // Apagado
-    "format-connected": "󰂰 {num_connections}", // Dispositivo conectado
-    "tooltip-format": "Dispositivo(s): {device_alias}",
-    "on-click": "blueberry"
-  },
-
-  // ── Utilidades ───────────────────────────────────────────
-  "custom/workspaces": {
-    "exec": "~/indicator/orbit-ws/target/release/orbit-ws ~/.kasumi/dotfiles/config/waybar/workspaces.toml",
+  // ── Verificador de actualizaciones ─────────────────────────
+  // exec-if evita ejecutar checkupdates/paru sin conectividad,
+  // previniendo timeouts y errores al cerrar sesion.
+  "custom/pacman": {
     "return-type": "json",
-    "format": "{}",
-    "on-click": "swaymsg workspace next",
-    "on-scroll-up": "swaymsg workspace prev",
-    "on-scroll-down": "swaymsg workspace next"
+    "format": " PKG {}",
+    "interval": 300,
+    "exec-if": "ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1",
+    "exec": "~/.config/sway/scripts/check-updates",
+    "on-click": "kitty -e paru -Syu",
+    "signal": 8
   },
 
-  "sway/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": ["󰆣", ""],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
-  },
+  // ╒═══════════════════════════════════════════════════════╕
+  // │              MÓDULOS — CENTRO                         │
+  // │  Reloj                                                │
+  // ╘═══════════════════════════════════════════════════════╛
 
-  "keyboard-state": {
-    "numlock": true,
-    "capslock": true,
-    "format": "{icon} {name}",
-    "format-icons": {
-      "locked": "",
-      "unlocked": "󱃓"
-    }
-  },
-  "tray": {
-    "icon-size": 18,
-    "spacing": 5
-  },
-  "privacy": {
-    "modules": [
-      { "type": "screenshare", "tooltip": true },
-      { "type": "audio-in", "tooltip": true }
-    ],
-    "icon-size": 16,
-    // cava captura audio del sink (monitor_FL/monitor_FR) para visualización
-    // pero no etiqueta sus streams con stream.monitor, por lo que PipeWire
-    // los clasifica como audio-in y el módulo privacy los detecta como falso
-    // positivo. Ignorar por nombre es el mecanismo oficial documentado.
-    "ignore": [
-      { "type": "audio-in", "name": "cava" }
-    ]
-  },
   "clock": {
     "timezones": [
       "",
@@ -355,41 +227,188 @@
       "on-scroll-up": "shift_up",
       "on-scroll-down": "shift_down"
     },
-    "format": " {:%a %d %b  %I:%M %p}", // Formato 12h
+    "format": "{:%a %d ｜ %H:%M}", // "sáb 28 ｜ 14:30"
     "format-alt": " {:%d/%m/%Y  %H:%M}",
     "interval": 1
   },
-  "idle_inhibitor": {
-    "format": "{icon} Idle",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    },
-    "tooltip-format-activated": "Inhibición activa (30 min)",
-    "tooltip-format-deactivated": "Click para inhibir idle"
-  },
-  // ── Verificador de actualizaciones ────────────────────────────
-  // exec-if evita ejecutar checkupdates/paru sin conectividad,
-  // previniendo timeouts y errores al cerrar sesion.
-  "custom/pacman": {
-    "return-type": "json",
-    "format": " PKG {}",
-    "interval": 300,
-    "exec-if": "ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1",
-    "exec": "~/.config/sway/scripts/check-updates",
-    "on-click": "kitty -e paru -Syu",
-    "signal": 8
-  },
-  "custom/launcher": {
-    "format": "",
-    "on-click": "rofi -show drun",
-    "tooltip": false
-  },
+
+  // ╒═══════════════════════════════════════════════════════╕
+  // │              MÓDULOS — DERECHA                        │
+  // ╒═══════════════════════════════════════════════════════╕
+  // │  Portapapeles, privacidad, audio, media, apagado       │
+  // ╘═══════════════════════════════════════════════════════╛
+
   "custom/clipboard": {
     "format": "󰅍 Clip",
     "tooltip": false,
     "on-click": "~/.config/sway/scripts/clipboard text"
   },
+
+  "privacy": {
+    "modules": [
+      { "type": "screenshare", "tooltip": true },
+      { "type": "audio-in", "tooltip": true }
+    ],
+    "icon-size": 16,
+    // cava captura audio del sink (monitor_FL/monitor_FR) para visualización
+    // pero no etiqueta sus streams con stream.monitor, por lo que PipeWire
+    // los clasifica como audio-in y el módulo privacy los detecta como falso
+    // positivo. Ignorar por nombre es el mecanismo oficial documentado.
+    "ignore": [
+      { "type": "audio-in", "name": "cava" }
+    ]
+  },
+
+  // ── Grupo audio (drawer) ──────────────────────────────────
+  "group/audio": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "audio-hidden",
+      "click-to-reveal": false
+    },
+    "modules": [
+      "wireplumber",
+      "wireplumber#mic"
+    ]
+  },
+
+  "wireplumber": {
+    "format": "{icon} {volume: >2}%",
+    "format-icons": {
+      "default": ["", "", ""]
+    },
+    "scroll-step": 2,
+    "format-muted": "{icon} MUTED",
+    "max-volume": 150,
+    "tooltip": true,
+    "tooltip-format": "{node_name}  {volume}%",
+    "on-click": "kitty --title wiremix -e wiremix",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  },
+
+  "wireplumber#mic": {
+    "node-type": "Audio/Source",
+    "format": "{icon} {volume: >2}%",
+    "format-muted": "{icon} MUTED",
+    "format-icons": {
+      "default": ["󰍮", "󰍮", "󰍬"]
+    },
+    "scroll-step": 2,
+    "on-click": "kitty --title wiremix -e wiremix",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+  },
+
+  // ── Grupo media (drawer) ─────────────────────────────────
+  "group/media": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "media-hidden",
+      "click-to-reveal": false
+    },
+    "modules": [
+      "mpris",
+      "mpd"
+    ]
+  },
+
+  // ── Media (MPRIS nativo) ─────────────────────────────────
+  // Acciones built-in:
+  //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
+  //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
+  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
+  "mpris": {
+    "format": "{player_icon} {status_icon} {dynamic}",
+    "format-paused": "{player_icon} {status_icon} <i>{dynamic}</i>",
+    "player-icons": {
+      //   "mpd": "󰎆",
+      //   "firefox": "󰌀",
+      //   "default": "_music"
+    },
+    "status-icons": {
+      "playing": "",
+      "paused": "",
+      "stopped": ""
+    },
+    "dynamic-order": ["title", "artist"],
+    "on-click-right": "",
+    "on-click-middle": "",
+    "on-scroll-up": "playerctl position 5+",
+    "on-scroll-down": "playerctl position 5-",
+    "tooltip": true,
+    "max-length": 45
+  },
+
+  // ── Media (MPD — tiempo) ─────────────────────────────────
+  // Exclusivo para mostrar tiempo de reproducción. Sin acciones;
+  // todos los controles (play, prev, next) están en mpris.
+  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPD
+  "mpd": {
+    "format": "{stateIcon} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+    "format-paused": " {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+    "format-stopped": "",
+    "format-disconnected": "",
+    "tooltip-format": "{artist} - {title}",
+    "state-icons": {
+      "playing": "",
+      "paused": ""
+    },
+    "on-click": "",
+    "on-click-right": "",
+    "on-click-middle": "",
+    "on-scroll-up": "",
+    "on-scroll-down": ""
+  },
+
+  // ── Cava (visualizador de audio) ─────────────────────────
+  // Usa ~/.config/sway/scripts/cava-bar
+  "custom/cava-internal": {
+    "format": "{}",
+    "exec": "~/.config/sway/scripts/cava-bar",
+    "on-click": "pkill -x waybar; swaymsg reload"
+  },
+
+  // ── Conectividad ─────────────────────────────────────────
+  "bluetooth": {
+    "format": "󰂯 {status}", // Encendido sin conexión
+    "format-disabled": "󰂲", // Apagado
+    "format-connected": "󰂰 {num_connections}", // Dispositivo conectado
+    "tooltip-format": "Dispositivo(s): {device_alias}",
+    "on-click": "blueberry"
+  },
+
+  "network": {
+    "format": "󰤮 Disabled",
+    "format-wifi": "{icon} {essid}",
+    "format-ethernet": "󱙴 Wired",
+    "format-linked": "󱘖 No IP",
+    "format-disconnected": "󰌙 Off",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "tooltip": true,
+    "tooltip-format-wifi": "{essid}  ({signalStrength}%)  {frequency}GHz\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
+    "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
+    "on-click": "iwctl"
+  },
+
+  "battery": {
+    "states": { "warning": 30, "critical": 15 },
+    "format": "{icon} {capacity: >3}% 󰚥",
+    "format-charging": "{icon} {capacity: >3}% 󱐥",
+    "format-discharging": "{icon} {capacity: >3}% 󱐤 ",
+    "format-time": "{H}h {M}m",
+    "format-icons": ["", "", "", "", ""],
+    "interval": 15,
+    "design-capacity": true,
+    "tooltip": true,
+    "tooltip-format": "{timeTo}    {cycles}    {health}%",
+    "events": {
+      "on-discharging-warning": "notify-send -u normal '󱇏  Batería baja' 'Queda poco...'",
+      "on-discharging-critical": "notify-send -u critical '󰯈  Batería crítica' 'Conectá el cargador'"
+    }
+    // "on-click": "kitty --title powertop -e sudo powertop"
+  },
+
   "custom/power": {
     "format": "󰤆",
     "on-click": "~/.config/rofi/scripts/power-menu",
