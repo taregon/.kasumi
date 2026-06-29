@@ -45,7 +45,7 @@ window#waybar {
   color: @mauve;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
-  padding: 5px 8px;
+  padding: 6px 8px;
 }
 
 #custom-workspaces {
@@ -55,7 +55,7 @@ window#waybar {
   opacity: 1;
   border-radius: 4px;
   margin: 8px 0;
-  padding: 0 8px;
+  padding: 6px 8px;
 }
 
 #custom-workspaces.urgent {
@@ -71,8 +71,18 @@ window#waybar {
 
 /* ── Convencion de margenes ───────────────────────────────────
    Todos los modulos usan margin: 8px 0 (vertical).
-   El espaciado horizontal se maneja con padding: 5px 8px.
+   El espaciado horizontal se maneja con padding: 6px 8px.
    No usar margin horizontal en modulos individuales.
+   ────────────────────────────────────────────────────────── */
+
+/* ── Convencion de padding ───────────────────────────────────
+   padding unificado a 6px 8px para todos los modulos.
+   6px vertical: altura suficiente para respiro sin agrandar
+   la barra. 8px horizontal: consistente con el padding de
+   grupos drawer (0) y tooltips (4px 8px).
+   keyboard-state no declara padding; hereda del grupo base.
+   tray usa 6px 8px manual por su override de background.
+   drawers, #waybar * (reset) y tooltip label no se tocan.
    ────────────────────────────────────────────────────────── */
 
 #backlight,
@@ -96,7 +106,7 @@ window#waybar {
 #scratchpad,
 #temperature,
 #wireplumber {
-  padding: 5px 8px;
+  padding: 6px 8px;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
@@ -112,7 +122,7 @@ window#waybar {
 
 #tray {
   background-color: transparent;
-  padding: 5px 8px;
+  padding: 6px 8px;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   opacity: 1;
