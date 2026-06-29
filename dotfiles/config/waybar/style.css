@@ -28,7 +28,7 @@ tooltip label {
 
 window#waybar {
   border-bottom: 4px solid shade(@base, 1.1);
-  background-color: shade(#1e1e2e, 0.95);
+  background-color: alpha(@base, 0.85);
 }
 
 @keyframes blink {
@@ -69,6 +69,12 @@ window#waybar {
  * ╘═════════════════════════════════════════════════════════╛
  */
 
+/* ── Convencion de margenes ───────────────────────────────────
+   Todos los modulos usan margin: 8px 0 (vertical).
+   El espaciado horizontal se maneja con padding: 5px 8px.
+   No usar margin horizontal en modulos individuales.
+   ────────────────────────────────────────────────────────── */
+
 #backlight,
 #battery,
 #bluetooth,
@@ -89,12 +95,26 @@ window#waybar {
 #privacy,
 #scratchpad,
 #temperature,
-#tray,
 #wireplumber {
   padding: 5px 8px;
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   background-color: shade(@base, 1.1);
+  opacity: 1;
+  margin: 8px 0;
+}
+
+#keyboard-state {
+  background-color: transparent;
+  border: none;
+  margin: 8px 0;
+}
+
+#tray {
+  background-color: transparent;
+  padding: 5px 8px;
+  border: 1px solid shade(@base, 1.4);
+  border-radius: 4px;
   opacity: 1;
   margin: 8px 0;
 }
@@ -153,22 +173,6 @@ window#waybar {
   opacity: 1;
 }
 
-#group-status {
-  padding: 0;
-  margin: 0;
-}
-
-#group-status .status-hidden {
-  opacity: 0;
-  margin: 0;
-  padding: 0;
-  transition: opacity 0.3s ease;
-}
-
-#group-status:hover .status-hidden {
-  opacity: 1;
-}
-
 /*
  * ╒═════════════════════════════════════════════════════════╕
  * │      IZQUIERDA — Lanzador, sistema, hardware            │
@@ -178,10 +182,6 @@ window#waybar {
 #custom-launcher {
   font-size: 20px;
   color: @mauve;
-}
-
-#backlight {
-  color: @yellow;
 }
 
 #battery {
@@ -291,6 +291,8 @@ window#waybar {
 
 #scratchpad {
   color: @mauve;
+  background-color: transparent;
+  border: none;
 }
 
 #scratchpad.empty {
@@ -309,9 +311,14 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │      DERECHA — Mode, bandeja, media, audio, sesión      │
+ * │      DERECHA — Portapapeles, brillo, media, audio,       │
+ * │      batería, power                                      │
  * ╘═════════════════════════════════════════════════════════╛
  */
+
+#backlight {
+  color: @yellow;
+}
 
 #wireplumber {
   color: @flamingo;
