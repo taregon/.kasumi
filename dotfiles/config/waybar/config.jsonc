@@ -16,30 +16,32 @@
   "height": 20, // Altura de la barra
   "exclusive": true,
   "margin": "4 0 0 0", // Ancho completo, solo margen superior
-  "spacing": 12, // px entre módulos adyacentes
+  "spacing": 8, // px entre módulos adyacentes
   "reload_style_on_change": true, // recarga style.css en disco automáticamente
 
   // ── Distribución de módulos ──────────────────────────────
   "modules-left": [
     "custom/launcher",
     "custom/workspaces",
-    "group/status",
-    "sway/mode",
-    "sway/scratchpad",
-    "tray",
     "group/hardware",
-    "custom/pacman",
-    "backlight"
+    "idle_inhibitor",
+    "custom/clipboard",
+    "sway/scratchpad",
+    "keyboard-state",
+    "tray",
+    "sway/language",
+    "sway/mode",
+    "custom/pacman"
   ],
   "modules-center": [
     "clock"
   ],
   "modules-right": [
-    "custom/clipboard",
     "privacy",
-    "group/audio",
+    "backlight",
     "group/media",
     "custom/cava-internal",
+    "group/audio",
     "bluetooth",
     "network",
     "battery",
@@ -67,23 +69,6 @@
     "on-scroll-down": "swaymsg workspace next"
   },
 
-  // ── Grupo status (drawer) ──────────────────────────────────
-  // keyboard-state siempre visible como label; idle, language
-  // y mode se revelan al hover.
-  "group/status": {
-    "orientation": "horizontal",
-    "drawer": {
-      "transition-duration": 300,
-      "children-class": "status-hidden",
-      "click-to-reveal": false
-    },
-    "modules": [
-      "keyboard-state",
-      "idle_inhibitor",
-      "sway/language"
-    ]
-  },
-
   "keyboard-state": {
     "numlock": true,
     "capslock": true,
@@ -95,7 +80,7 @@
   },
 
   "idle_inhibitor": {
-    "format": "{icon} Idle",
+    "format": "{icon} ",
     "format-icons": {
       "activated": "",
       "deactivated": ""
@@ -125,12 +110,6 @@
   "tray": {
     "icon-size": 18,
     "spacing": 5
-  },
-
-  "backlight": {
-    "format": "{icon} {percent: >1}%",
-    "format-icons": ["", ""],
-    "scroll-step": 5
   },
 
   // ── Grupo hardware (drawer) ──────────────────────────────
@@ -239,8 +218,8 @@
   // ╘═══════════════════════════════════════════════════════╛
 
   "custom/clipboard": {
-    "format": "󰅍 Clip",
-    "tooltip": false,
+    "format": "󰆒",
+    "tooltip-format": "Historial del portapapeles (click para abrir)",
     "on-click": "~/.config/sway/scripts/clipboard text"
   },
 
@@ -265,7 +244,8 @@
     "drawer": {
       "transition-duration": 300,
       "children-class": "audio-hidden",
-      "click-to-reveal": false
+      "click-to-reveal": false,
+      "transition-left-to-right": false
     },
     "modules": [
       "wireplumber",
@@ -299,13 +279,20 @@
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
   },
 
+  "backlight": {
+    "format": "{icon} {percent: >1}%",
+    "format-icons": ["", ""],
+    "scroll-step": 5
+  },
+
   // ── Grupo media (drawer) ─────────────────────────────────
   "group/media": {
     "orientation": "horizontal",
     "drawer": {
       "transition-duration": 300,
       "children-class": "media-hidden",
-      "click-to-reveal": false
+      "click-to-reveal": false,
+      "transition-left-to-right": false
     },
     "modules": [
       "mpris",
@@ -380,7 +367,7 @@
 
   "network": {
     "format": "󰤮 Disabled",
-    "format-wifi": "{icon} {essid}",
+    "format-wifi": "{icon} {frequency}GHz",
     "format-ethernet": "󱙴 Wired",
     "format-linked": "󱘖 No IP",
     "format-disconnected": "󰌙 Off",
@@ -388,7 +375,7 @@
     "tooltip": true,
     "tooltip-format-wifi": "{essid}  ({signalStrength}%)  {frequency}GHz\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
     "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
-    "on-click": "iwctl"
+    "on-click": "iwgtk"
   },
 
   "battery": {
