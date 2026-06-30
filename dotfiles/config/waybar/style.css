@@ -80,9 +80,17 @@ window#waybar {
    6px vertical: altura suficiente para respiro sin agrandar
    la barra. 8px horizontal: consistente con el padding de
    grupos drawer (0) y tooltips (4px 8px).
-   keyboard-state no declara padding; hereda del grupo base.
-   tray usa 6px 8px manual por su override de background.
+   Si un modulo necesita override visual (background, border),
+   se declara autosuficiente: se remueve del grupo base y se
+   le asignan padding y margin explicitos en su propia regla.
+   Ej: keyboard-state, scratchpad.
    drawers, #waybar * (reset) y tooltip label no se tocan.
+   ────────────────────────────────────────────────────────── */
+
+/* ── Separacion entre modulos ────────────────────────────────
+   El espacio entre modulos adyacentes se controla desde
+   config.jsonc: "spacing": 8 px. No es un valor CSS.
+   No agregar margin horizontal a modulos individuales.
    ────────────────────────────────────────────────────────── */
 
 #backlight,
@@ -96,14 +104,12 @@ window#waybar {
 #custom-power,
 #disk,
 #idle_inhibitor,
-#keyboard-state,
 #language,
 #memory,
 #mpd,
 #mpris,
 #network,
 #privacy,
-#scratchpad,
 #temperature,
 #wireplumber {
   padding: 6px 8px;
@@ -117,6 +123,7 @@ window#waybar {
 #keyboard-state {
   background-color: transparent;
   border: none;
+  padding: 6px 8px;
   margin: 8px 0;
 }
 
@@ -303,6 +310,8 @@ window#waybar {
   color: @mauve;
   background-color: transparent;
   border: none;
+  padding: 6px 8px;
+  margin: 8px 0;
 }
 
 #scratchpad.empty {
