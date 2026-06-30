@@ -307,7 +307,7 @@
   // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
   "mpris": {
     "format": "{player_icon} {status_icon} {dynamic}",
-    "format-paused": "{player_icon} {status_icon} <i>{dynamic}</i>",
+    "format-paused": "{player_icon} {status_icon} {dynamic}",
     "player-icons": {
       //   "mpd": "󰎆",
       //   "firefox": "󰌀",
