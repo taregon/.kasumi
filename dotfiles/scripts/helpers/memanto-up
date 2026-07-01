@@ -14,6 +14,7 @@ C_RST="\033[0m"       # reset
 
 MOORCHEH_URL="http://localhost:8080"
 MEMANTO_URL="http://localhost:8000"
+MEMANTO_LOG="/tmp/memanto.log"
 AGENT_ID="${MEMANTO_AGENT:-opencode}"
 
 MEMANTO_PID=""
@@ -33,7 +34,9 @@ memanto_health() {
 
 memanto_start_moorcheh() {
     echo -e " ${C_STEP}  Moorcheh (backend vectorial)${C_RST}"
-    moorcheh up 2>&1 | sed 's/^/   /'
+    while IFS= read -r line; do
+        echo "   $line"
+    done < <(moorcheh up 2>&1)
     if memanto_health "$MOORCHEH_URL"; then
         echo -e "   ${C_OK}  Moorcheh listo${C_RST}"
     else
@@ -48,7 +51,7 @@ memanto_start() {
         echo -e "   ${C_OK}  MEMANTO ya estaba corriendo${C_RST}"
         return 0
     fi
-    nohup memanto serve > /tmp/memanto.log 2>&1 &
+    nohup memanto serve > "$MEMANTO_LOG" 2>&1 &
     MEMANTO_PID=$!
     # Esperar hasta 15s a que responda
     local retries=0
@@ -58,7 +61,7 @@ memanto_start() {
     done
 
     if ! memanto_health "$MEMANTO_URL"; then
-        echo -e "   ${C_ACTION}  MEMANTO no arrancó, revisa /tmp/memanto.log${C_RST}"
+        echo -e "   ${C_ACTION}  MEMANTO no arrancó, revisa $MEMANTO_LOG${C_RST}"
         return 1
     fi
     echo -e "   ${C_OK}  MEMANTO listo (PID $MEMANTO_PID)${C_RST}"
@@ -80,17 +83,18 @@ memanto_activate_agent() {
 
 # ── Orquestacion ────────────────────────────────────────────────────
 
-echo -e "\n ${C_STEP}── Iniciando MEMANTO ──${C_RST}\n"
+echo -e "\n ${C_STEP}── Iniciando MEMANTO ──${C_RST}"
 
 if ! memanto_health "$MOORCHEH_URL"; then
-    memanto_start_moorcheh
+    memanto_start_moorcheh || exit 1
 else
     echo -e " ${C_OK}  Moorcheh ya disponible${C_RST}"
 fi
 
-memanto_start
+memanto_start || exit 1
 memanto_activate_agent
 
+# Trap se desactiva: el proceso MEMANTO debe seguir corriendo tras la ejecución
 MEMANTO_PID=""
 echo -e "\n ${C_OK}── MEMANTO operativo ──${C_RST}"
 echo -e "    API:     $MEMANTO_URL"
