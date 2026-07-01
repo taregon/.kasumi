@@ -424,6 +424,14 @@ fi
 #   █   █   █ █   █ █      ▀▀▀▄
 #   ▀    ▀▀▀   ▀▀▀  ▀▀▀▀▀ ▀▀▀▀
 # ╓
+# ║ Ejecuta fastfetch solo en shells interactivas.
+# ║ Evita contaminar scripts, subshells y `zsh -c`.
+# ╙
+# if [[ -o interactive ]]; then
+#     fastfetch
+# fi
+
+# ╓
 # ║ Zoxide: navegación inteligente por directorios
 # ║ Sustituye el uso tradicional de `cd` con el comando `z`
 # ║ Aprende automáticamente de los directorios más utilizados
