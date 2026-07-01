@@ -51,20 +51,27 @@ memanto_start() {
     nohup memanto serve > /tmp/memanto.log 2>&1 &
     MEMANTO_PID=$!
     # Esperar hasta 15s a que responda
-    for i in $(seq 1 15); do
-        if memanto_health "$MEMANTO_URL"; then
-            echo -e "   ${C_OK}  MEMANTO listo (PID $MEMANTO_PID)${C_RST}"
-            return 0
-        fi
+    local retries=0
+    while ! memanto_health "$MEMANTO_URL" && ((retries < 15)); do
         sleep 1
+        ((retries++))
     done
-    echo -e "   ${C_ACTION}  MEMANTO no arrancó, revisa /tmp/memanto.log${C_RST}"
-    return 1
+
+    if ! memanto_health "$MEMANTO_URL"; then
+        echo -e "   ${C_ACTION}  MEMANTO no arrancó, revisa /tmp/memanto.log${C_RST}"
+        return 1
+    fi
+    echo -e "   ${C_OK}  MEMANTO listo (PID $MEMANTO_PID)${C_RST}"
 }
 
 memanto_activate_agent() {
     echo -e " ${C_STEP}  Activando agente '$AGENT_ID'${C_RST}"
-    if memanto agent activate "$AGENT_ID" 2>&1 | grep -qi "already\|activado"; then
+    local output
+    output=$(memanto agent activate "$AGENT_ID" 2>&1) || {
+        echo -e "   ${C_ACTION}  Error activando agente${C_RST}"
+        return 1
+    }
+    if echo "$output" | grep -qi "already\|activado"; then
         echo -e "   ${C_OK}  Agente ya activo${C_RST}"
     else
         echo -e "   ${C_OK}  Agente activado${C_RST}"
