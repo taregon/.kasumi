@@ -7,11 +7,6 @@ set -euo pipefail
 
 # ── Constantes ──────────────────────────────────────────────────────
 
-C_STEP="\033[0;34m"   # blue
-C_OK="\033[0;32m"     # green
-C_ACTION="\033[0;33m" # yellow
-C_RST="\033[0m"       # reset
-
 MOORCHEH_URL="http://localhost:8080"
 MEMANTO_URL="http://localhost:8000"
 MEMANTO_LOG="/tmp/memanto.log"
@@ -33,22 +28,22 @@ memanto_health() {
 }
 
 memanto_start_moorcheh() {
-    echo -e " ${C_STEP}  Moorcheh (backend vectorial)${C_RST}"
+    echo "  Moorcheh (backend vectorial)"
     while IFS= read -r line; do
         echo "   $line"
     done < <(moorcheh up 2>&1)
     if memanto_health "$MOORCHEH_URL"; then
-        echo -e "   ${C_OK}  Moorcheh listo${C_RST}"
+        echo "     Moorcheh listo"
     else
-        echo -e "   ${C_ACTION}  Moorcheh no responde, revisa docker${C_RST}"
+        echo "  Moorcheh no responde, revisa docker"
         return 1
     fi
 }
 
 memanto_start() {
-    echo -e " ${C_STEP}  MEMANTO REST API${C_RST}"
+    echo "  MEMANTO REST API"
     if memanto_health "$MEMANTO_URL"; then
-        echo -e "   ${C_OK}  MEMANTO ya estaba corriendo${C_RST}"
+        echo "     MEMANTO ya estaba corriendo"
         return 0
     fi
     nohup memanto serve > "$MEMANTO_LOG" 2>&1 &
@@ -61,34 +56,34 @@ memanto_start() {
     done
 
     if ! memanto_health "$MEMANTO_URL"; then
-        echo -e "   ${C_ACTION}  MEMANTO no arrancó, revisa $MEMANTO_LOG${C_RST}"
+        echo "  MEMANTO no arrancó, revisa $MEMANTO_LOG"
         return 1
     fi
-    echo -e "   ${C_OK}  MEMANTO listo (PID $MEMANTO_PID)${C_RST}"
+    echo "     MEMANTO listo (PID $MEMANTO_PID)"
 }
 
 memanto_activate_agent() {
-    echo -e " ${C_STEP}  Activando agente '$AGENT_ID'${C_RST}"
+    echo "  Activando agente '$AGENT_ID'"
     local output
     output=$(memanto agent activate "$AGENT_ID" 2>&1) || {
-        echo -e "   ${C_ACTION}  Error activando agente${C_RST}"
+        echo "  Error activando agente"
         return 1
     }
     if echo "$output" | grep -qi "already\|activado"; then
-        echo -e "   ${C_OK}  Agente ya activo${C_RST}"
+        echo "     Agente ya activo"
     else
-        echo -e "   ${C_OK}  Agente activado${C_RST}"
+        echo "     Agente activado"
     fi
 }
 
 # ── Orquestacion ────────────────────────────────────────────────────
 
-echo -e "\n ${C_STEP}── Iniciando MEMANTO ──${C_RST}"
+echo -e "\n  Iniciando MEMANTO"
 
 if ! memanto_health "$MOORCHEH_URL"; then
     memanto_start_moorcheh || exit 1
 else
-    echo -e " ${C_OK}  Moorcheh ya disponible${C_RST}"
+    echo "     Moorcheh ya disponible"
 fi
 
 memanto_start || exit 1
@@ -96,7 +91,7 @@ memanto_activate_agent
 
 # Trap se desactiva: el proceso MEMANTO debe seguir corriendo tras la ejecución
 MEMANTO_PID=""
-echo -e "\n ${C_OK}── MEMANTO operativo ──${C_RST}"
-echo -e "    API:     $MEMANTO_URL"
-echo -e "    Backend: $MOORCHEH_URL"
-echo -e "    Agente:  $AGENT_ID\n"
+echo -e "\n  MEMANTO operativo"
+echo "    API:     $MEMANTO_URL"
+echo "    Backend: $MOORCHEH_URL"
+echo "    Agente:  $AGENT_ID"
