@@ -1,0 +1,82 @@
+[colors]
+firefox = "#f38ba8"
+keepassxc = "#a6e3a1"
+kitty = "#89b4fa"
+mpv = "#f9e2af"
+obsidian = "#cba6f7"
+telegramdesktop = "#cba6f7"
+thunar = "#fab387"
+zathura = "#94e2d5"
+zen = "#f38ba8"
+
+[settings]
+# Workspaces a mostrar (números). Si falta, usa los que existan en sway.
+workspace_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+
+# Color del número de cada workspace. Cualquier hex #rrggbb.
+num_color = "#a6adc8"
+
+# Icono y color para workspaces vacíos.
+# empty_icon: cualquier carácter o glifo Nerd Font.
+empty_icon = "\u00B7"
+empty_color = "#585b70"
+
+# Fallback cuando un app_id no tiene entrada en [icons] o [colors].
+default_icon = "▍"
+default_color = "#a6adc8"
+
+# Separador entre workspaces. Pueden ser espacios, caracteres, Pango.
+ws_separator = " "
+
+# Formato Pango para el workspace enfocado. {} se reemplaza por el contenido.
+focused_format = "<b>{}</b>"
+
+# Factor de atenuación (0.0 = invisible, 1.0 = sin cambio).
+dim_factor = 0.35
+# Offset mínimo de brillo para colores atenuados.
+dim_offset = 25.0
+
+# Mostrar tooltip al hover.
+tooltip_enabled = true
+# Template tooltip. Placeholders: {num}, {count}.
+# Si se omite, usa "ws{num}: {count} ventana(s)" con plural condicional.
+# tooltip_format = "ws{num}: {count}"
+
+# Segundos entre reintentos si la conexión IPC falla.
+reconnect_delay = 1
+
+# Clase CSS del JSON output (para target en style.css).
+output_class = "workspaces"
+
+# Icono para apps CON color configurado, en workspace no enfocado
+unfocused_icon = "▍"
+
+# Icono para apps CON color configurado, en workspace enfocado
+focused_icon = "▍"
+
+# Icono para apps CON color configurado, en workspace urgente
+urgent_icon = " "
+
+# Separador entre iconos dentro de un workspace (default " ").
+icon_separator = ""
+
+# Padding izquierdo y derecho del output completo (default "").
+pad_left = " "
+pad_right = ""
+
+# Tamaño de iconos Nerd Font. Valores posibles:
+#   "auto"      → enfocado normal, no enfocados font_size='smaller'
+#   "larger"    → todos un paso más grande (Pango)
+#   "smaller"   → todos un paso más pequeño
+#   "14pt"      → tamaño fijo en puntos
+#   "12000"     → tamaño en décimas de punto (12000 = 12pt)
+#   omitido     → sin atributo de tamaño (comportamiento por defecto)
+icon_size = "larger"
+
+# Workspaces con ventanas urgentes cambian a urgent_color.
+urgent_enabled = true
+urgent_color = "#f38ba8"
+
+# Prefijos de dominio a eliminar del app_id.
+# Ej: "org.telegram.desktop" → "telegramdesktop"
+strip_prefixes = ["org.", "com.", "net.", "io."]
