@@ -5,7 +5,7 @@
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 # Los atajos de teclado se encuentran en modules/
-# PEND: https://swaywm.com/sway_wiki/
+# PEND: https://swaywm.org/sway_wiki/
 # https://man.freebsd.org/cgi/man.cgi?query=sway&apropos=0&sektion=5&manpath=FreeBSD+15.0-RELEASE+and+Ports&format=html
 # ╒═════════════════════════════════════════════════════════════╕
 # │         NOTA: SINCRONIZACIÓN DE VARIABLES DE ENTORNO        │
@@ -29,38 +29,23 @@
   XDG_SESSION_TYPE \
   SWAYSOCK
 
-# ────────────────────────────────────────────────────────────
-# PEND: debes mover estos exec al archivo autostart
-# exec mpDris2
-# exec mpd
-# exec wl-paste --type images --watch cliphist store
-# exec wl-paste --type text --watch cliphist store
-# exec ~/.config/sway/scripts/bg_random_auto
-
 # ── VARIABLES ─────────────────────────────────────────────────
   set $mod   Mod4
-
   set $left  h
   set $down  j
   set $up    k
   set $right l
-
   floating_modifier $mod
 
-# ── BARRA DE ESTADO ───────────────────────────────────────────
-  bar {
-  swaybar_command waybar
-  }
-
-# ── DISTRIBUCIÓN DE TECLADO ───────────────────────────────────
+  # ── DISTRIBUCIÓN DE TECLADO ───────────────────────────────────
   input type:keyboard {
   xkb_layout  latam,us
   xkb_options grp:alt_shift_toggle
-# repeat_delay 300   PEND: cuando halla mejor teclado
+# repeat_delay 300   PEND: cuando haya mejor teclado
 # repeat_rate 50
   }
 
-# ── Touchpad / Click ──────────────────────────────────────────
+# ── TOUCHPAD / CLICK ──────────────────────────────────────────
   input type:touchpad {
   scroll_method edge
 # dwt enabled
@@ -68,14 +53,14 @@
 # middle_emulation enabled
   }
 
-# ── Output Scaling ────────────────────────────────────────────
+# ── OUTPUT SCALING ────────────────────────────────────────────
 # Lista las salidas detectadas por Sway y sus propiedades
 # Permite obtener el identificador exacto requerido en directivas `output`
 # Ejemplo:
 # swaymsg -t get_outputs
 # output "BOE 0x0852 Unknown" scale 1.25
 
-# ── GTK Theme ─────────────────────────────────────────────────
+# ── GTK THEME ─────────────────────────────────────────────────
   set $gnome-schema org.gnome.desktop.interface
   exec_always {
 #    gsettings set $gnome-schema gtk-theme 'Nightfox-Dusk-B'
@@ -91,7 +76,6 @@
 # ── CONFIGURACIONES ADICIONALES ───────────────────────────────
 # No muevas esta sección o sino cuando cargue la configuración,
 # no sabrán que teclas asignaste
-#
   include ~/.config/sway/modules/appearance.conf
   include ~/.config/sway/modules/autostart.conf
   include ~/.config/sway/modules/keybinds.conf
