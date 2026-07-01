@@ -320,6 +320,7 @@ install_app_general() {
     echo -e "${C_STEP}  Instalando aplicaciones generales${C_RST}"
     local pkgs
     pkgs=(
+        iwgtk            # Interfaz GTK para redes inalámbricas con iwd
         keepassxc        # Gestor de contraseñas local con base de datos cifrada
         localsend-bin    # Compartir archivos en red local sin configuración compleja
         spek-x-git       # Analizador visual de frecuencias en archivos de audio
@@ -405,7 +406,7 @@ install_utils_terminal() {
         pacman-contrib     # Utilidades adicionales para pacman
         pandoc             # Conversor de documentos markup entre formatos
         pastel             # Generación, análisis, conversión y manipulación de colores
-        python-pip         # Gestor de paquetes Python
+        python-pipx        # Ejecuta aplicaciones Python en entornos aislados
         ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
         source-highlight   # Resaltado de sintaxis para less y otros
