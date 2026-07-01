@@ -1,136 +1,142 @@
 #!/usr/bin/env bash
 # Visor de atajos de teclado de Sway con búsqueda vía rofi
+# Al seleccionar un atajo, ejecuta el comando correspondiente
 
 set -euo pipefail
 
 ROFI_THEME="$HOME/.config/rofi/themes/keybind-helper.rasi"
 mod="Win"
+scripts="$HOME/.config/sway/scripts"
 
 # ── Categorías y atajos ──────────────────────────────────────────
-# Formato: "icono descripción|tecla"
+# Formato: "icono descripción|tecla|comando"
+#   comando vacío o "_note_" → solo muestra, no ejecuta
+#   "exec ..." → evalúa lo que sigue
+#   resto → swaymsg <comando>
 
 entries=(
     # ── Aplicaciones ─────────────────────────────────────────────────
-    "  Abrir terminal|${mod}+Return"
-    "  Lanzador de aplicaciones|${mod}+n"
-    "󰎆  Obsidian|${mod}+o"
-    "  Thunar|${mod}+t"
-    "󰑂  Music (rmpc)|${mod}+m"
-    "  KeePassXC|${mod}+x"
-    "  Color picker|${mod}+p"
+    "  Abrir terminal|${mod}+Return|exec kitty"
+    "  Lanzador de aplicaciones|${mod}+n|exec rofi -show drun"
+    "󰎆  Obsidian|${mod}+o|exec obsidian"
+    "  Thunar|${mod}+t|exec thunar"
+    "󰑂  Music (rmpc)|${mod}+m|exec $scripts-legacy/rofi_music"
+    "  KeePassXC|${mod}+x|exec keepassxc"
+    "  Color picker|${mod}+p|exec hyprpicker --autocopy"
 
     # ── Workspaces ──────────────────────────────────────────────────
-    "  Workspace 1|${mod}+1"
-    "  Workspace 2|${mod}+2"
-    "  Workspace 3|${mod}+3"
-    "  Workspace 4|${mod}+4"
-    "  Workspace 5|${mod}+5"
-    "  Workspace 6|${mod}+6"
-    "  Workspace 7|${mod}+7"
-    "  Workspace 8|${mod}+8"
-    "  Workspace 9|${mod}+9"
-    "  Workspace 10|${mod}+0"
-    "  Mover contenedor a ws 1|${mod}+Shift+1"
-    "  Mover contenedor a ws 2|${mod}+Shift+2"
-    "  Mover contenedor a ws 3|${mod}+Shift+3"
-    "  Mover contenedor a ws 4|${mod}+Shift+4"
-    "  Mover contenedor a ws 5|${mod}+Shift+5"
-    "  Mover contenedor a ws 6|${mod}+Shift+6"
-    "  Mover contenedor a ws 7|${mod}+Shift+7"
-    "  Mover contenedor a ws 8|${mod}+Shift+8"
-    "  Mover contenedor a ws 9|${mod}+Shift+9"
-    "  Mover contenedor a ws 10|${mod}+Shift+0"
+    "  Workspace 1|${mod}+1|swaymsg workspace number 1"
+    "  Workspace 2|${mod}+2|swaymsg workspace number 2"
+    "  Workspace 3|${mod}+3|swaymsg workspace number 3"
+    "  Workspace 4|${mod}+4|swaymsg workspace number 4"
+    "  Workspace 5|${mod}+5|swaymsg workspace number 5"
+    "  Workspace 6|${mod}+6|swaymsg workspace number 6"
+    "  Workspace 7|${mod}+7|swaymsg workspace number 7"
+    "  Workspace 8|${mod}+8|swaymsg workspace number 8"
+    "  Workspace 9|${mod}+9|swaymsg workspace number 9"
+    "  Workspace 10|${mod}+0|swaymsg workspace number 10"
+    "  Mover contenedor a ws 1|${mod}+Shift+1|swaymsg move container to workspace number 1"
+    "  Mover contenedor a ws 2|${mod}+Shift+2|swaymsg move container to workspace number 2"
+    "  Mover contenedor a ws 3|${mod}+Shift+3|swaymsg move container to workspace number 3"
+    "  Mover contenedor a ws 4|${mod}+Shift+4|swaymsg move container to workspace number 4"
+    "  Mover contenedor a ws 5|${mod}+Shift+5|swaymsg move container to workspace number 5"
+    "  Mover contenedor a ws 6|${mod}+Shift+6|swaymsg move container to workspace number 6"
+    "  Mover contenedor a ws 7|${mod}+Shift+7|swaymsg move container to workspace number 7"
+    "  Mover contenedor a ws 8|${mod}+Shift+8|swaymsg move container to workspace number 8"
+    "  Mover contenedor a ws 9|${mod}+Shift+9|swaymsg move container to workspace number 9"
+    "  Mover contenedor a ws 10|${mod}+Shift+0|swaymsg move container to workspace number 10"
 
     # ── Gestión de ventanas ─────────────────────────────────────────
-    "󰧨  Foco izquierda|${mod}+h"
-    "󰧨  Foco abajo|${mod}+j"
-    "󰧨  Foco arriba|${mod}+k"
-    "󰧨  Foco derecha|${mod}+l"
-    "󰄾  Mover ventana izquierda|${mod}+Shift+h"
-    "󰄾  Mover ventana abajo|${mod}+Shift+j"
-    "󰄾  Mover ventana arriba|${mod}+Shift+k"
-    "󰄾  Mover ventana derecha|${mod}+Shift+l"
-    "󰖯  Cerrar ventana|${mod}+Shift+q"
-    "󰞎  Fullscreen|${mod}+f"
-    "󰮄  Layout tabbed|${mod}+w"
-    "󰮄  Layout stacking|${mod}+s"
-    "󰮄  Layout toggle split|${mod}+e"
-    "󰅃  Split horizontal|${mod}+b"
-    "󰅃  Split vertical|${mod}+v"
-    "󰸉  Foco modo toggle|${mod}+space"
-    "󰸉  Foco parent|${mod}+a"
-    "󰋱  Modo redimensionar|${mod}+r"
-    "󰤼  Floating toggle|${mod}+Shift+space"
+    "󰧨  Foco izquierda|${mod}+h|swaymsg focus left"
+    "󰧨  Foco abajo|${mod}+j|swaymsg focus down"
+    "󰧨  Foco arriba|${mod}+k|swaymsg focus up"
+    "󰧨  Foco derecha|${mod}+l|swaymsg focus right"
+    "󰄾  Mover ventana izquierda|${mod}+Shift+h|swaymsg move left"
+    "󰄾  Mover ventana abajo|${mod}+Shift+j|swaymsg move down"
+    "󰄾  Mover ventana arriba|${mod}+Shift+k|swaymsg move up"
+    "󰄾  Mover ventana derecha|${mod}+Shift+l|swaymsg move right"
+    "󰖯  Cerrar ventana|${mod}+Shift+q|swaymsg kill"
+    "󰞎  Fullscreen|${mod}+f|swaymsg fullscreen"
+    "󰮄  Layout tabbed|${mod}+w|swaymsg layout tabbed"
+    "󰮄  Layout stacking|${mod}+s|swaymsg layout stacking"
+    "󰮄  Layout toggle split|${mod}+e|swaymsg layout toggle split"
+    "󰅃  Split horizontal|${mod}+b|swaymsg splith"
+    "󰅃  Split vertical|${mod}+v|swaymsg splitv"
+    "󰸉  Foco modo toggle|${mod}+space|swaymsg focus mode_toggle"
+    "󰸉  Foco parent|${mod}+a|swaymsg focus parent"
+    "󰋱  Modo redimensionar|${mod}+r|_note_"
+    "󰤼  Floating toggle|${mod}+Shift+space|swaymsg floating toggle"
 
     # ── Scratchpad ──────────────────────────────────────────────────
-    "󰆉  Enviar a scratchpad|${mod}+Shift+minus"
-    "󰆉  Mostrar scratchpad|${mod}+minus"
+    "󰆉  Enviar a scratchpad|${mod}+Shift+minus|swaymsg move scratchpad"
+    "󰆉  Mostrar scratchpad|${mod}+minus|swaymsg scratchpad show"
 
-    # ── Redimensionar (modo ${mod}+r) ─────────────────────────────────
-    "󰋱  Encoger ancho 60px|h (resize mode)"
-    "󰋱  Estirar alto 60px|j (resize mode)"
-    "󰋱  Encoger alto 60px|k (resize mode)"
-    "󰋱  Estirar ancho 60px|l (resize mode)"
-    "󰋱  Encoger ancho 10px|← (resize mode)"
-    "󰋱  Estirar alto 10px|↓ (resize mode)"
-    "󰋱  Encoger alto 10px|↑ (resize mode)"
-    "󰋱  Estirar ancho 10px|→ (resize mode)"
-    "󰌌  Salir de resize|Return / Escape"
+    # ── Redimensionar (modo ${mod}+r) ────────────────────────────────
+    "󰋱  Encoger ancho 60px|h (resize mode)|_note_"
+    "󰋱  Estirar alto 60px|j (resize mode)|_note_"
+    "󰋱  Encoger alto 60px|k (resize mode)|_note_"
+    "󰋱  Estirar ancho 60px|l (resize mode)|_note_"
+    "󰋱  Encoger ancho 10px|← (resize mode)|_note_"
+    "󰋱  Estirar alto 10px|↓ (resize mode)|_note_"
+    "󰋱  Encoger alto 10px|↑ (resize mode)|_note_"
+    "󰋱  Estirar ancho 10px|→ (resize mode)|_note_"
+    "󰌌  Salir de resize|Return / Escape|_note_"
 
     # ── Redimensionar con mouse ─────────────────────────────────────
-    "󰆕  Ancho +40px|${mod}+scroll up"
-    "󰆕  Ancho -40px|${mod}+scroll down"
-    "󰆕  Alto -40px|${mod}+Shift+scroll up"
-    "󰆕  Alto +40px|${mod}+Shift+scroll down"
+    "󰆕  Ancho +40px|${mod}+scroll up|_note_"
+    "󰆕  Ancho -40px|${mod}+scroll down|_note_"
+    "󰆕  Alto -40px|${mod}+Shift+scroll up|_note_"
+    "󰆕  Alto +40px|${mod}+Shift+scroll down|_note_"
 
     # ── Capturas de pantalla ────────────────────────────────────────
-    "󰹑  Capturar región|Print"
-    "󰹑  Capturar ventana|Alt+Print"
-    "󰹑  Capturar con Swappy|Shift+Print"
-    "󰻃  Grabar área|${mod}+Print"
+    "󰹑  Capturar región|Print|exec $scripts/screenshot-control region"
+    "󰹑  Capturar ventana|Alt+Print|exec $scripts/screenshot-control window"
+    "󰹑  Capturar con Swappy|Shift+Print|exec $scripts/screenshot-control swappy"
+    "󰻃  Grabar área|${mod}+Print|exec $scripts/region-record"
 
     # ── Compartir pantalla ──────────────────────────────────────────
-    "󰹑  Iniciar screenshare|${mod}+y"
-    "󰹑  Detener screenshare|${mod}+Shift+y"
+    "󰹑  Iniciar screenshare|${mod}+y|exec $scripts/screenshare-control start"
+    "󰹑  Detener screenshare|${mod}+Shift+y|exec $scripts/screenshare-control stop"
 
     # ── Volumen ─────────────────────────────────────────────────────
-    "󰕾  Subir volumen|XF86AudioRaiseVolume"
-    "󰝞  Bajar volumen|XF86AudioLowerVolume"
-    "󰝟  Silenciar|XF86AudioMute"
+    "󰕾  Subir volumen|XF86AudioRaiseVolume|exec $scripts/media-control volume_up"
+    "󰝞  Bajar volumen|XF86AudioLowerVolume|exec $scripts/media-control volume_down"
+    "󰝟  Silenciar|XF86AudioMute|exec $scripts/media-control mute"
 
     # ── Multimedia ──────────────────────────────────────────────────
-    "󰐋  Play / Pausa|XF86AudioPlay"
-    "󰒮  Siguiente|XF86AudioNext"
-    "󰒮  Anterior|XF86AudioPrev"
+    "󰐋  Play / Pausa|XF86AudioPlay|exec $scripts/media-control play_pause"
+    "󰒮  Siguiente|XF86AudioNext|exec $scripts/media-control next"
+    "󰒮  Anterior|XF86AudioPrev|exec $scripts/media-control prev"
 
     # ── Brillo ──────────────────────────────────────────────────────
-    "󰛨  Subir brillo|XF86MonBrightnessUp"
-    "󰛨  Bajar brillo|XF86MonBrightnessDown"
+    "󰛨  Subir brillo|XF86MonBrightnessUp|exec $scripts/media-control l-up"
+    "󰛨  Bajar brillo|XF86MonBrightnessDown|exec $scripts/media-control l-down"
 
     # ── Ratings rmpc ────────────────────────────────────────────────
-    "󰓇  Rating 0 (descartar)|${mod}+Alt+0"
-    "󰓇  Rating 1 (regular)|${mod}+Alt+7"
-    "󰓇  Rating 2 (buena)|${mod}+Alt+8"
-    "󰓇  Rating 3 (excelente)|${mod}+Alt+9"
+    "󰓇  Rating 0 (descartar)|${mod}+Alt+0|exec $scripts/rmpc-sticker-rating 0"
+    "󰓇  Rating 1 (regular)|${mod}+Alt+7|exec $scripts/rmpc-sticker-rating 1"
+    "󰓇  Rating 2 (buena)|${mod}+Alt+8|exec $scripts/rmpc-sticker-rating 2"
+    "󰓇  Rating 3 (excelente)|${mod}+Alt+9|exec $scripts/rmpc-sticker-rating 3"
 
     # ── Portapapeles ────────────────────────────────────────────────
-    "󰅍  Historial de texto|${mod}+d"
-    "󰅍  Historial de imágenes|${mod}+Shift+d"
-    "󰃬  Calculadora|${mod}+c"
+    "󰅍  Historial de texto|${mod}+d|exec rofi -show \"󰯗  Historial de texto\" -modi \"󰯗  Historial de texto:\$HOME/.config/rofi/scripts/cliphist-modi-text\" -theme \"\$HOME/.config/rofi/themes/cliphist-modi-text.rasi\" -kb-custom-1 \"Alt+Delete\""
+    "󰅍  Historial de imágenes|${mod}+Shift+d|exec rofi -show \"󰯕  Historial de imágenes\" -modi \"󰯕  Historial de imágenes:\$HOME/.config/rofi/scripts/cliphist-modi-image\" -theme \"\$HOME/.config/rofi/themes/cliphist-modi-image.rasi\" -kb-custom-1 \"Alt+Delete\""
+    "󰃬  Calculadora|${mod}+c|exec rofi -show calc -modi calc -calc-command \"printf '%%s' '{result}' | wl-copy\" -no-show-match -theme \"\$HOME/.config/rofi/themes/calc-modi.rasi\""
 
     # ── Utilidades ──────────────────────────────────────────────────
-    "󰌾  Bloquear pantalla|${mod}+z"
-    "󰱬  Buscar archivos|${mod}+Shift+n"
-    "󰐦  Power menu|${mod}+Alt+e"
-    "󰄱  Visor de atajos|${mod}+?"
-    "󰑖  Recargar configuración|${mod}+Alt+r"
+    "󰌾  Bloquear pantalla|${mod}+z|exec $scripts/sway-idle lock"
+    "󰱬  Buscar archivos|${mod}+Shift+n|exec $scripts/file-seek"
+    "󰐦  Power menu|${mod}+Alt+e|exec ~/.config/rofi/scripts/power-menu"
+    "󰑖  Recargar configuración|${mod}+Alt+r|swaymsg reload"
+    "󰄱  Visor de atajos|${mod}+?|_note_"
 )
 
 # ── Presentar en rofi ────────────────────────────────────────────
 selection=$(
     for entry in "${entries[@]}"; do
         icon_desc="${entry%%|*}"
-        keys="${entry##*|}"
+        rest="${entry#*|}"
+        keys="${rest%%|*}"
         echo "$icon_desc  —  $keys"
     done \
         | rofi -dmenu \
@@ -139,3 +145,23 @@ selection=$(
             -p "Keybinds" \
             -theme "$ROFI_THEME"
 )
+
+# ── Dispatch ─────────────────────────────────────────────────────
+if [[ -n "$selection" ]]; then
+    for entry in "${entries[@]}"; do
+        IFS='|' read -r label keys cmd <<< "$entry"
+        display="$label  —  $keys"
+        if [[ "$display" == "$selection" ]]; then
+            if [[ -z "$cmd" || "$cmd" == "_note_" ]]; then
+                :
+            elif [[ "$cmd" == exec* ]]; then
+                rest="${cmd#exec }"
+                # shellcheck disable=SC2291
+                eval "$rest"
+            else
+                swaymsg "$cmd"
+            fi
+            break
+        fi
+    done
+fi
