@@ -5,6 +5,30 @@
 
 set -euo pipefail
 
+# ── Fix: red host + permisos para embeddings ─────────────────────────
+# Si moorcheh queda con items:0 y el job de embedding falla con
+# "failed calling ollama embeddings endpoint", aplicar estos pasos:
+#
+# 1. En ambos venvs (memanto y moorcheh-client):
+#    site-packages/moorcheh/compose/docker-compose.yml
+#    - Agregar: network_mode: host
+#    - Quitar: ports, extra_hosts (incompatibles con host network)
+#
+# 2. En docker_runtime.py y user_config.py de ambos venvs:
+#    - Reemplazar host.docker.internal → 127.0.0.1
+#    (El contenedor comparte red del host, localhost apunta al host)
+#
+# 3. Dar permisos al volumen de datos para el usuario del contenedor:
+#    chmod 777 ~/.moorcheh/data/
+#
+# 4. Recrear el contenedor con los cambios:
+#    moorcheh down && moorcheh up
+#
+# Verificar con: curl http://localhost:8080/health | grep items
+# La causa raíz: Ollama escucha solo en 127.0.0.1, y el contenedor
+# en bridge no puede alcanzarlo via host.docker.internal (Linux).
+# ─────────────────────────────────────────────────────────────────────
+
 # ── Constantes ──────────────────────────────────────────────────────
 
 MOORCHEH_URL="http://localhost:8080"
@@ -95,3 +119,19 @@ echo -e "\n  MEMANTO operativo"
 echo "    API:     $MEMANTO_URL"
 echo "    Backend: $MOORCHEH_URL"
 echo "    Agente:  $AGENT_ID"
+
+# ── Verificar persistencia ─────────────────────────────────────────
+# Si items es 0 el pipeline de embeddings falló (Ollama inalcanzable
+# desde el contenedor). Ver sección "Fix: red host + permisos" arriba.
+items=$(curl -sf "$MOORCHEH_URL/health" | python3 -c "
+import json,sys
+h = json.load(sys.stdin)
+print(h.get('items', '?'))
+" 2> /dev/null || echo "?")
+if [[ "$items" == "0" ]]; then
+    echo -e "\n  Items: $items — pipeline de embeddings no operativo"
+elif [[ "$items" != "?" ]]; then
+    echo -e "\n  Items: $items — persistencia funcional"
+else
+    echo -e "\n  No se pudo verificar items (health endpoint?)"
+fi
