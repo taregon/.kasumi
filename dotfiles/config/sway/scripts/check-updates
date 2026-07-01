@@ -1,8 +1,22 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Contar paquetes pendientes de actualizar (repos + AUR)
+# Salida JSON para waybar custom/pacman con return-type: json
 
-arch=$(checkupdates 2> /dev/null | wc -l)
-aur=$(paru -Qum 2> /dev/null | wc -l)
-number=$((arch + aur))
+set -euo pipefail
 
-echo $number
+pkg_repos=$(checkupdates 2> /dev/null | wc -l) || true # checkupdates retorna 1 sin actualizaciones
+pkg_aur=$(paru -Qum 2> /dev/null | wc -l) || true      # paru -Qum falla si no hay red o AUR no responde
+pkg_total=$((pkg_repos + pkg_aur))
+
+if [ "$pkg_total" -gt 0 ]; then
+    class="has-updates"
+    tooltip="$pkg_total paquetes pendientes"
+    [ "$pkg_repos" -gt 0 ] && tooltip="$tooltip\n$pkg_repos oficiales"
+    [ "$pkg_aur" -gt 0 ] && tooltip="$tooltip\n$pkg_aur AUR"
+else
+    class="uptodate"
+    tooltip="Todo actualizado"
+fi
+
+printf '{"text":"%s","tooltip":"%s","class":"%s","alt":"%s"}\n' \
+    "$pkg_total" "$tooltip" "$class" "$pkg_total"
