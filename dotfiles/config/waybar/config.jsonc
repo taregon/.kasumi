@@ -39,8 +39,8 @@
   "modules-right": [
     "privacy",
     "backlight",
-    "group/media",
     "custom/cava-internal",
+    "group/media",
     "group/audio",
     "bluetooth",
     "network",
@@ -324,7 +324,7 @@
     "on-scroll-up": "playerctl position 5+",
     "on-scroll-down": "playerctl position 5-",
     "tooltip": true,
-    "max-length": 45
+    "max-length": 26
   },
 
   // ── Media (MPD — tiempo) ─────────────────────────────────
@@ -350,11 +350,11 @@
 
   // ── Cava (visualizador de audio) ─────────────────────────
   // Usa ~/.config/sway/scripts/cava-bar
-  "custom/cava-internal": {
-    "format": "{}",
-    "exec": "~/.config/sway/scripts/cava-bar",
-    "on-click": "pkill -x waybar; swaymsg reload"
-  },
+  // "custom/cava-internal": {
+  //   "format": "{}",
+  //   "exec": "~/.config/sway/scripts/cava-bar",
+  //   "on-click": "pkill -x waybar; swaymsg reload"
+  // },
 
   // ── Conectividad ─────────────────────────────────────────
   "bluetooth": {

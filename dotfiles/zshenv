@@ -2,9 +2,16 @@
 # Permite usar claves SSH sin pedir passphrase cada vez
 # El socket se crea automáticamente en $XDG_RUNTIME_DIR/ssh-agent.socket
 # Requisito: systemctl --user enable --now ssh-agent
-export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+# NOTE: específico de systemd; revisar si se cambia de init
+[[ -z "$SSH_AUTH_SOCK" ]] && export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 # ─[ PATH ]───────────────────────────────────────────────────
 # Helpers y tooling personal reutilizable
 # Facilita pruebas, automatización y ejecución sin rutas largas
-export PATH="$HOME/.local/bin/kasumi/helpers:$PATH"
+typeset -U path PATH
+
+path=(
+    "$HOME/.local/bin"
+    "$HOME/.local/bin/kasumi/helpers"
+    $path
+)
