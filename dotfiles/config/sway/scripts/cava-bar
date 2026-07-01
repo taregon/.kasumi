@@ -13,6 +13,7 @@ sleep 0.1
 
 # Cava emite dígitos 0-7; sed los reemplaza por glifos de barra en la salida:
 # 0→▁ 1→▂ 2→▃ 3→▄ 4→▅ 5→▆ 6→▇ 7→█
+# Idea problable "⢀⢠⢰⢸"
 bar_glyphs="▁▂▃▄▅▆▇█"
 sed_script="s/;//g"
 bar_length=${#bar_glyphs}
