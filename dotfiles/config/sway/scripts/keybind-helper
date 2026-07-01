@@ -20,7 +20,7 @@ entries=(
     "  Lanzador de aplicaciones|${mod}+n|exec rofi -show drun"
     "󰎆  Obsidian|${mod}+o|exec obsidian"
     "  Thunar|${mod}+t|exec thunar"
-    "󰑂  Music (rmpc)|${mod}+m|exec $scripts-legacy/rofi_music"
+    "󰑂  Music (rmpc)|${mod}+m|exec kitty -e rmpc"
     "  KeePassXC|${mod}+x|exec keepassxc"
     "  Color picker|${mod}+p|exec hyprpicker --autocopy"
 
