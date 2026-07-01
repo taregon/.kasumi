@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Inicia MEMANTO + Moorcheh (backend vectorial) para memoria persistente.
+# Ruta: ~/.local/bin/kasumi/helpers/memanto-up
+# Idempotente: verifica estado antes de iniciar.
+
+set -euo pipefail
+
+# ── Constantes ──────────────────────────────────────────────────────
+
+C_STEP="\033[0;34m"   # blue
+C_OK="\033[0;32m"     # green
+C_ACTION="\033[0;33m" # yellow
+C_RST="\033[0m"       # reset
+
+MOORCHEH_URL="http://localhost:8080"
+MEMANTO_URL="http://localhost:8000"
+AGENT_ID="${MEMANTO_AGENT:-opencode}"
+
+MEMANTO_PID=""
+
+memanto_cleanup() {
+    if [[ -n "$MEMANTO_PID" ]] && kill -0 "$MEMANTO_PID" 2> /dev/null; then
+        kill "$MEMANTO_PID" 2> /dev/null || true
+    fi
+}
+trap memanto_cleanup EXIT
+
+# ── Helpers ─────────────────────────────────────────────────────────
+
+memanto_health() {
+    curl -sf "$1/health" -o /dev/null 2> /dev/null
+}
+
+memanto_start_moorcheh() {
+    echo -e " ${C_STEP}  Moorcheh (backend vectorial)${C_RST}"
+    moorcheh up 2>&1 | sed 's/^/   /'
+    if memanto_health "$MOORCHEH_URL"; then
+        echo -e "   ${C_OK}  Moorcheh listo${C_RST}"
+    else
+        echo -e "   ${C_ACTION}  Moorcheh no responde, revisa docker${C_RST}"
+        return 1
+    fi
+}
+
+memanto_start() {
+    echo -e " ${C_STEP}  MEMANTO REST API${C_RST}"
+    if memanto_health "$MEMANTO_URL"; then
+        echo -e "   ${C_OK}  MEMANTO ya estaba corriendo${C_RST}"
+        return 0
+    fi
+    nohup memanto serve > /tmp/memanto.log 2>&1 &
+    MEMANTO_PID=$!
+    # Esperar hasta 15s a que responda
+    for i in $(seq 1 15); do
+        if memanto_health "$MEMANTO_URL"; then
+            echo -e "   ${C_OK}  MEMANTO listo (PID $MEMANTO_PID)${C_RST}"
+            return 0
+        fi
+        sleep 1
+    done
+    echo -e "   ${C_ACTION}  MEMANTO no arrancó, revisa /tmp/memanto.log${C_RST}"
+    return 1
+}
+
+memanto_activate_agent() {
+    echo -e " ${C_STEP}  Activando agente '$AGENT_ID'${C_RST}"
+    if memanto agent activate "$AGENT_ID" 2>&1 | grep -qi "already\|activado"; then
+        echo -e "   ${C_OK}  Agente ya activo${C_RST}"
+    else
+        echo -e "   ${C_OK}  Agente activado${C_RST}"
+    fi
+}
+
+# ── Orquestacion ────────────────────────────────────────────────────
+
+echo -e "\n ${C_STEP}── Iniciando MEMANTO ──${C_RST}\n"
+
+if ! memanto_health "$MOORCHEH_URL"; then
+    memanto_start_moorcheh
+else
+    echo -e " ${C_OK}  Moorcheh ya disponible${C_RST}"
+fi
+
+memanto_start
+memanto_activate_agent
+
+MEMANTO_PID=""
+echo -e "\n ${C_OK}── MEMANTO operativo ──${C_RST}"
+echo -e "    API:     $MEMANTO_URL"
+echo -e "    Backend: $MOORCHEH_URL"
+echo -e "    Agente:  $AGENT_ID\n"
