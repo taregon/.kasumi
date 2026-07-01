@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+# Visor de atajos de teclado de Sway con búsqueda vía rofi
+
+set -euo pipefail
+
+ROFI_THEME="$HOME/.config/rofi/themes/keybind-helper.rasi"
+mod="Win"
+
+# ── Categorías y atajos ──────────────────────────────────────────
+# Formato: "icono descripción|tecla"
+
+entries=(
+    # ── Aplicaciones ─────────────────────────────────────────────────
+    "  Abrir terminal|${mod}+Return"
+    "  Lanzador de aplicaciones|${mod}+n"
+    "󰎆  Obsidian|${mod}+o"
+    "  Thunar|${mod}+t"
+    "󰑂  Music (rmpc)|${mod}+m"
+    "  KeePassXC|${mod}+x"
+    "  Color picker|${mod}+p"
+
+    # ── Workspaces ──────────────────────────────────────────────────
+    "  Workspace 1|${mod}+1"
+    "  Workspace 2|${mod}+2"
+    "  Workspace 3|${mod}+3"
+    "  Workspace 4|${mod}+4"
+    "  Workspace 5|${mod}+5"
+    "  Workspace 6|${mod}+6"
+    "  Workspace 7|${mod}+7"
+    "  Workspace 8|${mod}+8"
+    "  Workspace 9|${mod}+9"
+    "  Workspace 10|${mod}+0"
+    "  Mover contenedor a ws 1|${mod}+Shift+1"
+    "  Mover contenedor a ws 2|${mod}+Shift+2"
+    "  Mover contenedor a ws 3|${mod}+Shift+3"
+    "  Mover contenedor a ws 4|${mod}+Shift+4"
+    "  Mover contenedor a ws 5|${mod}+Shift+5"
+    "  Mover contenedor a ws 6|${mod}+Shift+6"
+    "  Mover contenedor a ws 7|${mod}+Shift+7"
+    "  Mover contenedor a ws 8|${mod}+Shift+8"
+    "  Mover contenedor a ws 9|${mod}+Shift+9"
+    "  Mover contenedor a ws 10|${mod}+Shift+0"
+
+    # ── Gestión de ventanas ─────────────────────────────────────────
+    "󰧨  Foco izquierda|${mod}+h"
+    "󰧨  Foco abajo|${mod}+j"
+    "󰧨  Foco arriba|${mod}+k"
+    "󰧨  Foco derecha|${mod}+l"
+    "󰄾  Mover ventana izquierda|${mod}+Shift+h"
+    "󰄾  Mover ventana abajo|${mod}+Shift+j"
+    "󰄾  Mover ventana arriba|${mod}+Shift+k"
+    "󰄾  Mover ventana derecha|${mod}+Shift+l"
+    "󰖯  Cerrar ventana|${mod}+Shift+q"
+    "󰞎  Fullscreen|${mod}+f"
+    "󰮄  Layout tabbed|${mod}+w"
+    "󰮄  Layout stacking|${mod}+s"
+    "󰮄  Layout toggle split|${mod}+e"
+    "󰅃  Split horizontal|${mod}+b"
+    "󰅃  Split vertical|${mod}+v"
+    "󰸉  Foco modo toggle|${mod}+space"
+    "󰸉  Foco parent|${mod}+a"
+    "󰋱  Modo redimensionar|${mod}+r"
+    "󰤼  Floating toggle|${mod}+Shift+space"
+
+    # ── Scratchpad ──────────────────────────────────────────────────
+    "󰆉  Enviar a scratchpad|${mod}+Shift+minus"
+    "󰆉  Mostrar scratchpad|${mod}+minus"
+
+    # ── Redimensionar (modo ${mod}+r) ─────────────────────────────────
+    "󰋱  Encoger ancho 60px|h (resize mode)"
+    "󰋱  Estirar alto 60px|j (resize mode)"
+    "󰋱  Encoger alto 60px|k (resize mode)"
+    "󰋱  Estirar ancho 60px|l (resize mode)"
+    "󰋱  Encoger ancho 10px|← (resize mode)"
+    "󰋱  Estirar alto 10px|↓ (resize mode)"
+    "󰋱  Encoger alto 10px|↑ (resize mode)"
+    "󰋱  Estirar ancho 10px|→ (resize mode)"
+    "󰌌  Salir de resize|Return / Escape"
+
+    # ── Redimensionar con mouse ─────────────────────────────────────
+    "󰆕  Ancho +40px|${mod}+scroll up"
+    "󰆕  Ancho -40px|${mod}+scroll down"
+    "󰆕  Alto -40px|${mod}+Shift+scroll up"
+    "󰆕  Alto +40px|${mod}+Shift+scroll down"
+
+    # ── Capturas de pantalla ────────────────────────────────────────
+    "󰹑  Capturar región|Print"
+    "󰹑  Capturar ventana|Alt+Print"
+    "󰹑  Capturar con Swappy|Shift+Print"
+    "󰻃  Grabar área|${mod}+Print"
+
+    # ── Compartir pantalla ──────────────────────────────────────────
+    "󰹑  Iniciar screenshare|${mod}+y"
+    "󰹑  Detener screenshare|${mod}+Shift+y"
+
+    # ── Volumen ─────────────────────────────────────────────────────
+    "󰕾  Subir volumen|XF86AudioRaiseVolume"
+    "󰝞  Bajar volumen|XF86AudioLowerVolume"
+    "󰝟  Silenciar|XF86AudioMute"
+
+    # ── Multimedia ──────────────────────────────────────────────────
+    "󰐋  Play / Pausa|XF86AudioPlay"
+    "󰒮  Siguiente|XF86AudioNext"
+    "󰒮  Anterior|XF86AudioPrev"
+
+    # ── Brillo ──────────────────────────────────────────────────────
+    "󰛨  Subir brillo|XF86MonBrightnessUp"
+    "󰛨  Bajar brillo|XF86MonBrightnessDown"
+
+    # ── Ratings rmpc ────────────────────────────────────────────────
+    "󰓇  Rating 0 (descartar)|${mod}+Alt+0"
+    "󰓇  Rating 1 (regular)|${mod}+Alt+7"
+    "󰓇  Rating 2 (buena)|${mod}+Alt+8"
+    "󰓇  Rating 3 (excelente)|${mod}+Alt+9"
+
+    # ── Portapapeles ────────────────────────────────────────────────
+    "󰅍  Historial de texto|${mod}+d"
+    "󰅍  Historial de imágenes|${mod}+Shift+d"
+    "󰃬  Calculadora|${mod}+c"
+
+    # ── Utilidades ──────────────────────────────────────────────────
+    "󰌾  Bloquear pantalla|${mod}+z"
+    "󰱬  Buscar archivos|${mod}+Shift+n"
+    "󰐦  Power menu|${mod}+Alt+e"
+    "󰄱  Visor de atajos|${mod}+?"
+    "󰑖  Recargar configuración|${mod}+Alt+r"
+)
+
+# ── Presentar en rofi ────────────────────────────────────────────
+selection=$(
+    for entry in "${entries[@]}"; do
+        icon_desc="${entry%%|*}"
+        keys="${entry##*|}"
+        echo "$icon_desc  —  $keys"
+    done \
+        | rofi -dmenu \
+            -i \
+            -matching fuzzy \
+            -p "Keybinds" \
+            -theme "$ROFI_THEME"
+)
