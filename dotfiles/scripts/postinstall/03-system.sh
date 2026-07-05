@@ -410,6 +410,7 @@ install_utils_terminal() {
         ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
         source-highlight   # Resaltado de sintaxis para less y otros
+        stow               # Gestor minimalista de dotfiles basado en symlinks modulares y reversibles
         toilet             # Generador de texto ASCII estilizado
         vivid              # Generador moderno de LS_COLORS con temas
         xan                # Utilidad para procesamiento de tablas CSV
