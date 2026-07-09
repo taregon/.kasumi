@@ -63,7 +63,8 @@ function M.staged_diff()
 		return "  No hay cambios staged en este archivo."
 	end
 
-	-- El prompt solo necesita el cuerpo del diff, no metadatos ni encabezados.
+	-- Limpiar el diff: eliminar metadatos git (diff --git, index, @@, ---/+++).
+	-- Solo se conservan líneas de cambio (+/-) y contexto ( ).
 	local lines = vim.split(diff_out, "\n", { plain = true })
 	local filtered = {}
 
@@ -79,9 +80,12 @@ function M.staged_diff()
 		end
 	end
 
-	-- Anclar líneas de comentario y contexto para que el modelo no las
-	-- interprete como código. [COMENTARIO] reemplaza el contenido de la línea
-	-- para evitar ruido decorativo. [CONTEXTO] se antepone al contenido original.
+	-- El modelo Gemma-4-it no distingue sintaxis de comentarios (#, //, --, ;)
+	-- del lenguaje y confunde decoración con código, clasificando cambios
+	-- cosméticos como feat. Solución: reemplazar contenido de líneas comentario
+	-- con [COMENTARIO] y prefijar contexto con [CONTEXTO]. Sin estos anclas,
+	-- el modelo interpreta todo el diff como código funcional y alucina
+	-- funcionalidades inexistentes.
 	for idx, line in ipairs(filtered) do
 		local marker = line:sub(1, 1)
 		local rest = line:sub(2)
@@ -95,9 +99,48 @@ function M.staged_diff()
 		end
 	end
 
+	-- Colapsar líneas [COMENTARIO] consecutivas del mismo marcador (+/-).
+	-- Sin colapso, N líneas idénticas saturan el prompt y el modelo genera
+	-- cuerpo repetido (misma línea N veces). Con colapso a 1, el modelo
+	-- diferencia cambios sin forzar repetición.
+	local collapsed = {}
+	local prev = nil
+	for _, line in ipairs(filtered) do
+		if line:match("%[COMENTARIO%]") then
+			if line ~= prev then
+				table.insert(collapsed, line)
+				prev = line
+			end
+		else
+			table.insert(collapsed, line)
+			prev = nil
+		end
+	end
+	filtered = collapsed
+
+	-- Heurística: si >50% de líneas +/- contienen [COMENTARIO], el cambio es
+	-- puramente cosmético. Se inyecta "tipo: style" en el header para que el
+	-- modelo no tenga que inferir la clasificación. Sin este hint, el modelo
+	-- asigna feat aunque el diff solo tenga cambios en comentarios.
+	local changed_lines = 0
+	local comment_lines = 0
+	for _, line in ipairs(filtered) do
+		if line:sub(1, 1) == "+" or line:sub(1, 1) == "-" then
+			changed_lines = changed_lines + 1
+			if line:match("%[COMENTARIO%]") then
+				comment_lines = comment_lines + 1
+			end
+		end
+	end
+
+	local hint = ""
+	if changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
+		hint = "\ntipo: style (solo comentarios)"
+	end
+
 	-- Cabecera compacta para ubicar el origen del diff en el prompt.
 	local parent_dir = file_dir:match("([^/]+)$") or ""
-	local header = "de: " .. parent_dir .. "/" .. file_name .. "\n\n"
+	local header = "de: " .. parent_dir .. "/" .. file_name .. hint .. "\n\n"
 	return header .. table.concat(filtered, "\n")
 end
 

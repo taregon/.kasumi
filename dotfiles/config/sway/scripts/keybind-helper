@@ -8,14 +8,16 @@ ROFI_THEME="$HOME/.config/rofi/themes/keybind-helper.rasi"
 mod="Win"
 scripts="$HOME/.config/sway/scripts"
 
-# ── Categorías y atajos ──────────────────────────────────────────
+# ── Categorías y atajos ─────────────────────────────────────
 # Formato: "icono descripción|tecla|comando"
 #   comando vacío o "_note_" → solo muestra, no ejecuta
 #   "exec ..." → evalúa lo que sigue
 #   resto → swaymsg <comando>
 
 entries=(
-    # ── Aplicaciones ─────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                       APLICACIONES                       │
+    # ╘══════════════════════════════════════════════════════════╛
     "  Abrir terminal|${mod}+Return|exec kitty"
     "  Lanzador de aplicaciones|${mod}+n|exec rofi -show drun"
     "󰎆  Obsidian|${mod}+o|exec obsidian"
@@ -24,7 +26,9 @@ entries=(
     "  KeePassXC|${mod}+x|exec keepassxc"
     "  Color picker|${mod}+p|exec hyprpicker --autocopy"
 
-    # ── Workspaces ──────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                        WORKSPACES                        │
+    # ╘══════════════════════════════════════════════════════════╛
     "  Workspace 1|${mod}+1|swaymsg workspace number 1"
     "  Workspace 2|${mod}+2|swaymsg workspace number 2"
     "  Workspace 3|${mod}+3|swaymsg workspace number 3"
@@ -46,7 +50,9 @@ entries=(
     "  Mover contenedor a ws 9|${mod}+Shift+9|swaymsg move container to workspace number 9"
     "  Mover contenedor a ws 10|${mod}+Shift+0|swaymsg move container to workspace number 10"
 
-    # ── Gestión de ventanas ─────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                   GESTIÓN DE VENTANAS                    │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰧨  Foco izquierda|${mod}+h|swaymsg focus left"
     "󰧨  Foco abajo|${mod}+j|swaymsg focus down"
     "󰧨  Foco arriba|${mod}+k|swaymsg focus up"
@@ -67,11 +73,15 @@ entries=(
     "󰋱  Modo redimensionar|${mod}+r|_note_"
     "󰤼  Floating toggle|${mod}+Shift+space|swaymsg floating toggle"
 
-    # ── Scratchpad ──────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                        SCRATCHPAD                        │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰆉  Enviar a scratchpad|${mod}+Shift+minus|swaymsg move scratchpad"
     "󰆉  Mostrar scratchpad|${mod}+minus|swaymsg scratchpad show"
 
-    # ── Redimensionar (modo ${mod}+r) ────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                   REDIMENSIONAR (MODO)                   │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰋱  Encoger ancho 60px|h (resize mode)|_note_"
     "󰋱  Estirar alto 60px|j (resize mode)|_note_"
     "󰋱  Encoger alto 60px|k (resize mode)|_note_"
@@ -82,48 +92,66 @@ entries=(
     "󰋱  Estirar ancho 10px|→ (resize mode)|_note_"
     "󰌌  Salir de resize|Return / Escape|_note_"
 
-    # ── Redimensionar con mouse ─────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                 REDIMENSIONAR CON MOUSE                  │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰆕  Ancho +40px|${mod}+scroll up|_note_"
     "󰆕  Ancho -40px|${mod}+scroll down|_note_"
     "󰆕  Alto -40px|${mod}+Shift+scroll up|_note_"
     "󰆕  Alto +40px|${mod}+Shift+scroll down|_note_"
 
-    # ── Capturas de pantalla ────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                   CAPTURAS DE PANTALLA                   │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰹑  Capturar región|Print|exec $scripts/screenshot-control region"
     "󰹑  Capturar ventana|Alt+Print|exec $scripts/screenshot-control window"
     "󰹑  Capturar con Swappy|Shift+Print|exec $scripts/screenshot-control swappy"
     "󰻃  Grabar área|${mod}+Print|exec $scripts/region-record"
 
-    # ── Compartir pantalla ──────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                    COMPARTIR PANTALLA                    │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰹑  Iniciar screenshare|${mod}+y|exec $scripts/screenshare-control start"
     "󰹑  Detener screenshare|${mod}+Shift+y|exec $scripts/screenshare-control stop"
 
-    # ── Volumen ─────────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                         VOLUMEN                          │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰕾  Subir volumen|XF86AudioRaiseVolume|exec $scripts/media-control volume_up"
     "󰝞  Bajar volumen|XF86AudioLowerVolume|exec $scripts/media-control volume_down"
     "󰝟  Silenciar|XF86AudioMute|exec $scripts/media-control mute"
 
-    # ── Multimedia ──────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                        MULTIMEDIA                        │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰐋  Play / Pausa|XF86AudioPlay|exec $scripts/media-control play_pause"
     "󰒮  Siguiente|XF86AudioNext|exec $scripts/media-control next"
     "󰒮  Anterior|XF86AudioPrev|exec $scripts/media-control prev"
 
-    # ── Brillo ──────────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                          BRILLO                          │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰛨  Subir brillo|XF86MonBrightnessUp|exec $scripts/media-control l-up"
     "󰛨  Bajar brillo|XF86MonBrightnessDown|exec $scripts/media-control l-down"
 
-    # ── Ratings rmpc ────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                       RATINGS RMPC                       │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰓇  Rating 0 (descartar)|${mod}+Alt+0|exec $scripts/rmpc-sticker-rating 0"
     "󰓇  Rating 1 (regular)|${mod}+Alt+7|exec $scripts/rmpc-sticker-rating 1"
     "󰓇  Rating 2 (buena)|${mod}+Alt+8|exec $scripts/rmpc-sticker-rating 2"
     "󰓇  Rating 3 (excelente)|${mod}+Alt+9|exec $scripts/rmpc-sticker-rating 3"
 
-    # ── Portapapeles ────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                       PORTAPAPELES                       │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰅍  Historial de texto|${mod}+d|exec rofi -show \"󰯗  Historial de texto\" -modi \"󰯗  Historial de texto:\$HOME/.config/rofi/scripts/cliphist-modi-text\" -theme \"\$HOME/.config/rofi/themes/cliphist-modi-text.rasi\" -kb-custom-1 \"Alt+Delete\""
     "󰅍  Historial de imágenes|${mod}+Shift+d|exec rofi -show \"󰯕  Historial de imágenes\" -modi \"󰯕  Historial de imágenes:\$HOME/.config/rofi/scripts/cliphist-modi-image\" -theme \"\$HOME/.config/rofi/themes/cliphist-modi-image.rasi\" -kb-custom-1 \"Alt+Delete\""
     "󰃬  Calculadora|${mod}+c|exec rofi -show calc -modi calc -calc-command \"printf '%%s' '{result}' | wl-copy\" -no-show-match -theme \"\$HOME/.config/rofi/themes/calc-modi.rasi\""
 
-    # ── Utilidades ──────────────────────────────────────────────────
+    # ╒══════════════════════════════════════════════════════════╕
+    # │                        UTILIDADES                        │
+    # ╘══════════════════════════════════════════════════════════╛
     "󰌾  Bloquear pantalla|${mod}+z|exec $scripts/sway-idle lock"
     "󰱬  Buscar archivos|${mod}+Shift+n|exec $scripts/file-seek"
     "󰐦  Power menu|${mod}+Alt+e|exec ~/.config/rofi/scripts/power-menu"
@@ -131,7 +159,9 @@ entries=(
     "󰄱  Visor de atajos|${mod}+?|_note_"
 )
 
-# ── Presentar en rofi ────────────────────────────────────────────
+# ╒══════════════════════════════════════════════════════════╕
+# │                    PRESENTAR EN ROFI                     │
+# ╘══════════════════════════════════════════════════════════╛
 selection=$(
     for entry in "${entries[@]}"; do
         icon_desc="${entry%%|*}"
@@ -146,7 +176,9 @@ selection=$(
             -theme "$ROFI_THEME"
 )
 
-# ── Dispatch ─────────────────────────────────────────────────────
+# ╒══════════════════════════════════════════════════════════╕
+# │                         DISPATCH                         │
+# ╘══════════════════════════════════════════════════════════╛
 if [[ -n "$selection" ]]; then
     for entry in "${entries[@]}"; do
         IFS='|' read -r label keys cmd <<< "$entry"
