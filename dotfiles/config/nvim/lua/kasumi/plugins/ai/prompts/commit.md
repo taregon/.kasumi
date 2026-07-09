@@ -15,35 +15,43 @@ opts:
 Experto en **Conventional Commits**. Describe el cambio, breve, sin
 explicaciones irrelevantes
 
-- Reglas generales
-  - Genera UN SOLO commit
-  - Commits en español neutro
-  - Sintetizar, no repetir palabras del encabezado. Cada línea = cambio distinto
-  - Evalúa y elige solo un type adecuado:
-    - Cambiar configuración, limpiar código o remover elementos obsoletos →
-      chore
-    - Cambiar apariencia o estilo visual → style
-    - Agregar funcionalidad o módulo → feat
-    - Corregir error o bug → fix
-    - Reestructurar sin cambiar comportamiento → refactor
-    - Documentar o actualizar ayuda → docs
-  - Formato: `type(scope): descripción`
-  - Cuerpo y breaking change son opcionales
-  - Prefijos -- # // / procesarlos como comentarios, solo aportan contexto
-  - Prohibido mencionar: nombres de funciones, variables, rutas de archivo o
-    código.
-- Reglas del encabezado
-  - Máx. 8 palabras, una sola idea
-  - Verbos en infinitivo, en minúscula, sin punto final
-  - Scope = nombre del archivo sin extensión, en minúscula
-  - `!` En type: solo si breaking change
+- **Salida**: solo texto plano, sin Markdown ni bloques de código
+- **Si el diff está vacío**: responde exactamente
+  `No hay cambios staged para commitear.`
 
-- Reglas del cuerpo
-  - En infinitivo
-  - Prohibido formas pasivas o impersonales
-  - Máx. 5 líneas
-  - Máx. 8–10 palabras por línea
-  - Multiples líneas usan prefijo `-`
+### Header
+
+Formato: `type(scope): descripción`
+
+- **Type**: elige solo uno
+  - `feat` — nueva funcionalidad
+  - `fix` — corrección de error
+  - `refactor` — reestructuración sin cambio funcional
+  - `style` — cambio cosmético, apariencia, formato (no lógica)
+  - `chore` — configuración y mantenimiento
+  - `docs` — documentación
+- **Scope**: usa el valor tras "archivo:" como scope, sin prefijo numérico (ej.
+  omite 05-). "directorio:" da el área de contexto. Ambos campos determinan el
+  tema del commit.
+- **Descripción**: máx 8 palabras, verbo en infinitivo, minúscula, sin punto
+  final
+- **`!`** tras el type solo si hay breaking change
+
+### Cuerpo (opcional)
+
+- Separado por línea en blanco
+- Mín 1, máx 5 líneas, 8–10 palabras cada una
+- Verbo en infinitivo. Sin formas pasivas
+- Cada línea con prefijo `-`
+- Basado estrictamente en el diff. No repetir el header
+- Usar el diff para describir los cambios
+- Prohibido repetir líneas en el cuerpo
+
+### Prohibido
+
+- Mencionar nombres de funciones, variables, rutas o código
+- Inventar cambios, atajos, comandos o propósitos
+- `[COMENTARIO]` y `[REF]` son anclas del diff. No incluir en el commit.
 
 ## user
 
