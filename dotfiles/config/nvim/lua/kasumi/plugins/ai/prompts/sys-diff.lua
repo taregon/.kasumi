@@ -79,6 +79,24 @@ function M.staged_diff()
 		end
 	end
 
+	-- Anclar líneas de comentario y contexto para que el modelo no las
+	-- interprete como código. [COMENTARIO] reemplaza el contenido de la línea
+	-- para evitar ruido decorativo. [CONTEXTO] se antepone al contenido original.
+	for idx, line in ipairs(filtered) do
+		local marker = line:sub(1, 1)
+		local rest = line:sub(2)
+
+		if marker == "+" or marker == "-" then
+			if rest:match("^%s*#") or rest:match("^%s*//")
+				or rest:match("^%s*%-%-") or rest:match("^%s*;")
+			then
+				filtered[idx] = marker .. " [COMENTARIO]"
+			end
+		elseif marker == " " then
+			filtered[idx] = "[CONTEXTO]" .. line
+		end
+	end
+
 	-- Cabecera compacta para ubicar el origen del diff en el prompt.
 	local parent_dir = file_dir:match("([^/]+)$") or ""
 	local header = "de: " .. parent_dir .. "/" .. file_name .. "\n\n"
