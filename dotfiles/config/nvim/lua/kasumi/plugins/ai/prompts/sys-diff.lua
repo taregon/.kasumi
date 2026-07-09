@@ -87,9 +87,7 @@ function M.staged_diff()
 		local rest = line:sub(2)
 
 		if marker == "+" or marker == "-" then
-			if rest:match("^%s*#") or rest:match("^%s*//")
-				or rest:match("^%s*%-%-") or rest:match("^%s*;")
-			then
+			if rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;") then
 				filtered[idx] = marker .. " [COMENTARIO]"
 			end
 		elseif marker == " " then
