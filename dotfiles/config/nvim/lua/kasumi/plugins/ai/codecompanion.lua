@@ -34,7 +34,7 @@ codecompanion.setup({
 				})
 			end,
 
-			gemma4 = function()
+			gemma = function()
 				return require("codecompanion.adapters").extend("ollama", {
 					name = "Gemma-4",
 					-- stylua: ignore
@@ -51,15 +51,19 @@ codecompanion.setup({
 				})
 			end,
 
-			gemma4_itq5 = function()
+			-- think en schema (no en parameters): el adapter Ollama reconstruye
+			-- self.parameters.think desde el default del schema
+			-- (check_thinking_capability), sobrescribiendo parameters estatico.
+			gemma_it = function()
 				return require("codecompanion.adapters").extend("ollama", {
 					name = "Gemma-4-it",
 					-- stylua: ignore
 					schema = {
-						model          = { default = "hf.co/mradermacher/gemma-4-E2B-it-uncensored-GGUF:Q4_K_M" },
+						model          = { default = "gemma4:e2b-it-qat" },
+						think          = { default = false },
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
-						repeat_penalty = { default = 1.01 },
+						repeat_penalty = { default = 1.10 },
 						temperature    = { default = 0.38 },
 						top_p          = { default = 0.84 },
 						top_k          = { default = 40 },
@@ -73,9 +77,8 @@ codecompanion.setup({
 					name = "Qwen-3-it",
 					-- stylua: ignore
 					schema = {
-						-- Cerberus 4B v2 Abliterated: basado en Qwen2
-						-- Sitio oficial: https://cerberusai.dev/
-						-- Modelo: hf.co/Grimxlock/cerberus-4b-v2-abliterated:Q4_K_M
+						-- Qwen3-4B-Instruct-2507 (Q4_K_M)
+						-- Sitio oficial: https://huggingface.co/Jeney
 						model          = { default = "hf.co/Jeney/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M" },
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
@@ -95,8 +98,8 @@ codecompanion.setup({
 	-- "strategies" fue renombrado a "interactions" en versiones recientes
 	-- stylua: ignore
 	interactions = {
-		chat   = { adapter = "gemma4_itq5" },
-		inline = { adapter = "gemma4" },
+		chat   = { adapter = "gemma_it" },
+		inline = { adapter = "gemma" },
 	},
 	display = {
 		chat = {
