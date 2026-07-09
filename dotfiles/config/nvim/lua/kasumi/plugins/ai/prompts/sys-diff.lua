@@ -35,10 +35,20 @@ function M.staged_diff()
 	end
 
 	local repo_root = vim.trim(root_res.stdout)
-	local file_name = vim.fn.fnamemodify(abs_path, ":t") -- nombre del archivo seguro
+	-- base conserva el prefijo numérico (ej. 05-ytdlp). El scope en commit.md
+	-- omite ese prefijo; aquí solo se extrae el nombre sin extensión.
+	local base = vim.fn.fnamemodify(abs_path, ":t:r") -- 05-ytdlp (sin extensión)
 
 	-- Path relativo requerido por git diff dentro del repo.
+	-- +2 salta el separador "/" entre repo_root y el resto del path.
 	local rel_path = abs_path:sub(#repo_root + 2)
+
+	-- Gemma-4 no distingue markdown de código; se detecta extensión para
+	-- inyectar "tipo: docs" sin ancla por línea (el hint encuadra el diff,
+	-- marcar cada línea era redundante y saturaba el prompt).
+	local doc_exts = { md = true, markdown = true, txt = true, rst = true, adoc = true, org = true }
+	local ext = vim.fn.fnamemodify(abs_path, ":e"):lower()
+	local is_doc = doc_exts[ext] or false
 
 	-- Diff staged del archivo actual, sin color ni herramientas externas.
 	local diff_res = vim.system({
@@ -63,8 +73,11 @@ function M.staged_diff()
 		return "  No hay cambios staged en este archivo."
 	end
 
-	-- Limpiar el diff: eliminar metadatos git (diff --git, index, @@, ---/+++).
-	-- Solo se conservan líneas de cambio (+/-) y contexto ( ).
+	-- Eliminar metadatos git (diff --git, index, @@, ---/+++), conservar solo
+	-- líneas de cambio (+/-) y contexto ( ).
+	-- WARN: en Lua "-" es carácter mágico; "^--- " coincide con "- " y
+	-- descarta eliminaciones. Debe ser "^%-%-%- " (guiones escapados con %).
+	-- No "corregir" a "--- " sin "%".
 	local lines = vim.split(diff_out, "\n", { plain = true })
 	local filtered = {}
 
@@ -72,7 +85,7 @@ function M.staged_diff()
 		local is_header = line:match("^@@ ")
 			or line:match("^diff ")
 			or line:match("^index ")
-			or line:match("^--- ")
+			or line:match("^%-%-%- ")
 			or line:match("^%+%+%+ ")
 
 		if not is_header then
@@ -80,22 +93,26 @@ function M.staged_diff()
 		end
 	end
 
-	-- El modelo Gemma-4-it no distingue sintaxis de comentarios (#, //, --, ;)
-	-- del lenguaje y confunde decoración con código, clasificando cambios
-	-- cosméticos como feat. Solución: reemplazar contenido de líneas comentario
-	-- con [COMENTARIO] y prefijar contexto con [CONTEXTO]. Sin estos anclas,
-	-- el modelo interpreta todo el diff como código funcional y alucina
-	-- funcionalidades inexistentes.
+	-- Gemma-4-it confunde sintaxis de comentarios con código funcional.
+	-- [COMENTARIO] reemplaza líneas de comentario, [REF] marca contexto.
+	-- Sin estas anclas el modelo alucina funcionalidades inexistentes.
 	for idx, line in ipairs(filtered) do
 		local marker = line:sub(1, 1)
 		local rest = line:sub(2)
 
 		if marker == "+" or marker == "-" then
-			if rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;") then
+			-- En archivos doc no se marca [COMENTARIO]: el hint "tipo: docs"
+			-- ya encuadra el diff; evita confundir # de markdown con comentario.
+			-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
+			-- bloques /* */ ni """; Gemma-4 no los requiere para inferir.
+			if
+				not is_doc
+				and (rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;"))
+			then
 				filtered[idx] = marker .. " [COMENTARIO]"
 			end
 		elseif marker == " " then
-			filtered[idx] = "[CONTEXTO]" .. line
+			filtered[idx] = "[REF]" .. line
 		end
 	end
 
@@ -134,13 +151,18 @@ function M.staged_diff()
 	end
 
 	local hint = ""
-	if changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
+	if is_doc then
+		hint = "\ntipo: docs (archivo de documentación)"
+	elseif changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
 		hint = "\ntipo: style (solo comentarios)"
 	end
 
-	-- Cabecera compacta para ubicar el origen del diff en el prompt.
+	-- Cabecera estructurada: "directorio:" y "archivo:" dan contexto de
+	-- origen; commit.md usa ambos para inferir el scope. "lenguaje:" es la
+	-- extensión del archivo; el modelo infiere el lenguaje desde ella.
 	local parent_dir = file_dir:match("([^/]+)$") or ""
-	local header = "de: " .. parent_dir .. "/" .. file_name .. hint .. "\n\n"
+	-- ext ya se calculó en línea 47; se reutiliza para el campo "lenguaje:".
+	local header = "directorio: " .. parent_dir .. "\narchivo: " .. base .. "\nlenguaje: " .. ext .. hint .. "\n\n"
 	return header .. table.concat(filtered, "\n")
 end
 
