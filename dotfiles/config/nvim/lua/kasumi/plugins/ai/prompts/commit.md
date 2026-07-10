@@ -52,6 +52,9 @@ Formato: `type(scope): descripción`
 - Mencionar nombres de funciones, variables, rutas o código
 - Inventar cambios, atajos, comandos o propósitos
 - `[COMENTARIO]` y `[REF]` son anclas del diff. No incluir en el commit.
+- Enviar texto con errores detectables.
+- Generar texto con errores ortográficos, puntuación o palabras unidas por falta
+  de espacios.
 
 ## user
 
