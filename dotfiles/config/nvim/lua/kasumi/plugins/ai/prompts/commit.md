@@ -30,9 +30,9 @@ Formato: `type(scope): descripción`
   - `style` — cambio cosmético, apariencia, formato (no lógica)
   - `chore` — configuración y mantenimiento
   - `docs` — documentación
-- **Scope**: usa el valor tras "archivo:" como scope, sin prefijo numérico (ej.
-  omite 05-). "directorio:" da el área de contexto. Ambos campos determinan el
-  tema del commit.
+- **Scope**: usa el valor tras "archivo:" como scope, sin prefijo numérico.
+  "directorio:" da el área de contexto. Ambos campos determinan el tema del
+  commit.
 - **Descripción**: máx 8 palabras, verbo en infinitivo, minúscula, sin punto
   final
 - **`!`** tras el type solo si hay breaking change
