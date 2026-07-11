@@ -14,7 +14,7 @@ local function num_levels_h2(_, item)
 	local levels = item.levels or {}
 	local h_index = levels[#levels] or "?"
 
-	return "  " .. h_index .. ".   "
+	return "" .. h_index .. ". "
 end
 
 local function num_levels_h3(_, item)
@@ -24,7 +24,7 @@ local function num_levels_h3(_, item)
 	local last = levels[depth] or "?"
 	local prev = levels[depth - 1]
 
-	return "🙗  " .. prev .. "." .. last .. " "
+	return "" .. prev .. "." .. last .. " 🯛 "
 end
 
 -- Genera una lista de highlights tipo gradiente (1→9),
@@ -98,7 +98,7 @@ require("markview").setup({
 			min_width = 60,
 			pad_amount = 3,
 
-			label_direction = "right",
+			label_direction = "left",
 
 			default = {
 				block_hl = "MarkviewCode",
@@ -108,29 +108,19 @@ require("markview").setup({
 
 		headings = { -- ────────────────────────────────────────────────────────────
 			enable = true,
-			shift_width = 2,
+			shift_width = 1,
 
 			heading_1 = {
-				style = "label",
-				align = "center",
-				padding_left = " ❰ ",
-				padding_right = " ❱ ",
+				style = "icon",
 				icon = "  ",
 				sign = "",
-				hl = "MarkviewHeading1",
+				hl = "MarkviewHeading1NoBg",
 			},
 
 			heading_2 = {
-				style = "label",
-				align = "center",
+				style = "icon",
 				icon = num_levels_h2,
 				sign = "",
-				corner_left = "▒",
-				corner_right = "▒ ",
-				corner_left_hl = "MarkviewHeading2Sign",
-				corner_right_hl = "MarkviewHeading2Sign",
-				padding_left = "  ",
-				padding_right = "    ",
 				hl = "MarkviewHeading2",
 			},
 
@@ -139,20 +129,17 @@ require("markview").setup({
 				-- border = "-",
 				icon = num_levels_h3,
 				sign = "",
-				hl = "MarkviewHeading3",
+				hl = "MarkviewHeading3NoBg",
 			},
 
 			heading_4 = {
-				style = "label",
-				padding_left = "  ",
-				padding_right = "  ",
-				corner_left = "⎣",
-				corner_right = "⎦",
+				style = "icon",
 				icon = "  ",
+				sign = "",
 				hl = "MarkviewHeading4",
 			},
-			heading_5 = { style = "icon", icon = "󰎯  ", hl = "MarkviewHeading5" },
-			heading_6 = { style = "icon", icon = "󰎴  ", hl = "MarkviewHeading6" },
+			-- 	heading_5 = { style = "icon", icon = "󰎯  ", hl = "MarkviewHeading5" },
+			-- 	heading_6 = { style = "icon", icon = "󰎴  ", hl = "MarkviewHeading6" },
 		},
 
 		horizontal_rules = { -- ────────────────────────────────────────────────────────────
@@ -172,7 +159,7 @@ require("markview").setup({
 				{
 					type = "text",
 					text = "   ",
-					hl = "MarkviewGradient9",
+					hl = "MarkviewGradientCenter",
 				},
 				{
 					type = "repeating",
@@ -190,22 +177,16 @@ require("markview").setup({
 		list_items = { -- ────────────────────────────────────────────────────────────
 			enable = true,
 			wrap = true,
-			indent_size = 4,
 
-			shift_width = function(buffer, item)
-				local sw = vim.bo[buffer].shiftwidth
-				local step = math.max(1, math.floor(sw / 2))
+			-- indent_size = 12,
 
-				return math.floor(item.indent / sw) * step + 4
-			end,
+			shift_width = 3,
 
 			marker_minus = {
 				enable = true,
-				add_padding = function()
-					return true
-				end,
+				add_padding = true,
 				conceal_on_checkboxes = true,
-				text = "🙗 ",
+				text = "🙓",
 				hl = "MarkviewListItemMinus",
 			},
 
@@ -230,7 +211,7 @@ require("markview").setup({
 		tables = { -- ────────────────────────────────────────────────────────────
 			enable = true,
 			block_decorator = true,
-			use_virt_lines = true,
+			use_virt_lines = false,
 
 			parts = {
 				top = { "┌", "─", "┐", "┬" },
