@@ -96,6 +96,7 @@ require("markview").setup({
 			["CITE"]  = { hl = "MarkviewBlockQuoteDefault", preview = "󱆨  Cite", title  = true, icon = "󱆨 " },
 			["QUOTE"] = { hl = "MarkviewBlockQuoteDefault", preview = "󱆨  Quote", title = true, icon = "󱆨 " },
 		},
+		-- stylua: ignore end
 
 		code_blocks = { -- ────────────────────────────────────────────────────────────
 			enable = true,
@@ -120,9 +121,9 @@ require("markview").setup({
 
 			heading_1 = {
 				style = "icon",
-				icon = "  ",
+				icon = "  ",
 				sign = "",
-				hl = "MarkviewHeading1NoBg",
+				hl = "MarkviewHeading1",
 			},
 
 			heading_2 = {
@@ -167,7 +168,7 @@ require("markview").setup({
 				{
 					type = "text",
 					text = "   ",
-					hl = "MarkviewGradientCenter",
+					hl = "MarkviewGradient9",
 				},
 				{
 					type = "repeating",
