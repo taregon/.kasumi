@@ -295,16 +295,15 @@
       "transition-left-to-right": false
     },
     "modules": [
-      "mpris",
+      "custom/scrollmpris",
       "mpd"
     ]
   },
 
-  // ── Media (MPRIS nativo) ─────────────────────────────────
-  // Acciones built-in:
-  //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
-  //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
-  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
+  // ── Media (MPRIS nativo — FALLBACK) ──────────────────────
+  // Descomentar este bloque y comentar custom/scrollmpris
+  // para volver al modulo nativo.
+  /*
   "mpris": {
     "format": "{player_icon} {status_icon} {dynamic}",
     "format-paused": "{player_icon} {status_icon} {dynamic}",
@@ -325,6 +324,17 @@
     "on-scroll-down": "playerctl position 5-",
     "tooltip": true,
     "max-length": 26
+  },
+  */
+
+  // ── Media (ScrollMPRIS) ──────────────────────────────────
+  // Alternativa con scroll tipo LCD. Reemplaza al mpris nativo.
+  // https://github.com/BEST8OY/ScrollMPRIS
+  "custom/scrollmpris": {
+    "return-type": "json",
+    "exec": "ScrollMPRIS --width 26 --scroll wrapping --freeze --no-status-icon",
+    "escape": true,
+    "on-click": "playerctl play-pause"
   },
 
   // ── Media (MPD — tiempo) ─────────────────────────────────
@@ -350,11 +360,11 @@
 
   // ── Cava (visualizador de audio) ─────────────────────────
   // Usa ~/.config/sway/scripts/cava-bar
-  // "custom/cava-internal": {
-  //   "format": "{}",
-  //   "exec": "~/.config/sway/scripts/cava-bar",
-  //   "on-click": "pkill -x waybar; swaymsg reload"
-  // },
+  "custom/cava-internal": {
+    "format": "{}",
+    "exec": "~/.config/sway/scripts/cava-bar",
+    "on-click": "pkill -x waybar; swaymsg reload"
+  },
 
   // ── Conectividad ─────────────────────────────────────────
   "bluetooth": {
