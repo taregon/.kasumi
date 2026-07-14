@@ -295,15 +295,16 @@
       "transition-left-to-right": false
     },
     "modules": [
-      "custom/scrollmpris",
+      "mpris",
       "mpd"
     ]
   },
 
-  // ── Media (MPRIS nativo — FALLBACK) ──────────────────────
-  // Descomentar este bloque y comentar custom/scrollmpris
-  // para volver al modulo nativo.
-  /*
+  // ── Media (MPRIS nativo) ─────────────────────────────────
+  // Acciones built-in:
+  //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
+  //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
+  // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
   "mpris": {
     "format": "{player_icon} {status_icon} {dynamic}",
     "format-paused": "{player_icon} {status_icon} {dynamic}",
@@ -325,21 +326,25 @@
     "tooltip": true,
     "max-length": 26
   },
-  */
 
-  // ── Media (ScrollMPRIS) ──────────────────────────────────
-  // Alternativa con scroll tipo LCD. Reemplaza al mpris nativo.
-  // https://github.com/BEST8OY/ScrollMPRIS
+  // ── Media (ScrollMPRIS — FALLBACK) ───────────────────────
+  // Descomentar este bloque y comentar mpris arriba para
+  // volver a ScrollMPRIS.
+  /*
   "custom/scrollmpris": {
     "return-type": "json",
-    "exec": "ScrollMPRIS --width 26 --scroll wrapping --freeze --no-status-icon",
+    "exec": "ScrollMPRIS --width 22 --scroll wrapping --freeze --no-status-icon --tooltip-format '{title} - {artist} - {album}'",
     "escape": true,
     "on-click": "playerctl play-pause"
   },
+  */
 
   // ── Media (MPD — tiempo) ─────────────────────────────────
-  // Exclusivo para mostrar tiempo de reproducción. Sin acciones;
-  // todos los controles (play, prev, next) están en mpris.
+  // Exclusivo para mostrar tiempo de reproducción.
+  // Solo funciona con MPD (rmpc, ncmpcpp, etc.).
+  // YouTube, navegadores y otras fuentes MPRIS no aparecen aquí;
+  // para tiempo universal usar ScrollMPRIS con -p.
+  // Sin acciones; todos los controles (play, prev, next) están en mpris.
   // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPD
   "mpd": {
     "format": "{stateIcon} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
