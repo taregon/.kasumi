@@ -10,7 +10,7 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
-continuation_prompt = "[▸▹ ](dimmed fg:ka_overlay0)"
+continuation_prompt = "[󰁃 ](dimmed fg:ka_overlay0)"
 # scan_timeout = 35
 # command_timeout = 700
 
@@ -117,7 +117,7 @@ style = "fg:ka_mantle bg:ka_teal"
 # read_only_style = "fg:color_directory"
 # repo_root_style = "bold fg:color_directory"
 format = "[](fg:ka_crust bg:ka_teal)[ $path ]($style)[](fg:ka_teal)"
-read_only = " "
+read_only = ""
 home_symbol = "~"
 truncation_symbol = "‥/"
 truncation_length = 3
@@ -254,10 +254,13 @@ disabled = true
 [gcloud]
 disabled = true
 
-[openstack]
+[kubernetes]
 disabled = true
 
-[kubernetes]
+[nats]
+disabled = true
+
+[openstack]
 disabled = true
 
 [pulumi]
@@ -289,13 +292,13 @@ disabled = true
 [meson]
 disabled = true
 
+[mise]
+disabled = true
+
 [terraform]
 disabled = true
 
 [xmake]
-disabled = true
-
-[mise]
 disabled = true
 
 # ───────────────────< LENGUAJES Y RUNTIMES >───────────────────
@@ -368,13 +371,16 @@ disabled = true
 [nim]
 disabled = true
 
+[nodejs]
+disabled = true
+
 [odin]
 disabled = true
 
-[opa]
+[ocaml]
 disabled = true
 
-[ocaml]
+[opa]
 disabled = true
 
 [perl]
@@ -433,6 +439,9 @@ disabled = true
 [direnv]
 disabled = true
 
+[env_var]
+disabled = true
+
 [guix_shell]
 disabled = true
 
@@ -445,7 +454,13 @@ disabled = true
 [nix_shell]
 disabled = true
 
+[shell]
+disabled = true
+
 [shlvl]
+disabled = true
+
+[sudo]
 disabled = true
 
 [vagrant]
@@ -467,16 +482,6 @@ disabled = true
 [pijul_channel]
 disabled = true
 
-# ───────────────────────< IA / EXTRAS >─────────────────────
-[claude_context]
-disabled = true
-
-[claude_cost]
-disabled = true
-
-[claude_model]
-disabled = true
-
 # ───────────────────────────< MISC >───────────────────────────
 [localip]
 disabled = true
@@ -487,8 +492,8 @@ disabled = true
 [os]
 disabled = true
 
-[vcsh]
+[vcs]
 disabled = true
 
-[vcs]
+[vcsh]
 disabled = true
