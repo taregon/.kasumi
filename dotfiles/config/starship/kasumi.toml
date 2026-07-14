@@ -439,8 +439,9 @@ disabled = true
 [direnv]
 disabled = true
 
-[env_var]
-disabled = true
+# env_var omitido intencionalmente: starship 1.26.0 rechaza todo el archivo
+# si esta seccion esta presente, incluso con disabled = true. Por defecto el
+# modulo ya esta deshabilitado, por lo que no es necesario declararlo.
 
 [guix_shell]
 disabled = true
@@ -480,6 +481,16 @@ disabled = true
 disabled = true
 
 [pijul_channel]
+disabled = true
+
+# ───────────────────────────< CLAUDE >───────────────────────────
+[claude_context]
+disabled = true
+
+[claude_cost]
+disabled = true
+
+[claude_model]
 disabled = true
 
 # ───────────────────────────< MISC >───────────────────────────
