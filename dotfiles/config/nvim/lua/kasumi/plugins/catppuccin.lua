@@ -163,15 +163,15 @@ require("catppuccin").setup({
 			-- ────────────────────────< MARKVIEW >─────────────────────
 			-- Bloques de código
 			MarkviewCode = {
-				bg = kas.darken(colors.mantle, 0.8, colors.base),
+				bg = colors.base,
 			},
 			MarkviewCodeInfo = {
 				fg = colors.overlay0,
 				bg = kas.darken(colors.mantle, 0.8, colors.base),
 			},
 			MarkviewInlineCode = {
-				fg = kas.darken(colors.sapphire, 0.80, colors.base),
-				bg = kas.darken(colors.green, 0.25, colors.base),
+				fg = kas.darken(colors.sapphire, 0.75, colors.base),
+				bg = kas.darken(colors.green, 0.20, colors.base),
 			},
 
 			-- Tablas
@@ -206,13 +206,23 @@ require("catppuccin").setup({
 			},
 
 			-- Encabezados
+			MarkviewHeading1 = {
+				fg = kas.darken(colors.red, 0.95, colors.base),
+				bg = kas.darken(colors.red, 0.10, colors.base),
+			},
 			MarkviewHeading2 = {
 				fg = kas.darken(colors.peach, 0.95, colors.base),
-				bg = kas.darken(colors.peach, 0.12, colors.base),
+				bg = kas.darken(colors.peach, 0.10, colors.base),
 			},
 			MarkviewHeading3 = {
 				fg = kas.darken(colors.peach, 0.95, colors.base),
-				bg = kas.darken(colors.peach, 0.06, colors.base),
+			},
+			MarkviewHeading4 = {
+				fg = kas.darken(colors.sapphire, 0.95, colors.base),
+				bg = kas.darken(colors.blue, 0.06, colors.base),
+			},
+			MarkviewGradientCenter = {
+				fg = kas.darken(colors.blue, 0.45, colors.base),
 			},
 			MarkviewHeading2Sign = {
 				fg = kas.darken(colors.base, 0.90, colors.peach),
