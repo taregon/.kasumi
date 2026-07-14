@@ -7,6 +7,14 @@
 # https://starship.rs/config/
 # https://fossies.org/linux/misc/starship-1.25.0.tar.gz/starship-1.25.0/docs/config/README.md
 # https://raw.githubusercontent.com/martinemde/starship-claude/refs/heads/main/plugin/templates/powerline.toml
+
+# ── Listar todos los módulos con su estado: ─────────────────
+#  starship print-config --default | grep -E '^\[' | sed 's/\[//;s/\]//' | while read mod; do
+#    st=$(starship print-config --default | sed -n "/^\[$mod\]/,/^\[/p" | grep 'disabled = ' | head -1)
+#    if [ -z "$st" ]; then echo "$mod: enabled (default)"
+#    else echo "$mod: $st"; fi
+#  done | sort
+
 "$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
@@ -238,12 +246,6 @@ disabled = false
 style = "fg:ka_maroon"
 min_time = 2_000
 format = "[$duration]($style) "
-
-# ╒════════════════════════════════════════════════════════════╕
-# │                   MÓDULOS DESHABILITADOS                   │
-# ╘════════════════════════════════════════════════════════════╛
-# Ver estado de módulos:
-#   starship print-config | grep -E '^\[[a-z_]+\]|^\s*disabled = '
 
 # ──────────────────────< CLOUD / INFRA >────────────────────
 [aws]
