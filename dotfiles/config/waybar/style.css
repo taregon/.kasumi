@@ -107,7 +107,7 @@ window#waybar {
 #language,
 #memory,
 #mpd,
-#custom-scrollmpris,
+#mpris,
 #network,
 #privacy,
 #temperature,
@@ -351,11 +351,10 @@ window#waybar {
   color: @overlay1;
 }
 
-/* #mpris (fallback) — ver config.jsonc
 #mpris {
   color: @mauve;
-  animation: blink 3s linear infinite alternate;
-  transition: color 0.4s ease, opacity 0.3s ease;
+  animation: blink 2s linear infinite alternate;
+  transition: color 0.4s ease, opacity 0.3s ease, background-color 0.4s ease;
 }
 
 #mpris.playing {
@@ -371,8 +370,8 @@ window#waybar {
   border-left: 3px solid transparent;
   padding-left: 6px;
 }
-*/
 
+/* #custom-scrollmpris (fallback) — ver config.jsonc
 #custom-scrollmpris {
   color: @mauve;
   transition: color 0.4s ease, opacity 0.3s ease;
@@ -391,6 +390,7 @@ window#waybar {
   border-left: 3px solid transparent;
   padding-left: 6px;
 }
+*/
 
 #mpd {
   color: @mauve;
