@@ -11,8 +11,9 @@
 
 add_newline = true
 continuation_prompt = "[󰁃 ](dimmed fg:ka_overlay0)"
-# scan_timeout = 35
-# command_timeout = 700
+scan_timeout = 50
+command_timeout = 1000
+follow_symlinks = false
 
 format = """
 [▒](fg:ka_crust)\
