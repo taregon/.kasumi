@@ -76,7 +76,7 @@ cmp.setup({
 			})
 
 			-- 2. Aplicar lspkind (configuración original)
-			item = require("lspkind").cmp_format({
+			item = lspkind.cmp_format({
 				mode = "symbol_text",
 				maxwidth = 50,
 				ellipsis_char = "󱗘 ",
