@@ -65,18 +65,19 @@ window#waybar {
 /*
  * ╒═════════════════════════════════════════════════════════╕
  * │              ESTILO BASE DE MÓDULOS                     │
- * │  Borde, fondo, padding y radio unificados              │
+ * │  Borde, fondo, padding y radio unificados               │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
-/* ── Convencion de margenes ───────────────────────────────────
-   Todos los modulos usan margin: 8px 0 (vertical).
-   El espaciado horizontal se maneja con padding: 6px 8px.
-   No usar margin horizontal en modulos individuales.
-   ────────────────────────────────────────────────────────── */
+/* ── Convencion de margenes ─────────────────────────── ── */
 
-/* ── Convencion de padding ───────────────────────────────────
-   padding unificado a 6px 8px para todos los modulos.
+/* Todos los modulos usan margin: 8px 0 (vertical).
+   El espaciado horizontal se maneja con padding: 6px 8px.
+   No usar margin horizontal en modulos individuales. */
+
+/* ── Convencion de padding ──────────────────────────── ── */
+
+/* padding unificado a 6px 8px para todos los modulos.
    6px vertical: altura suficiente para respiro sin agrandar
    la barra. 8px horizontal: consistente con el padding de
    grupos drawer (0) y tooltips (4px 8px).
@@ -84,14 +85,13 @@ window#waybar {
    se declara autosuficiente: se remueve del grupo base y se
    le asignan padding y margin explicitos en su propia regla.
    Ej: keyboard-state, scratchpad.
-   drawers, #waybar * (reset) y tooltip label no se tocan.
-   ────────────────────────────────────────────────────────── */
+   drawers, #waybar * (reset) y tooltip label no se tocan. */
 
-/* ── Separacion entre modulos ────────────────────────────────
-   El espacio entre modulos adyacentes se controla desde
+/* ── Separacion entre modulos ───────────────────────── ── */
+
+/* El espacio entre modulos adyacentes se controla desde
    config.jsonc: "spacing": 8 px. No es un valor CSS.
-   No agregar margin horizontal a modulos individuales.
-   ────────────────────────────────────────────────────────── */
+   No agregar margin horizontal a modulos individuales. */
 
 #backlight,
 #battery,
@@ -320,7 +320,7 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │      CENTRO — Reloj                                    │
+ * │                     CENTRO — Reloj                      │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
@@ -330,14 +330,17 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │      DERECHA — Portapapeles, brillo, media, audio,       │
- * │      batería, power                                      │
+ * │                         DERECHA                         │
  * ╘═════════════════════════════════════════════════════════╛
  */
+
+/* ── Brillo ─────────────────────────────────────────── ── */
 
 #backlight {
   color: @yellow;
 }
+
+/* ── Audio ──────────────────────────────────────────── ── */
 
 #wireplumber {
   color: @flamingo;
@@ -350,6 +353,8 @@ window#waybar {
 #wireplumber.muted {
   color: @overlay1;
 }
+
+/* ── Media ──────────────────────────────────────────── ── */
 
 #mpris {
   color: @mauve;
@@ -402,6 +407,8 @@ window#waybar {
   background-color: @base;
   font-size: 14px;
 }
+
+/* ── Power ──────────────────────────────────────────── ── */
 
 #custom-power {
   font-size: 20px;
