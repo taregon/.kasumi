@@ -142,20 +142,30 @@ window#waybar {
  * ╘═════════════════════════════════════════════════════════╛
  */
 
-#group-hardware {
+#group-hw-expand {
   padding: 0;
   margin: 0;
 }
 
-#group-hardware .hardware-hidden {
+#group-hw-expand .hw-expand-hidden {
   opacity: 0;
   margin: 0;
   padding: 0;
   transition: opacity 0.3s ease;
 }
 
-#group-hardware:hover .hardware-hidden {
+#group-hw-expand:hover .hw-expand-hidden {
   opacity: 1;
+}
+
+#custom-expand-hw {
+  color: @overlay1;
+  font-size: 12px;
+  padding: 6px 4px;
+}
+
+#group-hw-expand:hover #custom-expand-hw {
+  color: @sky;
 }
 
 #group-audio {
