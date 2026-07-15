@@ -114,7 +114,6 @@ window#waybar {
 #wireplumber {
   padding: 6px 8px;
   border: 1px solid shade(@base, 1.4);
-  border-radius: 4px;
   background-color: shade(@base, 1.1);
   opacity: 1;
   margin: 8px 0;
@@ -168,6 +167,32 @@ window#waybar {
   color: @sky;
 }
 
+#group-extra-left {
+  padding: 0;
+  margin: 0;
+}
+
+#group-extra-left .extra-left-hidden {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+#group-extra-left:hover .extra-left-hidden {
+  opacity: 1;
+}
+
+#custom-expand-extra {
+  color: @overlay1;
+  font-size: 12px;
+  padding: 6px 4px;
+}
+
+#group-extra-left:hover #custom-expand-extra {
+  color: @sky;
+}
+
 #group-audio {
   padding: 0;
   margin: 0;
@@ -209,6 +234,7 @@ window#waybar {
 #custom-launcher {
   font-size: 20px;
   color: @mauve;
+  border-radius: 4px;
 }
 
 #battery {
@@ -230,6 +256,7 @@ window#waybar {
 
 #cpu {
   color: @sky;
+  border: none;
 }
 
 #cpu.warning {
@@ -242,6 +269,7 @@ window#waybar {
 
 #memory {
   color: @sky;
+  border: none;
 }
 
 #memory.warning {
@@ -254,6 +282,8 @@ window#waybar {
 
 #disk {
   color: @green;
+  border: none;
+  border-right: 1px solid shade(@base, 1.4);
 }
 
 #disk.warning {
@@ -423,4 +453,5 @@ window#waybar {
 #custom-power {
   font-size: 20px;
   color: @red;
+  border-radius: 4px;
 }
