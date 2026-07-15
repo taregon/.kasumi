@@ -5,6 +5,9 @@
 -- └────────────────────────────────────────────┘
 local cmp = require("cmp")
 local luasnip = require("luasnip")
+luasnip.setup({
+	store_selection_keys = "<tab>",
+})
 local lspkind = require("lspkind")
 
 -- ┌────────────────────────────────────────────┐
@@ -27,9 +30,8 @@ cmp.setup({
 	completion = {
 		-- 'menu'     : Muestra un menú de opciones de auto completado.
 		-- 'menuone'  : Siempre muestra el menú, incluso si solo hay una opción disponible.
-		-- 'preview'  : Muestra una ventana de vista previa
 		-- 'noselect' : No selecciona automáticamente el primer elemento del menú
-		completeopt = "menu,menuone,preview,noselect",
+		completeopt = "menu,menuone,noselect",
 	},
 
 	-- Usa LuaSnip como motor de snippets
@@ -45,15 +47,11 @@ cmp.setup({
 		["<Up>"] = cmp.mapping.select_prev_item(),
 		["<Down>"] = cmp.mapping.select_next_item(),
 
-		-- PEND: Scroll en la ventana de documentación
-		["<C-d>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-
 		-- Forzar apertura del menú
 		["<C-Space>"] = cmp.mapping.complete(),
 
 		-- Cancelar el menú
-		["<C-e>"] = cmp.mapping.abort(),
+		["<C-c>"] = cmp.mapping.abort(),
 
 		-- Confirmar selección
 		["<CR>"] = cmp.mapping.confirm({ select = true }),
@@ -61,11 +59,11 @@ cmp.setup({
 
 	-- Orígenes del auto completado
 	sources = cmp.config.sources({
-		-- { name = "buffer", dup = 0 }, -- Textos del buffer actual
 		{ name = "luasnip" }, -- snippets
 		{ name = "nvim_lsp" }, -- LSP
+		{ name = "nvim_lua" }, -- APIs de Neovim
+		{ name = "buffer" }, -- Textos del buffer actual
 		{ name = "path" }, -- rutas del sistema
-		{ name = "supermaven" },
 	}),
 
 	-- Iconos para LSP
@@ -82,9 +80,6 @@ cmp.setup({
 				mode = "symbol_text",
 				maxwidth = 50,
 				ellipsis_char = "󱗘 ",
-				symbol_map = {
-					Supermaven = "",
-				},
 			})(entry, item)
 
 			-- 3. Si hay color, sobrescribir icono + highlight
