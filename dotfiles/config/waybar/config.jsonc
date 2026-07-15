@@ -13,7 +13,7 @@
   // "width": 1350, // (Opcional) Ancho de la barra
   "layer": "top",
   "position": "top", // Posición: top | bottom | left | right
-  "height": 20, // Altura de la barra
+  "height": 0, // Altura de la barra (0 = automática)
   "exclusive": true,
   "margin": "4 0 0 0", // Ancho completo, solo margen superior
   "spacing": 8, // px entre módulos adyacentes
@@ -23,7 +23,8 @@
   "modules-left": [
     "custom/launcher",
     "custom/workspaces",
-    "group/hardware",
+    "temperature",
+    "group/hw-expand",
     "idle_inhibitor",
     "custom/clipboard",
     "sway/scratchpad",
@@ -112,16 +113,21 @@
     "spacing": 5
   },
 
-  // ── Grupo hardware (drawer) ──────────────────────────────
-  "group/hardware": {
+  // ── Expand hardware (drawer) ─────────────────────────────
+  "custom/expand-hw": {
+    "format": "",
+    "tooltip": false
+  },
+
+  "group/hw-expand": {
     "orientation": "horizontal",
     "drawer": {
       "transition-duration": 300,
-      "children-class": "hardware-hidden",
+      "children-class": "hw-expand-hidden",
       "click-to-reveal": true
     },
     "modules": [
-      "temperature",
+      "custom/expand-hw",
       "cpu",
       "memory",
       "disk"
