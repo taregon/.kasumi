@@ -92,6 +92,7 @@ require("catppuccin").setup({
 	-- ╘═══════════════════════════════════════════════════════════╛
 	custom_highlights = function(colors)
 		local kasumi_colors = {
+			-- ────────────────────────< DIFF >────────────────────────
 			DiffDelete = {
 				fg = kas.darken(colors.red, 0.6, colors.base),
 				bg = kas.darken(colors.red, 0.1, colors.base),
@@ -108,6 +109,8 @@ require("catppuccin").setup({
 				fg = kas.darken(colors.yellow, 0.85, colors.base), -- Texto modificado
 				bg = kas.darken(colors.yellow, 0.06, colors.base), -- Igual a DiffChange
 			},
+
+			-- ─────────────────────< NEOVIM UI >─────────────────────
 			MsgArea = {
 				fg = kas.darken(colors.text, 0.8, colors.base), -- Area de comandos
 			},
@@ -164,14 +167,26 @@ require("catppuccin").setup({
 			-- Bloques de código
 			MarkviewCode = {
 				bg = colors.base,
+				-- bg = kas.darken(colors.overlay2, 0.06, colors.base),
 			},
 			MarkviewCodeInfo = {
-				fg = colors.overlay0,
-				bg = kas.darken(colors.mantle, 0.8, colors.base),
+				fg = kas.darken(colors.sapphire, 0.90, colors.base),
+				bg = kas.darken(colors.green, 0.10, colors.base),
 			},
 			MarkviewInlineCode = {
-				fg = kas.darken(colors.sapphire, 0.75, colors.base),
+				fg = kas.darken(colors.sapphire, 0.80, colors.base),
 				bg = kas.darken(colors.green, 0.20, colors.base),
+			},
+
+			-- Enlaces y blockquotes
+			MarkviewBlockQuoteDefault = {
+				fg = kas.darken(colors.blue, 0.90, colors.base),
+			},
+			MarkviewHyperlink = {
+				fg = kas.darken(colors.teal, 0.90, colors.base),
+			},
+			MarkviewPalette1Fg = {
+				fg = kas.darken(colors.teal, 0.90, colors.base),
 			},
 
 			-- Tablas
@@ -179,7 +194,7 @@ require("catppuccin").setup({
 				fg = kas.darken(colors.blue, 0.55, colors.base),
 			},
 			MarkviewTableBorder = {
-				fg = kas.darken(colors.blue, 0.35, colors.base),
+				fg = kas.darken(colors.overlay2, 0.35, colors.base),
 			},
 			MarkviewTableAlignLeft = {
 				fg = kas.darken(colors.blue, 0.65, colors.base),
@@ -215,11 +230,11 @@ require("catppuccin").setup({
 				bg = kas.darken(colors.peach, 0.10, colors.base),
 			},
 			MarkviewHeading3 = {
-				fg = kas.darken(colors.peach, 0.95, colors.base),
+				fg = kas.darken(colors.peach, 0.90, colors.base),
 			},
 			MarkviewHeading4 = {
-				fg = kas.darken(colors.sapphire, 0.95, colors.base),
-				bg = kas.darken(colors.blue, 0.06, colors.base),
+				fg = kas.darken(colors.green, 0.95, colors.base),
+				bg = kas.darken(colors.green, 0.10, colors.base),
 			},
 			MarkviewGradientCenter = {
 				fg = kas.darken(colors.blue, 0.45, colors.base),
@@ -230,7 +245,7 @@ require("catppuccin").setup({
 
 			-- Listas
 			MarkviewListItemMinus = {
-				fg = kas.darken(colors.pink, 0.74),
+				fg = kas.darken(colors.blue, 0.45, colors.base),
 			},
 
 			-- ────────────────────────< SCROLLBAR >────────────────────────
@@ -248,12 +263,23 @@ require("catppuccin").setup({
 			},
 		}
 
+		-- ────────────────────────< MARKUP >────────────────────────
 		--  Con esto separo el color de lualine de las variables de python
 		kasumi_colors["@variable"] = {
 			fg = colors.subtext0,
 		}
+		kasumi_colors["@markup.quote"] = {
+			fg = kas.darken(colors.blue, 0.65, colors.base),
+			style = { "italic" },
+		}
+		kasumi_colors["@markup.heading.markdown"] = {
+			fg = kas.darken(colors.blue, 0.65, colors.base),
+		}
+		kasumi_colors["@markup.list"] = {
+			fg = kas.darken(colors.blue, 0.45, colors.base),
+		}
 
-		-- ────────────────────────────────────────────────────────────
+		-- ────────────────────< MARKVIEW GRADIENT >──────────────────
 		-- Genera 9 niveles de gradiente para MarkviewGradient1..9,
 		-- interpolando linealmente un factor entre min y max para
 		-- oscurecer el color base de forma progresiva y consistente.
@@ -261,13 +287,13 @@ require("catppuccin").setup({
 		--      local factor = i * 0.1
 		local steps = 9
 		local min = 0.05
-		local max = 0.25
+		local max = 0.35
 
 		for i = 1, steps do
 			local factor = min + (max - min) * ((i - 1) / (steps - 1))
 
 			kasumi_colors["MarkviewGradient" .. i] = {
-				fg = kas.darken(colors.blue, factor, colors.base),
+				fg = kas.darken(colors.overlay2, factor, colors.base),
 			}
 		end
 		return kasumi_colors
