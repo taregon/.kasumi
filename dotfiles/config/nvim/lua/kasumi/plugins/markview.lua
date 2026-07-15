@@ -103,9 +103,11 @@ require("markview").setup({
 			style = "block",
 			sign = true,
 			label_hl = "MarkviewCodeInfo",
+			-- border_hl = "MarkviewTableBorder",
 
 			min_width = 60,
 			pad_amount = 3,
+			-- pad_char = "─",
 
 			label_direction = "left",
 
@@ -124,6 +126,7 @@ require("markview").setup({
 				icon = "  ",
 				sign = "",
 				hl = "MarkviewHeading1",
+				sign_hl = "MarkviewHeading1",
 			},
 
 			heading_2 = {
@@ -131,14 +134,15 @@ require("markview").setup({
 				icon = num_levels_h2,
 				sign = "",
 				hl = "MarkviewHeading2",
+				sign_hl = "MarkviewHeading2",
 			},
 
 			heading_3 = {
 				style = "icon",
-				-- border = "-",
 				icon = num_levels_h3,
 				sign = "",
-				hl = "MarkviewHeading3NoBg",
+				hl = "MarkviewHeading3",
+				sign_hl = "MarkviewHeading3",
 			},
 
 			heading_4 = {
@@ -195,7 +199,7 @@ require("markview").setup({
 				enable = true,
 				add_padding = true,
 				conceal_on_checkboxes = true,
-				text = "🙓",
+				text = "🟆",
 				hl = "MarkviewListItemMinus",
 			},
 
@@ -288,8 +292,8 @@ require("markview").setup({
 
 		inline_codes = { -- ────────────────────────────────────────────────────────────
 			hl = "MarkviewInlineCode",
-			padding_left = "  ",
-			padding_right = "  ",
+			padding_left = " ",
+			padding_right = " ",
 		},
 
 		block_references = { -- ────────────────────────────────────────────────────────────
