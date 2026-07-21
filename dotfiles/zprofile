@@ -32,6 +32,10 @@ export KASUMI_LYRICS_DIR="$HOME/Syncthing/OsiriaFS/PlayBack/Lyrics"
 # ─[ REGION RECORD ]──────────────────────────────────────────
 export KASUMI_RECORDING_DIR="$HOME/Documentos"
 
+# ─[ HTTP ]───────────────────────────────────────────────────
+# User-Agent para requests HTTP (curl, wget, etc.)
+export KASUMI_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
+
 # ─[ QT FIXES ]───────────────────────────────────────────────
 # Forzar backend XCB -> mejor compatibilidad y Auto-Type en Wayland
 # Ajustar el DPI de las fuentes para que se vean mejor sin necesidad de escalar demasiado

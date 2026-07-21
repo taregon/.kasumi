@@ -1,64 +1,53 @@
 # Convenciones para scripts shell, helpers zsh y configuracion
 
+## Skills del repositorio
+
+| Skill                   | Trigger                                                  |
+| :---------------------- | :------------------------------------------------------- |
+| `kasumi-rmpc`           | Al editar archivos `.ron` de rmpc                        |
+| `kasumi-output-format`  | Al crear/modificar scripts con salida de terminal        |
+| `kasumi-file-safety`    | Al manipular archivos o ejecutar scripts con rm          |
+| `kasumi-ascii-diagrams` | Al documentar layouts o jerarquías visuales              |
+| `box-comments`          | Al generar comentarios decorativos en cualquier lenguaje |
+
 ## Alcance
 
-Estas reglas aplican a este repositorio de dotfiles Kasumi. El sistema objetivo
-es Arch Linux con pacman/paru/AUR, Sway/Wayland, Kitty, rmpc y despliegue via
-dotdrop. No asumir convenciones de Debian, Ubuntu, Fedora, GNOME, KDE, X11 u
-otros gestores de paquetes.
+Dotfiles para Arch Linux (pacman/paru, Sway/Wayland, Kitty, rmpc, dotdrop). No
+asumir convenciones de otros sistemas operativos o gestores de paquetes.
 
-- Scripts bash en `dotfiles/scripts/`, `dotfiles/config/*/scripts/` y helpers
-  ejecutables similares.
-- Helpers zsh en `dotfiles/config/zsh/funcs/`.
-- Configuracion rmpc y temas RON.
-- Configuracion de terminal y salida pensada para Kitty.
+- Scripts bash en `dotfiles/scripts/`, `dotfiles/config/*/scripts/`.
+- Helpers zsh en `dotfiles/config/zsh/funcs/` (reglas en su `AGENTS.md`).
+- Configuracion rmpc, temas RON y terminal (Kitty).
 
-## Idioma
+## Escritura y caracteres
 
-- Usar español neutro, con tono impersonal y tecnico.
+- Usar español neutro, sin regionalismos ni modismos, con tono impersonal y
+  tecnico.
 - Mantener sin traducir terminos tecnicos, nombres de herramientas, flags,
   paquetes, APIs, URLs y sintaxis de codigo.
 - Conservar tokens estandar del area: `TODO`, `FIXME`, `NOTE`, `PEND`, `WARN` y
   similares.
-- Usar español neutro latinoamericano. Evitar regionalismos lexicos o
-  morfosintacticos marcados de paises o regiones concretas (argentinismos,
-  chilenismos, brasilenismos, etc.).
+- No usar caracteres Unicode invisibles en arte ASCII ni en strings de
+  configuracion. Los glifos Nerd Font (U+E000-U+F8FF) estan permitidos.
 
 ## Zona horaria
 
-- La zona horaria local del sistema es UTC-5.
-- Esta es la referencia para configuracion de hora en notificaciones y cualquier
-  funcionalidad que dependa de tiempo local.
+- Usar UTC-5 como referencia para timestamps, notificaciones y cualquier
+  funcionalidad dependiente de hora local.
 
 ## Gestor de paquetes
 
 - `paru` es el helper AUR estandar del repo; no reemplazarlo por `yay`.
-- Usar `pacman` cuando el script ya opere solo con repos oficiales o tareas del
-  sistema.
-- Usar `paru` cuando el script ya maneje AUR o listas mixtas.
-- No proponer `apt`, `dnf`, `brew`, `snap` ni `flatpak`.
+- Usar `pacman` para repos oficiales, `paru` para AUR o listas mixtas.
 - Usar `--needed` en instalaciones cuando aplique.
 
-## Sway y Wayland
+## Entorno grafico
 
-- El entorno grafico objetivo es Sway sobre Wayland.
-- Tratar X11 como legado y XWayland como capa de compatibilidad para
-  aplicaciones, no como base para scripts nuevos.
-- Preferir herramientas nativas Wayland: `swaymsg`, `grim`, `slurp`, `wl-copy`,
-  `wl-paste`, `wf-recorder`, `mako`, `cliphist` y `wlr-*` cuando aplique.
-- No proponer herramientas X11 como `xrandr`, `xdotool`, `xclip`, `xsel` o
-  `xprop`.
-- Mantener `rofi` como launcher/selector estandar del repo porque se usa en modo
-  Wayland; no reemplazarlo por `wofi`, `wmenu` u otro launcher sin peticion
+- Preferir herramientas nativas Wayland; no proponer equivalentes X11.
+- Mantener `rofi` como launcher/selector estandar; no reemplazarlo sin peticion
   explicita.
 - Usar `systemctl --user` y variables de entorno Wayland cuando el servicio
   pertenezca a la sesion grafica.
-
-## Helpers zsh
-
-Los helpers en `dotfiles/config/zsh/funcs/` son funciones ligeras autoload. No
-siguen las reglas de scripts bash. Las reglas completas viven en
-`dotfiles/config/zsh/funcs/AGENTS.md`.
 
 ## Scripts Bash
 
@@ -68,6 +57,8 @@ siguen las reglas de scripts bash. Las reglas completas viven en
 - Mantener tono descriptivo y tecnico, sin relleno.
 - Separar `local var` y `var=...` cuando la asignacion depende de un comando y
   se debe preservar su exit code.
+- Preferir heredoc con `tee` sobre pipelines con `echo`.
+- Preferir `echo -e "texto\n"` sobre echos vacios separados.
 
 ## Estructura
 
@@ -85,9 +76,6 @@ Separar cada capa con un comentario visual para navegacion rapida:
 ```bash
 # ── Setup ─────────────────────────────────────────────────────────────
 ```
-
-Los separadores visibles y glifos Nerd Font estan permitidos. Los caracteres
-Unicode invisibles no.
 
 ## Nombres y variables
 
@@ -118,7 +106,7 @@ Unicode invisibles no.
 Los helpers zsh son interactivos y pueden usar comentarios mas directos,
 incluyendo explicaciones de que hace una funcion.
 
-### Bloques técnicos
+## Bloques técnicos
 
 Cuando se documenten módulos o secciones de configuración:
 
@@ -149,91 +137,12 @@ Cuando se documenten módulos o secciones de configuración:
   linea.
 - Mantener Markdown envuelto de forma consistente.
 
-## Diagramas ASCII
-
-- Usar diagramas ASCII para ilustrar layouts, jerarquias y estructura de
-  configuracion cuando la representacion visual sea mas clara que una
-  descripcion textual.
-- Mantener alineacion y jerarquia visual consistentes usando espacios y
-  caracteres Unicode visibles: `─`, `│`, `┌`, `┐`, `└`, `┘`, `├`, `┤`, `┬`, `┴`,
-  `┼`.
-- Incluir nombres de widgets, bloques o archivos dentro del diagrama cuando
-  aporte contexto.
-- Los diagramas son opcionales; utilizarlos cuando mejoren claridad o
-  mantenibilidad.
-
-## Entrada, salida y archivos
-
-- Preferir heredoc con `tee` sobre pipelines con `echo`.
-- Preferir `echo -e "texto\n"` sobre echos vacios separados.
-- Marcar escritura de archivos con el color de accion y el icono ``.
-- Usar siempre 2 espacios despues de iconos Nerd Font. Es una regla normativa
-  para evitar bugs de renderizado en Kitty, no una preferencia estetica.
-
-```bash
-echo -e "   ${C_ACTION}  /ruta${C_RST}"
-```
-
 ## Robustez y seguridad
 
 - Verificar efectos secundarios: un comando puede aparentar éxito sin producir
   el estado esperado.
 - `|| true` solo en fallos esperados, con comentario inline del motivo.
 - No sobredimensionar validaciones si el comportamiento es predecible.
-
-## Operaciones destructivas y Git
-
-- Lectura Git permitida: `git status`, `git diff`, `git show`, `git log`.
-- Escritura Git prohibida sin petición explícita: `git add`, `commit`, `reset`,
-  `restore`, `checkout`, `clean`, `revert`, `stash`.
-- Antes de modificar archivos, revisar `git status --short`; asumir que cambios
-  no relacionados pertenecen al usuario.
-- Revertir cambios propios con patch puntual sobre líneas afectadas. Pedir
-  confirmación si requiere descartar archivos completos o cambios ajenos.
-- Comandos destructivos prohibidos sin petición explícita: `rm`, `mv`, `unlink`,
-  `rmdir`, `chmod`, `chown` o equivalentes.
-- En scripts: `rm` solo para recursos temporales propios; preferir `mktemp`,
-  `trap` y rutas acotadas sobre limpieza por patrones amplios.
-
-## Salida, colores e iconos
-
-### Colores
-
-- `C_STEP`: azul, para encabezados y progreso.
-- `C_OK`: verde, para estado completado / OK.
-- `C_ACTION`: amarillo, para acciones, cambios y advertencias.
-- `C_RST`: reset, cierra el color activo.
-
-Acompanar cada asignacion de color con un comentario inline del color fisico:
-
-```bash
-C_STEP="\033[0;34m"   # blue
-```
-
-### Iconos
-
-Preferir variantes outline y mantener consistencia segun el contexto:
-
-- Octicons (`nf-oct-*`, rango ``-``) para scripts de instalacion.
-- Material Design Outline (`nf-md-*_outline`) y Codicon (`nf-cod-*`) para
-  terminal, `notify-send` y scripts interactivos o ligeros.
-
-Usar 2 espacios entre icono y texto para evitar problemas de renderizado en
-Kitty.
-
-- ``: paso en progreso.
-- ``: accion aplicada o escritura de archivo.
-- ``: OK / completado.
-- ``: error o warning.
-- ``: habilitando / iniciando.
-
-### Salida
-
-- `` con azul para pasos principales.
-- `` con amarillo para acciones y escritura de archivos.
-- `` con amarillo para errores, con sugerencia indentada debajo.
-- `` con verde para completado.
-- Evitar hardcodear nombres de otros scripts.
 
 ## Organizacion de archivos
 
@@ -246,23 +155,5 @@ Kitty.
   homologacion.
 - No tomarlos como patron principal para codigo nuevo si existe una version
   activa equivalente.
-- Usarlos para entender intencion, opciones, textos, flujos o comportamiento que
-  deba portarse.
 - Al homologar, conservar el comportamiento util y adaptar herramientas
   obsoletas a equivalentes actuales del repo.
-
-## rmpc y temas RON
-
-- No usar caracteres Unicode invisibles en strings de `Text()`: zero-width
-  spaces U+200B, joiners U+200C/U+200D, soft hyphens U+00AD, etc.
-- Esta restriccion existe porque algunos modelos o herramientas pueden
-  inyectarlos accidentalmente y romper renderizado, busquedas o diffs.
-- Los glifos Nerd Font en el area privada U+E000-U+F8FF estan permitidos porque
-  son visibles y se renderizan como iconos.
-- Usar comentarios con `// ──` y padding a 70 caracteres totales.
-- `lyrics_dir` usa `~/.config/rmpc/lyrics`; es un symlink al directorio real. Si
-  no existe, recrearlo con:
-
-```bash
-ln -sf "$KASUMI_LYRICS_DIR" ~/.config/rmpc/lyrics
-```
