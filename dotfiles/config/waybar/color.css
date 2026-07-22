@@ -5,38 +5,22 @@
  *
  */
 
-/* ── Fondos ─────────────────────────────────────────── ── */
-@define-color base   #2E383D;
-/* @define-color mantle #1e2030;   // sin uso */
-/* @define-color crust  #181926;   // sin uso */
+/* ── Fondos ───────────────────────────────────────────────*/
+@define-color base   #242a2e;
 
-/* ── Texto ──────────────────────────────────────────── ── */
+/* ── Texto ────────────────────────────────────────────────*/
 @define-color text     #d8dee9;
-/* @define-color subtext0 #a5adcb; // sin uso */
-/* @define-color subtext1 #b8c0e0; // sin uso */
 
-/* ── Superficies ────────────────────────────────────── ── */
-/* @define-color surface0 #363a4f; // sin uso */
-/* @define-color surface1 #494d64; // sin uso */
-/* @define-color surface2 #5b6078; // sin uso */
+/* ── Overlay ──────────────────────────────────────────────*/
+@define-color overlay0 #5a656c;
+@define-color overlay1 #5d6c74;
 
-/* ── Overlay ────────────────────────────────────────── ── */
-@define-color overlay0 #6e738d;
-@define-color overlay1 #81a1c1;
-/* @define-color overlay2 #939ab7; // sin uso */
-
-/* ── Acentos ────────────────────────────────────────── ── */
-/* @define-color blue      #8aadf4; // sin uso */
+/* ── Acentos ──────────────────────────────────────────────*/
 @define-color lavender  #b7bdf8;
-/* @define-color sapphire  #7dc4e4; // sin uso */
 @define-color sky       #91d7e3;
 @define-color teal      #8bd5ca;
 @define-color green     #a6da95;
 @define-color yellow    #eed49f;
-/* @define-color peach     #f5a97f; // sin uso */
-/* @define-color maroon    #ee99a0; // sin uso */
 @define-color red       #bf616a;
 @define-color mauve     #c6a0f6;
-/* @define-color pink      #f5bde6; // sin uso */
 @define-color flamingo  #f0c6c6;
-/* @define-color rosewater #f4dbd6; // sin uso */
