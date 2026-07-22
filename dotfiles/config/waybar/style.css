@@ -53,9 +53,9 @@ window#waybar {
   border: 3px double shade(@base, 1.05);
   background-color: shade(@base, 0.95);
   opacity: 0.95;
- /* border-radius: 4px; */
-  margin: 8px 0;
+  /* border-radius: 4px; */
   padding: 6px 8px;
+  margin: 8px 0;
 }
 
 #custom-workspaces.urgent {
@@ -143,6 +143,7 @@ window#waybar {
 
 #group-hw-expand {
   padding: 0;
+  margin: 0;
 }
 
 #group-hw-expand .hw-expand-hidden {
@@ -327,6 +328,8 @@ window#waybar {
 
 #wireplumber#mic {
   color: @flamingo;
+  border: none;
+  border-right: 1px solid shade(@base, 1.4);
 }
 
 #wireplumber.muted {
