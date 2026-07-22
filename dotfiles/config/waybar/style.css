@@ -35,6 +35,11 @@ window#waybar {
   to { color: @overlay1; }
 }
 
+@keyframes pulse-power {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
 /*
  * ╒═════════════════════════════════════════════════════════╕
  * │                 MÓDULOS AUTOSUFICIENTES                 │
@@ -199,6 +204,11 @@ window#waybar {
   font-size: 20px;
   color: @mauve;
   border-radius: 4px;
+  transition: color 0.3s ease;
+}
+
+#custom-launcher:hover {
+  color: @lavender;
 }
 
 #battery {
@@ -390,4 +400,5 @@ window#waybar {
   font-size: 20px;
   color: @red;
   border-radius: 4px;
+  animation: pulse-power 3s ease infinite;
 }
