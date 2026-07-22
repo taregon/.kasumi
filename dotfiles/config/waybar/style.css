@@ -222,25 +222,21 @@ window#waybar {
   border: none;
 }
 
-#cpu.warning {
+#cpu.warning,
+#memory.warning,
+#temperature.warning {
   color: @yellow;
 }
 
-#cpu.critical {
+#cpu.critical,
+#memory.critical,
+#temperature.critical {
   color: @red;
 }
 
 #memory {
   color: @sky;
   border: none;
-}
-
-#memory.warning {
-  color: @yellow;
-}
-
-#memory.critical {
-  color: @red;
 }
 
 #disk {
@@ -261,14 +257,6 @@ window#waybar {
 
 #temperature {
   color: @teal;
-}
-
-#temperature.warning {
-  color: @yellow;
-}
-
-#temperature.critical {
-  color: @red;
 }
 
 #custom-pacman.has-updates {
