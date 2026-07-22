@@ -259,11 +259,15 @@ window#waybar {
   color: @teal;
 }
 
-#custom-pacman.has-updates {
+#custom-pacman.has-updates,
+#keyboard-state label.capslock.locked,
+#keyboard-state label.numlock.locked,
+#idle_inhibitor.activated {
   color: @yellow;
 }
 
-#network {
+#network,
+#bluetooth {
   color: @green;
 }
 
@@ -272,29 +276,13 @@ window#waybar {
   color: @red;
 }
 
-#bluetooth {
-  color: @green;
-}
-
 #keyboard-state label {
   color: @overlay1;
   margin-right: 4px;
 }
 
-#keyboard-state label.capslock.locked {
-  color: @yellow;
-}
-
-#keyboard-state label.numlock.locked {
-  color: @yellow;
-}
-
 #idle_inhibitor.deactivated {
   color: @overlay1;
-}
-
-#idle_inhibitor.activated {
-  color: @yellow;
 }
 
 #scratchpad {
