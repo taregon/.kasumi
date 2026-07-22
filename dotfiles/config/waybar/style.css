@@ -273,6 +273,10 @@ window#waybar {
   color: @yellow;
 }
 
+#custom-pacman.has-updates {
+  animation: pulse-power 3s ease infinite;
+}
+
 #network,
 #bluetooth {
   color: @green;
