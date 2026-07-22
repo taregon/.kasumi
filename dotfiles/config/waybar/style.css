@@ -50,10 +50,10 @@ window#waybar {
 
 #custom-workspaces {
   color: @overlay1;
-  border: 1px solid shade(@base, 1.4);
-  background-color: shade(@base, 1.1);
-  opacity: 1;
-  border-radius: 4px;
+  border: 3px double shade(@base, 1.05);
+  background-color: shade(@base, 0.95);
+  opacity: 0.95;
+ /* border-radius: 4px; */
   margin: 8px 0;
   padding: 6px 8px;
 }
@@ -113,8 +113,9 @@ window#waybar {
 #temperature,
 #wireplumber {
   padding: 6px 8px;
-  background-color: shade(@base, 1.1);
-  opacity: 1;
+  border: 3px double shade(@base, 1.05);
+  background-color: shade(@base, 0.95);
+  opacity: 0.95;
   margin: 8px 0;
 }
 
@@ -142,18 +143,15 @@ window#waybar {
 
 #group-hw-expand {
   padding: 0;
-  margin: 0;
 }
 
 #group-hw-expand .hw-expand-hidden {
-  opacity: 0;
-  margin: 0;
   padding: 0;
   transition: opacity 0.3s ease;
 }
 
 #group-hw-expand:hover .hw-expand-hidden {
-  opacity: 1;
+  opacity: 0;
 }
 
 #custom-expand-hw {
@@ -387,8 +385,6 @@ window#waybar {
 
 #wireplumber#mic {
   color: @flamingo;
-  border: none;
-  border-right: 1px solid shade(@base, 1.4);
 }
 
 #wireplumber.muted {
