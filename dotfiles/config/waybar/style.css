@@ -219,7 +219,6 @@ window#waybar {
 
 #cpu {
   color: @sky;
-  border: none;
 }
 
 #cpu.warning,
@@ -236,13 +235,10 @@ window#waybar {
 
 #memory {
   color: @sky;
-  border: none;
 }
 
 #disk {
   color: @green;
-  border: none;
-  border-right: 1px solid shade(@base, 1.4);
 }
 
 #disk.warning {
