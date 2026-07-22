@@ -1,9 +1,9 @@
+/* vim: set filetype=scss: */
 /*
- * vim: filetype=scss
  * ╒═════════════════════════════════════════════════════════╕
  * │                   CONFIGURACIÓN BASE                    │
  * ╘═════════════════════════════════════════════════════════╛
-*/
+ */
 
 @import "color.css";
 
@@ -37,7 +37,7 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │               MÓDULOS SIN FONDO DE BASE                 │
+ * │                 MÓDULOS AUTOSUFICIENTES                 │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
@@ -65,30 +65,31 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │              ESTILO BASE DE MÓDULOS                     │
- * │  Borde, fondo, padding y radio unificados               │
+ * │                 ESTILO BASE DE MÓDULOS                  │
  * ╘═════════════════════════════════════════════════════════╛
  */
+/* Borde, fondo, padding y radio unificados */
 
-/* ── Convencion de margenes ─────────────────────────── ── */
+/* ── Convención De Márgenes ───────────────────────────────*/
 
 /* Todos los modulos usan margin: 8px 0 (vertical).
    El espaciado horizontal se maneja con padding: 6px 8px.
    No usar margin horizontal en modulos individuales. */
 
-/* ── Convencion de padding ──────────────────────────── ── */
+/* ── Convención De Padding ────────────────────────────────*/
 
 /* padding unificado a 6px 8px para todos los modulos.
-   6px vertical: altura suficiente para respiro sin agrandar
-   la barra. 8px horizontal: consistente con el padding de
-   grupos drawer (0) y tooltips (4px 8px).
-   Si un modulo necesita override visual (background, border),
-   se declara autosuficiente: se remueve del grupo base y se
-   le asignan padding y margin explicitos en su propia regla.
-   Ej: keyboard-state, scratchpad.
-   drawers, #waybar * (reset) y tooltip label no se tocan. */
+    6px vertical: altura suficiente para respiro sin agrandar
+    la barra. 8px horizontal: consistente con el padding de
+    grupos drawer (0) y tooltips (4px 8px).
+    Expand icons de drawers usan 6px 4px (mas angostos).
+    Si un modulo necesita override visual (background, border),
+    se declara autosuficiente: se remueve del grupo base y se
+    le asignan padding y margin explicitos en su propia regla.
+    Ej: keyboard-state, scratchpad.
+    drawers, #waybar * (reset) y tooltip label no se tocan. */
 
-/* ── Separacion entre modulos ───────────────────────── ── */
+/* ── Separación Entre Módulos ─────────────────────────────*/
 
 /* El espacio entre modulos adyacentes se controla desde
    config.jsonc: "spacing": 8 px. No es un valor CSS.
@@ -138,7 +139,7 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │                   GRUPOS (DRAWER)                       │
+ * │                     GRUPOS (DRAWER)                     │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
@@ -190,7 +191,7 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │      IZQUIERDA — Lanzador, sistema, hardware            │
+ * │         IZQUIERDA — LANZADOR, SISTEMA, HARDWARE         │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
@@ -295,7 +296,7 @@ window#waybar {
 
 /*
  * ╒═════════════════════════════════════════════════════════╕
- * │                     CENTRO — Reloj                      │
+ * │                     CENTRO — RELOJ                      │
  * ╘═════════════════════════════════════════════════════════╛
  */
 
@@ -309,13 +310,13 @@ window#waybar {
  * ╘═════════════════════════════════════════════════════════╛
  */
 
-/* ── Brillo ─────────────────────────────────────────── ── */
+/* ── Brillo ───────────────────────────────────────────────*/
 
 #backlight {
   color: @yellow;
 }
 
-/* ── Audio ──────────────────────────────────────────── ── */
+/* ── Audio ────────────────────────────────────────────────*/
 
 #wireplumber {
   color: @flamingo;
@@ -323,15 +324,13 @@ window#waybar {
 
 #wireplumber#mic {
   color: @flamingo;
-  border: none;
-  border-right: 1px solid shade(@base, 1.4);
 }
 
 #wireplumber.muted {
   color: @overlay1;
 }
 
-/* ── Media ──────────────────────────────────────────── ── */
+/* ── Media ────────────────────────────────────────────────*/
 
 #mpris {
   color: @mauve;
@@ -385,7 +384,7 @@ window#waybar {
   font-size: 14px;
 }
 
-/* ── Power ──────────────────────────────────────────── ── */
+/* ── Power ────────────────────────────────────────────────*/
 
 #custom-power {
   font-size: 20px;
