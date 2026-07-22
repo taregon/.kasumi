@@ -113,7 +113,6 @@ window#waybar {
 #temperature,
 #wireplumber {
   padding: 6px 8px;
-  border: 1px solid shade(@base, 1.4);
   background-color: shade(@base, 1.1);
   opacity: 1;
   margin: 8px 0;
@@ -238,15 +237,15 @@ window#waybar {
 }
 
 #battery {
-  color: #d8dee9;
+  color: @text;
 }
 
 #battery.charging {
-  color: #81a1c1;
+  color: @overlay1;
 }
 
 #battery.critical:not(.charging) {
-  color: #bf616a;
+  color: @red;
   animation-name: blink;
   animation-duration: 0.5s;
   animation-timing-function: linear;
@@ -318,7 +317,7 @@ window#waybar {
 
 #network.disabled,
 #network.disconnected {
-  color: #bf616a;
+  color: @red;
 }
 
 #bluetooth {
@@ -388,6 +387,8 @@ window#waybar {
 
 #wireplumber#mic {
   color: @flamingo;
+  border: none;
+  border-right: 1px solid shade(@base, 1.4);
 }
 
 #wireplumber.muted {
