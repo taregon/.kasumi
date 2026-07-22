@@ -46,6 +46,7 @@ window#waybar {
   border: 1px solid shade(@base, 1.4);
   border-radius: 4px;
   padding: 6px 8px;
+  margin: 8px 0;
 }
 
 #custom-workspaces {
@@ -147,12 +148,10 @@ window#waybar {
 }
 
 #group-hw-expand .hw-expand-hidden {
+  opacity: 0;
+  margin: 0;
   padding: 0;
   transition: opacity 0.3s ease;
-}
-
-#group-hw-expand:hover .hw-expand-hidden {
-  opacity: 0;
 }
 
 #group-extra-left,
