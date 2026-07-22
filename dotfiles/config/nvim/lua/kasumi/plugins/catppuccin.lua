@@ -180,7 +180,7 @@ require("catppuccin").setup({
 
 			-- Enlaces y blockquotes
 			MarkviewBlockQuoteDefault = {
-				fg = kas.darken(colors.blue, 0.90, colors.base),
+				fg = colors.blue,
 			},
 			MarkviewHyperlink = {
 				fg = kas.darken(colors.teal, 0.90, colors.base),
