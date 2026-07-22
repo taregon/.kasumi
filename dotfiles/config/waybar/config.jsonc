@@ -244,7 +244,7 @@
       "on-scroll-up": "shift_up",
       "on-scroll-down": "shift_down"
     },
-    "format": "{:%a %d ｜ %H:%M}", // "sáb 28 ｜ 14:30"
+    "format": "{:%a %d ｜ %I:%M %p}", // "sáb 28 ｜ 02:30 PM"
     "format-alt": " {:%d/%m/%Y  %H:%M}",
     "interval": 1
   },
