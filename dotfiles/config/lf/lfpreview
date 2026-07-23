@@ -114,7 +114,7 @@ _lfpreview_archive() {
 }
 
 _lfpreview_audio() {
-    ffprobe -show_format -show_streams -of default=noprint_wrappers=1:nokey=1 "$FILE_PATH" 2> /dev/null | head -30
+    ffprobe -show_format -show_streams -of default=noprint_wrappers=1:nokey=1 "$FILE_PATH" 2> /dev/null
 }
 
 _lfpreview_gif() {
@@ -160,7 +160,12 @@ _lfpreview_main() {
         application/x-bittorrent)
             _lfpreview_torrent
             ;;
-        application/zip | application/gzip | application/java-archive | application/vnd.rar | application/x-7z-compressed | application/x-bzip2 | application/x-cab | application/x-cpio | application/x-deb | application/x-lzma | application/x-rar | application/x-tar | application/x-xz | application/x-zstd | application/zstd | application/vnd.ms-cab-compressed)
+        application/zip | application/gzip | application/java-archive | \
+            application/vnd.rar | application/x-7z-compressed | \
+            application/x-bzip2 | application/x-cab | application/x-cpio | \
+            application/x-deb | application/x-lzma | application/x-rar | \
+            application/x-tar | application/x-xz | application/x-zstd | \
+            application/zstd | application/vnd.ms-cab-compressed)
             _lfpreview_archive
             ;;
         audio/*)
@@ -177,8 +182,6 @@ _lfpreview_main() {
             ;;
         video/*)
             _lfpreview_video
-            ;;
-        *)
             ;;
     esac
 
