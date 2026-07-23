@@ -1,6 +1,8 @@
 # Convenciones para scripts shell, helpers zsh y configuracion
 
-## Skills del repositorio
+## Contexto
+
+### Skills del repositorio
 
 | Skill                   | Trigger                                                  |
 | :---------------------- | :------------------------------------------------------- |
@@ -10,7 +12,7 @@
 | `kasumi-ascii-diagrams` | Al documentar layouts o jerarquías visuales              |
 | `box-comments`          | Al generar comentarios decorativos en cualquier lenguaje |
 
-## Alcance
+### Alcance
 
 Dotfiles para Arch Linux (pacman/paru, Sway/Wayland, Kitty, rmpc, dotdrop). No
 asumir convenciones de otros sistemas operativos o gestores de paquetes.
@@ -19,7 +21,9 @@ asumir convenciones de otros sistemas operativos o gestores de paquetes.
 - Helpers zsh en `dotfiles/config/zsh/funcs/` (reglas en su `AGENTS.md`).
 - Configuracion rmpc, temas RON y terminal (Kitty).
 
-## Escritura y caracteres
+## Escritura y formato
+
+### Escritura y caracteres
 
 - Usar español neutro, sin regionalismos ni modismos, con tono impersonal y
   tecnico.
@@ -30,18 +34,28 @@ asumir convenciones de otros sistemas operativos o gestores de paquetes.
 - No usar caracteres Unicode invisibles en arte ASCII ni en strings de
   configuracion. Los glifos Nerd Font (U+E000-U+F8FF) estan permitidos.
 
-## Zona horaria
+### Zona horaria
 
 - Usar UTC-5 como referencia para timestamps, notificaciones y cualquier
   funcionalidad dependiente de hora local.
 
-## Gestor de paquetes
+### Formato
+
+- Preferir lineas cortas, alrededor de 100 caracteres.
+- Partir lineas con `\` cuando sea natural.
+- Escribir `case` expandido: cada branch en lineas separadas y `;;` en su propia
+  linea.
+- Mantener Markdown envuelto de forma consistente.
+
+## Entorno
+
+### Gestor de paquetes
 
 - `paru` es el helper AUR estandar del repo; no reemplazarlo por `yay`.
 - Usar `pacman` para repos oficiales, `paru` para AUR o listas mixtas.
 - Usar `--needed` en instalaciones cuando aplique.
 
-## Entorno grafico
+### Herramientas graficas
 
 - Preferir herramientas nativas Wayland; no proponer equivalentes X11.
 - Mantener `rofi` como launcher/selector estandar; no reemplazarlo sin peticion
@@ -50,6 +64,8 @@ asumir convenciones de otros sistemas operativos o gestores de paquetes.
   pertenezca a la sesion grafica.
 
 ## Scripts Bash
+
+### Convenciones
 
 - Iniciar todo script bash con `set -euo pipefail`.
 - Incluir tras el shebang un comentario de 1-3 lineas que describa proposito y
@@ -60,7 +76,7 @@ asumir convenciones de otros sistemas operativos o gestores de paquetes.
 - Preferir heredoc con `tee` sobre pipelines con `echo`.
 - Preferir `echo -e "texto\n"` sobre echos vacios separados.
 
-## Estructura
+### Estructura
 
 Organizar los scripts en capas verticales. Cada funcion debe referenciar solo
 funciones ya definidas.
@@ -77,21 +93,24 @@ Separar cada capa con un comentario visual para navegacion rapida:
 # ── Setup ─────────────────────────────────────────────────────────────
 ```
 
-## Nombres y variables
+### Nombres y variables
 
 - Usar `snake_case` para funciones y variables; no usar camelCase.
 - Preferir funciones con patron `<prefix>_<verb>`.
 - El prefijo agrupa por ambito; el verbo describe la accion.
+- En scripts ejecutables, el prefijo es semántico por dominio (no por nombre de
+  archivo): `install_sys_*`, `install_app_*`, `prepare_system`.
+- En helpers zsh, usar prefijo `kz` + categoría. Internos con `_kz`:
+  `kzimg-jpeg-preserve`, `_kzsearch-bat`.
 - Usar nombres autodescriptivos que no requieran comentarios obvios.
 - Usar prefijos agrupadores en variables cuando ayuden a identificar ambito.
 - Usar `readonly` para constantes cuando aporte claridad.
-- Definir rutas de directorio sin `/` final para evitar dobles separadores al
-  concatenar.
+- Definir rutas de directorio sin `/` final para evitar dobles separadores.
 - Agrupar constantes relacionadas bajo un comentario breve.
 
-## Comentarios
+### Comentarios
 
-### Bash
+#### Bash
 
 - Comentar el por qué, no el qué.
 - Contexto o restricciones del bloque; nunca repetir el código.
@@ -101,12 +120,12 @@ Separar cada capa con un comentario visual para navegacion rapida:
 - Señal práctica: si al reabrir el archivo meses después tendrías que detenerte
   a pensar por qué existe o qué problema evita, merece comentario.
 
-### zsh
+#### zsh
 
 Los helpers zsh son interactivos y pueden usar comentarios mas directos,
 incluyendo explicaciones de que hace una funcion.
 
-## Bloques técnicos
+#### Bloques técnicos
 
 Cuando se documenten módulos o secciones de configuración:
 
@@ -129,31 +148,23 @@ Cuando se documenten módulos o secciones de configuración:
 - Agrupar por categorías funcionales bajo subtítulos claros.
 - Priorizar legibilidad escaneable en terminal sobre exhaustividad narrativa.
 
-## Formato
+## Organización
 
-- Preferir lineas cortas, alrededor de 100 caracteres.
-- Partir lineas con `\` cuando sea natural.
-- Escribir `case` expandido: cada branch en lineas separadas y `;;` en su propia
-  linea.
-- Mantener Markdown envuelto de forma consistente.
+### Estructura de archivos
 
-## Robustez y seguridad
+- Usar prefijo `NN-` para scripts con orden de ejecucion.
+- Omitir prefijo en scripts opcionales.
+
+### Codigo legacy
+
+- `scripts-legacy/`, `.bk` y `.old` son referencia para migracion. No usar como
+  patron si existe version activa equivalente.
+
+## Seguridad
+
+### Defensa
 
 - Verificar efectos secundarios: un comando puede aparentar éxito sin producir
   el estado esperado.
 - `|| true` solo en fallos esperados, con comentario inline del motivo.
 - No sobredimensionar validaciones si el comportamiento es predecible.
-
-## Organizacion de archivos
-
-- Usar prefijo `NN-` para scripts con orden de ejecucion.
-- Omitir prefijo en scripts opcionales.
-
-## Codigo legacy
-
-- `scripts-legacy/`, `.bk` y `.old` existen como referencia para migracion y
-  homologacion.
-- No tomarlos como patron principal para codigo nuevo si existe una version
-  activa equivalente.
-- Al homologar, conservar el comportamiento util y adaptar herramientas
-  obsoletas a equivalentes actuales del repo.
