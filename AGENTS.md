@@ -100,8 +100,8 @@ Separar cada capa con un comentario visual para navegacion rapida:
 - El prefijo agrupa por ambito; el verbo describe la accion.
 - En scripts ejecutables, el prefijo es semántico por dominio (no por nombre de
   archivo): `install_sys_*`, `install_app_*`, `prepare_system`.
-- En helpers zsh, usar prefijo `kz` + categoría. Internos con `_kz`:
-  `kzimg-jpeg-preserve`, `_kzsearch-bat`.
+- En helpers zsh, usar patrón `kz<category>-<verb>` para públicos y
+  `_kz<category>-<verb>` para internos.
 - Usar nombres autodescriptivos que no requieran comentarios obvios.
 - Usar prefijos agrupadores en variables cuando ayuden a identificar ambito.
 - Usar `readonly` para constantes cuando aporte claridad.
