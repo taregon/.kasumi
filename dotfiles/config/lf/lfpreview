@@ -83,19 +83,19 @@ _lfpreview_draw_kitty() {
         --place "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}@${PREVIEW_X}x${PREVIEW_Y}" "$img" < /dev/null > /dev/tty
 }
 
-# ── Lógica intermedia (por tipo MIME) ──────────────────────────────────
+# ── Lógica intermedia ─────────────────────────────────────────────────
 
-_lfpreview_preview_epub() {
+_lfpreview_epub() {
     pandoc -s -t markdown "$FILE_PATH" \
         | bat -l markdown --color=always --paging=never --terminal-width="$PREVIEW_WIDTH"
 }
 
-_lfpreview_preview_json() {
+_lfpreview_json() {
     jq -C "." "$FILE_PATH" 2> /dev/null \
         || bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH"
 }
 
-_lfpreview_preview_pdf() {
+_lfpreview_pdf() {
     local cache_path
     cache_path="$(_lfpreview_create_cache_path)"
     [[ -s "${cache_path}.jpg" ]] || pdftoppm -jpeg -f 1 \
@@ -105,34 +105,34 @@ _lfpreview_preview_pdf() {
     _lfpreview_draw_kitty "${cache_path}.jpg" || _lfpreview_draw_ascii
 }
 
-_lfpreview_preview_torrent() {
+_lfpreview_torrent() {
     aria2c -S "$FILE_PATH"
 }
 
-_lfpreview_preview_archive() {
+_lfpreview_archive() {
     als "$FILE_PATH"
 }
 
-_lfpreview_preview_audio() {
+_lfpreview_audio() {
     ffprobe -show_format -show_streams -of default=noprint_wrappers=1:nokey=1 "$FILE_PATH" 2> /dev/null | head -30
 }
 
-_lfpreview_preview_gif() {
+_lfpreview_gif() {
     _lfpreview_draw_ascii
 }
 
-_lfpreview_preview_image() {
+_lfpreview_image() {
     local cache_path
     cache_path="$(_lfpreview_create_cache_path)"
     [[ -s "${cache_path}.jpg" ]] || _lfpreview_create_thumb "$cache_path"
     _lfpreview_draw_kitty "${cache_path}.jpg" || _lfpreview_draw_ascii
 }
 
-_lfpreview_preview_text() {
+_lfpreview_text() {
     bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH"
 }
 
-_lfpreview_preview_video() {
+_lfpreview_video() {
     local cache_path
     cache_path="$(_lfpreview_create_cache_path)"
     [[ -s "${cache_path}.jpg" ]] || ffmpegthumbnailer -i "$FILE_PATH" -o "${cache_path}.jpg" -s 0 -c jpeg
@@ -149,34 +149,34 @@ _lfpreview_main() {
 
     case "$mimetype" in
         */epub+zip | */x-fictionbook+xml)
-            _lfpreview_preview_epub
+            _lfpreview_epub
             ;;
         application/json)
-            _lfpreview_preview_json
+            _lfpreview_json
             ;;
         application/pdf)
-            _lfpreview_preview_pdf
+            _lfpreview_pdf
             ;;
         application/x-bittorrent)
-            _lfpreview_preview_torrent
+            _lfpreview_torrent
             ;;
         application/zip | application/gzip | application/java-archive | application/vnd.rar | application/x-7z-compressed | application/x-bzip2 | application/x-cab | application/x-cpio | application/x-deb | application/x-lzma | application/x-rar | application/x-tar | application/x-xz | application/x-zstd | application/zstd | application/vnd.ms-cab-compressed)
-            _lfpreview_preview_archive
+            _lfpreview_archive
             ;;
         audio/*)
-            _lfpreview_preview_audio
+            _lfpreview_audio
             ;;
         image/gif)
-            _lfpreview_preview_gif
+            _lfpreview_gif
             ;;
         image/*)
-            _lfpreview_preview_image
+            _lfpreview_image
             ;;
         text/* | */xml)
-            _lfpreview_preview_text
+            _lfpreview_text
             ;;
         video/*)
-            _lfpreview_preview_video
+            _lfpreview_video
             ;;
         *)
             ;;
