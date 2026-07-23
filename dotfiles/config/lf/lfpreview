@@ -1,23 +1,55 @@
 #!/usr/bin/env bash
+# Script de previsualización para lf (file manager).
+# Genera previews de imágenes, video, PDF, audio, texto y archivos comprimidos.
 
-set -o noclobber -o noglob -o nounset -o pipefail
+set -euo pipefail
 
-FILE_PATH="$1"
-PREVIEW_WIDTH="$2"
-PREVIEW_HEIGHT="$3"
-PREVIEW_X="$4"
-PREVIEW_Y="$5"
-THUMB_SIZE=800
-CACHE_DIR="${XDG_CACHE_HOME:-"$HOME/.cache"}/lf"
-PROFILE="$HOME/.config/lf/icc/sRGB-v2-micro.icc"
+# ── Setup ─────────────────────────────────────────────────────────────
+
+readonly FILE_PATH="$1"
+readonly PREVIEW_WIDTH="$2"
+readonly PREVIEW_HEIGHT="$3"
+readonly PREVIEW_X="$4"
+readonly PREVIEW_Y="$5"
+readonly THUMB_SIZE=800
+readonly CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/lf"
+readonly ICC_PROFILE="$HOME/.config/lf/icc/sRGB-v2-micro.icc"
+
+# Dependencias requeridas (documentación y verificación opcional)
+# xxhsum (xxhash), magick (imagemagick), chafa, kitty, pdftoppm (poppler),
+# ffmpegthumbnailer, als (atool), aria2c, 7z (p7zip), ffprobe (ffmpeg),
+# bat, jq, pandoc
+
 mkdir -p "$CACHE_DIR"
 
-create_cache() {
-    realfile="$(readlink -f "$FILE_PATH" || realpath "$FILE_PATH")"
-    CACHE="${CACHE_DIR}/thumb-$(stat --printf '%i\0%s\0%Y' "$realfile" | xxhsum -q | cut -d' ' -f1)"
+# ── Helpers de bajo nivel ─────────────────────────────────────────────
+
+_lfpreview_check_deps() {
+    local missing=()
+    local -a deps=(
+        xxhsum magick chafa kitty pdftoppm ffmpegthumbnailer
+        als aria2c 7z ffprobe bat jq pandoc
+    )
+    for dep in "${deps[@]}"; do
+        command -v "$dep" > /dev/null || missing+=("$dep")
+    done
+    if ((${#missing[@]} > 0)); then
+        printf 'lfpreview: dependencias faltantes: %s\n' "${missing[*]}" >&2
+        return 1
+    fi
+    return 0
 }
 
-create_thumb() {
+_lfpreview_create_cache_path() {
+    local realfile
+    realfile="$(readlink -f "$FILE_PATH" 2> /dev/null || realpath "$FILE_PATH")"
+    local cache_key
+    cache_key="$(stat --printf '%i\0%s\0%Y' "$realfile" | xxhsum -q | cut -d' ' -f1)"
+    printf '%s/thumb-%s' "$CACHE_DIR" "$cache_key"
+}
+
+_lfpreview_create_thumb() {
+    local cache_path="$1"
     magick \
         -define jpeg:size="${THUMB_SIZE}x${THUMB_SIZE}" \
         "$FILE_PATH" \
@@ -26,13 +58,13 @@ create_thumb() {
         -filter Triangle \
         -thumbnail "${THUMB_SIZE}x${THUMB_SIZE}>" \
         -colorspace sRGB \
-        -profile "${PROFILE}" \
+        -profile "${ICC_PROFILE}" \
         -define jpeg:optimize-coding=true \
         -quality 95 \
-        "${CACHE}.jpg" 2> /dev/null
+        "${cache_path}.jpg" 2> /dev/null
 }
 
-draw_ascii() {
+_lfpreview_draw_ascii() {
     chafa \
         -s "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}" \
         --animate off \
@@ -45,76 +77,124 @@ draw_ascii() {
         "$FILE_PATH"
 }
 
-draw_kitty() {
+_lfpreview_draw_kitty() {
     local img="${1:-$FILE_PATH}"
     kitty +kitten icat --silent --stdin no --transfer-mode memory \
         --place "${PREVIEW_WIDTH}x${PREVIEW_HEIGHT}@${PREVIEW_X}x${PREVIEW_Y}" "$img" < /dev/null > /dev/tty
 }
 
-MIMETYPE="$(file -L --brief --mime-type "$FILE_PATH")"
+# ── Lógica intermedia (por tipo MIME) ──────────────────────────────────
 
-case "$MIMETYPE" in
-    */epub+zip | */x-fictionbook+xml)
-        pandoc -s -t markdown "$FILE_PATH" | bat -l markdown --color=always --paging=never --terminal-width="$PREVIEW_WIDTH"
-        ;;
-    application/json)
-        jq -C "." "$FILE_PATH" 2> /dev/null || bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH"
-        ;;
-    application/pdf)
-        create_cache
-        [ -f "${CACHE}.jpg" ] || pdftoppm -jpeg -f 1 \
-            -scale-to "$THUMB_SIZE" \
-            -jpegopt quality=70,progressive=y,optimize=y \
-            -singlefile "$FILE_PATH" "$CACHE" 2> /dev/null
-        draw_kitty "${CACHE}.jpg" || draw_ascii
-        ;;
-    application/x-bittorrent)
-        aria2c -S "$FILE_PATH" 2> /dev/null
-        ;;
-    application/zip | \
-        application/gzip | \
-        application/java-archive | \
-        application/vnd.rar | \
-        application/x-7z-compressed | \
-        application/x-bzip2 | \
-        application/x-cab | \
-        application/x-cpio | \
-        application/x-deb | \
-        application/x-lzma | \
-        application/x-rar | \
-        application/x-tar | \
-        application/x-xz | \
-        application/x-zstd | \
-        application/zstd | \
-        application/vnd.ms-cab-compressed)
-        als "$FILE_PATH"
-        ;;
-    audio/*)
-        mpv --audio-display=no "$FILE_PATH"
-        # mediainfo "$FILE_PATH"
-        ;;
-    image/gif)
-        draw_ascii
-        ;;
-    image/*)
-        create_cache
-        [ -f "${CACHE}.jpg" ] || create_thumb
-        draw_kitty "${CACHE}.jpg" || draw_ascii
-        ;;
-    text/* | */xml)
-        bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH"
-        ;;
-    video/*)
-        create_cache
-        [ -f "${CACHE}.jpg" ] || ffmpegthumbnailer -i "$FILE_PATH" -o "${CACHE}.jpg" -s 0 -c jpeg
-        draw_kitty "${CACHE}.jpg"
-        ;;
-esac
+_lfpreview_preview_epub() {
+    pandoc -s -t markdown "$FILE_PATH" \
+        | bat -l markdown --color=always --paging=never --terminal-width="$PREVIEW_WIDTH"
+}
 
-case "$FILE_PATH" in
-    *.img)
-        7z l "$FILE_PATH"
-        ;;
-esac
+_lfpreview_preview_json() {
+    jq -C "." "$FILE_PATH" 2> /dev/null \
+        || bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH"
+}
 
+_lfpreview_preview_pdf() {
+    local cache_path
+    cache_path="$(_lfpreview_create_cache_path)"
+    [[ -s "${cache_path}.jpg" ]] || pdftoppm -jpeg -f 1 \
+        -scale-to "$THUMB_SIZE" \
+        -jpegopt quality=70,progressive=y,optimize=y \
+        -singlefile "$FILE_PATH" "$cache_path"
+    _lfpreview_draw_kitty "${cache_path}.jpg" || _lfpreview_draw_ascii
+}
+
+_lfpreview_preview_torrent() {
+    aria2c -S "$FILE_PATH"
+}
+
+_lfpreview_preview_archive() {
+    als "$FILE_PATH"
+}
+
+_lfpreview_preview_audio() {
+    ffprobe -show_format -show_streams -of default=noprint_wrappers=1:nokey=1 "$FILE_PATH" 2> /dev/null | head -30
+}
+
+_lfpreview_preview_gif() {
+    _lfpreview_draw_ascii
+}
+
+_lfpreview_preview_image() {
+    local cache_path
+    cache_path="$(_lfpreview_create_cache_path)"
+    [[ -s "${cache_path}.jpg" ]] || _lfpreview_create_thumb "$cache_path"
+    _lfpreview_draw_kitty "${cache_path}.jpg" || _lfpreview_draw_ascii
+}
+
+_lfpreview_preview_text() {
+    bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH"
+}
+
+_lfpreview_preview_video() {
+    local cache_path
+    cache_path="$(_lfpreview_create_cache_path)"
+    [[ -s "${cache_path}.jpg" ]] || ffmpegthumbnailer -i "$FILE_PATH" -o "${cache_path}.jpg" -s 0 -c jpeg
+    _lfpreview_draw_kitty "${cache_path}.jpg"
+}
+
+# ── Orquestación ──────────────────────────────────────────────────────
+
+_lfpreview_main() {
+    _lfpreview_check_deps || exit 1
+
+    local mimetype
+    mimetype="$(file -L --brief --mime-type "$FILE_PATH")"
+
+    case "$mimetype" in
+        */epub+zip | */x-fictionbook+xml)
+            _lfpreview_preview_epub
+            ;;
+        application/json)
+            _lfpreview_preview_json
+            ;;
+        application/pdf)
+            _lfpreview_preview_pdf
+            ;;
+        application/x-bittorrent)
+            _lfpreview_preview_torrent
+            ;;
+        application/zip | application/gzip | application/java-archive | application/vnd.rar | application/x-7z-compressed | application/x-bzip2 | application/x-cab | application/x-cpio | application/x-deb | application/x-lzma | application/x-rar | application/x-tar | application/x-xz | application/x-zstd | application/zstd | application/vnd.ms-cab-compressed)
+            _lfpreview_preview_archive
+            ;;
+        audio/*)
+            _lfpreview_preview_audio
+            ;;
+        image/gif)
+            _lfpreview_preview_gif
+            ;;
+        image/*)
+            _lfpreview_preview_image
+            ;;
+        text/* | */xml)
+            _lfpreview_preview_text
+            ;;
+        video/*)
+            _lfpreview_preview_video
+            ;;
+        *)
+            ;;
+    esac
+
+    case "$FILE_PATH" in
+        *.img)
+            7z l "$FILE_PATH"
+            ;;
+    esac
+}
+
+# ── Punto de entrada ──────────────────────────────────────────────────
+
+_lfpreview_main "$@"
+
+# WARN: exit 1 es INTENCIONAL. lf usa el código de salida del previewer para
+# decidir si limpia el área de preview. Exit 0 → lf limpia y espera stdout.
+# Exit !=0 → lf preserva el área, permitiendo que kitty icat escriba a /dev/tty.
+# Cambiar a exit $? o exit 0 DESTRUYE la vista previa en la segunda pasada.
 exit 1
