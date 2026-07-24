@@ -13,7 +13,7 @@ readonly PREVIEW_X="$4"
 readonly PREVIEW_Y="$5"
 readonly THUMB_SIZE=800
 readonly CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/lf"
-readonly ICC_PROFILE="$HOME/.config/lf/icc/sRGB-v2-micro.icc"
+readonly ICC_PROFILE="$HOME/.config/lf/icc/sRGB-v2-magic.icc"
 
 # Dependencias requeridas (documentación y verificación opcional)
 # xxhsum (xxhash), magick (imagemagick), chafa, kitty, pdftoppm (poppler),
@@ -48,19 +48,31 @@ lfpreview_create_cache_path() {
     printf '%s/thumb-%s' "$CACHE_DIR" "$cache_key"
 }
 
+# NOTE: ImageMagick procesa opciones en orden secuencial. El orden afecta el resultado:
+# 1. Settings (-define, -quality, -filter, -intent) persisten hasta que se resetean
+# 2. Operators (-auto-orient, -strip, -colorspace, -thumbnail, -profile) se aplican
+#    inmediatamente a la imagen actual
+# 3. Para conversión de color correcta: colorspace → resize → colorspace → profile
+# 4. -intent debe ir ANTES de -thumbnail para afectar la conversión durante resize
+# 5. -strip antes de -colorspace elimina perfiles, pero -colorspace RGB no los necesita
+# Ref: https://imagemagick.org/command-line-processing/
+
 lfpreview_create_thumb() {
     local cache_path="$1"
     magick \
         -define jpeg:size="${THUMB_SIZE}x${THUMB_SIZE}" \
+        -define jpeg:optimize-coding=true \
+        -quality 90 \
         "$FILE_PATH" \
         -auto-orient \
+        -strip \
+        -sampling-factor 4:2:0 \
         -colorspace RGB \
+        -intent Relative \
         -filter Triangle \
         -thumbnail "${THUMB_SIZE}x${THUMB_SIZE}>" \
         -colorspace sRGB \
         -profile "${ICC_PROFILE}" \
-        -define jpeg:optimize-coding=true \
-        -quality 95 \
         "${cache_path}.jpg" 2> /dev/null
 }
 
