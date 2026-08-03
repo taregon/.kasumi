@@ -99,7 +99,7 @@ codecompanion.setup({
 	-- stylua: ignore
 	interactions = {
 		chat   = { adapter = "gemma_it" },
-		inline = { adapter = "gemma" },
+		inline = { adapter = "gemma_it" },
 	},
 	display = {
 		chat = {
