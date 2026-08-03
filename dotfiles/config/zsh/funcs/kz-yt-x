@@ -2,23 +2,75 @@
 # yt-dlp para X/Twitter con cookies del navegador.
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A con thumbnail y metadata embebida.
+# Convierte thumbnails a jpg para incrustarlos sin dejar .avif suelto.
+# Valida enlaces con httpx en paralelo y anota cada uno:
+#   ::OK:: <code> - <link>   (2xx/3xx, se descarga)
+#   ::ERR:: <code> - <link>  (4xx/5xx o sin respuesta 000)
 # Incluye sleep 0.5s y reintentos para evitar rate-limit.
 # Trunca titulo a 120 bytes (~40 caracteres CJK) para filesystem.
 #
 # Uso: kz-yt-x <url>
+#      kz-yt-x -a <archivo_de_enlaces>
 
-# Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
 local browser="firefox"
 
-yt-dlp \
-    --cookies-from-browser "$browser" \
-    --embed-metadata \
-    --embed-thumbnail \
-    --windows-filenames \
-    --sleep-requests 0.5 \
-    --retries 3 \
-    --ignore-errors \
-    --xff default \
-    -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
-    -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s" \
-    "$@"
+# Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
+
+local -a yt_args=(
+    --cookies-from-browser "$browser"
+    --embed-metadata
+    --embed-thumbnail
+    --convert-thumbnails jpg
+    --windows-filenames
+    --sleep-requests 0.5
+    --retries 3
+    --ignore-errors
+    --xff default
+    -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
+    -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s"
+)
+
+local batch_file=""
+local -a targets
+if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
+    batch_file="$2"
+    targets=(${(f)"$(tr -d '\r' < "$batch_file" | grep -Ev '^\s*(#|$)')"})
+else
+    targets=("$1")
+fi
+if ((${#targets} == 0)); then
+    echo "Ningun enlace valido en $batch_file" >&2
+    return 1
+fi
+
+local tmp_httpx tmp_annotated tmp_links url line code
+tmp_httpx=$(mktemp)
+tmp_annotated=$(mktemp)
+tmp_links=$(mktemp)
+printf '%s\n' "${targets[@]}" \
+    | httpx-toolkit -silent -nc -sc -timeout 8 -t 20 > "$tmp_httpx"
+for url in "${targets[@]}"; do
+    line=$(grep -F -m1 -- "$url " "$tmp_httpx")
+    if [[ -n "$line" ]]; then
+        code=${line#*"["}
+        code=${code%"]"}
+    else
+        code=000
+    fi
+    if [[ "$code" == [23][0-9][0-9] ]]; then
+        echo "::OK:: $code - $url" >> "$tmp_annotated"
+    else
+        echo "::ERR:: $code - $url" >> "$tmp_annotated"
+    fi
+done
+
+grep '^::ERR::' "$tmp_annotated" >&2
+grep '^::OK::' "$tmp_annotated" \
+    | sed 's/^::OK:: [0-9][0-9][0-9] - //' > "$tmp_links"
+if [[ ! -s "$tmp_links" ]]; then
+    echo "Ningun enlace valido" >&2
+    rm -f "$tmp_httpx" "$tmp_annotated" "$tmp_links"
+    return 1
+fi
+yt-dlp "${yt_args[@]}" -a "$tmp_links"
+rm -f "$tmp_httpx" "$tmp_annotated" "$tmp_links"
