@@ -1,0 +1,7 @@
+# Mimocode
+.mimocode/
+
+# Backup files
+*.bak
+*.bk
+*.old
