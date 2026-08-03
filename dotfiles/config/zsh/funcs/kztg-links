@@ -1,0 +1,60 @@
+# Extrae enlaces de un JSON de exportación de Telegram
+#
+# Uso: tglinks -p archivo
+#   -p   Imprime en stdout en lugar de generar archivo
+#
+# Requiere: jaq
+# Salida: archivo_links.txt o stdout con -p
+
+# ─[ DEPENDENCIAS ]─────────────────────────────────
+command -v jaq > /dev/null || {
+    printf 'Error: jaq no instalado\n' >&2
+    return 1
+}
+
+# ─[ PARÁMETROS ]───────────────────────────────────
+local print_only=false
+
+while [[ "$1" == -* ]]; do
+    case "$1" in
+        -p | --print)
+            print_only=true
+            shift
+            ;;
+        *)
+            printf 'Opción desconocida: %s\n' "$1" >&2
+            return 1
+            ;;
+    esac
+done
+
+local input="${1:?Uso: tglinks -p archivo}"
+
+if [[ ! -f "$input" ]]; then
+    printf 'Error: archivo no encontrado: %s\n' "$input" >&2
+    return 1
+fi
+
+# ─[ EXTRACCIÓN ]───────────────────────────────────
+local links
+links=$(jaq -r '
+  if type == "array" then .[]
+  elif .messages then .messages[]
+  else .
+  end
+  | .text_entities // [] | .[] | select(.type == "link") | .text
+' "$input" | sort -u) || {
+    printf 'Error: fallo al procesar JSON\n' >&2
+    return 1
+}
+
+# ─[ SALIDA ]───────────────────────────────────────
+if $print_only; then
+    printf '%s\n' "$links"
+else
+    local output="${input%.json}_links.txt"
+    printf '%s\n' "$links" > "$output"
+    printf 'Extraídos %d links únicos → %s\n' "$(printf '%s' "$links" | wc -l)" "$output"
+fi
+
+return 0
