@@ -47,7 +47,6 @@ require("kasumi/plugins/alternate-toggler")
 -- │                     PLUGS (inactivos)                     │
 -- ╘═══════════════════════════════════════════════════════════╛
 -- require("kasumi/plugins/lsp/nvim-navbuddy")
--- require("kasumi/plugins/lsp/nvim-supermaven") -- se me acabo el demo
 -- require("kasumi/plugins/nvim-web-devicons") -- Esta de mas por que no tengo ajustes
 -- require("kasumi/plugins/telescope") -- Ta potente el asunto
 -- require("kasumi/plugins/colorizer")
