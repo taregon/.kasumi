@@ -23,12 +23,12 @@ explicaciones irrelevantes
 
 - **Formato**: `type: descripción`
 - **Type**: elige solo uno
-  - `feat` — nueva funcionalidad
-  - `fix` — corrección de error
-  - `refactor` — reestructuración sin cambio funcional
-  - `style` — cambio cosmético, apariencia, formato (no lógica)
-  - `chore` — configuración y mantenimiento
-  - `docs` — documentación
+  - `feat:` — nueva funcionalidad
+  - `fix:` — corrección de error
+  - `refactor:` — reestructuración sin cambio funcional
+  - `style:` — cambio cosmético, apariencia, formato (no lógica)
+  - `chore:` — configuración y mantenimiento
+  - `docs:` — documentación
 - **Descripción**: verbo en infinitivo, minúscula, sin punto final; no repetir
   el type
 
