@@ -52,13 +52,20 @@ require("mini.align").setup({
 })
 
 -- MANIPULA DELIMITADORES DE TEXTO: PARÉNTESIS, CORCHETES Y COMILLAS.
--- require("mini.surround").setup({
--- 	mappings = {
--- 		add = "<leader>sa", -- Añadir delimitador
--- 		delete = "<leader>sd", -- Eliminar delimitador
--- 		replace = "<leader>sr", -- Reemplazar delimitador
--- 		highlight = "<leader>sh", -- Resaltar delimitador
--- 	},
--- 	search_method = "cover_or_nearest", -- cómo buscar delimitadores
--- 	highlight_duration = 250, -- duración del resaltado en ms
--- })
+require("mini.surround").setup({
+	mappings = {
+		add = "sa", -- Añadir delimitador (modo visual)
+		delete = "sd", -- Eliminar delimitador
+		replace = "sr", -- Reemplazar delimitador
+		find = "sf", -- Buscar delimitador
+		find_left = "sF", -- Buscar delimitador izquierdo
+		highlight = "sh", -- Resaltar delimitador
+		update_n_lines = "sn", -- Actualizar líneas
+	},
+	search_method = "cover_or_nearest",
+	highlight_duration = 250,
+	custom_surroundings = {
+		["*"] = { output = { left = "**", right = "**" } }, -- Negrita markdown
+		["`"] = { output = { left = "`", right = "`" } }, -- Código inline
+	},
+})
