@@ -21,8 +21,7 @@ explicaciones irrelevantes
 
 ### Header
 
-Formato: `type: descripción`
-
+- **Formato**: `type: descripción`
 - **Type**: elige solo uno
   - `feat` — nueva funcionalidad
   - `fix` — corrección de error
@@ -30,15 +29,16 @@ Formato: `type: descripción`
   - `style` — cambio cosmético, apariencia, formato (no lógica)
   - `chore` — configuración y mantenimiento
   - `docs` — documentación
-- **Descripción**: verbo en infinitivo, minúscula, sin punto final
+- **Descripción**: verbo en infinitivo, minúscula, sin punto final; no repetir
+  el type
 
-### Body (opcional)
+### Body
 
+- Usar cuando el diff contenga cambios complejos o en múltiples áreas
 - Separado por línea en blanco
 - Máx 3 líneas
 - Sin formas pasivas
 - Cada línea inicia con `-`
-- Usar el diff para describir los cambios
 - No repetir el header ni líneas dentro del body
 
 ### Prohibido
