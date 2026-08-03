@@ -146,10 +146,6 @@ fi
 # Desactiva la carga de ajustes predeterminado para rc.conf
 export RANGER_LOAD_DEFAULT_RC=FALSE
 
-# ─[ USER AGENT ]─────────────────────────────────────────────
-# Personalizado para scripts o utilidades
-export IXOS_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
-
 # ─[ EDITORES ]───────────────────────────────────────────────
 # Definen el editor por defecto para terminal y GUI
 export EDITOR="nvim"
