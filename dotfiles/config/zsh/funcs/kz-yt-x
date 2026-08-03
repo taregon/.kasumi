@@ -1,12 +1,10 @@
 # vim: filetype=zsh
 # yt-dlp para X/Twitter con cookies del navegador.
 # Soporta tweets privados extrayendo cookies de Firefox.
-# Prioriza MP4 + M4A con thumbnail y metadata embebida.
-# Convierte thumbnails a jpg para incrustarlos sin dejar .avif suelto.
-# Valida enlaces con httpx en paralelo y anota cada uno:
-#   ::OK:: <code> - <link>   (2xx/3xx, se descarga)
-#   ::ERR:: <code> - <link>  (4xx/5xx o sin respuesta 000)
-# Incluye sleep 0.5s y reintentos para evitar rate-limit.
+# Prioriza MP4 + M4A.
+# Incluye impersonacion, sleep aleatorio y reintentos para evitar bloqueos.
+# Videos ya descargados se omiten automaticamente (--download-archive).
+# Batch mode via -a se maneja por yt-dlp nativamente.
 # Trunca titulo a 120 bytes (~40 caracteres CJK) para filesystem.
 #
 # Uso: kz-yt-x <url>
@@ -15,62 +13,28 @@
 local browser="firefox"
 
 # Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
+# Ruta opaca: evitar revelar que es un archive de descargas.
+local archive_file="$HOME/.cache/.d4ta/t"
 
 local -a yt_args=(
+    # Auth y anti-bloqueo
     --cookies-from-browser "$browser"
-    --embed-metadata
-    --embed-thumbnail
-    --convert-thumbnails jpg
-    --windows-filenames
+    --download-archive "$archive_file"
+    --no-overwrites
+    --impersonate chrome
     --sleep-requests 0.5
+    --sleep-interval 1
+    --max-sleep-interval 3
     --retries 3
+    --fragment-retries 5
     --ignore-errors
     --xff default
+    # Video prioritario MP4
     -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
+    --merge-output-format mp4
+    --windows-filenames
     -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s"
 )
 
-local batch_file=""
-local -a targets
-if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
-    batch_file="$2"
-    targets=(${(f)"$(tr -d '\r' < "$batch_file" | grep -Ev '^\s*(#|$)')"})
-else
-    targets=("$1")
-fi
-if ((${#targets} == 0)); then
-    echo "Ningun enlace valido en $batch_file" >&2
-    return 1
-fi
-
-local tmp_httpx tmp_annotated tmp_links url line code
-tmp_httpx=$(mktemp)
-tmp_annotated=$(mktemp)
-tmp_links=$(mktemp)
-printf '%s\n' "${targets[@]}" \
-    | httpx-toolkit -silent -nc -sc -timeout 8 -t 20 > "$tmp_httpx"
-for url in "${targets[@]}"; do
-    line=$(grep -F -m1 -- "$url " "$tmp_httpx")
-    if [[ -n "$line" ]]; then
-        code=${line#*"["}
-        code=${code%"]"}
-    else
-        code=000
-    fi
-    if [[ "$code" == [23][0-9][0-9] ]]; then
-        echo "::OK:: $code - $url" >> "$tmp_annotated"
-    else
-        echo "::ERR:: $code - $url" >> "$tmp_annotated"
-    fi
-done
-
-grep '^::ERR::' "$tmp_annotated" >&2
-grep '^::OK::' "$tmp_annotated" \
-    | sed 's/^::OK:: [0-9][0-9][0-9] - //' > "$tmp_links"
-if [[ ! -s "$tmp_links" ]]; then
-    echo "Ningun enlace valido" >&2
-    rm -f "$tmp_httpx" "$tmp_annotated" "$tmp_links"
-    return 1
-fi
-yt-dlp "${yt_args[@]}" -a "$tmp_links"
-rm -f "$tmp_httpx" "$tmp_annotated" "$tmp_links"
+mkdir -p "${archive_file:h}"
+yt-dlp "${yt_args[@]}" "$@"
