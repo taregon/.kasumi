@@ -204,6 +204,8 @@ window#waybar {
   font-size: 20px;
   color: @mauve;
   border-radius: 4px;
+  border: none;
+  padding: 6px 14px;
   transition: color 0.3s ease;
 }
 
@@ -404,5 +406,7 @@ window#waybar {
   font-size: 20px;
   color: @red;
   border-radius: 4px;
+  border: none;
+  padding: 6px 14px;
   animation: pulse-power 3s ease infinite;
 }
