@@ -76,6 +76,7 @@ Plug("williamboman/mason.nvim") -- Instalador de LSP servers, linters y formatte
 Plug("L3MON4D3/LuaSnip") -- Motor de snippets con soporte VS Code, SnipMate y Lua
 Plug("hrsh7th/cmp-buffer") -- Completado de palabras en buffers abiertos
 Plug("hrsh7th/cmp-nvim-lsp") -- Completado de símbolos LSP (functions, fields, methods)
+Plug("hrsh7th/cmp-nvim-lua") -- Completado de APIs de Neovim (vim.api, vim.lsp, etc)
 Plug("hrsh7th/cmp-path") -- Completado de rutas de archivos
 Plug("hrsh7th/nvim-cmp") -- Motor de autocompletado principal
 Plug("junegunn/fzf", {
@@ -97,7 +98,6 @@ Plug("saadparwaiz1/cmp_luasnip") -- Integración de LuaSnip con nvim-cmp
 -- Plug("nvimdev/lspsaga.nvim") -- Tiene una barra como navic, hay que colocar un require vació.
 -- Plug("smoka7/multicursors.nvim") -- Editar multiples lineas
 -- Plug("stevearc/dressing.nvim") -- Mejoras en la UI (que hace, no se) y ya pa que, lo archivaron
--- Plug("supermaven-inc/supermaven-nvim")
 -- Plug("williamboman/mason-lspconfig.nvim") -- Conecta Mason con LSPConfig para instalar servidores LSP
 -- Plug("windwp/nvim-ts-autotag") -- Para renombrará etiquetas de html
 Plug("lanej/hotreload.nvim") -- Recarga automática de archivos visibles cuando cambian en disco
