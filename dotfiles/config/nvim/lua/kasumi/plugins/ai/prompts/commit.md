@@ -17,8 +17,8 @@ explicaciones irrelevantes. Solo texto plano
 
 ### Header
 
-- **Formato**: una sola línea `type: descripción`
-- **Type**: elige solo uno
+- Formato: una sola línea `tipo: descripción`
+- Tipo: elige solo uno
   - `feat:` — nueva funcionalidad
   - `fix:` — corrección de error
   - `refactor:` — reestructuración sin cambio funcional
@@ -35,7 +35,7 @@ explicaciones irrelevantes. Solo texto plano
 - Máx 3 líneas
 - Sin formas pasivas
 - Cada línea inicia con `-`
-- No repetir el header ni líneas dentro del body
+- No repetir el type en la descripción ni el header en el body
 
 ### Prohibido
 
