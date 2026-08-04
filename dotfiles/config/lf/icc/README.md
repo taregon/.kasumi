@@ -2,12 +2,12 @@
 
 ## Perfiles disponibles
 
-| Perfil            | Tamaño    | Curva TRC  | Estado   |
-| ----------------- | --------- | ---------- | -------- |
-| sRGB-v2-magic.icc | 736 bytes | 182 puntos | `Activo` |
-| sRGB-v2-micro.icc | 456 bytes | 42 puntos  | Respaldo |
+| Perfil            | Tamaño    | Curva TRC  | Estado     |
+| ----------------- | --------- | ---------- | ---------- |
+| sRGB-v2-magic.icc | 736 bytes | 182 puntos | **Activo** |
+| sRGB-v2-micro.icc | 456 bytes | 42 puntos  | Respaldo   |
 
-Fuente: [Compact-ICC-Profiles][6]
+Fuente: [Compact-ICC-Profiles][5]
 
 ## Problema
 
@@ -30,7 +30,7 @@ TRC) con tamaño mínimo. Técnicas de optimización aplicadas en [PhotoSauce][3
 ## Pipeline de procesamiento
 
 Orden del pipeline ImageMagick (settings → imagen → pre-procesamiento → resize →
-perfil):
+perfil), según la [documentación oficial][6]:
 
 ```
 magick \
@@ -55,10 +55,8 @@ magick \
 - `-intent Relative` antes de `-thumbnail`: afecta conversión durante resize
 - `-colorspace RGB` antes del resize: procesar en luz lineal
 - `-colorspace sRGB` después del resize: volver al espacio de visualización
-- `-profile` al final: incrusta perfil [ICC][5] después de todas las
+- `-profile` al final: incrusta perfil [ICC][4] después de todas las
   transformaciones
-
-Ref: https://imagemagick.org/command-line-processing/
 
 ## Resultados de comparación
 
@@ -80,5 +78,6 @@ original y reconversión a sRGB estándar.
 [1]: https://github.com/nicedoc/iccs/blob/master/sRGB.icc
 [2]: https://ninedegreesbelow.com/photography/srgb-profile-comparison.html
 [3]: https://photosauce.net/blog/post/making-a-minimal-srgb-icc-profile-part-1-trim-the-fat-abuse-the-spec
-[5]: https://www.color.org/specification/ICC1v43_2010-12.pdf
-[6]: https://github.com/saucecontrol/Compact-ICC-Profiles
+[4]: https://www.color.org/specification/ICC1v43_2010-12.pdf
+[5]: https://github.com/saucecontrol/Compact-ICC-Profiles
+[6]: https://imagemagick.org/command-line-processing/
