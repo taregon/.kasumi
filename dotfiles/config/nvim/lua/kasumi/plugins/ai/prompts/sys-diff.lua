@@ -44,7 +44,7 @@ function M.staged_diff()
 	local rel_path = abs_path:sub(#repo_root + 2)
 
 	-- Gemma-4 no distingue markdown de código; se detecta extensión para
-	-- inyectar "tipo: docs" sin ancla por línea (el hint encuadra el diff,
+	-- inyectar "type: docs" sin ancla por línea (el hint encuadra el diff,
 	-- marcar cada línea era redundante y saturaba el prompt).
 	local doc_exts = { md = true, markdown = true, txt = true, rst = true, adoc = true, org = true }
 	local ext = vim.fn.fnamemodify(abs_path, ":e"):lower()
@@ -101,7 +101,7 @@ function M.staged_diff()
 		local rest = line:sub(2)
 
 		if marker == "+" or marker == "-" then
-			-- En archivos doc no se marca [COMENTARIO]: el hint "tipo: docs"
+			-- En archivos doc no se marca [COMENTARIO]: el hint "type: docs"
 			-- ya encuadra el diff; evita confundir # de markdown con comentario.
 			-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
 			-- bloques /* */ ni """; Gemma-4 no los requiere para inferir.
@@ -136,7 +136,7 @@ function M.staged_diff()
 	filtered = collapsed
 
 	-- Heurística: si >50% de líneas +/- contienen [COMENTARIO], el cambio es
-	-- puramente cosmético. Se inyecta "tipo: style" en el header para que el
+	-- puramente cosmético. Se inyecta "type: style" en el header para que el
 	-- modelo no tenga que inferir la clasificación. Sin este hint, el modelo
 	-- asigna feat aunque el diff solo tenga cambios en comentarios.
 	local changed_lines = 0
@@ -152,9 +152,9 @@ function M.staged_diff()
 
 	local hint = ""
 	if is_doc then
-		hint = "\ntipo: docs (archivo de documentación)"
+		hint = "\n[META] type: docs (archivo de documentación)"
 	elseif changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
-		hint = "\ntipo: style (solo comentarios)"
+		hint = "\n[META] type: style (solo comentarios)"
 	end
 
 	-- Cabecera estructurada: "directorio:" y "archivo:" dan contexto de
@@ -162,7 +162,7 @@ function M.staged_diff()
 	-- extensión del archivo; el modelo infiere el lenguaje desde ella.
 	local parent_dir = file_dir:match("([^/]+)$") or ""
 	-- ext ya se calculó en línea 47; se reutiliza para el campo "lenguaje:".
-	local header = "directorio: " .. parent_dir .. "\narchivo: " .. base .. "\nlenguaje: " .. ext .. hint .. "\n\n"
+	local header = "[META] directorio: " .. parent_dir .. "\n[META] archivo: " .. base .. "\n[META] lenguaje: " .. ext .. hint .. "\n\n"
 	return header .. table.concat(filtered, "\n")
 end
 
