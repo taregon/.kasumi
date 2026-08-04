@@ -2,9 +2,10 @@
 # yt-dlp para X/Twitter con cookies del navegador.
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A.
+# Valida enlaces con httpx en paralelo y reporta solo los rotos:
+#   ::ERR:: <code> - <link>  (4xx/5xx o sin respuesta 000)
 # Incluye impersonacion, sleep aleatorio y reintentos para evitar bloqueos.
 # Videos ya descargados se omiten automaticamente (--download-archive).
-# Batch mode via -a se maneja por yt-dlp nativamente.
 # Trunca titulo a 120 bytes (~40 caracteres CJK) para filesystem.
 #
 # Uso: kz-yt-x <url>
@@ -37,4 +38,33 @@ local -a yt_args=(
 )
 
 mkdir -p "${archive_file:h}"
-yt-dlp "${yt_args[@]}" "$@"
+
+local -a targets
+if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
+    targets=("${(@f)$(sed -e '/^[[:space:]]*$/d' -e '/^[[:space:]]*#/d' -e 's/\r$//' "$2")}")
+else
+    targets=("$@")
+fi
+
+local tmp_httpx url code
+tmp_httpx=$(mktemp)
+printf '%s\n' "${targets[@]}" \
+    | httpx-toolkit -silent -json -timeout 8 -t 20 > "$tmp_httpx"
+
+local -a valid_links
+for url in "${targets[@]}"; do
+    code=$(jaq -r --arg u "$url" 'first(select(.url == $u) | .status_code)' "$tmp_httpx")
+    code=${code:-000}
+    if [[ "$code" == [23][0-9][0-9] ]]; then
+        valid_links+=("$url")
+    else
+        echo "ERR $code - $url" >&2
+    fi
+done
+rm -f "$tmp_httpx"
+
+if ((${#valid_links} == 0)); then
+    echo "Ningun enlace valido" >&2
+    return 1
+fi
+yt-dlp "${yt_args[@]}" "${valid_links[@]}"
