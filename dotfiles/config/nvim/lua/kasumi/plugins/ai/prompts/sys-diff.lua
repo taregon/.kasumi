@@ -74,7 +74,7 @@ function M.staged_diff()
 	end
 
 	-- Eliminar metadatos git (diff --git, index, @@, ---/+++), conservar solo
-	-- líneas de cambio (+/-) y contexto ( ).
+	-- líneas de cambio y contexto; los marcadores [+]/[-] se aplican después.
 	-- WARN: en Lua "-" es carácter mágico; "^--- " coincide con "- " y
 	-- descarta eliminaciones. Debe ser "^%-%-%- " (guiones escapados con %).
 	-- No "corregir" a "--- " sin "%".
@@ -94,13 +94,17 @@ function M.staged_diff()
 	end
 
 	-- Gemma-4-it confunde sintaxis de comentarios con código funcional.
-	-- [COMENTARIO] reemplaza líneas de comentario, [REF] marca contexto.
+	-- [COMENTARIO] reemplaza líneas de comentario, [REF] marca contexto, [+]/[-]
+	-- marcan líneas añadidas/eliminadas.
 	-- Sin estas anclas el modelo alucina funcionalidades inexistentes.
 	for idx, line in ipairs(filtered) do
 		local marker = line:sub(1, 1)
 		local rest = line:sub(2)
 
 		if marker == "+" or marker == "-" then
+			-- El símbolo +/- no se marca: el modelo local lo confunde con
+			-- markdown (listas). Se reemplaza por los marcadores [+]/[-].
+			local sym = marker == "+" and "[+]" or "[-]"
 			-- En archivos doc no se marca [COMENTARIO]: el hint "type: docs"
 			-- ya encuadra el diff; evita confundir # de markdown con comentario.
 			-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
@@ -109,7 +113,9 @@ function M.staged_diff()
 				not is_doc
 				and (rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;"))
 			then
-				filtered[idx] = marker .. " [COMENTARIO]"
+				filtered[idx] = sym .. " [COMENTARIO]"
+			else
+				filtered[idx] = sym .. " " .. rest
 			end
 		elseif marker == " " then
 			filtered[idx] = "[REF]" .. line
@@ -135,14 +141,15 @@ function M.staged_diff()
 	end
 	filtered = collapsed
 
-	-- Heurística: si >50% de líneas +/- contienen [COMENTARIO], el cambio es
-	-- puramente cosmético. Se inyecta "type: style" en el header para que el
+	-- Heurística: si >50% de líneas de cambio contienen [COMENTARIO], el cambio
+	-- es puramente cosmético. Se inyecta "type: style" en el header para que el
 	-- modelo no tenga que inferir la clasificación. Sin este hint, el modelo
 	-- asigna feat aunque el diff solo tenga cambios en comentarios.
 	local changed_lines = 0
 	local comment_lines = 0
 	for _, line in ipairs(filtered) do
-		if line:sub(1, 1) == "+" or line:sub(1, 1) == "-" then
+		local prefix = line:sub(1, 3)
+		if prefix == "[+]" or prefix == "[-]" then
 			changed_lines = changed_lines + 1
 			if line:match("%[COMENTARIO%]") then
 				comment_lines = comment_lines + 1
@@ -152,9 +159,9 @@ function M.staged_diff()
 
 	local hint = ""
 	if is_doc then
-		hint = "\n[META] type: docs (archivo de documentación)"
+		hint = "\n[META] type: docs"
 	elseif changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
-		hint = "\n[META] type: style (solo comentarios)"
+		hint = "\n[META] type: style"
 	end
 
 	-- Cabecera estructurada: "directorio:" y "archivo:" dan contexto de
@@ -162,7 +169,14 @@ function M.staged_diff()
 	-- extensión del archivo; el modelo infiere el lenguaje desde ella.
 	local parent_dir = file_dir:match("([^/]+)$") or ""
 	-- ext ya se calculó en línea 47; se reutiliza para el campo "lenguaje:".
-	local header = "[META] directorio: " .. parent_dir .. "\n[META] archivo: " .. base .. "\n[META] lenguaje: " .. ext .. hint .. "\n\n"
+	local header = "[META] directorio: "
+		.. parent_dir
+		.. "\n[META] archivo: "
+		.. base
+		.. "\n[META] lenguaje: "
+		.. ext
+		.. hint
+		.. "\n\n"
 	return header .. table.concat(filtered, "\n")
 end
 

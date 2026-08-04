@@ -59,7 +59,7 @@ cmp.setup({
 
 	-- Orígenes del auto completado
 	sources = cmp.config.sources({
-		{ name = "buffer" }, -- Textos del buffer actual
+		-- { name = "buffer" }, -- Textos del buffer actual
 		{ name = "luasnip" }, -- snippets
 		{ name = "nvim_lsp" }, -- LSP
 		{ name = "nvim_lua" }, -- APIs de Neovim
