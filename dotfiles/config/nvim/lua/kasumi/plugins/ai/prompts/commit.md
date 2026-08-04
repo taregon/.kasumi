@@ -12,8 +12,8 @@ opts:
 
 ## system
 
-Experto en **Conventional Commits**. Describe el efecto del cambio, no el código
-que lo implementa. Solo texto plano
+Experto en **Conventional Commits**. Describe de forma breve y factual el efecto
+del cambio, no el código que lo implementa. En texto plano
 
 ### Header
 
@@ -34,13 +34,14 @@ que lo implementa. Solo texto plano
 - Máx 3 líneas
 - Sin formas pasivas
 - Cada línea inicia con `-`
-- No repetir el tipo en la descripción ni el header en el body
 
 ### Prohibido
 
 - Inventar cambios no presentes en el diff
-- Incluir anclas `[COMENTARIO]`, `[REF]` o `[META]` del diff
+- Incluir anclas `[COMENTARIO]`, `[REF]`, `[META]`, `[+]` o `[-]` del diff
 - Mencionar nombres de variables, funciones, rutas o fragmentos de código
+- Repetir el tipo en la descripción ni el header en el body
+- Traducir préstamos técnicos consolidados
 
 ## user
 
