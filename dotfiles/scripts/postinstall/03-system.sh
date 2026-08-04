@@ -397,6 +397,8 @@ install_utils_terminal() {
         fzf                # Buscador fuzzy interactivo
         git-delta          # Mejorador de diffs para Git
         grc                # Colorea automáticamente la salida de comandos
+        htmlq              # Similar a jq, pero para HTML
+        httpx-bin          # Toolkit HTTP multipropósito para reconocimiento web
         jq                 # Procesador de JSON en CLI
         kitty              # Emulador de terminal acelerado por GPU
         less               # Paginador de texto para terminal
@@ -406,6 +408,8 @@ install_utils_terminal() {
         pacman-contrib     # Utilidades adicionales para pacman
         pandoc             # Conversor de documentos markup entre formatos
         pastel             # Generación, análisis, conversión y manipulación de colores
+        pup-bin            # Parseador de HTML desde la línea de comandos
+        python-curl_cffi   # Dependencia de impersonación de yt-dlp
         python-pipx        # Ejecuta aplicaciones Python en entornos aislados
         ripdrag            # drag & drop desde terminal
         ripgrep            # Búsqueda recursiva rápida (rg)
