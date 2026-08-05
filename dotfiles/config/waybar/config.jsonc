@@ -16,7 +16,7 @@
   "height": 0, // Altura de la barra (0 = automática)
   "exclusive": true,
   "margin": "4 0 0 0", // Ancho completo, solo margen superior
-  "spacing": 8, // px entre módulos adyacentes
+  "spacing": 6, // px entre módulos adyacentes
   "reload_style_on_change": true, // recarga style.css en disco automáticamente
 
   // ── Distribución De Módulos ────────────────────────────────
@@ -28,7 +28,8 @@
     "custom/pacman",
     "group/extra-left",
     "sway/scratchpad",
-    "sway/mode"
+    "sway/mode",
+    "tray"
   ],
   "modules-center": [
     "clock"
@@ -153,16 +154,15 @@
       "idle_inhibitor",
       "custom/clipboard",
       "keyboard-state",
-      "sway/language",
-      "tray"
+      "sway/language"
     ]
   },
 
   "idle_inhibitor": {
-    "format": "{icon} ",
+    "format": "{icon}",
     "format-icons": {
       "activated": "",
-      "deactivated": ""
+      "deactivated": ""
     },
     "tooltip-format-activated": "Inhibición activa (30 min)",
     "tooltip-format-deactivated": "Click para inhibir idle"
