@@ -270,6 +270,10 @@ window#waybar {
   animation: pulse-power 3s ease infinite;
 }
 
+#custom-pacman:hover {
+  border-color: alpha(@yellow, 0.15);
+}
+
 #network,
 #bluetooth {
   color: @green;
