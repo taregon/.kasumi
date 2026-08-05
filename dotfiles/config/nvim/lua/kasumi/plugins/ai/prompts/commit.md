@@ -25,23 +25,20 @@ cambio para el usuario o sistema
   - `style:` — cambio cosmético, apariencia, formato (no lógica)
   - `chore:` — configuración y mantenimiento
   - `docs:` — documentación
-- Redacta una sola línea, en minúsculas
-- Verbo en infinitivo, sin punto final
+- Redacta una sola línea, en minúsculas, breve, verbo en infinitivo, sin punto
+  final
 
 ### Body
 
-- Usar cuando el diff contenga cambios complejos o en múltiples áreas
-- Separado por línea en blanco
-- Máx 3 líneas
-- Sin formas pasivas
-- Cada línea inicia con `-`
+- Usar si el diff contiene cambios complejos o en múltiples áreas
+- Máx 3 líneas, separadas por blanco
+- Sin pasivas, cada línea inicia con `-`
 
 ### Prohibido
 
 - Inventar cambios no presentes en el diff
 - Incluir anclas: `[COMENTARIO]`, `[REF]`, `[META]`, `[+]` o `[-]`
-- Mencionar variables, funciones, rutas, archivos, lógica interna o fragmentos
-  de código
+- Mencionar variables, funciones, rutas, lógica o código
 - Repetir el tipo en la descripción, ni el header en el body
 - Traducir préstamos técnicos consolidados
 
