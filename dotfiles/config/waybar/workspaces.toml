@@ -23,8 +23,8 @@ default_color = "#a6adc8"
 
 # ── Workspaces Vacios ───────────────────────────────────────
 # Icono y color para workspaces sin ventanas.
-empty_icon = "\u00B7"
-empty_color = "#585b70"
+empty_icon = ""
+empty_color = "#a6adc8"
 
 # ── Estados ─────────────────────────────────────────────────
 # Icono por estado del workspace.
@@ -37,12 +37,16 @@ urgent_enabled = true
 urgent_color = "#f38ba8"
 
 # ── Atenuacion ──────────────────────────────────────────────
-# Atenuación de colores en workspaces no enfocados (0.0-1.0).
-unfocused_dim_factor = 0.35
-# Brillo mínimo tras atenuar.
-unfocused_dim_offset = 25.0
-# Multiplicador del color en workspaces vacíos (0.0 invisible, 1.0 sin cambio).
-empty_dim_factor = 0.78
+# Atenuación de números en workspaces no enfocados (0.0-1.0).
+num_dim_factor = 0.52
+# Atenuación de iconos en workspaces no enfocados (0.0-1.0).
+icon_dim_factor = 0.44
+# Desaturación de iconos en workspaces inactivos con ventanas
+# (0.0 sin cambio, 1.0 gris).
+icon_desaturate = 0.35
+# Atenuación del icono en workspaces vacíos (0.0-1.0).
+# Omitido: usa icon_dim_factor.
+empty_icon_dim = 0.78
 
 # ── Formato ─────────────────────────────────────────────────
 # Separador entre workspaces.
@@ -53,15 +57,6 @@ focused_format = "<span background='#363a42'> <b>{}</b></span>"
 
 # Separador entre iconos dentro de un workspace.
 icon_separator = ""
-
-# Tamaño de los iconos de apps. Valores posibles:
-#   "auto"      → enfocado normal, no enfocados más pequeños
-#   "larger"    → todos un paso más grandes
-#   "smaller"   → todos un paso más pequeños
-#   "14pt"      → tamaño fijo en puntos
-#   "12000"     → tamaño en décimas de punto (12000 = 12pt)
-#   omitido     → sin cambio de tamaño (por defecto)
-icon_size = "larger"
 
 # ── Tooltip ─────────────────────────────────────────────────
 # Mostrar tooltip al pasar el mouse.
