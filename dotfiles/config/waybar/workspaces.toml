@@ -22,8 +22,9 @@ default_icon = "▍"
 default_color = "#a6adc8"
 
 # ── Workspaces Vacios ───────────────────────────────────────
-# Icono y color para workspaces sin ventanas.
+# Icono para workspaces sin ventanas.
 empty_icon = ""
+# Color del icono en workspaces vacíos.
 empty_color = "#a6adc8"
 
 # ── Estados ─────────────────────────────────────────────────
@@ -53,7 +54,12 @@ empty_icon_dim = 0.78
 ws_separator = " "
 
 # Formato del workspace enfocado. {} se reemplaza por el número del workspace.
-focused_format = "<span background='#363a42'> <b>{}</b></span>"
+# {bg} se reemplaza por el fondo calculado (base #242a2e × focused_bg_shade).
+focused_format = "<span background='{bg}'> <b>{}</b></span>"
+
+# Factor de brillo para el fondo del workspace enfocado (base #242a2e).
+# 1.0 = @base sin cambio, 1.2 = 20% más claro, 0.8 = 20% más oscuro.
+focused_bg_shade = 0.85
 
 # Separador entre iconos dentro de un workspace.
 icon_separator = ""
@@ -61,7 +67,9 @@ icon_separator = ""
 # ── Tooltip ─────────────────────────────────────────────────
 # Mostrar tooltip al pasar el mouse.
 tooltip_enabled = true
-# Template del tooltip. Usar {num} y {count} como marcadores.
+
+# ── Template del tooltip (no implementado) ─────────────────
+# Usar {num} y {count} como marcadores.
 # Omitido: usa "ws{num}: {count} ventana(s)".
 # tooltip_format = "ws{num}: {count}"
 
@@ -69,8 +77,9 @@ tooltip_enabled = true
 # Clase CSS del módulo (para style.css).
 output_class = "workspaces"
 
-# Espacio a la izquierda y derecha del output completo.
+# Espacio a la izquierda del output completo.
 pad_left = " "
+# Espacio a la derecha del output completo.
 pad_right = ""
 
 # ── Daemon ──────────────────────────────────────────────────
