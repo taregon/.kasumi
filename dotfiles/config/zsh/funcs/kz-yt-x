@@ -2,7 +2,7 @@
 # yt-dlp para X/Twitter con cookies del navegador.
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A.
-# Valida enlaces con httpx en paralelo y reporta solo los rotos:
+# Valida enlaces con httpx en paralelo y reporta lo que no descarga:
 #   ERR <code> - <link>     (4xx/5xx o sin respuesta 000)
 #   ERR redirect - <link>   (tweet sin video nativo)
 #   ERR profile - <link>    (URL de perfil, no de tweet)
@@ -13,9 +13,9 @@
 # Uso: kz-yt-x <url>
 #      kz-yt-x -a <archivo_de_enlaces>
 
+# Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
 local browser="firefox"
 
-# Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
 # Ruta opaca: evitar revelar que es un archive de descargas.
 local archive_file="$HOME/.cache/.d4ta/t"
 
@@ -52,9 +52,18 @@ mkdir -p "${archive_file:h}"
 
 local -a targets
 if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
-    targets=("${(@f)$(sed -e '/^[[:space:]]*$/d' -e '/^[[:space:]]*#/d' -e 's/\r$//' "$2")}")
+    # Archivo ausente o vacio: sed falla en stderr (se silencia) y el
+    # guard de abajo emite el uso con un solo mensaje, sin ruido.
+    targets=("${(@f)$(sed -e '/^[[:space:]]*$/d' -e '/^[[:space:]]*#/d' -e 's/\r$//' "$2" 2> /dev/null)}")
 else
     targets=("$@")
+fi
+
+# Sin argumentos o sin enlaces en el archivo: sin trabajo, sin probes.
+# Sed vacio deja un elemento vacio (longitud 1), por eso se mira el primero.
+if [[ -z "${targets[1]-}" ]]; then
+    echo "Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>" >&2
+    return 1
 fi
 
 # ── Limpieza de URLs ────────────────────────────────────────────────
