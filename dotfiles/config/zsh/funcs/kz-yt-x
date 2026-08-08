@@ -3,7 +3,9 @@
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A.
 # Valida enlaces con httpx en paralelo y reporta solo los rotos:
-#   ::ERR:: <code> - <link>  (4xx/5xx o sin respuesta 000)
+#   ERR <code> - <link>     (4xx/5xx o sin respuesta 000)
+#   ERR redirect - <link>   (tweet sin video nativo)
+#   ERR profile - <link>    (URL de perfil, no de tweet)
 # Incluye impersonacion, sleep aleatorio y reintentos para evitar bloqueos.
 # Videos ya descargados se omiten automaticamente (--download-archive).
 # Trunca titulo a 120 bytes (~40 caracteres CJK) para filesystem.
@@ -16,6 +18,15 @@ local browser="firefox"
 # Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
 # Ruta opaca: evitar revelar que es un archive de descargas.
 local archive_file="$HOME/.cache/.d4ta/t"
+
+# Dependencias externas no estándar: fallo temprano y sin ruido si faltan.
+local dep
+for dep in httpx-toolkit jaq yt-dlp; do
+    if ! command -v "$dep" > /dev/null 2>&1; then
+        echo "Falta dependencia: $dep" >&2
+        return 1
+    fi
+done
 
 local -a yt_args=(
     # Auth y anti-bloqueo
@@ -87,7 +98,7 @@ rm -f "$tmp_httpx"
 # Tweets que solo enlazan a otro sitio (link-posts) o no tienen video
 # nativo: yt-dlp intentaria seguir el enlace externo y no descargaria.
 # La syndication publica de X devuelve el media del tweet por ID, sin auth.
-local syn_url syn_json syn_verdict syn_id
+local syn_json syn_verdict syn_id
 local -a final_links
 for url in "${valid_links[@]}"; do
     syn_id="${url##*/status/}"
