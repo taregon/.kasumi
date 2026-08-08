@@ -46,6 +46,20 @@ else
     targets=("$@")
 fi
 
+# ── Limpieza de URLs ────────────────────────────────────────────────
+# Enlaces de share de X llevan query de tracking (?t=...&s=09) que no
+# afecta a la descarga; se descarta para pasar la URL canonica a yt-dlp.
+local raw_url clean_url
+local -a clean_targets
+for raw_url in "${targets[@]}"; do
+    clean_url="$raw_url"
+    if [[ "$raw_url" == *x.com/* || "$raw_url" == *twitter.com/* ]]; then
+        clean_url="${raw_url%%[?#]*}"
+    fi
+    clean_targets+=("$clean_url")
+done
+targets=("${clean_targets[@]}")
+
 local tmp_httpx url code
 tmp_httpx=$(mktemp)
 printf '%s\n' "${targets[@]}" \
@@ -63,8 +77,35 @@ for url in "${targets[@]}"; do
 done
 rm -f "$tmp_httpx"
 
-if ((${#valid_links} == 0)); then
+# ── Filtro de redireccion externa ───────────────────────────────────
+# Tweets que solo enlazan a otro sitio (link-posts) o no tienen video
+# nativo: yt-dlp intentaria seguir el enlace externo y no descargaria.
+# La syndication publica de X devuelve el media del tweet por ID, sin auth.
+local syn_url syn_json syn_verdict syn_id
+local -a final_links
+for url in "${valid_links[@]}"; do
+    syn_id="${url##*/status/}"
+    syn_id="${syn_id%%/*}"
+    if [[ "$syn_id" != <-> ]]; then
+        final_links+=("$url")
+        continue
+    fi
+    syn_json=$(curl -s -m 6 -A 'Mozilla/5.0' \
+        "https://cdn.syndication.twimg.com/tweet-result?id=$syn_id&lang=en&token=a")
+    syn_verdict=$(jaq -r 'if .__typename == "Tweet" then
+        ([.mediaDetails[]?.type] | (index("video") != null or index("animated_gif") != null))
+        else "ambig" end' <<<"$syn_json" 2>/dev/null)
+    # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
+    # para no descartar tweets privados, que la syndication no expone.
+    if [[ "$syn_verdict" == "false" ]]; then
+        echo "ERR redirect - $url" >&2
+    else
+        final_links+=("$url")
+    fi
+done
+
+if ((${#final_links} == 0)); then
     echo "Ningun enlace valido" >&2
     return 1
 fi
-yt-dlp "${yt_args[@]}" "${valid_links[@]}"
+yt-dlp "${yt_args[@]}" "${final_links[@]}"
