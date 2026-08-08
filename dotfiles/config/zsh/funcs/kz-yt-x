@@ -94,7 +94,7 @@ for url in "${valid_links[@]}"; do
         "https://cdn.syndication.twimg.com/tweet-result?id=$syn_id&lang=en&token=a")
     syn_verdict=$(jaq -r 'if .__typename == "Tweet" then
         ([.mediaDetails[]?.type] | (index("video") != null or index("animated_gif") != null))
-        else "ambig" end' <<<"$syn_json" 2>/dev/null)
+        else "ambig" end' <<< "$syn_json" 2> /dev/null)
     # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
