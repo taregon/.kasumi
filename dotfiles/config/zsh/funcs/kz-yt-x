@@ -49,7 +49,7 @@ fi
 local tmp_httpx url code
 tmp_httpx=$(mktemp)
 printf '%s\n' "${targets[@]}" \
-    | httpx-toolkit -silent -json -timeout 8 -t 20 > "$tmp_httpx"
+    | httpx-toolkit -silent -json -timeout 6 -t 20 -nfs -ob -rstr 1024 > "$tmp_httpx"
 
 local -a valid_links
 for url in "${targets[@]}"; do
