@@ -3,7 +3,7 @@
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A.
 # Valida enlaces con httpx en paralelo y reporta lo que no descarga:
-#   ERR <code> - <link>     (4xx/5xx o sin respuesta 000)
+#   ERR <code> - <link>     (3xx redirect, 4xx/5xx o sin respuesta 000)
 #   ERR redirect - <link>   (tweet sin video nativo)
 #   ERR profile - <link>    (URL de perfil, no de tweet)
 # Incluye impersonacion, sleep aleatorio y reintentos para evitar bloqueos.
@@ -14,24 +14,24 @@
 #      kz-yt-x -a <archivo_de_enlaces>
 
 # Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
-local browser="firefox"
+readonly BROWSER="firefox"
 
 # Ruta opaca: evitar revelar que es un archive de descargas.
-local archive_file="$HOME/.cache/.d4ta/t"
+readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
-# Dependencias externas no estándar: fallo temprano y sin ruido si faltan.
+# Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
 local dep
-for dep in httpx-toolkit jaq yt-dlp; do
+for dep in httpx-toolkit jaq curl yt-dlp; do
     if ! command -v "$dep" > /dev/null 2>&1; then
-        echo "Falta dependencia: $dep" >&2
+        printf 'Falta dependencia: %s\n' "$dep" >&2
         return 1
     fi
 done
 
 local -a yt_args=(
     # Auth y anti-bloqueo
-    --cookies-from-browser "$browser"
-    --download-archive "$archive_file"
+    --cookies-from-browser "$BROWSER"
+    --download-archive "$ARCHIVE_FILE"
     --no-overwrites
     --impersonate chrome
     --sleep-requests 0.5
@@ -48,13 +48,21 @@ local -a yt_args=(
     -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s"
 )
 
-mkdir -p "${archive_file:h}"
+mkdir -p "${ARCHIVE_FILE:h}"
 
 local -a targets
 if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
-    # Archivo ausente o vacio: sed falla en stderr (se silencia) y el
-    # guard de abajo emite el uso con un solo mensaje, sin ruido.
-    targets=("${(@f)$(sed -e '/^[[:space:]]*$/d' -e '/^[[:space:]]*#/d' -e 's/\r$//' "$2" 2> /dev/null)}")
+    local batch_file="${2:?Archivo requerido con -a}"
+    # Diagnostico directo: el archivo debe existir para leerlo.
+    if [[ ! -f "$batch_file" ]]; then
+        printf 'Archivo no encontrado: %s\n' "$batch_file" >&2
+        return 1
+    fi
+    # Sed: elimina lineas vacías, comentarios y carriage returns.
+    targets=("${(@f)$(sed -e '/^[[:space:]]*$/d' \
+        -e '/^[[:space:]]*#/d' \
+        -e 's/\r$//' \
+        "$batch_file" 2> /dev/null)}")
 else
     targets=("$@")
 fi
@@ -62,8 +70,8 @@ fi
 # Sin argumentos o sin enlaces en el archivo: sin trabajo, sin probes.
 # Sed vacio deja un elemento vacio (longitud 1), por eso se mira el primero.
 if [[ -z "${targets[1]-}" ]]; then
-    echo "Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>" >&2
-    return 1
+    printf 'Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>\n' >&2
+    return 2
 fi
 
 # ── Limpieza de URLs ────────────────────────────────────────────────
@@ -78,7 +86,7 @@ for raw_url in "${targets[@]}"; do
     if [[ "$raw_url" == *x.com/* || "$raw_url" == *twitter.com/* ]]; then
         clean_url="${raw_url%%[?#]*}"
         if [[ "$clean_url" != */status/* ]]; then
-            echo "ERR profile - $clean_url" >&2
+            printf 'ERR profile - %s\n' "$clean_url" >&2
             continue
         fi
     fi
@@ -86,22 +94,32 @@ for raw_url in "${targets[@]}"; do
 done
 targets=("${clean_targets[@]}")
 
-local tmp_httpx url code
-tmp_httpx=$(mktemp)
+# Sin enlaces tras descartar perfiles: no hay nada que probar ni descargar.
+if ((${#targets} == 0)); then
+    printf 'Ningun enlace valido\n' >&2
+    return 1
+fi
+
+local tmpdir url code
+tmpdir=$(mktemp -d)
+# Limpieza garantizada del temporal en cualquier salida de la funcion.
+trap 'rm -rf "$tmpdir"' EXIT
 printf '%s\n' "${targets[@]}" \
-    | httpx-toolkit -silent -json -duc -nc -timeout 6 -t 20 -nfs -ob -rstr 1024 > "$tmp_httpx"
+    | httpx-toolkit -silent -json -duc -nc -timeout 6 -t 20 -nfs -ob -rstr 1024 > "$tmpdir/probe"
 
 local -a valid_links
 for url in "${targets[@]}"; do
-    code=$(jaq -r --arg u "$url" 'first(select(.url == $u) | .status_code)' "$tmp_httpx")
+    # Sin match en el JSON, first() emite vacio y ${code:-000} fija 000.
+    code=$(jaq -r --arg u "$url" 'first(select(.url == $u) | .status_code)' "$tmpdir/probe")
     code=${code:-000}
-    if [[ "$code" == [23][0-9][0-9] ]]; then
+    # Solo 2xx descarga: un redirect (3xx) no tiene video nativo y quedaria
+    # deudor en yt-dlp; se reporta como ERR redirect via code.
+    if [[ "$code" == 2[0-9][0-9] ]]; then
         valid_links+=("$url")
     else
-        echo "ERR $code - $url" >&2
+        printf 'ERR %s - %s\n' "$code" "$url" >&2
     fi
 done
-rm -f "$tmp_httpx"
 
 # ── Filtro de redireccion externa ───────────────────────────────────
 # Tweets que solo enlazan a otro sitio (link-posts) o no tienen video
@@ -124,14 +142,14 @@ for url in "${valid_links[@]}"; do
     # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
-        echo "ERR redirect - $url" >&2
+        printf 'ERR redirect - %s\n' "$url" >&2
     else
         final_links+=("$url")
     fi
 done
 
 if ((${#final_links} == 0)); then
-    echo "Ningun enlace valido" >&2
+    printf 'Ningun enlace valido\n' >&2
     return 1
 fi
 yt-dlp "${yt_args[@]}" "${final_links[@]}"
