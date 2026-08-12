@@ -13,33 +13,51 @@ config:
     - actions.d/nano.yaml
     - actions.d/nvim.yaml
 dotfiles:
-  f_cava:
-    src: config/cava/kasumi-cava.conf
-    dst: ~/.config/cava/kasumi-cava.conf
+  d_aria2:
+    src: config/aria2
+    dst: ~/.config/aria2
+    link: absolute
+    chmod: '700'
+  d_cliphist:
+    src: config/cliphist
+    dst: ~/.config/cliphist
+    link: absolute
+  d_gammastep:
+    src: config/gammastep
+    dst: ~/.config/gammastep
+    link: absolute
+  d_git:
+    src: config/git
+    dst: ~/.config/git
+    link: absolute
+  d_gotop:
+    src: config/gotop
+    dst: ~/.config/gotop
     link: absolute
   d_kitty:
     src: config/kitty
     dst: ~/.config/kitty
     link: absolute
-  f_redshift:
-    src: config/redshift/redshift.conf
-    dst: ~/.config/redshift/redshift.conf
+  d_lf:
+    src: config/lf
+    dst: ~/.config/lf
     link: absolute
-  f_tmux:
-    src: config/tmux/kasumi-tmux.conf
-    dst: ~/.config/tmux/kasumi-tmux.conf
+  d_lnav:
+    src: config/lnav/configs/installed
+    dst: ~/.config/lnav/configs/installed
     link: absolute
-  f_zshrc:
-    src: zshrc
-    dst: ~/.zshrc
+    chmod: '750'
+  d_mako:
+    src: config/mako
+    dst: ~/.config/mako
     link: absolute
-  f_starttree:
-    src: config/StartTree/config.yaml
-    dst: ~/.config/StartTree/config.yaml
+  d_mpd:
+    src: config/mpd
+    dst: ~/.config/mpd
     link: absolute
-  d_zsh:
-    src: config/zsh
-    dst: ~/.config/zsh
+  d_mpv:
+    src: config/mpv
+    dst: ~/.config/mpv
     link: absolute
   d_neovim:
     src: config/nvim
@@ -48,17 +66,37 @@ dotfiles:
     actions:
       - nvim-plug-install
       - nvim-update
-  d_git:
-    src: config/git
-    dst: ~/.config/git
+  d_opencode_theme:
+    src: config/opencode/themes
+    dst: ~/.config/opencode/themes
     link: absolute
-  f_gitconfig:
-    src: gitconfig
-    dst: ~/.gitconfig
+  d_paru:
+    src: config/paru
+    dst: ~/.config/paru
     link: absolute
-  f_lazygit:
-    src: config/lazygit/config.yml
-    dst: ~/.config/lazygit/config.yml
+  d_rmpc:
+    src: config/rmpc
+    dst: ~/.config/rmpc
+    link: absolute
+  d_rofi:
+    src: config/rofi
+    dst: ~/.config/rofi
+    link: absolute
+  d_scripts:
+    src: scripts
+    dst: ~/.local/bin/kasumi
+    link: absolute
+  d_sounds:
+    src: sounds
+    dst: ~/.local/share/kasumi/sounds
+    link: absolute
+  d_starship:
+    src: config/starship
+    dst: ~/.config/starship
+    link: absolute
+  d_state:
+    src: state
+    dst: ~/.local/share/kasumi/state
     link: absolute
   d_sway:
     src: config/sway
@@ -68,32 +106,6 @@ dotfiles:
     src: config/swaylock
     dst: ~/.config/swaylock
     link: absolute
-  d_wofi:
-    src: config/wofi
-    dst: ~/.config/wofi
-    link: absolute
-  f_rc.conf:
-    src: config/ranger/rc.conf
-    dst: ~/.config/ranger/rc.conf
-    link: absolute
-  d_waybar:
-    src: config/waybar
-    dst: ~/.config/waybar
-    link: absolute
-  d_zathura:
-    src: config/zathura
-    dst: ~/.config/zathura
-    link: absolute
-  f_nanorc:
-    src: nanorc
-    dst: ~/.nanorc
-    link: absolute
-    actions:
-      - dir-nano-backup
-  d_gotop:
-    src: config/gotop
-    dst: ~/.config/gotop
-    link: absolute
   d_vivid:
     src: config/vivid
     dst: ~/.config/vivid
@@ -102,21 +114,69 @@ dotfiles:
     src: wallpapers
     dst: ~/.local/share/kasumi/wallpapers
     link: absolute
-  d_sounds:
-    src: sounds
-    dst: ~/.local/share/kasumi/sounds
+  d_waybar:
+    src: config/waybar
+    dst: ~/.config/waybar
     link: absolute
-  d_state:
-    src: state
-    dst: ~/.local/share/kasumi/state
+  d_wofi:
+    src: config/wofi
+    dst: ~/.config/wofi
     link: absolute
-  d_scripts:
-    src: scripts
-    dst: ~/.local/bin/kasumi
+  d_zathura:
+    src: config/zathura
+    dst: ~/.config/zathura
     link: absolute
-  d_rofi:
-    src: config/rofi
-    dst: ~/.config/rofi
+  d_zsh:
+    src: config/zsh
+    dst: ~/.config/zsh
+    link: absolute
+  f_cava:
+    src: config/cava/kasumi-cava.conf
+    dst: ~/.config/cava/kasumi-cava.conf
+    link: absolute
+  f_fonts:
+    src: config/fontconfig
+    dst: ~/.config/fontconfig
+    link: absolute
+  f_gitconfig:
+    src: gitconfig
+    dst: ~/.gitconfig
+    link: absolute
+  f_lazygit:
+    src: config/lazygit/config.yml
+    dst: ~/.config/lazygit/config.yml
+    link: absolute
+  f_lnav:
+    src: config/lnav/config.json
+    dst: ~/.config/lnav/config.json
+    link: absolute
+    chmod: '600'
+  f_nanorc:
+    src: nanorc
+    dst: ~/.nanorc
+    link: absolute
+    actions:
+      - dir-nano-backup
+  f_rc.conf:
+    src: config/ranger/rc.conf
+    dst: ~/.config/ranger/rc.conf
+    link: absolute
+  f_redshift:
+    src: config/redshift/redshift.conf
+    dst: ~/.config/redshift/redshift.conf
+    link: absolute
+  f_ssh:
+    src: ssh/config
+    dst: ~/.ssh/config
+    link: absolute
+    chmod: '600'
+  f_starttree:
+    src: config/StartTree/config.yaml
+    dst: ~/.config/StartTree/config.yaml
+    link: absolute
+  f_tmux:
+    src: config/tmux/kasumi-tmux.conf
+    dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
   f_zprofile:
     src: zprofile
@@ -126,65 +186,9 @@ dotfiles:
     src: zshenv
     dst: ~/.zshenv
     link: absolute
-  f_ssh:
-    src: ssh/config
-    dst: ~/.ssh/config
-    link: absolute
-    chmod: '600'
-  d_mako:
-    src: config/mako
-    dst: ~/.config/mako
-    link: absolute
-  d_aria2:
-    src: config/aria2
-    dst: ~/.config/aria2
-    link: absolute
-    chmod: '700'
-  d_lnav:
-    src: config/lnav/configs/installed
-    dst: ~/.config/lnav/configs/installed
-    link: absolute
-    chmod: '750'
-  f_lnav:
-    src: config/lnav/config.json
-    dst: ~/.config/lnav/config.json
-    link: absolute
-    chmod: '600'
-  f_fonts:
-    src: config/fontconfig
-    dst: ~/.config/fontconfig
-    link: absolute
-  d_lf:
-    src: config/lf
-    dst: ~/.config/lf
-    link: absolute
-  d_opencode_theme:
-    src: config/opencode/themes
-    dst: ~/.config/opencode/themes
-    link: absolute
-  d_gammastep:
-    src: config/gammastep
-    dst: ~/.config/gammastep
-    link: absolute
-  d_mpd:
-    src: config/mpd
-    dst: ~/.config/mpd
-    link: absolute
-  d_starship:
-    src: config/starship
-    dst: ~/.config/starship
-    link: absolute
-  d_cliphist:
-    src: config/cliphist
-    dst: ~/.config/cliphist
-    link: absolute
-  d_rmpc:
-    src: config/rmpc
-    dst: ~/.config/rmpc
-    link: absolute
-  d_paru:
-    src: config/paru
-    dst: ~/.config/paru
+  f_zshrc:
+    src: zshrc
+    dst: ~/.zshrc
     link: absolute
 profiles:
   kasumi:
@@ -195,6 +199,7 @@ profiles:
       - d_kitty
       - d_lf
       - d_mako
+      - d_mpv
       - d_rofi
       - d_scripts
       - d_sounds
