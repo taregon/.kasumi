@@ -21,14 +21,13 @@ readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
 # Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
 local dep
-for dep in httpx-toolkit jaq curl yt-dlp; do
+for dep in httpx-toolkit jaq curl ugrep yt-dlp; do
     if ! command -v "$dep" > /dev/null 2>&1; then
         printf '>>FAIL Falta %s. Instala %s primero.\n' "$dep" "$dep" >&2
         return 1
     fi
 done
 
-# Verificar soporte de impersonate (requiere curl_cffi compatible).
 local -a yt_args=(
     # Auth y anti-bloqueo
     --cookies-from-browser "$BROWSER"
@@ -47,9 +46,9 @@ local -a yt_args=(
     --windows-filenames
     -o "%(webpage_url_domain)s [%(id)s] %(uploader)s - %(title).120B.%(ext)s"
 )
-# Impersonate requiere curl_cffi 0.10.x-0.15.x; versiones incompatibles
-# (como 0.16.x con yt-dlp <2026.08) lo marcan unavailable y fallan.
-if yt-dlp --list-impersonate-targets 2>&1 | grep -q 'Chrome.*curl_cffi[^(]*(unavailable)'; then
+# Impersonate requiere curl_cffi compatible; versiones incompatibles
+# lo marcan unavailable y abortan. Se verifica soporte antes de usar.
+if yt-dlp --list-impersonate-targets 2>&1 | ugrep -q 'Chrome.*curl_cffi.*unavailable'; then
     printf '>>WARN Impersonate no disponible (curl_cffi incompatible). Se omite.\n' >&2
 else
     yt_args+=(--impersonate chrome)
@@ -78,7 +77,7 @@ fi
 # Sed vacio deja un elemento vacio (longitud 1), por eso se mira el primero.
 if [[ -z "${targets[1]-}" ]]; then
     printf '>>HELP Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>\n' >&2
-    return 0
+    return 2
 fi
 
 # ── Limpieza de URLs ────────────────────────────────────────────────
@@ -116,7 +115,7 @@ printf '%s\n' "${targets[@]}" \
     | httpx-toolkit -silent -json -duc -nc -timeout 6 -t 20 -nfs -ob -rstr 1024 > "$tmpdir/probe"
 
 local -a valid_links
-local -i _err_count=0
+local -i err_count=0
 printf '>>INFO [2/3] Validando %d enlaces con httpx...\n' "${#targets[@]}" >&2
 for url in "${targets[@]}"; do
     # Sin match en el JSON, first() emite vacio y ${code:-000} fija 000.
@@ -128,11 +127,11 @@ for url in "${targets[@]}"; do
         valid_links+=("$url")
     else
         printf '   ~> ERR %s - %s\n' "$code" "$url" >&2
-        ((_err_count++))
+        ((err_count++))
     fi
 done
-if ((_err_count)); then
-    printf '>>FAIL %d de %d enlaces rechazados por httpx.\n' "$_err_count" "${#targets[@]}" >&2
+if ((err_count)); then
+    printf '>>FAIL %d de %d enlaces rechazados por httpx.\n' "$err_count" "${#targets[@]}" >&2
 fi
 
 # ── Filtro de redireccion externa ───────────────────────────────────
@@ -141,7 +140,7 @@ fi
 # La syndication publica de X devuelve el media del tweet por ID, sin auth.
 local syn_json syn_verdict syn_id
 local -a final_links
-local -i _redir_count=0
+local -i redir_count=0
 printf '>>INFO [3/3] Filtrando %d enlaces validados...\n' "${#valid_links[@]}" >&2
 for url in "${valid_links[@]}"; do
     syn_id="${url##*/status/}"
@@ -159,13 +158,13 @@ for url in "${valid_links[@]}"; do
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
         printf '   ~> ERR redirect - %s\n' "$url" >&2
-        ((_redir_count++))
+        ((redir_count++))
     else
         final_links+=("$url")
     fi
 done
-if ((_redir_count)); then
-    printf '>>FAIL %d de %d enlaces sin video nativo.\n' "$_redir_count" "${#valid_links[@]}" >&2
+if ((redir_count)); then
+    printf '>>FAIL %d de %d enlaces sin video nativo.\n' "$redir_count" "${#valid_links[@]}" >&2
 fi
 
 if ((${#final_links} == 0)); then
