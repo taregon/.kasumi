@@ -19,11 +19,16 @@ readonly BROWSER="firefox"
 # Ruta opaca: evitar revelar que es un archive de descargas.
 readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
+# shell-colors: C_BLU=STEP/INFO/HELP, C_YEL=FAIL/WARN, C_GRN=PASS.
+# Solo ~> PASS y >>NIVEL llevan color; los anidados ~> ERR van en plano.
+readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
+
 # Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
 local dep
 for dep in httpx-toolkit jaq curl ugrep yt-dlp; do
     if ! command -v "$dep" > /dev/null 2>&1; then
-        printf '>>FAIL Falta %s. Instala %s primero.\n' "$dep" "$dep" >&2
+        printf "${C_YEL}>>FAIL Falta %s.${C_RST}\n" "$dep" >&2
+        printf "   > Instala %s primero.\n" "$dep" >&2
         return 1
     fi
 done
@@ -49,7 +54,7 @@ local -a yt_args=(
 # Impersonate requiere curl_cffi compatible; versiones incompatibles
 # lo marcan unavailable y abortan. Se verifica soporte antes de usar.
 if yt-dlp --list-impersonate-targets 2>&1 | ugrep -q 'Chrome.*curl_cffi.*unavailable'; then
-    printf '>>WARN Impersonate no disponible (curl_cffi incompatible). Se omite.\n' >&2
+    printf "${C_BLU}>>INFO Omitiendo impersonate (curl_cffi incompatible).${C_RST}\n" >&2
 else
     yt_args+=(--impersonate chrome)
 fi
@@ -61,7 +66,7 @@ if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
     local batch_file="${2:?Archivo requerido con -a}"
     # Diagnostico directo: el archivo debe existir para leerlo.
     if [[ ! -f "$batch_file" ]]; then
-        printf '>>FAIL %s no existe.\n' "$batch_file" >&2
+        printf "${C_YEL}>>FAIL %s no existe.${C_RST}\n" "$batch_file" >&2
         return 1
     fi
     # Sed: elimina lineas vacías, comentarios y carriage returns.
@@ -76,8 +81,8 @@ fi
 # Sin argumentos o sin enlaces en el archivo: sin trabajo, sin probes.
 # Sed vacio deja un elemento vacio (longitud 1), por eso se mira el primero.
 if [[ -z "${targets[1]-}" ]]; then
-    printf '>>HELP Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>\n' >&2
-    return 2
+    printf "${C_BLU}>>HELP Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>${C_RST}\n" >&2
+    return 0
 fi
 
 # ── Limpieza de URLs ────────────────────────────────────────────────
@@ -87,13 +92,13 @@ fi
 # profile y se descarta antes de gastar un probe en httpx.
 local raw_url clean_url
 local -a clean_targets
-printf '>>INFO [1/3] Depurando URLs...\n' >&2
+printf "${C_BLU}>>STEP [1/3] Depurando URLs...${C_RST}\n" >&2
 for raw_url in "${targets[@]}"; do
     clean_url="$raw_url"
     if [[ "$raw_url" == *x.com/* || "$raw_url" == *twitter.com/* ]]; then
         clean_url="${raw_url%%[?#]*}"
         if [[ "$clean_url" != */status/* ]]; then
-            printf '   ~> ERR profile - %s\n' "$clean_url" >&2
+            printf "   ~> ERR profile - %s\n" "$clean_url" >&2
             continue
         fi
     fi
@@ -103,7 +108,7 @@ targets=("${clean_targets[@]}")
 
 # Sin enlaces tras descartar perfiles: no hay nada que probar ni descargar.
 if ((${#targets} == 0)); then
-    printf '>>FAIL Ningun enlace valido.\n' >&2
+    printf "${C_YEL}>>FAIL Ningún enlace válido.${C_RST}\n" >&2
     return 1
 fi
 
@@ -115,8 +120,7 @@ printf '%s\n' "${targets[@]}" \
     | httpx-toolkit -silent -json -duc -nc -timeout 6 -t 20 -nfs -ob -rstr 1024 > "$tmpdir/probe"
 
 local -a valid_links
-local -i err_count=0
-printf '>>INFO [2/3] Validando %d enlaces con httpx...\n' "${#targets[@]}" >&2
+printf "${C_BLU}>>STEP [2/3] Validando %d enlaces con httpx...${C_RST}\n" "${#targets[@]}" >&2
 for url in "${targets[@]}"; do
     # Sin match en el JSON, first() emite vacio y ${code:-000} fija 000.
     code=$(jaq -r --arg u "$url" 'first(select(.url == $u) | .status_code)' "$tmpdir/probe")
@@ -126,13 +130,9 @@ for url in "${targets[@]}"; do
     if [[ "$code" == 2[0-9][0-9] ]]; then
         valid_links+=("$url")
     else
-        printf '   ~> ERR %s - %s\n' "$code" "$url" >&2
-        ((err_count++))
+        printf "   ~> ERR %s - %s\n" "$code" "$url" >&2
     fi
 done
-if ((err_count)); then
-    printf '>>FAIL %d de %d enlaces rechazados por httpx.\n' "$err_count" "${#targets[@]}" >&2
-fi
 
 # ── Filtro de redireccion externa ───────────────────────────────────
 # Tweets que solo enlazan a otro sitio (link-posts) o no tienen video
@@ -140,8 +140,7 @@ fi
 # La syndication publica de X devuelve el media del tweet por ID, sin auth.
 local syn_json syn_verdict syn_id
 local -a final_links
-local -i redir_count=0
-printf '>>INFO [3/3] Filtrando %d enlaces validados...\n' "${#valid_links[@]}" >&2
+printf "${C_BLU}>>STEP [3/3] Filtrando %d enlaces validados...${C_RST}\n" "${#valid_links[@]}" >&2
 for url in "${valid_links[@]}"; do
     syn_id="${url##*/status/}"
     syn_id="${syn_id%%/*}"
@@ -157,18 +156,20 @@ for url in "${valid_links[@]}"; do
     # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
-        printf '   ~> ERR redirect - %s\n' "$url" >&2
-        ((redir_count++))
+        printf "   ~> ERR redirect - %s\n" "$url" >&2
     else
         final_links+=("$url")
     fi
 done
-if ((redir_count)); then
-    printf '>>FAIL %d de %d enlaces sin video nativo.\n' "$redir_count" "${#valid_links[@]}" >&2
-fi
 
 if ((${#final_links} == 0)); then
-    printf '>>FAIL Ningun enlace valido.\n' >&2
+    printf "${C_YEL}>>FAIL Ningún enlace válido.${C_RST}\n" >&2
     return 1
 fi
-yt-dlp "${yt_args[@]}" "${final_links[@]}"
+if yt-dlp "${yt_args[@]}" "${final_links[@]}"; then
+    printf "${C_GRN}>>PASS Descarga completada.${C_RST}\n" >&2
+    return 0
+else
+    printf "${C_YEL}>>WARN yt-dlp fallo en una parte de los enlaces; los descargados se conservan.${C_RST}\n" >&2
+    return 1
+fi
