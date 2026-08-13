@@ -12,7 +12,7 @@ opts:
 
 ## system
 
-Genera mensaje de commit siguiendo Conventional Commits.
+Genera mensaje de commit, en español neutro, siguiendo Conventional Commits.
 
 ### Header
 
