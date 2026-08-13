@@ -20,7 +20,7 @@ readonly BROWSER="firefox"
 readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
 # shell-colors: C_BLU=STEP/INFO/HELP, C_YEL=FAIL/WARN, C_GRN=PASS.
-# Solo ~> PASS y >>NIVEL llevan color; los anidados ~> ERR van en plano.
+# Solo los >>NIVEL llevan color; los anidados ~> ERR van en plano.
 readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
 
 # Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
@@ -28,7 +28,6 @@ local dep
 for dep in httpx-toolkit jaq curl ugrep yt-dlp; do
     if ! command -v "$dep" > /dev/null 2>&1; then
         printf '%s>>FAIL Falta %s.%s\n' "$C_YEL" "$dep" "$C_RST" >&2
-        printf "   > Instala %s primero.\n" "$dep" >&2
         return 1
     fi
 done
@@ -98,7 +97,7 @@ for raw_url in "${targets[@]}"; do
     if [[ "$raw_url" == *x.com/* || "$raw_url" == *twitter.com/* ]]; then
         clean_url="${raw_url%%[?#]*}"
         if [[ "$clean_url" != */status/* ]]; then
-            printf "   ~> ERR profile - %s\n" "$clean_url" >&2
+            printf "   ~> ERR profile - %s\n" "$clean_url"
             continue
         fi
     fi
@@ -130,7 +129,7 @@ for url in "${targets[@]}"; do
     if [[ "$code" == 2[0-9][0-9] ]]; then
         valid_links+=("$url")
     else
-        printf "   ~> ERR %s - %s\n" "$code" "$url" >&2
+        printf "   ~> ERR %s - %s\n" "$code" "$url"
     fi
 done
 
@@ -156,7 +155,7 @@ for url in "${valid_links[@]}"; do
     # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
-        printf "   ~> ERR redirect - %s\n" "$url" >&2
+        printf "   ~> ERR redirect - %s\n" "$url"
     else
         final_links+=("$url")
     fi
