@@ -19,7 +19,7 @@ readonly BROWSER="firefox"
 # Ruta opaca: evitar revelar que es un archive de descargas.
 readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
-# shell-colors: C_BLU=STEP/INFO/HELP, C_YEL=FAIL/WARN, C_GRN=PASS.
+# shell-colors: C_BLU=STEP/HELP, C_YEL=INFO/FAIL/WARN, C_GRN=PASS.
 # Solo los >>NIVEL llevan color; los anidados ~> ERR van en plano.
 readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
 
@@ -53,7 +53,7 @@ local -a yt_args=(
 # Impersonate requiere curl_cffi compatible; versiones incompatibles
 # lo marcan unavailable y abortan. Se verifica soporte antes de usar.
 if yt-dlp --list-impersonate-targets 2>&1 | ugrep -q 'Chrome.*curl_cffi.*unavailable'; then
-    printf '%s>>INFO Omitiendo impersonate (curl_cffi incompatible).%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>INFO Omitiendo impersonate (curl_cffi incompatible).%s\n' "$C_YEL" "$C_RST"
 else
     yt_args+=(--impersonate chrome)
 fi
