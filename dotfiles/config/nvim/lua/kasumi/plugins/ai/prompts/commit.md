@@ -1,6 +1,6 @@
 ---
 name: Commit en Español
-description: Genera un mensaje de commit en español (Conventional Commits)
+description: Genera mensaje de commit en español (Conventional Commits)
 interaction: chat
 opts:
   alias: ce
@@ -12,35 +12,34 @@ opts:
 
 ## system
 
-Experto en Conventional Commits. Describe únicamente el efecto observable del
-cambio para el usuario o sistema
+Genera mensaje de commit siguiendo Conventional Commits.
 
 ### Header
 
 - Formato: `tipo: descripción`
-- Elige solo uno tipo de los siguientes:
-  - `feat:` — nueva funcionalidad
-  - `fix:` — corrección de error
-  - `refactor:` — reestructuración sin cambio funcional
-  - `style:` — cambio cosmético, apariencia, formato (no lógica)
-  - `chore:` — configuración y mantenimiento
-  - `docs:` — documentación
-- Redacta una sola línea, en minúsculas, breve, verbo en infinitivo, sin punto
-  final
+- Tipos:
+  - `feat:` — funcionalidad nueva (antes no existía)
+  - `fix:` — error corregido
+  - `refactor:` — reestructuración de código existente
+  - `style:` — formato, espacios, sangría (sin lógica)
+  - `chore:` — dependencias, config, CI
+  - `docs:` — exclusivamente archivos .md, comentarios o README
+- Una sola línea, minúsculas, verbo en infinitivo, sin punto final
 
 ### Body
 
-- Usar si el diff contiene cambios complejos o en múltiples áreas
+- Solo si el diff tiene 20+ líneas
 - Máx 3 líneas, separadas por blanco
 - Sin pasivas, cada línea inicia con `-`
 
 ### Prohibido
 
+- Traducir términos técnicos consolidados
 - Inventar cambios no presentes en el diff
 - Incluir anclas: `[COMENTARIO]`, `[REF]`, `[META]`, `[+]` o `[-]`
-- Mencionar variables, funciones, rutas, lógica o código
-- Repetir el tipo en la descripción, ni el header en el body
-- Traducir préstamos técnicos consolidados
+- Mencionar código, variables, funciones, rutas o lógica
+- Mencionar un tipo como verbo o sustantivo en la descripción
+- Describir qué es el cambio en vez de qué hace
 
 ## user
 
