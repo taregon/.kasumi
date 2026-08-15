@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
-# Actualiza los paquetes NVIDIA 580xx de la AUR de forma atómica.
-# Al estar en IgnorePkg, paru -Syu no los toca; este script es el único
-# camino de actualización. Fail-stop: si un subpaquete no construye, aborta
-# sin instalar nada, evitando el estado parcial que bloquea utils nuevo
-# contra dkms viejo.
+# Actualiza de forma atomica los paquetes NVIDIA 580xx de la AUR.
+# En IgnorePkg, paru -Syu no los toca; fail-stop: si un subpaquete no
+# construye, aborta sin instalar nada y evita el estado parcial dkms/utils.
 
 set -euo pipefail
 
 # ── Setup ───────────────────────────────────────────────────
 readonly CLONE="$HOME/.cache/paru/clone"
 declare -ra AUR_BASES=(nvidia-580xx-utils nvidia-580xx-settings)
+# Linea dedicada en [options]; al ser lista acumulativa, coexiste con otras.
+readonly IGNORE_LINE="IgnorePkg   = nvidia-580xx-utils nvidia-580xx-dkms \
+nvidia-580xx-settings opencl-nvidia-580xx libxnvctrl-580xx"
 
 # ── Validación ──────────────────────────────────────────────
 # Fallo temprano y consistente: herramientas requeridas y clones de paru.
-for cmd in git sed awk pacman makepkg sudo; do
+for cmd in git sed awk grep pacman makepkg sudo; do
     command -v "$cmd" > /dev/null || {
         printf ">>FAIL herramienta requerida no encontrada: %s\n" "$cmd"
         exit 1
@@ -26,6 +27,21 @@ for base in "${AUR_BASES[@]}"; do
         exit 1
     }
 done
+
+# IgnorePkg presente: paru -Syu no toca NVIDIA. Si la linea dedicada falta,
+# se inserta tras [options]; repetir IgnorePkg es valido y acumulativo.
+if grep -qF "$IGNORE_LINE" /etc/pacman.conf; then
+    printf ">>INFO IgnorePkg presente\n"
+else
+    printf ">>WARN IgnorePkg ausente en /etc/pacman.conf\n"
+    printf "   > Se requiere sudo para insertarlo\n"
+    sudo sed -i "/^\[options\]/a $IGNORE_LINE" /etc/pacman.conf
+    grep -qF "$IGNORE_LINE" /etc/pacman.conf || {
+        printf ">>FAIL No se pudo insertar IgnorePkg en /etc/pacman.conf\n"
+        exit 1
+    }
+    printf ">>PASS IgnorePkg insertado: /etc/pacman.conf\n"
+fi
 
 # ── Construcción ────────────────────────────────────────────
 built=()
