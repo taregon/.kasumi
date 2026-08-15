@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Actualiza los paquetes NVIDIA 580xx de la AUR de forma atómica.
+# Al estar en IgnorePkg, paru -Syu no los toca; este script es el único
+# camino de actualización. Fail-stop: si un subpaquete no construye, aborta
+# sin instalar nada, evitando el estado parcial que bloquea utils nuevo
+# contra dkms viejo.
+
+set -euo pipefail
+
+# ── Setup ──
+readonly CLONE="$HOME/.cache/paru/clone"
+declare -ra AUR_BASES=(nvidia-580xx-utils nvidia-580xx-settings)
+
+# ── Validación ──
+# Fallo temprano y consistente: herramientas requeridas y clones de paru.
+for cmd in git sed awk pacman makepkg sudo; do
+    command -v "$cmd" > /dev/null || {
+        printf ">>FAIL herramienta requerida no encontrada: %s\n" "$cmd"
+        exit 1
+    }
+done
+
+for base in "${AUR_BASES[@]}"; do
+    [[ -d "$CLONE/$base" ]] || {
+        printf ">>FAIL clon AUR no encontrado: %s (ejecuta 'paru -S %s' una vez)\n" "$base" "$base"
+        exit 1
+    }
+done
+
+# ── Construcción ──
+built=()
+for base in "${AUR_BASES[@]}"; do
+    git -C "$CLONE/$base" pull --ff-only --quiet
+    pkgver=$(sed -n 's/^pkgver=//p' "$CLONE/$base/PKGBUILD")
+    pkgrel=$(sed -n 's/^pkgrel=//p' "$CLONE/$base/PKGBUILD")
+    installed=$(pacman -Q "$base" | awk '{print $2}')
+    if [[ "$installed" == "$pkgver-$pkgrel" ]]; then
+        printf ">>INFO %s al dia (%s)\n" "$base" "$installed"
+        continue
+    fi
+    makepkg --noconfirm -C -c -d -f
+    built+=("$CLONE/$base"/*.pkg.tar.zst)
+done
+
+# ── Instalación ──
+# Transacción única: utils, opencl y dkms entran juntos con la misma versión,
+# de modo que la dependencia estricta dkms -> utils=${pkgver} queda satisfecha.
+if ((${#built[@]})); then
+    sudo pacman -U --noconfirm \
+        "${built[@]}"
+    printf ">>PASS nvidia-580xx actualizado a %s\n" \
+        "$(pacman -Q nvidia-580xx-utils | awk '{print $2}')"
+fi
+
+exit 0
