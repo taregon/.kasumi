@@ -1,0 +1,21 @@
+# ─[ SSH AGENT ]──────────────────────────────────────────────
+# Permite usar claves SSH sin pedir passphrase cada vez
+# El socket se crea automáticamente en $XDG_RUNTIME_DIR/ssh-agent.socket
+# Requisito: systemctl --user enable --now ssh-agent
+# NOTE: específico de systemd; revisar si se cambia de init
+[[ -z "$SSH_AUTH_SOCK" ]] && export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+
+# ─[ PATH ]───────────────────────────────────────────────────
+# Helpers y tooling personal reutilizable
+# Facilita pruebas, automatización y ejecución sin rutas largas
+typeset -U path PATH
+
+path=(
+    "$HOME/.local/bin"
+    "$HOME/.local/bin/kasumi/helpers"
+    $path
+)
+
+# Al fijar ZDOTDIR, ly y zsh leen los archivos de arranque desde
+# este directorio en lugar de $HOME.
+export ZDOTDIR=$HOME/.config/zsh

@@ -20,7 +20,7 @@ fi
 
 if [[ -z "$4" ]]; then
     local title
-    title=$(yt-dlp --print "%(title)s" -s "$url" 2>/dev/null)
+    title=$(yt-dlp --print "%(title)s" -s "$url" 2> /dev/null)
     title=${title//[^a-zA-Z0-9_-]/}
     title=${title:0:40}
     outfile="yt_audiocut-${title}-${start//:/-}-${end//:/-}.m4a"

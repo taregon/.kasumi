@@ -52,6 +52,9 @@ alias neovim-update="pip install --upgrade neovim"
 alias pac-autoremove="pacman -Q -dt -q | sudo pacman -Rn -"
 alias pac-cleancache="cdu -B /var/cache/pacman/pkg && paccache -r -k 1 && cdu /var/cache/pacman/pkg"
 alias paz="paru -Sua --noconfirm"
+# Actualización del sistema: paru -Syu ignora NVIDIA (IgnorePkg) y
+# nvidia-update refresca los paquetes 580xx de forma atómica al final.
+alias update="paru -Syu && $HOME/.local/bin/kasumi/helpers/nvidia-update"
 alias q="exit"
 alias servicios="systemctl list-units --type=service --all"
 alias zf='zoxide query -l | fzf \
