@@ -14,10 +14,9 @@
 #   • Terminales
 #   • Aplicaciones (binds, wmenu/wofi, systemd --user, etc.)
 
-# WARN: ly (/etc/ly/setup.sh) y zsh login cargan este archivo desde
-# $ZDOTDIR cuando la variable está activa. Cambiar de display manager o
-# shell puede requerir otros métodos (ej: environment.d, configuración de
-# sesión).
+# WARN: ly (/etc/ly/setup.sh) y zsh login cargan este archivo desde $ZDOTDIR
+# cuando la variable está activa. Cambiar de display manager o shell puede
+# requerir otros métodos (ej: environment.d, configuración de sesión).
 
 # ─[ WALLPAPER ]──────────────────────────────────────────────
 # Directorio estándar en $HOME para almacenar los
