@@ -1,8 +1,7 @@
 # ─[ SSH AGENT ]──────────────────────────────────────────────
 # Permite usar claves SSH sin pedir passphrase cada vez
 # El socket se crea automáticamente en $XDG_RUNTIME_DIR/ssh-agent.socket
-# Requisito: systemctl --user enable --now ssh-agent
-# NOTE: específico de systemd; revisar si se cambia de init
+# Requisito systemd: systemctl --user enable --now ssh-agent
 [[ -z "$SSH_AUTH_SOCK" ]] && export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 # ─[ PATH ]───────────────────────────────────────────────────
@@ -16,6 +15,6 @@ path=(
     $path
 )
 
-# Al fijar ZDOTDIR, ly y zsh leen los archivos de arranque desde
-# este directorio en lugar de $HOME.
+# Al exportar ZDOTDIR, ly y zsh leen los archivos de arranque desde
+# $ZDOTDIR en lugar de $HOME.
 export ZDOTDIR=$HOME/.config/zsh
