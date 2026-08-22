@@ -3,8 +3,8 @@
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A.
 # Valida enlaces con httpx en paralelo y reporta lo que no descarga:
-#   ~> ERR <code> - <link>     (3xx redirect, 4xx/5xx o sin respuesta 000)
-#   ~> ERR redirect - <link>   (tweet sin video nativo)
+#   ~> ERR <code> - <link>     (3xx nomedia, 4xx/5xx o sin respuesta 000)
+#   ~> ERR nomedia - <link>   (tweet sin video nativo)
 #   ~> ERR profile - <link>    (URL de perfil, no de tweet)
 # Incluye impersonacion, sleep aleatorio y reintentos para evitar bloqueos.
 # Videos ya descargados se omiten automaticamente (--download-archive).
@@ -79,7 +79,7 @@ fi
 
 # Sin argumentos o sin enlaces en el archivo: sin trabajo, sin probes.
 # Sed vacio deja un elemento vacio (longitud 1), por eso se mira el primero.
-if [[ -z "${targets[1]-}" ]]; then
+if [[ -z "${targets[1]:-}" ]]; then
     printf '%s>>HELP Uso: kz-yt-x <url>  |  kz-yt-x -a <archivo_de_enlaces>%s\n' "$C_BLU" "$C_RST"
     return 0
 fi
@@ -124,8 +124,8 @@ for url in "${targets[@]}"; do
     # Sin match en el JSON, first() emite vacio y ${code:-000} fija 000.
     code=$(jaq -r --arg u "$url" 'first(select(.url == $u) | .status_code)' "$tmpdir/probe")
     code=${code:-000}
-    # Solo 2xx descarga: un redirect (3xx) no tiene video nativo y quedaria
-    # deudor en yt-dlp; se reporta como ERR redirect via code.
+    # Solo 2xx descarga: un nomedia (3xx) no tiene video nativo y quedaria
+    # deudor en yt-dlp; se reporta el codigo numerico (ERR <code>) en plano
     if [[ "$code" == 2[0-9][0-9] ]]; then
         valid_links+=("$url")
     else
@@ -155,7 +155,7 @@ for url in "${valid_links[@]}"; do
     # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
-        printf "   ~> ERR redirect - %s\n" "$url"
+        printf "   ~> ERR nomedia - %s\n" "$url"
     else
         final_links+=("$url")
     fi
