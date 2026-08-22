@@ -1,68 +1,90 @@
 # vim: filetype=zsh
-# Descarga y corta audio de videos de YouTube
+# Descarga el mejor audio de un video de YouTube y lo corta con ffmpeg.
 #
 # Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]
-# Ejemplo: kzaudio-cut "https://youtube.com/watch?v=ID" 00:48:20 00:51:13 mi_clip.m4a
+# Ejemplo: kzaudio-cut "https://youtube.com/watch?v=ID" 00:48:20 00:51:13 clip.m4a
 #
-# Descarga el mejor audio disponible (ordenado por códec opus y bitrate),
-# lo corta con ffmpeg usando seek preciso, y lo guarda en M4A/AAC.
+# La descarga se ordena por códec opus y bitrate, y el corte usa seek preciso.
 # Si el archivo de salida ya existe, se salta la descarga.
+
+# Colores ANSI para niveles raíz; sub-tareas (~>) y notas van sin color.
+readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
+
+# Validación de dependencias al inicio: fallo temprano y consistente.
+if ! command -v yt-dlp &> /dev/null; then
+    printf '%s>>FAIL yt-dlp no está instalado.%s\n' "$C_YEL" "$C_RST"
+    printf '   > Instala yt-dlp con el gestor de paquetes.\n'
+    return 1
+fi
+
+if ! command -v ffmpeg &> /dev/null; then
+    printf '%s>>FAIL ffmpeg no está instalado.%s\n' "$C_YEL" "$C_RST"
+    printf '   > Instala ffmpeg con el gestor de paquetes.\n'
+    return 1
+fi
 
 local url="$1"
 local start="$2"
 local end="$3"
-local outfile
+local outfile="$4"
 
 if [[ -z "$url" || -z "$start" || -z "$end" ]]; then
-    echo "Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]"
-    return 1
+    printf '%s>>HELP Uso: kzaudio-cut <url> <inicio> <fin> [archivo_salida]%s\n' "$C_BLU" "$C_RST"
+    printf '   > Ejemplo: kzaudio-cut "https://youtube.com/watch?v=ID" 00:48:20 00:51:13 clip.m4a\n'
+    return 2
 fi
 
-if [[ -z "$4" ]]; then
+# Nombre de salida derivado del título del video si no se especificó uno.
+if [[ -z "$outfile" ]]; then
     local title
     title=$(yt-dlp --print "%(title)s" -s "$url" 2> /dev/null)
     title=${title//[^a-zA-Z0-9_-]/}
     title=${title:0:40}
     outfile="yt_audiocut-${title}-${start//:/-}-${end//:/-}.m4a"
-else
-    outfile="$4"
 fi
 
 if [[ -s "$outfile" ]]; then
-    echo "  El archivo ya existe: $outfile"
-    return 0
+    printf '%s>>SKIP ya existe: '%s'%s\n' "$C_GRN" "$outfile" "$C_RST"
+    return 1
 fi
 
-# Archivo temporal para descargar el mejor audio
-local tmpfile="/tmp/kzaud-$RANDOM-$(date +%s).tmp"
+# Directorio temporal para la descarga; limpieza garantizada al salir.
+local tmpdir
+tmpdir=$(mktemp -d) || {
+    printf '%s>>FAIL No se pudo crear el directorio temporal.%s\n' "$C_YEL" "$C_RST"
+    return 1
+}
+trap 'rm -rf -- "$tmpdir"' EXIT INT TERM
 
-trap 'rm -f "$tmpfile"' EXIT INT TERM
-
-echo "[1/2] Descargando mejor audio disponible (ordenado por calidad)..."
-yt-dlp -f bestaudio --format-sort "acodec:opus,abr" --force-overwrites -o "$tmpfile" "$url" || {
-    echo "  No se pudo descargar el audio. "
-    echo "   Revisa el URL o formatos disponibles con 'yt-dlp -F $url'"
+printf '%s>>STEP [1/2] Descargando el mejor audio disponible...%s\n' "$C_BLU" "$C_RST"
+yt-dlp -f bestaudio --format-sort "acodec:opus,abr" \
+    --force-overwrites -o "$tmpdir/audio" "$url" || {
+    printf '%s>>FAIL No se pudo descargar el audio.%s\n' "$C_YEL" "$C_RST"
+    printf '   > Revisa el URL o los formatos disponibles con "yt-dlp -F %s".\n' "$url"
     return 1
 }
 
-if [[ ! -s "$tmpfile" ]]; then
-    echo "  Archivo descargado vacío"
+# yt-dlp añade la extensión real del contenedor al nombre base.
+local -a audio=("$tmpdir"/audio.*(N))
+if [[ ! -s "$audio[1]" ]]; then
+    printf '%s>>FAIL Descarga vacía o sin archivo de salida.%s\n' "$C_YEL" "$C_RST"
     return 1
 fi
 
-echo "[2/2] Cortando audio (preservando calidad)..."
+printf '%s>>STEP [2/2] Cortando audio preservando calidad...%s\n' "$C_BLU" "$C_RST"
 ffmpeg -hide_banner -loglevel info \
-    -i "$tmpfile" \
+    -i "$audio[1]" \
     -ss "$start" -to "$end" \
     -c:a aac -q:a 0 \
     "$outfile" || {
-    echo "  ffmpeg falló durante el corte/recodificación"
+    printf '%s>>FAIL ffmpeg falló durante el corte.%s\n' "$C_YEL" "$C_RST"
     return 1
 }
 
 if [[ -s "$outfile" ]]; then
-    echo "  Clip generado: $outfile"
-else
-    echo "  No se generó el archivo de salida"
-    return 1
+    printf '%s>>PASS Clip generado: %s%s\n' "$C_GRN" "$outfile" "$C_RST"
+    return 0
 fi
+
+printf '%s>>FAIL No se generó el archivo de salida.%s\n' "$C_YEL" "$C_RST"
+return 1
