@@ -84,7 +84,7 @@ if [[ -z "${targets[1]-}" ]]; then
     return 0
 fi
 
-# ── Limpieza de URLs ────────────────────────────────────────────────
+# ──「 Limpieza De Urls 」────────────────────────────────────
 # Enlaces de share de X llevan query de tracking (?t=...&s=09) que no
 # afecta a la descarga; se descarta para pasar la URL canonica a yt-dlp.
 # Un perfil (x.com/<usuario>) no tiene tweet descargable; se marca ERR
@@ -133,7 +133,7 @@ for url in "${targets[@]}"; do
     fi
 done
 
-# ── Filtro de redireccion externa ───────────────────────────────────
+# ──「 Filtro De Redireccion Externa 」───────────────────────
 # Tweets que solo enlazan a otro sitio (link-posts) o no tienen video
 # nativo: yt-dlp intentaria seguir el enlace externo y no descargaria.
 # La syndication publica de X devuelve el media del tweet por ID, sin auth.
