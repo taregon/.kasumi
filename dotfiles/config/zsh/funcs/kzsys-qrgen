@@ -1,28 +1,54 @@
 # vim: filetype=zsh
-
-# Genera un código QR desde texto o archivo de entrada.
-# El QR se guarda como PNG con nombre basado en fecha y hora.
-# Ejemplos:
-#   qrgen "Texto"       -> QR desde texto literal
-#   qrgen < archivo.txt -> QR desde contenido de un archivo
+# Genera un código QR como PNG desde texto o entrada estándar.
+# La salida se guarda en el directorio actual con nombre de fecha y hora.
+#
+# Uso: kzsys-qrgen <texto>        -> QR desde texto literal
+#      kzsys-qrgen < archivo.txt  -> QR desde contenido de un archivo
+#
 # Más info: https://www.howtogeek.com/devops/how-to-create-qr-codes-from-the-linux-command-line/
 
-local outfile
-outfile="$(date +"qrcode_%F_%H%M%S").png"
+# Colores ANSI para niveles raíz; sub-tareas (~>) y notas van sin color.
+readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
 
-# Generar el QR
-qrencode \
+# Validación de dependencias al inicio: fallo temprano y consistente.
+if ! command -v qrencode &> /dev/null; then
+    printf '%s>>FAIL qrencode no está instalado.%s\n' "$C_YEL" "$C_RST"
+    printf '   > Instala qrencode con el gestor de paquetes.\n'
+    return 1
+fi
+
+# Sin argumento y con stdin interactivo no hay datos que codificar.
+if [[ -z "$1" && -t 0 ]]; then
+    printf '%s>>HELP Uso: kzsys-qrgen <texto> | kzsys-qrgen < archivo.txt%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Genera un QR PNG desde texto o entrada estándar.\n'
+    return 2
+fi
+
+# qrencode lee de stdin solo cuando no recibe el dato como argumento.
+local -a data=()
+[[ -n "$1" ]] && data=("$1")
+
+local outfile
+outfile="$(date +'qrcode_%F_%H%M%S').png"
+
+if ! qrencode \
     --background=faedeb \
     --foreground=9b044c \
     -s 16 \
     -m 2 \
     -l M \
     -o "$outfile" \
-    "$1"
-
-# Mostrar mensaje claro de éxito
-if [[ -f "$outfile" ]]; then
-    echo "  QR generado: $outfile"
-else
-    echo "  Error al generar el QR"
+    "$data[@]"; then
+    printf '%s>>FAIL qrencode falló.%s\n' "$C_YEL" "$C_RST"
+    printf '   > Revisa el texto de entrada o los permisos del directorio.\n'
+    return 1
 fi
+
+# Verificar el efecto secundario: el comando puede terminar sin producir la salida.
+if [[ -f "$outfile" ]]; then
+    printf '%s>>PASS generado: %s%s\n' "$C_GRN" "$outfile" "$C_RST"
+    return 0
+fi
+
+printf '%s>>FAIL No se generó el archivo de salida.%s\n' "$C_YEL" "$C_RST"
+return 1
