@@ -8,12 +8,12 @@
 # Más info: https://www.howtogeek.com/devops/how-to-create-qr-codes-from-the-linux-command-line/
 
 # Colores ANSI para niveles raíz; sub-tareas (~>) y notas van sin color.
-readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
+readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 
 # Validación de dependencias al inicio: fallo temprano y consistente.
 if ! command -v qrencode &> /dev/null; then
-    printf '%s>>FAIL qrencode no está instalado.%s\n' "$C_YEL" "$C_RST"
-    printf '   > Instala qrencode con el gestor de paquetes.\n'
+    printf '%s>>FAIL qrencode no está instalado.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   > Instala qrencode con el gestor de paquetes.\n' >&2
     return 1
 fi
 
@@ -21,7 +21,7 @@ fi
 if [[ -z "$1" && -t 0 ]]; then
     printf '%s>>HELP Uso: kzsys-qrgen <texto> | kzsys-qrgen < archivo.txt%s\n' "$C_BLU" "$C_RST"
     printf '  :: Genera un QR PNG desde texto o entrada estándar.\n'
-    return 2
+    return 0
 fi
 
 # qrencode lee de stdin solo cuando no recibe el dato como argumento.
@@ -39,8 +39,8 @@ if ! qrencode \
     -l M \
     -o "$outfile" \
     "$data[@]"; then
-    printf '%s>>FAIL qrencode falló.%s\n' "$C_YEL" "$C_RST"
-    printf '   > Revisa el texto de entrada o los permisos del directorio.\n'
+    printf '%s>>FAIL qrencode falló.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   > Revisa el texto de entrada o los permisos del directorio.\n' >&2
     return 1
 fi
 
@@ -50,5 +50,5 @@ if [[ -f "$outfile" ]]; then
     return 0
 fi
 
-printf '%s>>FAIL No se generó el archivo de salida.%s\n' "$C_YEL" "$C_RST"
+printf '%s>>FAIL No se generó el archivo de salida.%s\n' "$C_RED" "$C_RST" >&2
 return 1
