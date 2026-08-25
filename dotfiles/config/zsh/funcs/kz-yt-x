@@ -19,15 +19,16 @@ readonly BROWSER="firefox"
 # Ruta opaca: evitar revelar que es un archive de descargas.
 readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
-# shell-colors: C_BLU=STEP/HELP, C_YEL=INFO/FAIL/WARN, C_GRN=PASS.
-# Solo los >>NIVEL llevan color; los anidados ~> FAIL van en plano.
-readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
+# shell-colors: STEP/HELP/INFO -> C_BLU; WARN/SKIP -> C_YEL;
+# PASS -> C_GRN; FAIL -> C_RED. Sub-tareas (~>) y notas van sin color.
+readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' \
+         C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 
 # Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
 local dep
 for dep in httpx-toolkit jaq curl ugrep yt-dlp; do
     if ! command -v "$dep" > /dev/null 2>&1; then
-        printf '%s>>FAIL Falta %s.%s\n' "$C_YEL" "$dep" "$C_RST" >&2
+        printf '%s>>FAIL Falta %s.%s\n' "$C_RED" "$dep" "$C_RST" >&2
         return 1
     fi
 done
@@ -53,7 +54,7 @@ local -a yt_args=(
 # Impersonate requiere curl_cffi compatible; versiones incompatibles
 # lo marcan unavailable y abortan. Se verifica soporte antes de usar.
 if yt-dlp --list-impersonate-targets 2>&1 | ugrep -q 'Chrome.*curl_cffi.*unavailable'; then
-    printf '%s>>INFO Omitiendo impersonate (curl_cffi incompatible).%s\n' "$C_YEL" "$C_RST"
+        printf '%s>>INFO Omitiendo impersonate (curl_cffi incompatible).%s\n' "$C_BLU" "$C_RST"
 else
     yt_args+=(--impersonate chrome)
 fi
@@ -65,7 +66,7 @@ if [[ "$1" == "-a" || "$1" == "--batch-file" ]]; then
     local batch_file="${2:?Archivo requerido con -a}"
     # Diagnostico directo: el archivo debe existir para leerlo.
     if [[ ! -f "$batch_file" ]]; then
-        printf '%s>>FAIL %s no existe.%s\n' "$C_YEL" "$batch_file" "$C_RST" >&2
+        printf '%s>>FAIL %s no existe.%s\n' "$C_RED" "$batch_file" "$C_RST" >&2
         return 1
     fi
     # Sed: elimina lineas vacías, comentarios y carriage returns.
@@ -107,7 +108,7 @@ targets=("${clean_targets[@]}")
 
 # Sin enlaces tras descartar perfiles: no hay nada que probar ni descargar.
 if ((${#targets} == 0)); then
-    printf '%s>>FAIL Ningún enlace válido.%s\n' "$C_YEL" "$C_RST" >&2
+    printf '%s>>FAIL Ningún enlace válido.%s\n' "$C_RED" "$C_RST" >&2
     return 1
 fi
 
@@ -125,7 +126,7 @@ for url in "${targets[@]}"; do
     code=$(jaq -r --arg u "$url" 'first(select(.url == $u) | .status_code)' "$tmpdir/probe")
     code=${code:-000}
     # Solo 2xx descarga: un nomedia (3xx) no tiene video nativo y quedaria
-    # deudor en yt-dlp; se reporta el codigo numerico (ERR <code>) en plano
+    # deudor en yt-dlp; se reporta el codigo numerico (FAIL <code>) en plano
     if [[ "$code" == 2[0-9][0-9] ]]; then
         valid_links+=("$url")
     else
@@ -162,7 +163,7 @@ for url in "${valid_links[@]}"; do
 done
 
 if ((${#final_links} == 0)); then
-    printf '%s>>FAIL Ningún enlace válido.%s\n' "$C_YEL" "$C_RST" >&2
+    printf '%s>>FAIL Ningún enlace válido.%s\n' "$C_RED" "$C_RST" >&2
     return 1
 fi
 if yt-dlp "${yt_args[@]}" "${final_links[@]}"; then
