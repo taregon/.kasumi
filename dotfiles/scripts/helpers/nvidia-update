@@ -5,14 +5,14 @@
 
 set -euo pipefail
 
-# ── Setup ───────────────────────────────────────────────────
+# ──「 Setup 」───────────────────────────────────────────────
 readonly CLONE="$HOME/.cache/paru/clone"
 declare -ra AUR_BASES=(nvidia-580xx-utils nvidia-580xx-settings)
 # Linea dedicada en [options]; al ser lista acumulativa, coexiste con otras.
 readonly IGNORE_LINE="IgnorePkg   = nvidia-580xx-utils nvidia-580xx-dkms \
 nvidia-580xx-settings opencl-nvidia-580xx libxnvctrl-580xx"
 
-# ── Validación ──────────────────────────────────────────────
+# ──「 Validación 」──────────────────────────────────────────
 # Fallo temprano y consistente: herramientas requeridas y clones de paru.
 for cmd in git sed awk grep pacman makepkg sudo; do
     command -v "$cmd" > /dev/null || {
@@ -43,7 +43,7 @@ else
     printf ">>PASS IgnorePkg insertado: /etc/pacman.conf\n"
 fi
 
-# ── Construcción ────────────────────────────────────────────
+# ──「 Construcción 」────────────────────────────────────────
 built=()
 for base in "${AUR_BASES[@]}"; do
     git -C "$CLONE/$base" pull --ff-only --quiet
@@ -58,7 +58,7 @@ for base in "${AUR_BASES[@]}"; do
     built+=("$CLONE/$base"/*.pkg.tar.zst)
 done
 
-# ── Instalación ─────────────────────────────────────────────
+# ──「 Instalación 」─────────────────────────────────────────
 # Transacción única: utils, opencl y dkms entran juntos con la misma versión,
 # de modo que la dependencia estricta dkms -> utils=${pkgver} queda satisfecha.
 if ((${#built[@]})); then
