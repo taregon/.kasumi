@@ -5,3 +5,9 @@
 *.bak
 *.bk
 *.old
+
+# Zsh cache — regenerable via compinit
+.zcompdump*
+*.zcompdump*
+*.zwc
+.zshrc.zwc

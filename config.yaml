@@ -5,9 +5,13 @@ config:
   impignore:
     - '*.wants'
     - '*.socket'
+    - '.zcompdump*'
+    - '*.zwc'
   upignore:
     - '*.wants'
     - '*.socket'
+    - '.zcompdump*'
+    - '*.zwc'
   link_dotfile_default: absolute
   import_actions:
     - actions.d/nano.yaml
@@ -178,17 +182,9 @@ dotfiles:
     src: config/tmux/kasumi-tmux.conf
     dst: ~/.config/tmux/kasumi-tmux.conf
     link: absolute
-  f_zprofile:
-    src: zprofile
-    dst: ~/.zprofile
-    link: absolute
   f_zshenv:
     src: zshenv
     dst: ~/.zshenv
-    link: absolute
-  f_zshrc:
-    src: zshrc
-    dst: ~/.zshrc
     link: absolute
 profiles:
   kasumi:
@@ -215,8 +211,7 @@ profiles:
       - f_rc.conf
       - f_redshift
       - f_tmux
-      - f_zprofile
-      - f_zshrc
+      - d_zsh
   kasumi_extras:
     dotfiles:
       - d_aria2
@@ -227,7 +222,6 @@ profiles:
       - d_opencode_theme
       - d_paru
       - d_rmpc
-      - d_zsh
       - f_fonts
       - f_lnav
       - f_ssh

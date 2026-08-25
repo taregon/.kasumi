@@ -4,7 +4,7 @@ alias sumishell-geo='/usr/lib/geoclue-2.0/demos/where-am-i'
 alias sumishell-hist="history"
 alias tolower="tr '[:upper:]' '[:lower:]'"
 alias sumishell-rldt="tmux source ~/.tmux.conf"
-alias sumishell-rldz="source ~/.zshrc"
+alias sumishell-rldz="source ${ZDOTDIR:-$HOME/.config/zsh}/.zshrc"
 
 # ── Terminal ──────────────────────────────────────────────────
 alias sumiterm-figlet="figlet -f smshadow"
