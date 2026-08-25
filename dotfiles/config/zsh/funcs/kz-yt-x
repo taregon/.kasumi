@@ -3,9 +3,9 @@
 # Soporta tweets privados extrayendo cookies de Firefox.
 # Prioriza MP4 + M4A.
 # Valida enlaces con httpx en paralelo y reporta lo que no descarga:
-#   ~> ERR <code> - <link>     (3xx nomedia, 4xx/5xx o sin respuesta 000)
-#   ~> ERR nomedia - <link>   (tweet sin video nativo)
-#   ~> ERR profile - <link>    (URL de perfil, no de tweet)
+#   ~> FAIL <code> - <link>     (3xx nomedia, 4xx/5xx o sin respuesta 000)
+#   ~> FAIL nomedia - <link>   (tweet sin video nativo)
+#   ~> FAIL profile - <link>    (URL de perfil, no de tweet)
 # Incluye impersonacion, sleep aleatorio y reintentos para evitar bloqueos.
 # Videos ya descargados se omiten automaticamente (--download-archive).
 # Trunca titulo a 120 bytes (~40 caracteres CJK) para filesystem.
@@ -20,7 +20,7 @@ readonly BROWSER="firefox"
 readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 
 # shell-colors: C_BLU=STEP/HELP, C_YEL=INFO/FAIL/WARN, C_GRN=PASS.
-# Solo los >>NIVEL llevan color; los anidados ~> ERR van en plano.
+# Solo los >>NIVEL llevan color; los anidados ~> FAIL van en plano.
 readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' C_RST=$'\033[0m'
 
 # Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
@@ -97,7 +97,7 @@ for raw_url in "${targets[@]}"; do
     if [[ "$raw_url" == *x.com/* || "$raw_url" == *twitter.com/* ]]; then
         clean_url="${raw_url%%[?#]*}"
         if [[ "$clean_url" != */status/* ]]; then
-            printf "   ~> ERR profile - %s\n" "$clean_url"
+            printf "   ~> FAIL profile - %s\n" "$clean_url"
             continue
         fi
     fi
@@ -129,7 +129,7 @@ for url in "${targets[@]}"; do
     if [[ "$code" == 2[0-9][0-9] ]]; then
         valid_links+=("$url")
     else
-        printf "   ~> ERR %s - %s\n" "$code" "$url"
+        printf "   ~> FAIL %s - %s\n" "$code" "$url"
     fi
 done
 
@@ -155,7 +155,7 @@ for url in "${valid_links[@]}"; do
     # Fallo de red o respuesta no parseable: se deja pasar (fail-open)
     # para no descartar tweets privados, que la syndication no expone.
     if [[ "$syn_verdict" == "false" ]]; then
-        printf "   ~> ERR nomedia - %s\n" "$url"
+        printf "   ~> FAIL nomedia - %s\n" "$url"
     else
         final_links+=("$url")
     fi
