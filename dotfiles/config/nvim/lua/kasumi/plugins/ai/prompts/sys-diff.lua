@@ -94,8 +94,8 @@ function M.staged_diff()
 	end
 
 	-- Gemma-4-it confunde sintaxis de comentarios con código funcional.
-	-- [COMENTARIO] reemplaza líneas de comentario, [REF] marca contexto, [+]/[-]
-	-- marcan líneas añadidas/eliminadas.
+	-- [CMT] marca líneas de comentario conservando un tramo de su texto,
+	-- [REF] marca contexto, [+]/[-] marcan líneas añadidas/eliminadas.
 	-- Sin estas anclas el modelo alucina funcionalidades inexistentes.
 	for idx, line in ipairs(filtered) do
 		local marker = line:sub(1, 1)
@@ -105,7 +105,7 @@ function M.staged_diff()
 			-- El símbolo +/- no se marca: el modelo local lo confunde con
 			-- markdown (listas). Se reemplaza por los marcadores [+]/[-].
 			local sym = marker == "+" and "[+]" or "[-]"
-			-- En archivos doc no se marca [COMENTARIO]: el hint "type: docs"
+			-- En archivos doc no se marca [CMT]: el hint "type: docs"
 			-- ya encuadra el diff; evita confundir # de markdown con comentario.
 			-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
 			-- bloques /* */ ni """; Gemma-4 no los requiere para inferir.
@@ -113,7 +113,18 @@ function M.staged_diff()
 				not is_doc
 				and (rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;"))
 			then
-				filtered[idx] = sym .. " [COMENTARIO]"
+				-- Suprimir todo el texto obligaba al modelo a inventar el
+				-- contenido del comentario; el tramo conserva su significado.
+				-- 40 caracteres bastan para el asunto sin saturar un modelo 2B.
+				local ctx = rest:sub(1, 40)
+				-- Trim evita que la indentación consuma parte del límite.
+				ctx = vim.trim(ctx)
+				-- El corte puede dejar frases incompletas; [...] evita que el
+				-- modelo trate el tramo como texto completo y lo cite entero.
+				if #rest > 40 then
+					ctx = ctx .. " [...]"
+				end
+				filtered[idx] = sym .. " [CMT] " .. ctx
 			else
 				filtered[idx] = sym .. " " .. rest
 			end
@@ -122,14 +133,14 @@ function M.staged_diff()
 		end
 	end
 
-	-- Colapsar líneas [COMENTARIO] consecutivas del mismo marcador (+/-).
+	-- Colapsar líneas [CMT] consecutivas del mismo marcador (+/-).
 	-- Sin colapso, N líneas idénticas saturan el prompt y el modelo genera
 	-- cuerpo repetido (misma línea N veces). Con colapso a 1, el modelo
 	-- diferencia cambios sin forzar repetición.
 	local collapsed = {}
 	local prev = nil
 	for _, line in ipairs(filtered) do
-		if line:match("%[COMENTARIO%]") then
+		if line:match("%[CMT%]") then
 			if line ~= prev then
 				table.insert(collapsed, line)
 				prev = line
@@ -141,17 +152,18 @@ function M.staged_diff()
 	end
 	filtered = collapsed
 
-	-- Heurística: si >50% de líneas de cambio contienen [COMENTARIO], el cambio
+	-- Heurística: si >50% de líneas de cambio contienen [CMT], el cambio
 	-- es puramente cosmético. Se inyecta "type: style" en el header para que el
 	-- modelo no tenga que inferir la clasificación. Sin este hint, el modelo
-	-- asigna feat aunque el diff solo tenga cambios en comentarios.
+	-- asigna feat o fix aunque el diff solo tenga cambios en comentarios;
+	-- banners con texto "FIX:" empujan especialmente a la clasificación errónea.
 	local changed_lines = 0
 	local comment_lines = 0
 	for _, line in ipairs(filtered) do
 		local prefix = line:sub(1, 3)
 		if prefix == "[+]" or prefix == "[-]" then
 			changed_lines = changed_lines + 1
-			if line:match("%[COMENTARIO%]") then
+			if line:match("%[CMT%]") then
 				comment_lines = comment_lines + 1
 			end
 		end
