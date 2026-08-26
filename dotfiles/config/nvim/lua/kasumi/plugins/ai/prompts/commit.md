@@ -16,8 +16,8 @@ Genera commit en español neutro.
 
 ### Anclas del diff
 
-`[META]` directorio/archivo/tipo/lenguaje, `[REF]` contexto extra, `[CMT]`
-comentario, `[...]` truncado, `[+]`/`[-]` adición/eliminación.
+`[META]` metadata del archivo, `[REF]` contexto extra, `[CMT]` comentario,
+`[...]` truncado, `[+]`/`[-]` adición/eliminación.
 
 ### Tipo
 
@@ -32,21 +32,22 @@ comentario, `[...]` truncado, `[+]`/`[-]` adición/eliminación.
 
 - Formato: `tipo: descripción`
 - Descripción: un solo propósito, el de más líneas cambiadas.
-- Los demás cambios van al Body (máx 3)
+- Los demás cambios moverlos al Body (máx 3)
 - Máx 72 chars, sin punto, minúscula
 
 ### Body
 
 - Máx 3 cambios, uno por línea
 - Identifica con una viñeta `-`
+- Sin lineas vacías entre ellas
 
 ### Redacción
 
 - Preservar términos técnicos en inglés
-- Emplea verbo en infinitivo
 - No repetir ni parafrasear el header
-- No incluir anclas, nombre de archivo o rutas
-- No inventar cambios ausentes
+- No incluir anclas, archivos o rutas
+- Sin pleonasmos ni verbatim
+- Verbo en infinitivo
 
 ## user
 
