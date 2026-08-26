@@ -21,16 +21,17 @@ Genera commit en español neutro.
 
 ### Tipo
 
-- `feat:` código nuevo con comportamiento nuevo
-- `fix:` corrige error o comportamiento incorrecto
-- `refactor:` cambia código sin cambiar comportamiento
-- `style:` solo espacios, sangría, comas
-- `chore:` solo config, deps, CI, build
-- `docs:` solo comentarios, README, documentación
+- `feat:` agrega nueva funcionalidad, opción o comportamiento
+- `fix:` corrige algo que falla o produce resultado incorrecto
+- `refactor:` reestructura código sin cambiar salida ni comportamiento
+- `chore:` modifica infraestructura: build, deps, CI, scripts de soporte
+- `style:` solo formato: espacios, sangría, comas, comillas
+- `docs:` solo comentarios, README o documentación
 
 ### Header
 
-- Formato: `tipo: descripción`
+- Formato: `tipo(sustantivo): descripción`
+- Sustantivo: inferir de metadata
 - Descripción: un solo propósito, el de más líneas cambiadas.
 - Los demás cambios moverlos al Body (máx 3)
 - Máx 72 chars, sin punto, minúscula
@@ -38,7 +39,7 @@ Genera commit en español neutro.
 ### Body
 
 - Máx 3 cambios, uno por línea
-- Identifica con una viñeta `-`
+- Precede una viñeta `-`
 - Sin lineas vacías entre ellas
 
 ### Redacción
@@ -46,7 +47,6 @@ Genera commit en español neutro.
 - Preservar términos técnicos en inglés
 - No repetir ni parafrasear el header
 - No incluir anclas, archivos o rutas
-- Sin pleonasmos ni verbatim
 - Verbo en infinitivo
 
 ## user
