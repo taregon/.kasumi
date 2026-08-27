@@ -25,8 +25,8 @@ ensure_fallback_image() {
     mkdir -p "$(dirname "$FALLBACK_IMAGE")" 2> /dev/null || return 1
     # OpenCL esta desactivado por defecto en ImageMagick; no requiere control explicito
     timeout 10 magick \
-        -size 1080x1080 \
-        xc:'#1e293b' \
+        -size 1920x1080 \
+        xc:'#2E383D' \
         -gravity center \
         -fill white \
         -pointsize 80 \
