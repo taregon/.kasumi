@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Rota wallpapers vía awww en Sway. Fallback a [NO IMAGE] en cache si no hay fondos.
-# Env: KASUMI_WALLPAPERS_DIR (zsh/.zprofile); silencioso, ver con: awww query
+# Rota wallpapers en Sway via awww cada 20s con transición fade.
+# Si awww no está instalado, sale sin error. Si el directorio de wallpapers
+# está ausente o vacío, genera [NO IMAGE] en cache (requiere magick/timeout).
+# Env: KASUMI_WALLPAPERS_DIR; ver estado con: awww query
 # ╒══════════════════════════════════════════════════════════╕
 # │                     WALL-RANDOM-AWWW                     │
 # ╘══════════════════════════════════════════════════════════╛
@@ -23,7 +25,8 @@ ensure_fallback_image() {
     command -v magick > /dev/null 2>&1 || return 1
     command -v timeout > /dev/null 2>&1 || return 1
     mkdir -p "$(dirname "$FALLBACK_IMAGE")" 2> /dev/null || return 1
-    # OpenCL esta desactivado por defecto en ImageMagick; no requiere control explicito
+    # ImageMagick no usa OpenCL por defecto
+    # 1920x1080 es la resolucion del monitor primario (eDP-1); un cuadrado deformaria el crop 16:9
     timeout 10 magick \
         -size 1920x1080 \
         xc:'#2E383D' \
@@ -42,7 +45,7 @@ set_random_wallpaper() {
         # Fallo esperado si no hay imágenes: se descarta el error
         random_image=$(find "$BACKGROUND_DIR" -type f 2> /dev/null | shuf -n 1 2> /dev/null || true)
     fi
-    # Variable sin rutas: fallback visible en vez de fallar en silencio
+    # Directorio ausente o sin valor: fallback visible en vez de fallar en silencio
     if [[ -z "$random_image" ]]; then
         # Fallback no generable (sin magick/timeout o error):
         # se omite la rotación, no romper autostart
