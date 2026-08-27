@@ -1,30 +1,71 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Rota wallpapers vía awww en Sway. Fallback a [NO IMAGE] en cache si no hay fondos.
+# Env: KASUMI_WALLPAPERS_DIR (zsh/.zprofile); silencioso, ver con: awww query
+# ╒══════════════════════════════════════════════════════════╕
+# │                     WALL-RANDOM-AWWW                     │
+# ╘══════════════════════════════════════════════════════════╛
+set -euo pipefail
 
-# NOTA: Puedes revisar su funcionamiento con: ❯ awww query
-# también con:  pgrep -af "awww"
-#
-# Ruta donde están los fondos de pantalla
-BACKGROUND_DIR="$KASUMI_WALLPAPERS_DIR"
+# ──「 Config 」──────────────────────────────────────────────
+readonly INTERVAL=20 # segundos entre cambios
+readonly FPS=60      # fotogramas de la transición
+readonly TYPE=fade   # tipo de transición awww
+readonly DURATION=3  # duración de la transición en segundos
 
-# Configuración del cambio automático de fondo
-INTERVAL=20 # Tiempo que tarda en cambiar el wallpaper (en segundos)
-FPS=60      # Fotogramas para la transición
-TYPE=fade   # Tipo de transición
-DURATION=3  # Duración de la transición en segundos
+readonly BACKGROUND_DIR="${KASUMI_WALLPAPERS_DIR:-}"
+readonly FALLBACK_IMAGE="${XDG_CACHE_HOME:-$HOME/.cache}/kasumi/no-image.png"
 
-set_random_wallpaper() {
+# Sin awww no hay trabajo: salida silenciosa para no romper el autostart
+command -v awww > /dev/null 2>&1 || exit 0
 
-    local random_image
-    random_image=$(find "$BACKGROUND_DIR" -type f | shuf -n 1)
-
-    awww img "$random_image" \
-        --transition-type $TYPE \
-        --transition-duration $DURATION \
-        --transition-fps $FPS
+# ──「 Funciones 」───────────────────────────────────────────
+ensure_fallback_image() {
+    command -v magick > /dev/null 2>&1 || return 1
+    command -v timeout > /dev/null 2>&1 || return 1
+    mkdir -p "$(dirname "$FALLBACK_IMAGE")" 2> /dev/null || return 1
+    # OpenCL esta desactivado por defecto en ImageMagick; no requiere control explicito
+    timeout 10 magick \
+        -size 1080x1080 \
+        xc:'#1e293b' \
+        -gravity center \
+        -fill white \
+        -pointsize 80 \
+        -annotate +0+0 '[NO IMAGE]' \
+        "png:${FALLBACK_IMAGE}" \
+        2> /dev/null
 }
 
-# ── BUCLE PRINCIPAL ─────────────────────────────────────────
-while true; do
-    set_random_wallpaper
-    sleep "$INTERVAL"
-done
+set_random_wallpaper() {
+    local random_image
+    # Directorio ausente o sin ficheros: se cae al fallback
+    if [[ -d "$BACKGROUND_DIR" ]]; then
+        # Fallo esperado si no hay imágenes: se descarta el error
+        random_image=$(find "$BACKGROUND_DIR" -type f 2> /dev/null | shuf -n 1 2> /dev/null || true)
+    fi
+    # Variable sin rutas: fallback visible en vez de fallar en silencio
+    if [[ -z "$random_image" ]]; then
+        # Fallback no generable (sin magick/timeout o error):
+        # se omite la rotación, no romper autostart
+        ensure_fallback_image || return 0
+        random_image="$FALLBACK_IMAGE"
+    fi
+    # Transición fallida (daemon no disponible) es benigna en autostart
+    awww img "$random_image" \
+        --transition-type "$TYPE" \
+        --transition-duration "$DURATION" \
+        --transition-fps "$FPS" \
+        2> /dev/null || true
+}
+
+# ──「 Bucle Principal 」─────────────────────────────────────
+main() {
+    # Salida limpia ante TERM/INT: bajo set -e,
+    # terminar el bucle sin trap reportaría error en autostart
+    trap 'exit 0' TERM INT
+    while true; do
+        set_random_wallpaper
+        sleep "$INTERVAL"
+    done
+}
+
+main "$@"
