@@ -4,26 +4,25 @@
 #  ███╔╝  ╚════██║██╔══██║██╔══╝  ██║     ██║
 # ███████╗███████║██║  ██║███████╗███████╗███████╗
 # ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
+# ──「 Zsh Shell 」───────────────────────────────────────────
 # Habilitar profiling
 # zmodload zsh/zprof
 
-# ─[ ZINIT BOOTSTRAP ]────────────────────────────────────────
 # Configuración inicial de Zinit: instala el gestor si no existe
 # y lo deja listo para cargar plugins.
-#
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
-# ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █▀▄▀█ █▀▀▀▄ █     █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▄  █
 # █     █   █ █   █ █▀▀▀  █     █▀▀     █     █   █   █ █ ▀▄█
 #  ▀▀▀▀  ▀▀▀  ▀   ▀ ▀     ▀▀▀▀▀ ▀▀▀▀▀   ▀   ▀▀▀▀▀  ▀▀▀  ▀   ▀
+# ──「 Completion 」──────────────────────────────────────────
 
 # NOTA: Para revisar las activas, ejecuta: zstyle -L ':completion:*'
 
-# ── AJUSTES DE AUTOCOMPLETADO NATIVO DE ZSH (SIN FZF-TAB) ───
+# Ajustes de autocompletado nativo (sin fzf-tab)
 
 # Muestra los directorios especiales '.' y '..' en la
 # autocompletación de rutas.
@@ -49,7 +48,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 # elementos listados en el menú de completado.
 # zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# ── COMPLETADO GLOBAL DE ZSH ────────────────────────────────
+# Completado global
 # Desactiva el menú interactivo nativo de zsh.
 # Requerido para que fzf-tab intercepte el prefijo unambiguous
 # y gestione su propio selector visual.
@@ -81,7 +80,7 @@ zstyle ':completion:*:git-checkout:*' sort false
 # en las expresiones de vista previa.
 zstyle ':completion:*:descriptions' format '󰩗  %d'
 
-# ── FZF-TAB - COMPORTAMIENTO GLOBAL ─────────────────────────
+# Fzf-tab — comportamiento global
 # Habilita la lectura de FZF_DEFAULT_OPTS del entorno.
 # Nota: si FZF_DEFAULT_OPTS contiene --tmux, fzf-tab falla
 # (issue #455). En ese caso debe establecerse a no.
@@ -107,14 +106,14 @@ zstyle ':fzf-tab:*' group-colors \
 # Valores por defecto: F1 y F2. Se redefine a '<' y '>'.
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-# ── VARIABLES INTERNAS - REFERENCIA ─────────────────────────
+# Variables internas - referencia
 # $word     Valor que se inserta en la línea de comandos
 # $desc     Texto visible en fzf (incluye descripción)
 # $group    Categoría del candidato (ej: "[option]", "[filename]")
 # $realpath Ruta absoluta (solo en candidatos tipo archivo/directorio)
 # $words    Estado actual de la línea de comandos
 
-# ── FZF-TAB - VISTAS PREVIAS PERSONALIZADAS ─────────────────
+# Fzf-tab — vistas previas personalizadas
 # Vista previa para cd: árbol de directorios con eza.
 # Opciones: solo directorios, profundidad 2, sin colores.
 zstyle ':fzf-tab:complete:cd:*' fzf-preview \
@@ -125,10 +124,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview \
 zstyle ':fzf-tab:complete:git-show:*' \
     fzf-preview 'git show --color=always "$word" | delta'
 
-# ┌───────────────────────────────────────────────────────────┐
-#   Configuración de TERM para habilitar
-#   pre visualización de imágenes en Ranger según la terminal
-# └───────────────────────────────────────────────────────────┘
+# TERM: habilita previsualización de imágenes en Ranger según terminal
 if [[ -n "$KITTY_WINDOW_ID" ]] && [[ -z "$TMUX" ]]; then
     export TERM="xterm-kitty"
     alias ssh='kitty +kitten ssh'
@@ -136,52 +132,39 @@ else
     export TERM="xterm-256color"
 fi
 
-# ────────────────────────────────────────────────────────────
 # ▄▀▀▀▀ █▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▀▀█▀▀ █▄  █ ▄▀▀▀▀ ▄▀▀▀▀
 #  ▀▀▀▄ █▀▀     █     █     █   █ ▀▄█ █ ▀▀█  ▀▀▀▄
 # ▀▀▀▀  ▀▀▀▀▀   ▀     ▀   ▀▀▀▀▀ ▀   ▀  ▀▀▀  ▀▀▀▀
+# ──「 Settings 」────────────────────────────────────────────
 # VARIABLES DE ENTORNO
 
-# ─[ RANGER ]─────────────────────────────────────────────────
-# Desactiva la carga de ajustes predeterminado para rc.conf
-export RANGER_LOAD_DEFAULT_RC=FALSE
+export RANGER_LOAD_DEFAULT_RC=FALSE # desactiva rc.conf predeterminado de ranger
 
-# ─[ EDITORES ]───────────────────────────────────────────────
-# Definen el editor por defecto para terminal y GUI
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="nvim" # editor por defecto (terminal/GUI)
+export VISUAL="nvim" # idem
 
-# ─[ STARSHIP PROMPT ]────────────────────────────────────────
-export STARSHIP_CONFIG=~/.config/starship/kasumi.toml
-TRANSIENT_PROMPT_TRANSIENT_PROMPT=' '
+export STARSHIP_CONFIG=~/.config/starship/kasumi.toml # configuración starship
+TRANSIENT_PROMPT_TRANSIENT_PROMPT=' '                 # prompt transitorio vacío
 
-# ────────────────────────────────────────────────────────────
+# ──「 Colors 」──────────────────────────────────────────────
 # ▄▀▀▀▀ ▄▀▀▀▄ █     ▄▀▀▀▄ █▀▀▀▄ ▄▀▀▀▀
 # █     █   █ █     █   █ █▀▀▀▄  ▀▀▀▄
 #  ▀▀▀▀  ▀▀▀  ▀▀▀▀▀  ▀▀▀  ▀   ▀ ▀▀▀▀
-#
-# ─[ COLORES PARA BAT ]───────────────────────────────────────
-export BAT_STYLE="full"
-export BAT_THEME="base16" # Tema de colores compatible con kitty
 
-# ─[ COLORES PARA LS ]────────────────────────────────────────
-# Requiere: vivid
-export LS_COLORS="$(vivid generate kasumi)"
+export BAT_STYLE="full"   # bat: listado completo
+export BAT_THEME="base16" # tema compatible con kitty
 
-# ─[ COLORES PARA GREP ]──────────────────────────────────────
-# PEND: Resalta en negrita y amarillo las búsquedas con grep
+export LS_COLORS="$(vivid generate kasumi)" # requiere vivid
+
+# PEND: resalta en negrita y amarillo las búsquedas con grep
 # export GREP_COLORS="mt=1;33"
 
-# ─[ COLORES PARA LESS ]──────────────────────────────────────
 # Requiere: source-highlight
 export LESSOPEN="| src-hilite-lesspipe.sh %s"
 
-# Opciones globales para less
-#   -M prompt,    -F quit-if-one-screen,
-#   -R ANSI,      -I ignore-case
-export LESS='-MRFI'
+export LESS='-MRFI' # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
 
-# ─[ COLORES PARA MAN ]───────────────────────────────────────
+# Colores para man
 # Define el paginador para man (MANPAGER) usando less con:
 # - Soporte completo para colores/ANSI (-R + --use-color)
 # - Prompt más legible y con info (-M)
@@ -226,21 +209,13 @@ export LESS_TERMCAP_us=$(
     tput setaf 2
 )
 
-# ------------------------------------------------------
+# ──「 Fzf 」─────────────────────────────────────────────────
 # █▀▀▀▀ ▀▀▀▀█ █▀▀▀▀
 # █▀▀   ▄▀▀▀  █▀▀
 # ▀     ▀▀▀▀▀ ▀
-# OPCIONES GENERALES DE FZF
-# ┌───────────────────────────────────────┐
-#   Generador de TEMAS para fzf
-#   https://vitormv.github.io/fzf-themes/
-# └───────────────────────────────────────┘
-# FZF_FD_BASE es una variable creada para definir los ajustes en fzf, para listar archivos.
-# Se usa `fd` por rendimiento y simplicidad frente a `find`.
-# Los parámetros utilizados son:
-#   --type f: Restringe la selección a archivos, excluyendo directorios.
-#   --hidden: Incluye archivos ocultos, lo cual es relevante en sistemas Linux.
-#   --follow: Permite seguir los enlaces simbólicos.
+# Opciones generales de fzf — generador de temas: https://vitormv.github.io/fzf-themes/
+# FZF_FD_BASE usa fd por rendimiento frente a find
+# (--type f archivos, --hidden incluye ocultos, --follow sigue enlaces)
 typeset -a FZF_FD_OPTS=(
     --exclude .bun
     --exclude .cache
@@ -295,17 +270,21 @@ export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 # export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
 export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 
-# ------------------------------------------------------
+# ──「 History 」─────────────────────────────────────────────
 # █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
 # █▀▀▀█   █    ▀▀▀▄   █   █   █ █▀▀▀▄ ▀▀▀▀█
 # ▀   ▀ ▀▀▀▀▀ ▀▀▀▀    ▀    ▀▀▀  ▀   ▀ ▀▀▀▀▀
-# COMMAND CONFIGURATION
-# Puedes revisar las opciones activas con el comando: set -o
-# https://zsh.sourceforge.io/Doc/Release/Variables-Index.html
-# https://zsh.sourceforge.io/Doc/Release/Options.html#History
+# Opciones: ver `set -o` — https://zsh.sourceforge.io/Doc/Release/Options.html
 
-PROMPT_EOL_MARK="🐙"           # Define el símbolo que se mostrará al final de la línea de comandos en el prompt.
-HISTFILE=~/.cache/zsh_history # Archivo donde se guarda el historial
+PROMPT_EOL_MARK="🐙" # marca EOL del prompt
+# Historial persistente en XDG_STATE_HOME (no en cache: lo de cache se puede borrar sin avisar)
+# Ruta por defecto ~/.local/state/zsh/history; fallback asegura que funcione aunque XDG_STATE_HOME no esté exportado
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}" # asegura directorio existe (idempotente)
+# Si hay historial antiguo en la ubicación previa de cache y aún no existe en state, migrarlo para no aparentar pérdida
+if [[ -f "$HOME/.cache/zsh_history" && ! -f "$HISTFILE" ]]; then
+    mv -- "$HOME/.cache/zsh_history" "$HISTFILE"
+fi
 HISTSIZE=30000                # Comandos que se mantienen en memoria
 SAVEHIST=30000                # Comandos que se guardan en disco
 setopt APPEND_HISTORY         # Permite que múltiples sesiones de terminal agreguen comandos al historial en lugar de sobrescribirlo.
@@ -328,14 +307,7 @@ setopt NO_HIST_NO_FUNCTIONS   # No elimina definiciones de funciones del histori
 setopt RM_STAR_WAIT           # Espera 10 segundos antes de ejecutar `rm` con un asterisco (*).
 setopt SHARE_HISTORY          # Comparte el historial entre todas las sesiones de terminal.
 
-# ┌────────────────────────────────────────────────┐
-#   FILTRA EL HISTORIAL DE ZSH ANTES DE GUARDARLO.
-#   Solo almacena comandos que existen en el sistema
-#   y que no coincidan  con los patrones definidos
-#   en HISTORY_IGNORE
-# └────────────────────────────────────────────────┘
-
-# Lista de comandos a ignorar
+# Filtra historial: solo almacena comandos existentes y no coincidentes con HISTORY_IGNORE
 HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|ranger|yt-mp3"
 
 # Hook: decide qué comandos guardar en historial
@@ -343,22 +315,20 @@ zshaddhistory() {
     local line cmd
     line=${1%%$'\n'}
     cmd=${line%% *}
-    # 1. Ignorar si el comando no existe
-    whence "$cmd" >| /dev/null || return 1
-    # 2. Ignorar si coincide con algún patrón en HISTORY_IGNORE
+    whence "$cmd" >| /dev/null || return 1 # 1. ignora si comando no existe
     local -a ignore_patterns
-    ignore_patterns=(${(s:|:)HISTORY_IGNORE}) # Divide patrones por |
+    ignore_patterns=(${(s:|:)HISTORY_IGNORE}) # divide patrones por |
     for pattern in "${ignore_patterns[@]}"; do
-        [[ $line == $~pattern ]] && return 1
+        [[ $line == $~pattern ]] && return 1 # 2. ignora si coincide con HISTORY_IGNORE
     done
     return 0
 }
 
-# ────────────────────────────────────────────────────────────
+# ──「 Zinit 」───────────────────────────────────────────────
 # ▀▀▀▀█ ▀▀█▀▀ █▄  █ ▀▀█▀▀ ▀▀█▀▀
 # ▄▀▀▀    █   █ ▀▄█   █     █
 # ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
-# FAST ZSHELL PLUGIN MANAGER
+# Fast Zshell Plugin Manager
 
 # Proporciona definiciones adicionales de completado
 # para cientos de comandos y utilidades externas que Zsh no incluye por defecto.
@@ -366,8 +336,7 @@ zshaddhistory() {
 zinit ice wait'0' lucid blockf atload'zicompinit; zicdreplay'
 zinit light zsh-users/zsh-completions
 
-# Interfaz avanzada para el auto-completado con fzf
-zinit ice wait'0' lucid blockf
+zinit ice wait'0' lucid blockf # interfaz avanzada para autocompletado con fzf
 zinit light Aloxaf/fzf-tab
 
 # Muestra sugerencias basadas en el historial mientras se escribe,
@@ -390,62 +359,29 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit ice wait'1' lucid
 zinit light wfxr/forgit
 
-# Transient prompt: limpia líneas previas sin ruido
-zinit ice wait'0' lucid
+zinit ice wait'0' lucid # transient prompt: limpia líneas previas
 zinit light olets/zsh-transient-prompt
 
-# ────────────────────────────────────────────────────────────
-# CONFIGURACIÓN PERSONAL
-# Definir ruta base para archivos de configuración adicionales
-local ZSH_CONF=~/.config/zsh
+# Configuración personal
+local ZSH_CONF=${ZDOTDIR:-$HOME/.config/zsh} # ruta base para configuración adicional
 
-# ALIASES
+# Aliases
 for file in $ZSH_CONF/aliases/*.zsh(N); do
     source "$file"
 done
 
-# DIRECTORIOS DE FUNCIONES (AUTOLOAD)
-# Agrega el directorio al inicio de fpath y carga las funciones
+# Directorios de funciones (autoload)
 fpath=(
     $ZSH_CONF/funcs
     ${fpath[@]}
 )
 
-# Verifica que el directorio exista y tenga archivos antes de autoload
 if [[ -d "$ZSH_CONF/funcs" ]]; then
-    autoload -Uz $ZSH_CONF/funcs/*(.N:t)
+    autoload -Uz $ZSH_CONF/funcs/*(.N:t) # verifica directorio con archivos antes de autoload
 fi
 
-# ▀▀█▀▀ ▄▀▀▀▄ ▄▀▀▀▄ █     ▄▀▀▀▀
-#   █   █   █ █   █ █      ▀▀▀▄
-#   ▀    ▀▀▀   ▀▀▀  ▀▀▀▀▀ ▀▀▀▀
-# ╓
-# ║ Ejecuta fastfetch solo en shells interactivas.
-# ║ Evita contaminar scripts, subshells y `zsh -c`.
-# ╙
-# if [[ -o interactive ]]; then
-#     fastfetch
-# fi
+eval "$(zoxide init zsh)" # zoxide: navegación 'z' (aprende directorios, requiere pacman -S zoxide)
 
-# ╓
-# ║ Zoxide: navegación inteligente por directorios
-# ║ Sustituye el uso tradicional de `cd` con el comando `z`
-# ║ Aprende automáticamente de los directorios más utilizados
-# ║ Requiere: pacman -S zoxide
-# ╙
-eval "$(zoxide init zsh)"
+source <(fzf --zsh) # fzf: buscador interactivo (Ctrl+R historial, Ctrl+T archivos, Alt+C directorios, requiere pacman -S fzf)
 
-# ╓
-# ║ fzf: buscador interactivo para la terminal
-# ║ Permite encontrar archivos, rutas e historial aunque no escribas el nombre exacto
-# ║ Mejora el historial (Ctrl+R), selección de archivos (Ctrl+T) y cambio de carpetas (Alt+C)
-# ║ Requiere: pacman -S fzf
-# ╙
-source <(fzf --zsh)
-
-# ╓
-# ║ Starship: prompt moderno, rápido y altamente configurable
-# ║ Detecta contexto (git, lenguajes, entorno) y lo muestra en el prompt
-# ║ Configuración centralizada en ~/.config/starship/kasumi.toml
-# ╙
-eval "$(starship init zsh)"
+eval "$(starship init zsh)" # starship: prompt moderno (config en ~/.config/starship/kasumi.toml)
