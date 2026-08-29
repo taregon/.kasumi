@@ -118,8 +118,8 @@ export LS_COLORS="$(vivid generate kasumi)" # requiere vivid
 export LESSOPEN="| src-hilite-lesspipe.sh %s" # Requiere: source-highlight
 export LESS='-MRFI'                           # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
 
-export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto.
-export MANROFFOPT='-c'                       # groff: fuerza SGR para -R.
+export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto; requiere MANROFFOPT -c + LESS_TERMCAP.
+export MANROFFOPT='-c'                       # groff: fuerza SGR para -R; sin esto groff no emite escapes que less/LESS_TERMCAP colorea.
 
 export LESS_TERMCAP_mb=$(
     tput bold
