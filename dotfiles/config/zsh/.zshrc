@@ -7,7 +7,7 @@
 # ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 
 # Bootstrap Zinit: clona si falta y prepara carga de plugins.
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+ZINIT_HOME="$XDG_DATA_HOME/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
@@ -98,13 +98,10 @@ zstyle ':fzf-tab:complete:git-show:*' \
 # ▄▀▀▀▄ █▀▀▀▄ █▀▀▀▄ █▀▀▀▀ ▄▀▀▀▄ █▀▀▀▄ ▄▀▀▀▄ █▄  █ ▄▀▀▀▀ █▀▀▀▀
 # █▀▀▀█ █▀▀▀  █▀▀▀  █▀▀   █▀▀▀█ █▀▀▀▄ █▀▀▀█ █ ▀▄█ █     █▀▀
 # ▀   ▀ ▀     ▀     ▀▀▀▀▀ ▀   ▀ ▀   ▀ ▀   ▀ ▀   ▀  ▀▀▀▀ ▀▀▀▀▀
-# TERM para preview imágenes en Ranger (kitty/xterm).
-if [[ -n "$KITTY_WINDOW_ID" ]] && [[ -z "$TMUX" ]]; then
-    export TERM="xterm-kitty" # kitty: preview imágenes
-    alias ssh='kitty +kitten ssh'
-else
-    export TERM="xterm-256color" # fallback 256color
-fi
+# Kitty ya exporta xterm-kitty (kitty.conf term); no forzar TERM.
+# Ranger preview kitty depende de TERM nativo; tmux gestiona el suyo.
+# ArchWiki Kitty#Terminal_issues_with_SSH: kitten ssh copia terminfo al remoto.
+[[ "$TERM" == "xterm-kitty" ]] && alias ssh='kitty +kitten ssh'
 
 export EDITOR="nvim" # editor por defecto (terminal/GUI)
 export VISUAL="nvim" # idem
@@ -121,10 +118,8 @@ export LS_COLORS="$(vivid generate kasumi)" # requiere vivid
 export LESSOPEN="| src-hilite-lesspipe.sh %s" # Requiere: source-highlight
 export LESS='-MRFI'                           # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
 
-# Colores para man
 export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto.
 export MANROFFOPT='-c'                       # groff: fuerza SGR para -R.
-# LESS_TERMCAP via tput (portable) por colores man.
 
 export LESS_TERMCAP_mb=$(
     tput bold
@@ -200,8 +195,8 @@ export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
 
-# Ctrl+t: archivos
-export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}" # Ctrl+t: archivos via fd
+# Ctrl+t: archivos (via fd)
+export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 
 # ──「 History 」─────────────────────────────────────────────
 # █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
@@ -210,13 +205,18 @@ export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}" # Ctrl+t: archivos via
 # Opciones: `set -o` — https://zsh.sourceforge.io/Doc/Release/Options.html
 
 PROMPT_EOL_MARK="🐙" # marca EOL del prompt
-# Historial en XDG_STATE_HOME (~/.local/state/zsh/history, fallback, no cache).
-HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
-[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}" # asegura directorio existe (idempotente)
-# Migra historial antiguo de ~/.cache si no existe en state.
-if [[ -f "$HOME/.cache/zsh_history" && ! -f "$HISTFILE" ]]; then
+
+# Historial en XDG_STATE_HOME per spec 0.8 (state, persiste entre reinicios, no cache) — https://specifications.freedesktop.org/basedir/latest/
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+[[ -d "${HISTFILE:h}" ]] || mkdir -p -m 0700 "${HISTFILE:h}" # asegura directorio existe (0700 spec §4, idempotente)
+
+# Migra historial de ~/.cache → state si state no existe y cache no vacío; limpia huérfano vacío.
+if [[ -s "$HOME/.cache/zsh_history" && ! -s "$HISTFILE" ]]; then
     mv -- "$HOME/.cache/zsh_history" "$HISTFILE"
+elif [[ -f "$HOME/.cache/zsh_history" && ! -s "$HOME/.cache/zsh_history" ]]; then
+    rm -f -- "$HOME/.cache/zsh_history" # huérfano 0B tras migración
 fi
+
 HISTSIZE=30000                # en memoria
 SAVEHIST=30000                # en disco
 setopt APPEND_HISTORY         # agrega sin sobrescribir entre sesiones
@@ -260,7 +260,6 @@ zshaddhistory() {
 # ▀▀▀▀█ ▀▀█▀▀ █▄  █ ▀▀█▀▀ ▀▀█▀▀
 # ▄▀▀▀    █   █ ▀▄█   █     █
 # ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
-# Fast Zshell Plugin Manager
 
 # Autocompletado extra para cientos de comandos; usa zicompinit+zicdreplay (Turbo).
 zinit ice wait'0' lucid blockf atload'zicompinit; zicdreplay'
@@ -288,6 +287,7 @@ zinit light olets/zsh-transient-prompt
 # █▀▀▀▄ █▀▀▀▀ █▀▀▀▄ ▄▀▀▀▀ ▄▀▀▀▄ █▄  █ ▄▀▀▀▄ █
 # █▀▀▀  █▀▀   █▀▀▀▄  ▀▀▀▄ █   █ █ ▀▄█ █▀▀▀█ █
 # ▀     ▀▀▀▀▀ ▀   ▀ ▀▀▀▀   ▀▀▀  ▀   ▀ ▀   ▀ ▀▀▀▀▀
+
 local ZSH_CONF=${ZDOTDIR:-$HOME/.config/zsh} # ruta base para configuración adicional
 
 # Aliases
