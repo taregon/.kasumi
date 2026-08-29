@@ -219,7 +219,6 @@ fi
 
 HISTSIZE=30000                # en memoria
 SAVEHIST=30000                # en disco
-setopt APPEND_HISTORY         # agrega sin sobrescribir entre sesiones
 setopt BANG_HIST              # expansión de '!' en historial
 setopt COMPLETE_ALIASES       # completa alias
 setopt EXTENDED_HISTORY       # guarda timestamp ':inicio:duración;comando'
@@ -227,17 +226,15 @@ setopt HIST_ALLOW_CLOBBER     # historial puede sobrescribir con CLOBBER off
 setopt HIST_BEEP              # beep si historial inexistente
 setopt HIST_EXPIRE_DUPS_FIRST # purga duplicados al límite HISTSIZE
 setopt HIST_FIND_NO_DUPS      # omite duplicados en búsqueda
-setopt HIST_IGNORE_ALL_DUPS   # elimina previo si duplicado
-setopt HIST_IGNORE_DUPS       # ignora duplicados en lista
+setopt HIST_IGNORE_ALL_DUPS   # elimina previo si duplicado (implica HIST_IGNORE_DUPS)
 setopt HIST_IGNORE_SPACE      # ignora comandos con espacio inicial
 setopt HIST_NO_STORE          # no guarda 'fc -l'
 setopt HIST_REDUCE_BLANKS     # colapsa blancos
 setopt HIST_SAVE_NO_DUPS      # no guarda duplicados en disco
 setopt HIST_VERIFY            # muestra comando antes de ejecutar desde historial
-setopt INC_APPEND_HISTORY     # escribe inmediato, no al cierre
 setopt NO_HIST_NO_FUNCTIONS   # conserva funciones
 setopt RM_STAR_WAIT           # espera 10s en 'rm *'
-setopt SHARE_HISTORY          # comparte entre sesiones
+setopt SHARE_HISTORY          # comparte entre sesiones (implica APPEND/INC_APPEND)
 
 # Filtra historial: solo comandos existentes, excluye HISTORY_IGNORE
 HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|ranger|yt-mp3"
