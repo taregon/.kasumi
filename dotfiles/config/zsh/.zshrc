@@ -5,8 +5,6 @@
 #  ███╔╝  ╚════██║██╔══██║██╔══╝  ██║     ██║
 # ███████╗███████║██║  ██║███████╗███████╗███████╗
 # ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
-# Habilitar profiling
-# zmodload zsh/zprof
 
 # Bootstrap Zinit: clona si falta y prepara carga de plugins.
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -102,10 +100,10 @@ zstyle ':fzf-tab:complete:git-show:*' \
 # ▀   ▀ ▀     ▀     ▀▀▀▀▀ ▀   ▀ ▀   ▀ ▀   ▀ ▀   ▀  ▀▀▀▀ ▀▀▀▀▀
 # TERM para preview imágenes en Ranger (kitty/xterm).
 if [[ -n "$KITTY_WINDOW_ID" ]] && [[ -z "$TMUX" ]]; then
-    export TERM="xterm-kitty"
+    export TERM="xterm-kitty" # kitty: preview imágenes
     alias ssh='kitty +kitten ssh'
 else
-    export TERM="xterm-256color"
+    export TERM="xterm-256color" # fallback 256color
 fi
 
 export EDITOR="nvim" # editor por defecto (terminal/GUI)
@@ -119,18 +117,13 @@ TRANSIENT_PROMPT_TRANSIENT_PROMPT=' '                 # prompt transitorio vací
 export BAT_STYLE="full"                     # bat: listado completo
 export BAT_THEME="base16"                   # tema compatible con kitty
 export LS_COLORS="$(vivid generate kasumi)" # requiere vivid
-# PEND: resalta en negrita y amarillo las búsquedas con grep
-# export GREP_COLORS="mt=1;33"
 
-# Requiere: source-highlight
-export LESSOPEN="| src-hilite-lesspipe.sh %s"
-export LESS='-MRFI' # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
+export LESSOPEN="| src-hilite-lesspipe.sh %s" # Requiere: source-highlight
+export LESS='-MRFI'                           # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
 
 # Colores para man
-# MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto.
-export MANPAGER='less -M +Gg -R --use-color'
-# groff: fuerza SGR para -R.
-export MANROFFOPT='-c'
+export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto.
+export MANROFFOPT='-c'                       # groff: fuerza SGR para -R.
 # LESS_TERMCAP via tput (portable) por colores man.
 
 export LESS_TERMCAP_mb=$(
@@ -183,7 +176,6 @@ typeset -a FZF_FD_OPTS=(
 )
 
 # Fzf globales: colores/layout/comportamiento.
-# export FZF_DEFAULT_OPTS="--layout=reverse" # El prompt se abre desde arriba
 export FZF_DEFAULT_OPTS='
   --color=fg:#818F98,fg+:#C8D0D6,bg:-1,bg+:#333C42
   --color=hl:#A88E6B,hl+:#FBC06E,info:#94B8BC,marker:#FF62E0
@@ -208,12 +200,8 @@ export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
 
-# Alt+c: directorio
-# export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
-
 # Ctrl+t: archivos
-# export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
-export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
+export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}" # Ctrl+t: archivos via fd
 
 # ──「 History 」─────────────────────────────────────────────
 # █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
@@ -317,8 +305,25 @@ if [[ -d "$ZSH_CONF/funcs" ]]; then
     autoload -Uz $ZSH_CONF/funcs/*(.N:t) # verifica directorio con archivos antes de autoload
 fi
 
-eval "$(zoxide init zsh)" # zoxide: navegación 'z' (aprende directorios, requiere pacman -S zoxide)
-
-source <(fzf --zsh) # fzf: buscador interactivo (Ctrl+R historial, Ctrl+T archivos, Alt+C directorios, requiere pacman -S fzf)
-
 eval "$(starship init zsh)" # starship: prompt moderno (config en ~/.config/starship/kasumi.toml)
+eval "$(zoxide init zsh)"   # zoxide: navegación 'z' (aprende directorios, requiere pacman -S zoxide)
+source <(fzf --zsh)         # fzf: buscador interactivo (Ctrl+R historial, Ctrl+T archivos, Alt+C directorios, requiere pacman -S fzf)
+
+# ──「 Inactivos 」───────────────────────────────────────────
+# ▀▀█▀▀ █▄  █ ▄▀▀▀▄ ▄▀▀▀▀ ▀▀█▀▀ ▀▀█▀▀ █   █ ▄▀▀▀▄ ▄▀▀▀▀
+#   █   █ ▀▄█ █▀▀▀█ █       █     █    █ █  █   █  ▀▀▀▄
+# ▀▀▀▀▀ ▀   ▀ ▀   ▀  ▀▀▀▀   ▀   ▀▀▀▀▀   ▀    ▀▀▀  ▀▀▀▀
+# Ajustes inactivos — excluye zstyle (permanecen en su sección)
+
+# Habilitar profiling
+# zmodload zsh/zprof
+
+# PEND: resalta en negrita y amarillo las búsquedas con grep
+# export GREP_COLORS="mt=1;33"
+
+# export FZF_DEFAULT_OPTS="--layout=reverse" # El prompt se abre desde arriba
+
+# Alt+c: directorio
+# export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+# export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
