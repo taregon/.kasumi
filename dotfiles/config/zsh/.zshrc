@@ -118,8 +118,8 @@ export LS_COLORS="$(vivid generate kasumi)" # requiere vivid
 export LESSOPEN="| src-hilite-lesspipe.sh %s" # Requiere: source-highlight
 export LESS='-MRFI'                           # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
 
-export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto; requiere MANROFFOPT -c + LESS_TERMCAP.
-export MANROFFOPT='-c'                       # groff: fuerza SGR para -R; sin esto groff no emite escapes que less/LESS_TERMCAP colorea.
+export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto; requiere MANROFFOPT -P -c + LESS_TERMCAP.
+export MANROFFOPT='-P -c'                    # nroff/grotty: deshabilita SGR/OSC8 -> legacy overstrike para que less coloree via LESS_TERMCAP; sin esto grotty emite SGR que ignora LESS_TERMCAP
 
 export LESS_TERMCAP_mb=$'\e[1m\e[33m' # yellow bold (tput bold; setaf 3)
 export LESS_TERMCAP_md=$'\e[1m\e[36m' # cyan bold (tput bold; setaf 6)
