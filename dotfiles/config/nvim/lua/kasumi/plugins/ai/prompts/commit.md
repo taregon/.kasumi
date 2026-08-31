@@ -40,7 +40,10 @@ Genera commit en español neutro.
 
 - Máx 3 cambios, uno por línea
 - Precede una viñeta `-`
-- Sin lineas vacías entre ellas
+- Sin líneas vacías entre ellas
+- Cada viñeta: un cambio user-facing, en infinitivo, enfocado en _qué_ y _por qué_
+- No detallar sintaxis, operaciones o estructura interna del archivo (ya está
+  implícito en el diff)
 
 ### Redacción
 
@@ -48,6 +51,7 @@ Genera commit en español neutro.
 - No repetir ni parafrasear el header
 - No incluir anclas ni rutas
 - Verbo en infinitivo
+- Priorizar viñetas concisas sobre oraciones largas
 
 ## user
 
