@@ -115,19 +115,10 @@ export BAT_STYLE="full"                     # bat: listado completo
 export BAT_THEME="base16"                   # tema compatible con kitty
 export LS_COLORS="$(vivid generate kasumi)" # requiere vivid
 
-export LESSOPEN="| src-hilite-lesspipe.sh %s" # Requiere: source-highlight
-export LESS='-MRFI'                           # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case
-
-export MANPAGER='less -M +Gg -R --use-color' # MANPAGER via less (-R/-M/-s/+Gg) por color/prompt/scroll exacto; requiere MANROFFOPT -P -c + LESS_TERMCAP.
-export MANROFFOPT='-P -c'                    # nroff/grotty: deshabilita SGR/OSC8 -> legacy overstrike para que less coloree via LESS_TERMCAP; sin esto grotty emite SGR que ignora LESS_TERMCAP
-
-export LESS_TERMCAP_mb=$'\e[1m\e[33m' # yellow bold (tput bold; setaf 3)
-export LESS_TERMCAP_md=$'\e[1m\e[36m' # cyan bold (tput bold; setaf 6)
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_so=$'\e[1m\e[33m' # standout yellow (tput bold; setaf 3)
-export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_us=$'\e[4m\e[32m' # underline green (tput smul; setaf 2)
+export LESSOPEN="| src-hilite-lesspipe.sh %s"                  # Requiere: source-highlight
+export LESS='-MRFI --use-color'                                # -M prompt, -F quit-if-one-screen, -R ANSI, -I ignore-case, --use-color UI
+export MANPAGER='less -M +Gg -R --use-color -Dd+c -Du+g -Ds+y' # less -D colorea bold/cyan (Dd), underline/green (Du), standout/yellow (Ds) vía overstrike; requiere MANROFFOPT -P -c, sin LESS_TERMCAP
+export MANROFFOPT='-P -c'                                      # nroff/grotty: deshabilita SGR/OSC8 -> legacy overstrike para que less coloree via -D; sin esto grotty emite SGR que ignora -D
 
 # ──「 Fzf 」─────────────────────────────────────────────────
 # █▀▀▀▀ ▀▀▀▀█ █▀▀▀▀
