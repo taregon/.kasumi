@@ -55,9 +55,10 @@ tipo(sustantivo): descripción
 ### Redacción
 
 - Usar type de META si aparece
+- Documenta solo cambios del diff
 - Preservar términos técnicos en inglés
 - Excluir rutas, variables, funciones, métodos, librerías o lógica
-- Sin repetir ni parafrasear viñetas
+- Sin repetir ni parafrasear viñetas o tipos
 - Ser conciso sobre oraciones largas
 - Verbo infinitivo
 
