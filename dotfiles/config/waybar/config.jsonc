@@ -129,7 +129,7 @@
     "format": " PKG {}",
     "interval": 300,
     "exec-if": "ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1",
-    "exec": "~/.config/sway/scripts/check-updates",
+    "exec": "~/.config/sway/scripts/waybar-check-updates",
     "on-click": "kitty -e paru -Syu",
     "signal": 8
   },
@@ -171,7 +171,7 @@
   "custom/clipboard": {
     "format": "󰆒",
     "tooltip-format": "Historial del portapapeles (click para abrir)",
-    "on-click": "~/.config/sway/scripts/clipboard text"
+    "on-click": "~/.config/sway/scripts/helper-clipboard text"
   },
 
   "keyboard-state": {
@@ -268,7 +268,7 @@
   // ── Visualizador De Audio (Cava) ───────────────────────────
   "custom/cava-internal": {
     "format": "{}",
-    "exec": "~/.config/sway/scripts/cava-bar",
+    "exec": "~/.config/sway/scripts/waybar-cava",
     "on-click": "pkill -x waybar; swaymsg reload"
   },
 

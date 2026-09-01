@@ -4,81 +4,13 @@
 # ╚════██║██║███╗██║██╔══██║  ╚██╔╝
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
-# Los atajos de teclado se encuentran en modules/
-# PEND: https://swaywm.org/sway_wiki/
+# https://swaywm.org/sway_wiki/
 # https://man.freebsd.org/cgi/man.cgi?query=sway&apropos=0&sektion=5&manpath=FreeBSD+15.0-RELEASE+and+Ports&format=html
 # ╒═════════════════════════════════════════════════════════════╕
-# │         NOTA: SINCRONIZACIÓN DE VARIABLES DE ENTORNO        │
+# │                    CONFIGURACIÓN PRINCIPAL                  │
 # ╘═════════════════════════════════════════════════════════════╛
-# Necesario si Sway se inicia desde TTY o apps dependen de systemd/D-Bus
+# Este archivo solo define la carga de módulos en config.d/.
+# Orden de carga: 00-environment → 10-input → 20-output → 30-appearance → 40-window-rules → 50-keybindings → 60-autostart
+# No mover el include: los keybindings necesitan las variables $mod definidas antes.
 
-# Importa al entorno de systemd --user las variables de Sway
-# para que servicios como mako, swayidle o kanshi detecten Wayland.
-  exec systemctl --user import-environment \
-  WAYLAND_DISPLAY \
-  XDG_CURRENT_DESKTOP \
-  XDG_SESSION_TYPE \
-  SWAYSOCK
-
-# Actualiza el entorno D-Bus con las mismas variables.
-# Esto asegura que las aplicaciones que se activan mediante D-Bus
-# operen dentro del entorno correcto de Wayland.
-  exec dbus-update-activation-environment --systemd \
-  WAYLAND_DISPLAY \
-  XDG_CURRENT_DESKTOP \
-  XDG_SESSION_TYPE \
-  SWAYSOCK
-
-# ── VARIABLES ─────────────────────────────────────────────────
-  set $mod   Mod4
-  set $left  h
-  set $down  j
-  set $up    k
-  set $right l
-  floating_modifier $mod
-
-  # ── DISTRIBUCIÓN DE TECLADO ───────────────────────────────────
-  input type:keyboard {
-  xkb_layout  latam,us
-  xkb_options grp:alt_shift_toggle
-# repeat_delay 300   PEND: cuando haya mejor teclado
-# repeat_rate 50
-  }
-
-# ── TOUCHPAD / CLICK ──────────────────────────────────────────
-  input type:touchpad {
-  scroll_method edge
-# dwt enabled
-# tap enabled
-# middle_emulation enabled
-  }
-
-# ── OUTPUT SCALING ────────────────────────────────────────────
-# Lista las salidas detectadas por Sway y sus propiedades
-# Permite obtener el identificador exacto requerido en directivas `output`
-# Ejemplo:
-# swaymsg -t get_outputs
-# output "BOE 0x0852 Unknown" scale 1.25
-
-# ── GTK THEME ─────────────────────────────────────────────────
-  set $gnome-schema org.gnome.desktop.interface
-  exec_always {
-#    gsettings set $gnome-schema gtk-theme 'Nightfox-Dusk-B'
-#    gsettings set $gnome-schema icon-theme 'Flat-Remix-Blue-Dark'
-#    gsettings set $gnome-schema cursor-theme 'Bibata-Modern-Ice'
-#    gsettings set $gnome-schema font-name 'SF Pro Display'
-
-# Recomendados para dark mode y Firefox
-#    gsettings $gnome-schema color-scheme 'prefer-dark'
-#    gsettings $gnome-schema gtk-application-prefer-dark-theme true
-  }
-
-# ── CONFIGURACIONES ADICIONALES ───────────────────────────────
-# No muevas esta sección o sino cuando cargue la configuración,
-# no sabrán que teclas asignaste
-  include ~/.config/sway/modules/appearance.conf
-  include ~/.config/sway/modules/autostart.conf
-  include ~/.config/sway/modules/keybinds.conf
-  include ~/.config/sway/modules/shortcuts.conf
-  include ~/.config/sway/modules/window-rules.conf
-  include ~/.config/sway/modules/fx.conf
+  include ~/.config/sway/config.d/*.conf

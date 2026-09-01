@@ -103,16 +103,16 @@ entries=(
     # ╒══════════════════════════════════════════════════════════╕
     # │                   CAPTURAS DE PANTALLA                   │
     # ╘══════════════════════════════════════════════════════════╛
-    "󰹑  Capturar región|Print|exec $scripts/screenshot-control region"
-    "󰹑  Capturar ventana|Alt+Print|exec $scripts/screenshot-control window"
-    "󰹑  Capturar con Swappy|Shift+Print|exec $scripts/screenshot-control swappy"
-    "󰻃  Grabar área|${mod}+Print|exec $scripts/region-record"
+    "󰹑  Capturar región|Print|exec $scripts/capture-screenshot region"
+    "󰹑  Capturar ventana|Alt+Print|exec $scripts/capture-screenshot window"
+    "󰹑  Capturar con Swappy|Shift+Print|exec $scripts/capture-screenshot swappy"
+    "󰻃  Grabar área|${mod}+Print|exec $scripts/capture-record"
 
     # ╒══════════════════════════════════════════════════════════╕
     # │                    COMPARTIR PANTALLA                    │
     # ╘══════════════════════════════════════════════════════════╛
-    "󰹑  Iniciar screenshare|${mod}+y|exec $scripts/screenshare-control start"
-    "󰹑  Detener screenshare|${mod}+Shift+y|exec $scripts/screenshare-control stop"
+    "󰹑  Iniciar screenshare|${mod}+y|exec $scripts/capture-screenshare start"
+    "󰹑  Detener screenshare|${mod}+Shift+y|exec $scripts/capture-screenshare stop"
 
     # ╒══════════════════════════════════════════════════════════╕
     # │                         VOLUMEN                          │
@@ -137,10 +137,10 @@ entries=(
     # ╒══════════════════════════════════════════════════════════╕
     # │                       RATINGS RMPC                       │
     # ╘══════════════════════════════════════════════════════════╛
-    "󰓇  Rating 0 (descartar)|${mod}+Alt+0|exec $scripts/rmpc-sticker-rating 0"
-    "󰓇  Rating 1 (regular)|${mod}+Alt+7|exec $scripts/rmpc-sticker-rating 1"
-    "󰓇  Rating 2 (buena)|${mod}+Alt+8|exec $scripts/rmpc-sticker-rating 2"
-    "󰓇  Rating 3 (excelente)|${mod}+Alt+9|exec $scripts/rmpc-sticker-rating 3"
+    "󰓇  Rating 0 (descartar)|${mod}+Alt+0|exec $scripts/media-rmpc-rating 0"
+    "󰓇  Rating 1 (regular)|${mod}+Alt+7|exec $scripts/media-rmpc-rating 1"
+    "󰓇  Rating 2 (buena)|${mod}+Alt+8|exec $scripts/media-rmpc-rating 2"
+    "󰓇  Rating 3 (excelente)|${mod}+Alt+9|exec $scripts/media-rmpc-rating 3"
 
     # ╒══════════════════════════════════════════════════════════╕
     # │                       PORTAPAPELES                       │
@@ -152,8 +152,8 @@ entries=(
     # ╒══════════════════════════════════════════════════════════╕
     # │                        UTILIDADES                        │
     # ╘══════════════════════════════════════════════════════════╛
-    "󰌾  Bloquear pantalla|${mod}+z|exec $scripts/sway-idle lock"
-    "󰱬  Buscar archivos|${mod}+Shift+n|exec $scripts/file-seek"
+    "󰌾  Bloquear pantalla|${mod}+z|exec $scripts/system-idle lock"
+    "󰱬  Buscar archivos|${mod}+Shift+n|exec $scripts/helper-file-seek"
     "󰐦  Power menu|${mod}+Alt+e|exec ~/.config/rofi/scripts/power-menu"
     "󰑖  Recargar configuración|${mod}+Alt+r|swaymsg reload"
     "󰄱  Visor de atajos|${mod}+?|_note_"

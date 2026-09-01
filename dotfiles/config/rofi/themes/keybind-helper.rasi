@@ -1,6 +1,6 @@
 /* Tema del visor de atajos de teclado de Sway
  * Lista plana con búsqueda fuzzy vía rofi dmenu.
- * Script padre: dotfiles/config/sway/scripts/keybind-helper */
+ * Script padre: dotfiles/config/sway/scripts/helper-keybinds */
 @import "~/.config/rofi/kasumi-full.rasi"
 
 mainbox {

@@ -76,7 +76,7 @@ menu_prompt() {
 cmd_dispatch() {
     case "$1" in
         --lock)
-            "$HOME/.config/sway/scripts/sway-idle" lock
+            "$HOME/.config/sway/scripts/system-idle" lock
             ;;
         --logout)
             confirm_exec swaymsg exit

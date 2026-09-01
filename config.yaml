@@ -7,11 +7,17 @@ config:
     - '*.socket'
     - '.zcompdump*'
     - '*.zwc'
+    - '_archive/**'
+    - '*.bk'
+    - '*.bak'
   upignore:
     - '*.wants'
     - '*.socket'
     - '.zcompdump*'
     - '*.zwc'
+    - '_archive/**'
+    - '*.bk'
+    - '*.bak'
   link_dotfile_default: absolute
   import_actions:
     - actions.d/nano.yaml
