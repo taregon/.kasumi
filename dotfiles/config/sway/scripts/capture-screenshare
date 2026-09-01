@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# screenshare-control
+# ╒══════════════════════════════════════════════════════════╕
+# │                    COMPARTIR PANTALLA                    │
+# ╘══════════════════════════════════════════════════════════╛
 # Comparte pantalla de Sway/Wayland como cámara virtual V4L2.
 #
-# Uso: screenshare-control start [/dev/videoX] | stop
+# Uso: capture-screenshare start [/dev/videoX] | stop
 #
 # Docs/refs:
 #   - v4l2loopback: https://github.com/v4l2loopback/v4l2loopback/wiki
@@ -14,10 +16,10 @@
 
 set -euo pipefail
 
-LOCKFILE="/tmp/screenshare-control.lock"
+LOCKFILE="/tmp/capture-screenshare.lock"
 DEFAULT_DEVICE="/dev/video8"
 
-# ────────────────────────────────────────────────────────────
+# ──「 LIMPIEZA 」────────────────────────────────────────────
 screenshare_cleanup() {
     rm -f "$LOCKFILE"
     notify-send -t 1200 "󰍺  Screenshare" "Detenido"
@@ -25,6 +27,7 @@ screenshare_cleanup() {
 
 virtual_camera_device=""
 
+# ──「 ARGUMENTOS 」──────────────────────────────────────────
 case "${1:-}" in
     stop)
         if [ -f "$LOCKFILE" ]; then
@@ -47,7 +50,7 @@ case "${1:-}" in
         ;;
 esac
 
-# ────────────────────────────────────────────────────────────
+# ──「 INSTANCIA ÚNICA 」─────────────────────────────────────
 # Instancia única (evita múltiples wf-recorder al mismo tiempo).
 exec 200> "$LOCKFILE"
 if ! flock -n 200; then
@@ -56,7 +59,7 @@ if ! flock -n 200; then
 fi
 trap screenshare_cleanup EXIT
 
-# ────────────────────────────────────────────────────────────
+# ──「 RESOLUCIÓN 」──────────────────────────────────────────
 # Obtiene resolución del monitor enfocado (swaymsg + jq).
 read -r screen_width screen_height < <(
     swaymsg -t get_outputs -r \
@@ -70,14 +73,14 @@ read -r screen_width screen_height < <(
 screen_width="${screen_width:-1920}"
 screen_height="${screen_height:-1080}"
 
-# ────────────────────────────────────────────────────────────
+# ──「 DISPOSITIVO 」─────────────────────────────────────────
 # Verifica que el dispositivo V4L2 exista.
 if [[ ! -e "$virtual_camera_device" ]]; then
     notify-send -t 1200 -u critical "󰍺  Screenshare" "Dispositivo no encontrado: $virtual_camera_device"
     exit 1
 fi
 
-# ────────────────────────────────────────────────────────────
+# ──「 FORMATO V4L2 」────────────────────────────────────────
 # Configura formato V4L2.
 #
 # Orden correcto (>= 2020): <device> <caps> (el inverso es deprecated)
@@ -94,7 +97,7 @@ v4l2loopback-ctl set-caps \
 
 v4l2-ctl -d "$virtual_camera_device" -c sustain_framerate=1 # Mantiene FPS estables (WebRTC)
 
-# ────────────────────────────────────────────────────────────
+# ──「 INICIO 」──────────────────────────────────────────────
 notify-send -t 5000 "󰍺  Screenshare" "Iniciando: ${screen_width}x${screen_height} @ ${virtual_camera_device}"
 
 # Nota sobre hflip:

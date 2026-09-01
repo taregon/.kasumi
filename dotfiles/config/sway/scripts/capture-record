@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# region-record
+# ╒══════════════════════════════════════════════════════════╕
+# │                   GRABACIÓN DE REGIÓN                    │
+# ╘══════════════════════════════════════════════════════════╛
 # Graba una región de pantalla en Sway/Wayland como archivo de video.
 # Toggle: sin argumentos inicia o detiene según estado.
 
 set -euo pipefail
 
-# ── Setup ─────────────────────────────────────────────────────────────
-
-readonly LOCKFILE="/tmp/region-record.lock"
+# ──「 CONFIGURACIÓN 」───────────────────────────────────────
+readonly LOCKFILE="/tmp/capture-record.lock"
 readonly OUTPUT_DIR="${KASUMI_RECORDING_DIR:-$HOME}"
 
-# ── Funciones ─────────────────────────────────────────────────────────
-
+# ──「 FUNCIONES 」───────────────────────────────────────────
 stop_recording() {
     # SIGINT permite que wf-recorder cierre limpiamente
     # el contenedor y finalice correctamente el video.
@@ -52,7 +52,6 @@ start_recording() {
     notify-send -t 2500 "󰿏  Grabación" "Finalizada"
 }
 
-# ── Entry point ───────────────────────────────────────────────────────
-
+# ──「 PUNTO DE ENTRADA 」────────────────────────────────────
 [ -f "$LOCKFILE" ] && stop_recording
 start_recording

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                    CALIFICACIÓN RMPC                     │
+# ╘══════════════════════════════════════════════════════════╛
 # Stickers de rating para filtrar canciones por calidad en rmpc
 set -euo pipefail
 

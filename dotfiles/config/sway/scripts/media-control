@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                    CONTROL MULTIMEDIA                    │
+# ╘══════════════════════════════════════════════════════════╛
 
+# ──「 CONFIGURACIÓN 」───────────────────────────────────────
 # Pasos de ajuste
 STEP_VOL=5
 STEP_BRT=2
 
+# ──「 NOTIFICACIÓN 」────────────────────────────────────────
 # Funcion para enviar notificaciones con barra de progreso
 notify() {
     local msg="$1"
@@ -18,6 +23,7 @@ notify() {
         "$msg"
 }
 
+# ──「 VOLUMEN 」─────────────────────────────────────────────
 case "$1" in
     volume_up)
         # Aumenta volumen y notifica
@@ -44,6 +50,7 @@ case "$1" in
         fi
         ;;
 
+# ──「 REPRODUCCIÓN 」────────────────────────────────────────
     play_pause)
         # Alterna reproduccion y muestra estado
         playerctl play-pause
@@ -66,6 +73,7 @@ case "$1" in
         notify "Pista anterior" 0 "media"
         ;;
 
+# ──「 BRILLO 」──────────────────────────────────────────────
     l-up)
         # Aumenta brillo: ajusta, obtiene nivel absoluto, convierte a porcentaje
         brightnessctl set +"$STEP_BRT"%

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                       PORTAPAPELES                       │
+# ╘══════════════════════════════════════════════════════════╛
 # Historial de portapapeles con rofi
 # Modos:
 #   text  -> solo texto
@@ -7,6 +10,7 @@
 # Salir ante error, variable indefinida o pipe roto
 set -euo pipefail
 
+# ──「 MODO TEXTO 」──────────────────────────────────────────
 case "$1" in
     text)
         seleccion=$(
@@ -24,6 +28,7 @@ case "$1" in
         )
         ;;
 
+# ──「 MODO IMAGEN 」─────────────────────────────────────────
     image)
         # Directorio temporal para previews de imágenes
         tmp_dir=$(mktemp -d)
@@ -75,6 +80,7 @@ case "$1" in
         ;;
 esac
 
+# ──「 COPIA 」───────────────────────────────────────────────
 # Copiar selección al portapapeles
 if [ -n "$seleccion" ]; then
     # Decodificar y copiar con wl-copy

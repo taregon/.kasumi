@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                  GESTIÓN DE INACTIVIDAD                  │
+# ╘══════════════════════════════════════════════════════════╛
 # Gestiona bloqueo automático, apagado de pantalla y suspensión bajo Sway.
 # before-sleep: lock antes de suspender/sleep
 
@@ -8,6 +11,7 @@ TIMEOUT_LOCK=300     # segundos de inactividad para lock (5 min)
 TIMEOUT_DPMS_OFF=600 # segundos totales para dpms off (10 min)
 TIMEOUT_SUSPEND=900  # segundos totales para suspend (15 min)
 
+# ──「 BLOQUEO 」─────────────────────────────────────────────
 lock_screen() {
     pidof swaylock > /dev/null && return
 
@@ -24,6 +28,7 @@ lock_screen() {
     fi
 }
 
+# ──「 TIMEOUTS 」────────────────────────────────────────────
 # Ejecuta swayidle en modo bloqueante (espera a que cada acción termine)
 #   1. Tras un periodo de inactividad, bloquea la sesión
 #   2. Tras más inactividad, apaga todas las pantallas (DPMS off)

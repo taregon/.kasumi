@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                   BÚSQUEDA DE ARCHIVOS                   │
+# ╘══════════════════════════════════════════════════════════╛
 # Busca archivos en directorios fijos y los abre via rofi + xdg-open
 
+# ──「 DIRECTORIOS 」─────────────────────────────────────────
 # Directorios base donde buscar archivos
 dirs=(
     # "$(zoxide query)"
@@ -9,6 +13,7 @@ dirs=(
     "$HOME/Syncthing/OsiriaFS"
 )
 
+# ──「 SELECCIÓN 」───────────────────────────────────────────
 # -show-icons: muestra iconos via XDG thumbnailers (prefijo thumbnail:// en la entrada)
 # short_path: reemplaza $HOME por ~ en la ruta mostrada en rofi
 

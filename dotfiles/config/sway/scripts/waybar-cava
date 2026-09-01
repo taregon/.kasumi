@@ -1,10 +1,12 @@
 #!/usr/bin/bash
-# cava-bar — Cava audio visualizer para Waybar
+# ╒══════════════════════════════════════════════════════════╕
+# │                    VISUALIZADOR CAVA                     │
+# ╘══════════════════════════════════════════════════════════╛
+# Cava audio visualizer para Waybar
 
 set -euo pipefail
 
-# ── Setup ─────────────────────────────────────────────────────────────────
-
+# ──「 CONFIGURACIÓN 」───────────────────────────────────────
 config_file="$HOME/.config/cava/cava-waybar.conf"
 
 # Evita múltiples instancias de cava compitiendo por el dispositivo de audio
@@ -45,6 +47,5 @@ data_format = ascii
 ascii_max_range = 7
 EOF
 
-# ── Pipeline ──────────────────────────────────────────────────────────────
-
+# ──「 TUBERÍA 」─────────────────────────────────────────────
 cava -p "$config_file" | sed -u "$sed_script"

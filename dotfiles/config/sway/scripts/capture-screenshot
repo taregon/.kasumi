@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                   CAPTURA DE PANTALLA                    │
+# ╘══════════════════════════════════════════════════════════╛
 # Captura de pantalla con slurp para Sway
-# Uso: screenshot-area [region|window|swappy]
+# Uso: capture-screenshot [region|window|swappy]
 #   region  (default) - selecciona área, guarda y copia al clipboard
 #   window            - selecciona ventana, guarda y copia
 #   swappy            - selecciona área y abre swappy para editar antes de guardar
@@ -8,20 +11,21 @@
 
 set -uo pipefail
 
+# ──「 CONFIGURACIÓN 」───────────────────────────────────────
 EXIT_CANCEL=2
 OUTPUT_DIR="${KASUMI_SCREENSHOT_DIR:-$HOME}"
 
-LOCKFILE="/tmp/screenshot-control.lock"
+LOCKFILE="/tmp/capture-screenshot.lock"
 
 # Abre/crea un archivo lock y lo asocia al descriptor 200.
 # flock -n intenta tomar el bloqueo sin esperar:
 # - Si el bloqueo ya existe, otra instancia está ejecutándose y se sale con exit 1.
 # - Si obtiene el bloqueo, el script continúa normalmente.
 # El trap elimina el archivo lock al finalizar el script.
-LOCKFILE="/tmp/screenshot-control.lock"
 exec 200> "$LOCKFILE"
 flock -n 200 && trap 'rm -f "$LOCKFILE"' EXIT || exit 1
 
+# ──「 ESTILO SLURP 」────────────────────────────────────────
 # Argumentos para slurp (estilo visual)
 KASUMI_SLURP_ARGS=(
     -b '#A4084C4D' # overlay global semitransparente fuera de la selección
@@ -32,11 +36,13 @@ KASUMI_SLURP_ARGS=(
     -d             # muestra dimensiones en tiempo real
 )
 
+# ──「 MODO 」────────────────────────────────────────────────
 MODE="${1:-region}" # Primer argumento: region (default)
 
 # Solo se necesita FILENAME si se guarda archivo (no en modo swappy)
 [ "$MODE" != "swappy" ] && FILENAME="$OUTPUT_DIR/shot-$(date +%Y%m%d-%H%M%S).png"
 
+# ──「 CAPTURA 」─────────────────────────────────────────────
 # Función de captura
 # Flujo: slurp (selección) -> grim (captura) -> salida (guarda+copia, o swappy)
 # Retorna 0 éxito, $EXIT_CANCEL si el usuario cancela (sin selección), otro si error
@@ -71,7 +77,7 @@ capture() {
     esac
 }
 
-# Notificaciones
+# ──「 NOTIFICACIONES 」──────────────────────────────────────
 capture
 capture_status=$?
 if [ $capture_status -eq 0 ]; then

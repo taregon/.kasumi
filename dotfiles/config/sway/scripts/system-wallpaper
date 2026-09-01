@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
+# ╒══════════════════════════════════════════════════════════╕
+# │                     FONDO ALEATORIO                      │
+# ╘══════════════════════════════════════════════════════════╛
 # Rota wallpapers en Sway via awww cada 20s con transición fade.
 # Si awww no está instalado, sale sin error. Si el directorio de wallpapers
 # está ausente o vacío, genera [NO IMAGE] en cache (requiere magick/timeout).
 # Env: KASUMI_WALLPAPERS_DIR; ver estado con: awww query
-# ╒══════════════════════════════════════════════════════════╕
-# │                     WALL-RANDOM-AWWW                     │
-# ╘══════════════════════════════════════════════════════════╛
 set -euo pipefail
 
-# ──「 Config 」──────────────────────────────────────────────
+# ──「 CONFIGURACIÓN 」───────────────────────────────────────
 readonly INTERVAL=20 # segundos entre cambios
 readonly FPS=60      # fotogramas de la transición
 readonly TYPE=fade   # tipo de transición awww
@@ -20,7 +20,7 @@ readonly FALLBACK_IMAGE="${XDG_CACHE_HOME:-$HOME/.cache}/kasumi/no-image.png"
 # Sin awww no hay trabajo: salida silenciosa para no romper el autostart
 command -v awww > /dev/null 2>&1 || exit 0
 
-# ──「 Funciones 」───────────────────────────────────────────
+# ──「 IMAGEN DE RESPALDO 」──────────────────────────────────
 ensure_fallback_image() {
     command -v magick > /dev/null 2>&1 || return 1
     command -v timeout > /dev/null 2>&1 || return 1
@@ -38,6 +38,7 @@ ensure_fallback_image() {
         2> /dev/null
 }
 
+# ──「 FUNCIONES 」───────────────────────────────────────────
 set_random_wallpaper() {
     local random_image
     # Directorio ausente o sin ficheros: se cae al fallback
@@ -60,7 +61,7 @@ set_random_wallpaper() {
         2> /dev/null || true
 }
 
-# ──「 Bucle Principal 」─────────────────────────────────────
+# ──「 BUCLE PRINCIPAL 」─────────────────────────────────────
 main() {
     # Salida limpia ante TERM/INT: bajo set -e,
     # terminar el bucle sin trap reportaría error en autostart

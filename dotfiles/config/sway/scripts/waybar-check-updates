@@ -1,4 +1,7 @@
 #!/usr/bin/bash
+# ╒══════════════════════════════════════════════════════════╕
+# │             VERIFICACIÓN DE ACTUALIZACIONES              │
+# ╘══════════════════════════════════════════════════════════╛
 # Contar paquetes pendientes de actualizar (repos + AUR)
 # Salida JSON para waybar custom/pacman con return-type: json
 
