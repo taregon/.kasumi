@@ -14,6 +14,16 @@ opts:
 
 Genera commit en español neutro.
 
+**Formato:**
+
+```txt
+tipo(sustantivo): descripción
+
+- Cambio 1
+- Cambio 2
+- Cambio 3
+```
+
 ### Anclas del diff
 
 `[META]` metadata del archivo, `[REF]` contexto extra, `[CMT]` comentario,
@@ -21,36 +31,35 @@ Genera commit en español neutro.
 
 ### Tipo
 
-- `feat:` agrega nueva funcionalidad, opción, comportamiento
-- `fix:` corrige algo que falla
-- `refactor:` reestructura código sin cambiar salida ni comportamiento
-- `chore:` modifica infraestructura: build, deps, CI, scripts de soporte
-- `style:` solo formato: espacios, sangría, comas, comillas
-- `docs:` cambios en comentarios, README, documentación
+- `feat:` agrega funcionalidad
+- `fix:` corrige fallo
+- `refactor:` reestructura código sin cambiar comportamiento
+- `chore:` modifica infraestructura: build, deps, CI, scripts
+- `style:` solo formato: espacios, sangría, puntuación
+- `docs:` cambios en documentación o comentarios
 
 ### Header
 
-- **Formato:** `tipo(sustantivo): descripción`
 - Sustantivo: inferir de metadata
-- Descripción: un solo propósito, el de más líneas cambiadas.
-- Los demás cambios moverlos al Body (máx 3)
-- Máx 72 chars, sin punto, minúscula
+- Descripción: un solo propósito, el de más líneas cambiadas
+- Demás cambios al Body
+- Minúsculas, sin punto
 
 ### Body
 
-- Máx 3 cambios, sin líneas vacías
-- Precede una viñeta `-`
-- Cada viñeta: un cambio user-facing, enfocado en _qué_ y _por qué_
+- Cada viñeta: un cambio concreto
+- Precede `-`, sin líneas vacías
+- Entre 1-3 viñetas, solo lo relevante
+- Excluir información secundaria
 
 ### Redacción
 
-- META puede incluir type, úsalo si aparece
-- No mencionar código, variables, funciones, rutas, métodos o lógica
+- Usar type de META si aparece
 - Preservar términos técnicos en inglés
-- No repetir ni parafrasear el header
-- No incluir anclas ni rutas
-- Verbo en infinitivo
-- Priorizar viñetas concisas sobre oraciones largas
+- Excluir rutas, variables, funciones, métodos, librerías o lógica
+- Sin repetir ni parafrasear viñetas
+- Ser conciso sobre oraciones largas
+- Verbo infinitivo
 
 ## user
 
