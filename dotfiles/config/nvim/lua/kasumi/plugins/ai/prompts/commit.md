@@ -38,15 +38,14 @@ Genera commit en español neutro.
 
 ### Body
 
-- Máx 3 cambios, uno por línea
+- Máx 3 cambios, sin líneas vacías
 - Precede una viñeta `-`
-- Sin líneas vacías entre ellas
-- Cada viñeta: un cambio user-facing, en infinitivo, enfocado en _qué_ y _por qué_
-- No detallar sintaxis, operaciones o estructura interna del archivo (ya está
-  implícito en el diff)
+- Cada viñeta: un cambio user-facing, enfocado en _qué_ y _por qué_
 
 ### Redacción
 
+- META puede incluir type, úsalo si aparece
+- No mencionar código, variables, funciones, rutas, métodos o lógica
 - Preservar términos técnicos en inglés
 - No repetir ni parafrasear el header
 - No incluir anclas ni rutas
