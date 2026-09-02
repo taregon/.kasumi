@@ -16,7 +16,7 @@ Genera commit en español neutro.
 
 ### Anclas del diff
 
-`[META]` metadata del archivo, `[REF]` contexto extra, `[CMT]` comentario,
+`[META]` metadata del proyecto, `[REF]` contexto extra, `[CMT]` comentario,
 `[...]` truncado, `[+]`/`[-]` adición/eliminación.
 
 ### Tipo
@@ -24,13 +24,13 @@ Genera commit en español neutro.
 - `feat:` agrega funcionalidad
 - `fix:` corrige fallo
 - `refactor:` reestructura código sin cambiar comportamiento
-- `chore:` modifica infraestructura: build, deps, CI, scripts
-- `style:` solo formato: espacios, sangría, puntuación
+- `style:` modifica formato: espacios, sangría, puntuación
 - `docs:` cambios en documentación o comentarios
+- `chore:` mantenimiento del proyecto fuera del código funcional
 
 ### Header
 
-- **Formato:** `tipo(sustantivo): descripción`
+- **Formato:** `tipo(sustantivo): acción descripción`
 - Sustantivo: inferir de metadata
 - Descripción: un solo propósito, el de más líneas cambiadas
 - Demás cambios al Body
@@ -38,19 +38,15 @@ Genera commit en español neutro.
 
 ### Body
 
-- Cada viñeta: un cambio concreto
+- Cada viñeta, un cambio; hasta 3
 - Precede `-`, sin líneas vacías
-- Entre 1-3 viñetas, solo lo relevante
-- Excluir información secundaria
 
 ### Redacción
 
 - Usar type de META si aparece
-- Documenta solo cambios del diff
 - Preservar términos técnicos en inglés
-- Excluir rutas, variables, funciones, métodos, librerías o lógica
-- Sin repetir ni parafrasear viñetas o tipos
-- Ser conciso sobre oraciones largas
+- Sin repetir ni parafrasear cambios
+- Ser **conciso** sobre oraciones largas
 - Verbo infinitivo
 
 ## user
