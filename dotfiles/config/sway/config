@@ -5,12 +5,9 @@
 # ███████║╚███╔███╔╝██║  ██║   ██║
 # ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
 # https://swaywm.org/sway_wiki/
-# https://man.freebsd.org/cgi/man.cgi?query=sway&apropos=0&sektion=5&manpath=FreeBSD+15.0-RELEASE+and+Ports&format=html
-# ╒═════════════════════════════════════════════════════════════╕
-# │                    CONFIGURACIÓN PRINCIPAL                  │
-# ╘═════════════════════════════════════════════════════════════╛
-# Este archivo solo define la carga de módulos en config.d/.
-# Orden de carga: 00-environment → 10-input → 20-output → 30-appearance → 40-window-rules → 50-keybindings → 60-autostart
-# No mover el include: los keybindings necesitan las variables $mod definidas antes.
+
+# Punto de entrada: carga secuencial de módulos en config.d/.
+# El orden define dependencias: variables en 10-input se usan en 50-keybindings.
+# No mover el include fuera de este archivo.
 
   include ~/.config/sway/config.d/*.conf
