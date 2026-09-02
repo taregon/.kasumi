@@ -19,35 +19,39 @@ Genera commit en español neutro.
 `[META]` metadata del proyecto, `[REF]` contexto extra, `[CMT]` comentario,
 `[...]` truncado, `[+]`/`[-]` adición/eliminación.
 
-### Tipo
+### Tipo funcional
 
-- `feat:` agrega funcionalidad
-- `fix:` corrige fallo
-- `refactor:` reestructura código sin cambiar comportamiento
-- `style:` modifica formato: espacios, sangría, puntuación
-- `docs:` cambios en documentación o comentarios
-- `chore:` mantenimiento del proyecto fuera del código funcional
+- `feat:` funcionalidad nueva
+- `fix:` fallo corregido
+- `refactor:` código reestructurado
+
+### Tipo auxiliary
+
+- `style:` formato modificado
+- `docs:` documentación
+- `chore:` mantenimiento
 
 ### Header
 
-- **Formato:** `tipo(sustantivo): acción descripción`
+- Formato: `tipo(alcance): verbo descripción`
 - Sustantivo: inferir de metadata
-- Descripción: un solo propósito, el de más líneas cambiadas
+- Usa el type de `[META]` si aparece
+- Descripción: un solo propósito, el de mayor volumen de líneas `[+]`/`[-]`
+- Si empatan, usa el que aparece primero
 - Demás cambios al Body
 - Minúsculas, sin punto
 
 ### Body
 
-- Cada viñeta, un cambio; hasta 3
-- Precede `-`, sin líneas vacías
+- Inicia cada línea con `-`, sin líneas vacías
+- Máximo 3 viñetas
+- No uses voz pasiva
 
 ### Redacción
 
-- Usar type de META si aparece
-- Preservar términos técnicos en inglés
-- Sin repetir ni parafrasear cambios
-- Ser **conciso** sobre oraciones largas
-- Verbo infinitivo
+- Infinitivo, sin punto, ≤12 palabras
+- Sin repetir el tipo en la descripción
+- Términos técnicos en inglés
 
 ## user
 
