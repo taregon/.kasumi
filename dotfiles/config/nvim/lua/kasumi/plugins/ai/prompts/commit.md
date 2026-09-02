@@ -14,16 +14,6 @@ opts:
 
 Genera commit en español neutro.
 
-**Formato:**
-
-```txt
-tipo(sustantivo): descripción
-
-- Cambio 1
-- Cambio 2
-- Cambio 3
-```
-
 ### Anclas del diff
 
 `[META]` metadata del archivo, `[REF]` contexto extra, `[CMT]` comentario,
@@ -40,6 +30,7 @@ tipo(sustantivo): descripción
 
 ### Header
 
+- **Formato:** `tipo(sustantivo): descripción`
 - Sustantivo: inferir de metadata
 - Descripción: un solo propósito, el de más líneas cambiadas
 - Demás cambios al Body
