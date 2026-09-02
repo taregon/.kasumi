@@ -3,7 +3,7 @@
 # │░▄▀░░█▀▀░█▀▄░█░█░█▀▀░░█░░█░░░█▀▀│
 # │░▀▀▀░▀░░░▀░▀░▀▀▀░▀░░░▀▀▀░▀▀▀░▀▀▀│
 # └────────────────────────────────┘
-# Variables de entorno definidas en ~/.zprofile porque:
+# Variables de entorno definidas en $ZDOTDIR/.zprofile porque:
 # - Ly ejecuta /etc/ly/setup.sh y carga explícitamente este archivo al usar
 # zsh (vía source), emulando parcialmente un login shell
 
@@ -21,7 +21,7 @@
 # ─[ WALLPAPER ]──────────────────────────────────────────────
 # Directorio estándar en $HOME para almacenar los
 # fondos de pantalla gestionados por el dotfile kasumi
-export KASUMI_WALLPAPERS_DIR="$HOME/.local/share/kasumi/wallpapers/general"
+export KASUMI_WALLPAPERS_DIR="$XDG_DATA_HOME/kasumi/wallpapers/general"
 
 # ─[ SCREENSHOTS ]────────────────────────────────────────────
 export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots"
