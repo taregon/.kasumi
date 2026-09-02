@@ -62,7 +62,7 @@ require("which-key").add({
 	-- ──────────────────────< COMMENT BOX >───────────────────────
 	-- Puedes ver mas estilos ejecutando :CBcatalog
 	-- Repo: https://github.com/LudoPinelli/comment-box.nvim
-	{ "<leader>c", group = "󱜾  Boxes", mode = { "n", "v" } },
+	{ "<leader>c", group = "󱜾  Box & Comment", mode = { "n", "v" } },
 	-- ────────────────────────────────────────────────────────────
 	{ "<leader>ca", ":CBlabox20<CR>", desc = "Title Squared (adaptive)", mode = "v" },
 	{ "<leader>cc", ":CBlcline8<CR>", desc = "Title Spiked (center)" },
@@ -72,6 +72,7 @@ require("which-key").add({
 	{ "<leader>cq", ":CBllbox13<CR>", desc = "Quote", mode = "v" },
 	{ "<leader>cl", ":CBline<CR>", desc = "Line" },
 	{ "<leader>cr", ":CBd<CR>", desc = "Remove", mode = "v" },
+	{ "<leader>cm", "gq", desc = "Format Comment", mode = "v" },
 	-- ───────────────────────< DIAGNOSTICS >───────────────────────
 	-- Debido a nuevas actualizaciones, los mensajes del linter / LSP
 	-- ya no se muestran así que se activan por atajos
