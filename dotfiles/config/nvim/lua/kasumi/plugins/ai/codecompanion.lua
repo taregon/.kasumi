@@ -51,9 +51,8 @@ codecompanion.setup({
 				})
 			end,
 
-			-- think en schema (no en parameters): el adapter Ollama reconstruye
-			-- self.parameters.think desde el default del schema
-			-- (check_thinking_capability), sobrescribiendo parameters estatico.
+			-- think en schema: Ollama lo promueve a parameters.think.
+			-- num_ctx 6144 ajustado a VRAM 4GB (GTX 1050 Ti) para evitar spill a RAM.
 			gemma_it = function()
 				return require("codecompanion.adapters").extend("ollama", {
 					name = "Gemma-4-it",
@@ -61,12 +60,12 @@ codecompanion.setup({
 					schema = {
 						model          = { default = "gemma4:e2b-it-qat" },
 						think          = { default = false },
-						num_ctx        = { default = 8192 },
-						num_predict    = { default = 512 },
-						repeat_penalty = { default = 1.10 },
-						temperature    = { default = 0.38 },
+						num_ctx        = { default = 6144 },
+						num_predict    = { default = 400 },
+						repeat_penalty = { default = 1.11 },
+						temperature    = { default = 0.42 },
 						top_p          = { default = 0.84 },
-						top_k          = { default = 40 },
+						top_k          = { default = 36 },
 					},
 					env = { url = "http://127.0.0.1:11434" },
 				})
@@ -79,7 +78,7 @@ codecompanion.setup({
 					schema = {
 						-- Qwen3-4B-Instruct-2507 (Q4_K_M)
 						-- Sitio oficial: https://huggingface.co/Jeney
-						model          = { default = "hf.co/Jeney/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M" },
+						model          = { default = "hf.co/Qwen/Qwen3-VL-2B-Instruct-GGUF:Q4_K_M" },
 						num_ctx        = { default = 8192 },
 						num_predict    = { default = 512 },
 						repeat_penalty = { default = 1.02 },
