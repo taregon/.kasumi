@@ -35,17 +35,18 @@ function M.staged_diff()
 	end
 
 	local repo_root = vim.trim(root_res.stdout)
-	-- base conserva el prefijo numérico (ej. 05-ytdlp). El scope en commit.md
-	-- omite ese prefijo; aquí solo se extrae el nombre sin extensión.
-	local base = vim.fn.fnamemodify(abs_path, ":t:r") -- 05-ytdlp (sin extensión)
+	-- Nombre sin extensión ni ruta, ya normalizado para scope.
+	-- El scope omite el prefijo numérico y usa minúsculas (spec: sustantivo).
+	local raw_base = vim.fn.fnamemodify(abs_path, ":t:r") -- ej. 05-ytdlp
+	local base = raw_base:gsub("^%d+%-", ""):lower() -- ej. ytdlp
 
 	-- Path relativo requerido por git diff dentro del repo.
 	-- +2 salta el separador "/" entre repo_root y el resto del path.
 	local rel_path = abs_path:sub(#repo_root + 2)
 
 	-- Gemma-4 no distingue markdown de código; se detecta extensión para
-	-- inyectar "type: docs" sin ancla por línea (el hint encuadra el diff,
-	-- marcar cada línea era redundante y saturaba el prompt).
+	-- inyectar [TYPE] docs (el hint encuadra el diff, marcar cada línea
+	-- era redundante y saturaba el prompt).
 	local doc_exts = { md = true, markdown = true, txt = true, rst = true, adoc = true, org = true }
 	local ext = vim.fn.fnamemodify(abs_path, ":e"):lower()
 	local is_doc = doc_exts[ext] or false
@@ -58,7 +59,7 @@ function M.staged_diff()
 		"--cached",
 		"--no-ext-diff",
 		"--no-prefix",
-		"--unified=1", -- agrega más contexto antes/después del hunk
+		"--unified=0", -- agrega más contexto antes/después del hunk
 		"--color=never",
 		"--",
 		rel_path,
@@ -105,7 +106,7 @@ function M.staged_diff()
 			-- El símbolo +/- no se marca: el modelo local lo confunde con
 			-- markdown (listas). Se reemplaza por los marcadores [+]/[-].
 			local sym = marker == "+" and "[+]" or "[-]"
-			-- En archivos doc no se marca [CMT]: el hint "type: docs"
+			-- En archivos doc no se marca [CMT]: el hint [TYPE] docs
 			-- ya encuadra el diff; evita confundir # de markdown con comentario.
 			-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
 			-- bloques /* */ ni """; Gemma-4 no los requiere para inferir.
@@ -153,7 +154,7 @@ function M.staged_diff()
 	filtered = collapsed
 
 	-- Heurística: si >50% de líneas de cambio contienen [CMT], el cambio
-	-- es puramente cosmético. Se inyecta "type: style" en el header para que el
+	-- es puramente cosmético. Se inyecta [TYPE] style en el header para que el
 	-- modelo no tenga que inferir la clasificación. Sin este hint, el modelo
 	-- asigna feat o fix aunque el diff solo tenga cambios en comentarios;
 	-- banners con texto "FIX:" empujan especialmente a la clasificación errónea.
@@ -171,24 +172,25 @@ function M.staged_diff()
 
 	local hint = ""
 	if is_doc then
-		hint = "\n[META] type: docs"
+		hint = "\n[TYPE] docs"
 	elseif changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
-		hint = "\n[META] type: style"
+		hint = "\n[TYPE] style"
 	end
 
-	-- Cabecera estructurada: "directorio:" y "archivo:" dan contexto de
-	-- origen; commit.md usa ambos para inferir el scope. "lenguaje:" es la
-	-- extensión del archivo; el modelo infiere el lenguaje desde ella.
-	local parent_dir = file_dir:match("([^/]+)$") or ""
-	-- ext ya se calculó en línea 47; se reutiliza para el campo "lenguaje:".
-	local header = "[META] directorio: "
-		.. parent_dir
-		.. "\n[META] archivo: "
-		.. base
-		.. "\n[META] lenguaje: "
-		.. ext
-		.. hint
-		.. "\n\n"
+	-- Cabecera mínima: [SDR] da el contexto, [SFL] el objeto ya
+	-- normalizado para scope, [EXT] el lenguaje si hay extensión
+	-- y [TYPE] la clasificación.
+	-- [SDR] conserva 3 niveles para desambiguar directorios repetidos.
+	local parent_dir = file_dir:match("([^/]+/[^/]+/[^/]+)$")
+		or file_dir:match("([^/]+/[^/]+)$")
+		or file_dir:match("([^/]+)$")
+		or ""
+	local header = "[SDR] " .. parent_dir .. "\n[SFL] " .. base
+	-- Sin extensión no se emite [EXT]: evita línea vacía que el modelo cita.
+	if ext ~= "" then
+		header = header .. "\n[EXT] " .. ext
+	end
+	header = header .. hint .. "\n\n"
 	return header .. table.concat(filtered, "\n")
 end
 

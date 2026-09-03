@@ -34,7 +34,7 @@ comentario, `[...]` truncado, `[+]` adición, `[-]` eliminación
 ### Header
 
 - Formato: `tipo(alcance): verbo descripción`
-- Alcance: determina el módulo afectado; un sustantivo
+- Alcance: identifica el módulo afectado; solo un sustantivo
 - Descripción: el de mayor volumen `[+]`/`[-]`
 - Si empatan, usa el que aparece primero
 - Cambios restantes al Body
