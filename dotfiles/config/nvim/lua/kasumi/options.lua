@@ -6,6 +6,7 @@
 -- https://neovim.io/doc/user/quickref/#option-list
 -- https://neovim.io/doc/user/options/
 -- https://neovim.io/doc/user/deprecated/
+-- https://neovim.io/doc/user/lua/
 
 local opt = vim.opt
 local cmd = vim.cmd
@@ -31,6 +32,8 @@ opt.spelllang = { "en", "es" } -- Corregir palabras usando diccionarios en ingl�
 opt.splitbelow = true -- Controla la posición de la nueva ventana (abajo)
 opt.splitright = true -- Controla la posición de la nueva ventana (a la derecha)
 opt.undofile = true -- Guarda el historial de deshacer. Persistencia entre sesiones.
+opt.textwidth = 90 -- Límite de columnas para comentarios
+opt.formatoptions:append("c") -- Formatea comentarios según textwidth
 
 -- ╒═══════════════════════════════════════════════════════════╕
 -- │                        IDENTACION                         │
