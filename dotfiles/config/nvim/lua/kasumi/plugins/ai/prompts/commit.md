@@ -16,8 +16,8 @@ Genera commit en español neutro.
 
 ### Anclas del diff
 
-`[META]` metadata del proyecto, `[REF]` contexto extra, `[CMT]` comentario,
-`[...]` truncado, `[+]`/`[-]` adición/eliminación.
+`[SDR]` ubicación, `[SFL]` archivo, `[EXT]` lenguaje, `[TYPE]` tipo, `[CMT]`
+comentario, `[...]` truncado, `[+]` adición, `[-]` eliminación
 
 ### Tipo funcional
 
@@ -34,12 +34,12 @@ Genera commit en español neutro.
 ### Header
 
 - Formato: `tipo(alcance): verbo descripción`
-- Sustantivo: inferir de metadata
-- Usa el type de `[META]` si aparece
-- Descripción: un solo propósito, el de mayor volumen de líneas `[+]`/`[-]`
+- Alcance: determina el módulo afectado; un sustantivo
+- Descripción: el de mayor volumen `[+]`/`[-]`
 - Si empatan, usa el que aparece primero
-- Demás cambios al Body
+- Cambios restantes al Body
 - Minúsculas, sin punto
+- Usa el de `[TYPE]` si aparece
 
 ### Body
 
