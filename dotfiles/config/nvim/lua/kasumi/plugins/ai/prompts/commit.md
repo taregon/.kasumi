@@ -18,11 +18,11 @@ Genera commit en español simple, sin voseo ni modismos.
 
 - `[SFL]` archivo: usar como alcance
 - `[TYPE]` tipo: usar como tipo
+- `[+]` con agregar o actualizar, `[-]` con eliminar o quitar
 - `[+]`/`[-]` sin `[CMT]`: único cambio a describir
 - `[SDR]` contexto: ignorar
 - `[EXT]` lenguaje: ignorar
 - `[CMT]` comentario: ignorar
-- `[REF]` contexto: ignorar
 - `[...]` recorte: ignorar
 - Ignora además `new file mode`
 
