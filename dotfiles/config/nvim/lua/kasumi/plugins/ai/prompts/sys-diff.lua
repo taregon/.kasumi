@@ -3,7 +3,7 @@
 -- descartando metadatos y encabezados de hunk (@@).
 -- Conserva únicamente las líneas de cambio reales (+/-).
 -- Comportamiento equivalente (aplicado a un solo archivo) a:
--- git diff --cached --no-ext-diff --no-prefix --unified=1 --color=never
+-- git diff --cached --no-ext-diff --no-prefix --unified=0 --color=never
 
 local M = {}
 
@@ -35,10 +35,11 @@ function M.staged_diff()
 	end
 
 	local repo_root = vim.trim(root_res.stdout)
-	-- Nombre sin extensión ni ruta, ya normalizado para scope.
-	-- El scope omite el prefijo numérico y usa minúsculas (spec: sustantivo).
-	local raw_base = vim.fn.fnamemodify(abs_path, ":t:r") -- ej. 05-ytdlp
-	local base = raw_base:gsub("^%d+%-", ""):lower() -- ej. ytdlp
+	-- Nombre ya normalizado para scope: sin prefijo numérico, puntos,
+	-- extensión ni ruta; solo minúsculas, letras, números y guiones.
+	-- El modelo lo copia tal cual, sin transformar.
+	local raw_base = vim.fn.fnamemodify(abs_path, ":t:r") -- ej. 05-ytdlp, .zlogin
+	local base = raw_base:gsub("^%d+%-", ""):gsub("^%.+", ""):lower():gsub("[^%w%-]", "") -- ej. ytdlp, zlogin
 
 	-- Path relativo requerido por git diff dentro del repo.
 	-- +2 salta el separador "/" entre repo_root y el resto del path.
@@ -59,7 +60,7 @@ function M.staged_diff()
 		"--cached",
 		"--no-ext-diff",
 		"--no-prefix",
-		"--unified=0", -- agrega más contexto antes/después del hunk
+		"--unified=0", -- sin líneas de contexto
 		"--color=never",
 		"--",
 		rel_path,
@@ -88,6 +89,13 @@ function M.staged_diff()
 			or line:match("^index ")
 			or line:match("^%-%-%- ")
 			or line:match("^%+%+%+ ")
+			-- Ruido de archivo nuevo que el modelo cita como contenido.
+			or line:match("^new file ")
+			or line:match("^deleted file ")
+			or line:match("^old mode")
+			or line:match("^new mode")
+			or line:match("^similarity ")
+			or line:match("^rename ")
 
 		if not is_header then
 			table.insert(filtered, line)
@@ -95,52 +103,68 @@ function M.staged_diff()
 	end
 
 	-- Gemma-4-it confunde sintaxis de comentarios con código funcional.
-	-- [CMT] marca líneas de comentario conservando un tramo de su texto,
-	-- [REF] marca contexto, [+]/[-] marcan líneas añadidas/eliminadas.
+	-- [CMT] marca líneas de comentario conservando un tramo de su texto;
+	-- [+]/[-] marcan líneas añadidas/eliminadas.
 	-- Sin estas anclas el modelo alucina funcionalidades inexistentes.
-	for idx, line in ipairs(filtered) do
+	-- Sin [REF]: unified=0 no emite líneas de contexto.
+	-- Marcado en una sola fase: banners descartados al vuelo, resto a tabla nueva.
+	local marked = {}
+	for _, line in ipairs(filtered) do
 		local marker = line:sub(1, 1)
 		local rest = line:sub(2)
 
 		if marker == "+" or marker == "-" then
-			-- El símbolo +/- no se marca: el modelo local lo confunde con
-			-- markdown (listas). Se reemplaza por los marcadores [+]/[-].
-			local sym = marker == "+" and "[+]" or "[-]"
-			-- En archivos doc no se marca [CMT]: el hint [TYPE] docs
-			-- ya encuadra el diff; evita confundir # de markdown con comentario.
-			-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
-			-- bloques /* */ ni """; Gemma-4 no los requiere para inferir.
-			if
-				not is_doc
-				and (rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;"))
-			then
-				-- Suprimir todo el texto obligaba al modelo a inventar el
-				-- contenido del comentario; el tramo conserva su significado.
-				-- 40 caracteres bastan para el asunto sin saturar un modelo 2B.
-				local ctx = rest:sub(1, 40)
-				-- Trim evita que la indentación consuma parte del límite.
-				ctx = vim.trim(ctx)
-				-- El corte puede dejar frases incompletas; [...] evita que el
-				-- modelo trate el tramo como texto completo y lo cite entero.
-				if #rest > 40 then
-					ctx = ctx .. " [...]"
+			-- Banners decorativos con box-drawing solo aportan ruido;
+			-- se descartan para que el modelo describa código funcional.
+			if not rest:match("[─═│╒╕╘╛┌┐└┘╔╗╚╝]") then
+				-- El símbolo +/- no se marca: el modelo local lo confunde con
+				-- markdown (listas). Se reemplaza por los marcadores [+]/[-].
+				local sym = marker == "+" and "[+]" or "[-]"
+				-- En archivos doc no se marca [CMT]: el hint [TYPE] docs
+				-- ya encuadra el diff; evita confundir # de markdown con comentario.
+				-- Patrón cubre # // -- ; (C, Lua, shell, Python, JS...). No cubre
+				-- bloques /* */ ni """; Gemma-4 no los requiere para inferir.
+				if
+					not is_doc
+					and (rest:match("^%s*#") or rest:match("^%s*//") or rest:match("^%s*%-%-") or rest:match("^%s*;"))
+				then
+					-- Suprimir todo el texto obligaba al modelo a inventar el
+					-- contenido del comentario; el tramo conserva su significado.
+					-- 40 caracteres bastan para el asunto sin saturar un modelo 2B.
+					local ctx = rest:sub(1, 40)
+					-- Trim evita que la indentación consuma parte del límite.
+					ctx = vim.trim(ctx)
+					-- El corte puede dejar frases incompletas; [...] evita que el
+					-- modelo trate el tramo como texto completo y lo cite entero.
+					if #rest > 40 then
+						ctx = ctx .. " [...]"
+					end
+					table.insert(marked, sym .. " [CMT] " .. ctx)
+				else
+					table.insert(marked, sym .. " " .. rest)
 				end
-				filtered[idx] = sym .. " [CMT] " .. ctx
-			else
-				filtered[idx] = sym .. " " .. rest
 			end
-		elseif marker == " " then
-			filtered[idx] = "[REF]" .. line
+		else
+			-- Resto (ej. "\ No newline") pasa intacto.
+			table.insert(marked, line)
 		end
 	end
 
-	-- Colapsar líneas [CMT] consecutivas del mismo marcador (+/-).
-	-- Sin colapso, N líneas idénticas saturan el prompt y el modelo genera
-	-- cuerpo repetido (misma línea N veces). Con colapso a 1, el modelo
-	-- diferencia cambios sin forzar repetición.
+	-- Colapsar [CMT] idénticas adyacentes; en la misma pasada se cuentan
+	-- cambios y funcionales para el hint [TYPE]. Sin colapso, N líneas
+	-- idénticas saturan el prompt y el modelo repite cuerpo.
 	local collapsed = {}
 	local prev = nil
-	for _, line in ipairs(filtered) do
+	local changed_lines = 0
+	local functional_lines = 0
+	for _, line in ipairs(marked) do
+		local prefix = line:sub(1, 3)
+		if prefix == "[+]" or prefix == "[-]" then
+			changed_lines = changed_lines + 1
+			if not line:match("%[CMT%]") then
+				functional_lines = functional_lines + 1
+			end
+		end
 		if line:match("%[CMT%]") then
 			if line ~= prev then
 				table.insert(collapsed, line)
@@ -153,38 +177,22 @@ function M.staged_diff()
 	end
 	filtered = collapsed
 
-	-- Heurística: si >50% de líneas de cambio contienen [CMT], el cambio
-	-- es puramente cosmético. Se inyecta [TYPE] style en el header para que el
-	-- modelo no tenga que inferir la clasificación. Sin este hint, el modelo
-	-- asigna feat o fix aunque el diff solo tenga cambios en comentarios;
-	-- banners con texto "FIX:" empujan especialmente a la clasificación errónea.
-	local changed_lines = 0
-	local comment_lines = 0
-	for _, line in ipairs(filtered) do
-		local prefix = line:sub(1, 3)
-		if prefix == "[+]" or prefix == "[-]" then
-			changed_lines = changed_lines + 1
-			if line:match("%[CMT%]") then
-				comment_lines = comment_lines + 1
-			end
-		end
-	end
-
+	-- Heurística: solo si no hay líneas funcionales el cambio es cosmético.
+	-- Antes bastaba >50% [CMT]; eso marcaba style en archivos nuevos con
+	-- banner + código real (ej. .zlogin con fastfetch). Ahora se exige
+	-- cero líneas [+]/[-] sin [CMT] para inyectar style.
 	local hint = ""
 	if is_doc then
 		hint = "\n[TYPE] docs"
-	elseif changed_lines > 0 and (comment_lines / changed_lines) > 0.5 then
+	elseif changed_lines > 0 and functional_lines == 0 then
 		hint = "\n[TYPE] style"
 	end
 
 	-- Cabecera mínima: [SDR] da el contexto, [SFL] el objeto ya
 	-- normalizado para scope, [EXT] el lenguaje si hay extensión
 	-- y [TYPE] la clasificación.
-	-- [SDR] conserva 3 niveles para desambiguar directorios repetidos.
-	local parent_dir = file_dir:match("([^/]+/[^/]+/[^/]+)$")
-		or file_dir:match("([^/]+/[^/]+)$")
-		or file_dir:match("([^/]+)$")
-		or ""
+	-- [SDR] solo último segmento; contexto mínimo para modelo 2B.
+	local parent_dir = file_dir:match("([^/]+)$") or ""
 	local header = "[SDR] " .. parent_dir .. "\n[SFL] " .. base
 	-- Sin extensión no se emite [EXT]: evita línea vacía que el modelo cita.
 	if ext ~= "" then
