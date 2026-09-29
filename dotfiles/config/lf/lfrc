@@ -5,6 +5,7 @@
 # └────────┘
 # https://man.archlinux.org/man/lf.1.en
 # ────────────────────────────────────────────────────────────
+# NOTE: Los comandos interactivos usan zsh; previewer/cleaner usan bash por latencia y sintaxis batch. Unificar degrada el scroll.
   set shell zsh
   set shellopts '-eu'
   set ifs "\n"
@@ -19,6 +20,7 @@
   set scrolloff 10
 
   set previewer ~/.config/lf/lfpreview
+  set cleaner ~/.config/lf/lfclean
   set ratios 1:2:2
 
   set info ctime:size

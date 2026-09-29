@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Causa: icat pinta overlay GPU fuera del buffer de lf;
+# sin clear explícito se apila.
+
+kitty +kitten icat --clear --silent --stdin no --transfer-mode memory < /dev/null > /dev/tty 2> /dev/null
