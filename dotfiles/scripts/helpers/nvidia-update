@@ -38,6 +38,8 @@ purge_stale_pkgs() {
     stale=("$dir"/*.pkg.tar.zst)
     shopt -u nullglob
 
+    # Las guardas ${...+...} toleran array vacio bajo set -u; simplificarlas
+    # reintroduce el aborto cuando el clon no tiene paquetes previos.
     for f in ${stale[@]+"${stale[@]}"}; do
         name=$(basename "$f")
         keep=0
@@ -97,6 +99,8 @@ fi
 # ──「 Construcción 」────────────────────────────────────────
 built=()
 for base in "${AUR_BASES[@]}"; do
+    # --ff-only es fail-stop ante historial reescrito o clon divergente;
+    # recuperar con reset --hard al remoto o re-clonando via paru -S.
     git -C "$CLONE/$base" pull --ff-only --quiet
     pkgver=$(sed -n 's/^pkgver=//p' "$CLONE/$base/PKGBUILD" | tr -d "'\"")
     pkgrel=$(sed -n 's/^pkgrel=//p' "$CLONE/$base/PKGBUILD" | tr -d "'\"")
@@ -119,6 +123,8 @@ for base in "${AUR_BASES[@]}"; do
     fi
     # makepkg -C es cleanbuild, no cambio de directorio como git -C; el
     # subshell aisla el cd y construye sobre el PKGBUILD recien traido.
+    # -d salta la resolucion de dependencias: evita operaciones -S durante el
+    # build; los makedeps ya los dejo el paru -S inicial que creo el clon.
     (cd "$CLONE/$base" && makepkg --noconfirm -C -c -d -f)
     # Solo entran los splits de esta base en la version esperada; la
     # depuracion y los rancios quedan fuera de la transaccion.
@@ -126,6 +132,7 @@ for base in "${AUR_BASES[@]}"; do
     candidates=("$CLONE/$base/"*-"$expected"-*.pkg.tar.zst)
     shopt -u nullglob
     added=0
+    # Misma guarda que en purge_stale_pkgs: candidates puede venir vacio.
     for f in ${candidates[@]+"${candidates[@]}"}; do
         name=$(basename "$f")
         [[ "$name" == *-debug-*.pkg.tar.zst ]] && continue
