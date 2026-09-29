@@ -2,15 +2,66 @@
 # Actualiza de forma atomica los paquetes NVIDIA 580xx de la AUR.
 # En IgnorePkg, paru -Syu no los toca; fail-stop: si un subpaquete no
 # construye, aborta sin instalar nada y evita el estado parcial dkms/utils.
+# La instalacion usa pacman -U desde fichero, que no esta sujeta a IgnorePkg
+# (solo rige operaciones de sincronizacion); los avisos de omitido de -Syu
+# son el comportamiento esperado, no un error del script.
 
 set -euo pipefail
 
 # ──「 Setup 」───────────────────────────────────────────────
 readonly CLONE="$HOME/.cache/paru/clone"
 declare -ra AUR_BASES=(nvidia-580xx-utils nvidia-580xx-settings)
+# Splits que produce cada pkgbase; la purga y la transaccion solo operan
+# sobre estos nombres y nunca sobre otras fuentes del clon.
+declare -rA BASE_SPLITS=(
+    [nvidia - 580xx - utils]="nvidia-580xx-utils opencl-nvidia-580xx nvidia-580xx-dkms"
+    [nvidia - 580xx - settings]="nvidia-580xx-settings libxnvctrl-580xx"
+)
 # Linea dedicada en [options]; al ser lista acumulativa, coexiste con otras.
 readonly IGNORE_LINE="IgnorePkg   = nvidia-580xx-utils nvidia-580xx-dkms \
 nvidia-580xx-settings opencl-nvidia-580xx libxnvctrl-580xx"
+
+# ──「 Helpers 」─────────────────────────────────────────────
+# El clon acumula .pkg.tar.zst de pkgrel anteriores porque makepkg solo
+# sobrescribe la misma version; la purga acotada evita que el glob mezcle
+# versiones en la transaccion.
+# Recibe: directorio del clon, version esperada y splits de la base.
+purge_stale_pkgs() {
+    local dir="$1"
+    local expected="$2"
+    shift 2
+    local -a splits=("$@")
+    local -a stale=()
+    local f name split keep
+
+    shopt -s nullglob
+    stale=("$dir"/*.pkg.tar.zst)
+    shopt -u nullglob
+
+    for f in ${stale[@]+"${stale[@]}"}; do
+        name=$(basename "$f")
+        keep=0
+        for split in ${splits[@]+"${splits[@]}"}; do
+            if [[ "$name" == "$split-"* ]]; then
+                keep=1
+                break
+            fi
+        done
+        # Fuera de la allowlist: artefacto ajeno al driver, se conserva.
+        ((keep)) || continue
+        # La depuracion nunca entra en la transaccion, siempre se purga.
+        if [[ "$name" == *-debug-*.pkg.tar.zst ]]; then
+            rm -f "$f"
+            printf ">>INFO purgado: %s\n" "$name"
+            continue
+        fi
+        # Solo coincide la version esperada; el resto son rancios.
+        if [[ "$name" != *-"$expected"-* ]]; then
+            rm -f "$f"
+            printf ">>INFO purgado: %s\n" "$name"
+        fi
+    done
+}
 
 # ──「 Validación 」──────────────────────────────────────────
 # Fallo temprano y consistente: herramientas requeridas y clones de paru.
@@ -47,15 +98,50 @@ fi
 built=()
 for base in "${AUR_BASES[@]}"; do
     git -C "$CLONE/$base" pull --ff-only --quiet
-    pkgver=$(sed -n 's/^pkgver=//p' "$CLONE/$base/PKGBUILD")
-    pkgrel=$(sed -n 's/^pkgrel=//p' "$CLONE/$base/PKGBUILD")
-    installed=$(pacman -Q "$base" | awk '{print $2}')
-    if [[ "$installed" == "$pkgver-$pkgrel" ]]; then
-        printf ">>INFO %s al dia (%s)\n" "$base" "$installed"
+    pkgver=$(sed -n 's/^pkgver=//p' "$CLONE/$base/PKGBUILD" | tr -d "'\"")
+    pkgrel=$(sed -n 's/^pkgrel=//p' "$CLONE/$base/PKGBUILD" | tr -d "'\"")
+    expected="$pkgver-$pkgrel"
+    read -ra splits <<< "${BASE_SPLITS[$base]}"
+    need_build=0
+    for split in "${splits[@]}"; do
+        # Un split ausente cuenta como desactualizado: se reconstruye la
+        # transaccion completa en vez de abortar sin diagnostico por pipefail.
+        installed=$(pacman -Q "$split" 2> /dev/null | awk '{print $2}' || true)
+        if [[ "${installed:-}" != "$expected" ]]; then
+            need_build=1
+            printf ">>INFO %s desactualizado (%s -> %s)\n" \
+                "$split" "${installed:-ausente}" "$expected"
+        fi
+    done
+    if ((need_build == 0)); then
+        printf ">>INFO %s al dia (%s)\n" "$base" "$expected"
         continue
     fi
-    makepkg --noconfirm -C -c -d -f
-    built+=("$CLONE/$base"/*.pkg.tar.zst)
+    # makepkg -C es cleanbuild, no cambio de directorio como git -C; el
+    # subshell aisla el cd y construye sobre el PKGBUILD recien traido.
+    (cd "$CLONE/$base" && makepkg --noconfirm -C -c -d -f)
+    # Solo entran los splits de esta base en la version esperada; la
+    # depuracion y los rancios quedan fuera de la transaccion.
+    shopt -s nullglob
+    candidates=("$CLONE/$base/"*-"$expected"-*.pkg.tar.zst)
+    shopt -u nullglob
+    added=0
+    for f in ${candidates[@]+"${candidates[@]}"}; do
+        name=$(basename "$f")
+        [[ "$name" == *-debug-*.pkg.tar.zst ]] && continue
+        for split in "${splits[@]}"; do
+            if [[ "$name" == "$split-$expected-"* ]]; then
+                built+=("$f")
+                added=1
+                break
+            fi
+        done
+    done
+    # makepkg puede salir bien sin artefacto util ante un pkgname renombrado.
+    if ((added == 0)); then
+        printf ">>FAIL sin paquetes generados para %s (%s)\n" "$base" "$expected"
+        exit 1
+    fi
 done
 
 # ──「 Instalación 」─────────────────────────────────────────
@@ -64,6 +150,14 @@ done
 if ((${#built[@]})); then
     sudo pacman -U --noconfirm \
         "${built[@]}"
+    # Con la nueva version instalada, los rancios pierden su valor de
+    # rollback y se purgan acotados a los splits de cada base.
+    for base in "${AUR_BASES[@]}"; do
+        pkgver=$(sed -n 's/^pkgver=//p' "$CLONE/$base/PKGBUILD" | tr -d "'\"")
+        pkgrel=$(sed -n 's/^pkgrel=//p' "$CLONE/$base/PKGBUILD" | tr -d "'\"")
+        read -ra splits <<< "${BASE_SPLITS[$base]}"
+        purge_stale_pkgs "$CLONE/$base" "$pkgver-$pkgrel" "${splits[@]}"
+    done
     printf ">>PASS nvidia-580xx actualizado a %s\n" \
         "$(pacman -Q nvidia-580xx-utils | awk '{print $2}')"
 fi
