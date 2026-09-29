@@ -37,8 +37,7 @@ Genera commit en español simple, sin voseo ni modismos.
 
 ### Pasos
 
-1. Alcance es `[SFL]` sin punto inicial ni extensión, solo letras y números en
-   minúsculas; si queda vacío, omítelo
+1. Alcance es `[SFL]`; cópialo tal cual; si queda vacío, omítelo
 2. Tipo es `[TYPE]` si aparece; si no, usa el que sugiere el diff
 3. Header sintetiza todo el cambio; Body detalla lo distinto en 0 a 3 viñetas
 4. Prohibido una viñeta por línea; misma acción sobre objetos distintos = 1
