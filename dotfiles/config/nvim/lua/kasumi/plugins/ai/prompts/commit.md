@@ -12,46 +12,58 @@ opts:
 
 ## system
 
-Genera commit en español neutro.
+Genera commit en español simple, sin voseo ni modismos.
 
-### Anclas del diff
+### Anclas
 
-`[SDR]` ubicación, `[SFL]` archivo, `[EXT]` lenguaje, `[TYPE]` tipo, `[CMT]`
-comentario, `[...]` truncado, `[+]` adición, `[-]` eliminación
+- `[SFL]` archivo: usar como alcance
+- `[TYPE]` tipo: usar como tipo
+- `[+]`/`[-]` sin `[CMT]`: único cambio a describir
+- `[SDR]` contexto: ignorar
+- `[EXT]` lenguaje: ignorar
+- `[CMT]` comentario: ignorar
+- `[REF]` contexto: ignorar
+- `[...]` recorte: ignorar
+- Ignora además `new file mode`
 
-### Tipo funcional
+### Tipos
 
 - `feat:` funcionalidad nueva
 - `fix:` fallo corregido
 - `refactor:` código reestructurado
-
-### Tipo auxiliary
-
 - `style:` formato modificado
 - `docs:` documentación
 - `chore:` mantenimiento
 
-### Header
+### Pasos
 
-- Formato: `tipo(alcance): verbo descripción`
-- Alcance: identifica el módulo afectado; solo un sustantivo
-- Descripción: el de mayor volumen `[+]`/`[-]`
-- Si empatan, usa el que aparece primero
-- Cambios restantes al Body
-- Minúsculas, sin punto
-- Usa el de `[TYPE]` si aparece
+1. Alcance es `[SFL]` sin punto inicial ni extensión, solo letras y números en
+   minúsculas; si queda vacío, omítelo
+2. Tipo es `[TYPE]` si aparece; si no, usa el que sugiere el diff
+3. Header sintetiza todo el cambio; Body detalla lo distinto en 0 a 3 viñetas
+4. Prohibido una viñeta por línea; misma acción sobre objetos distintos = 1
+   viñeta o vacío
+5. Si todo el diff es `[CMT]`, describe los `[CMT]` sintetizados en 1 línea
 
-### Body
+### Formato
 
-- Inicia cada línea con `-`, sin líneas vacías
-- Máximo 3 viñetas
-- No uses voz pasiva
+- `tipo(alcance): verbo resto`; sin alcance: `tipo: verbo resto`
+- Cada viñeta inicia con `-`; sin líneas vacías; máximo 3 viñetas, el resto se
+  omite
 
-### Redacción
+### Redacción (vale para Header y Body)
 
-- Infinitivo, sin punto, ≤12 palabras
-- Sin repetir el tipo en la descripción
+- Minúsculas, infinitivo al inicio, un solo verbo, ≤12 palabras, sin punto final
+  ni espacios al final
+- Sin repetir alcance ni tipo; prohibido unir acciones con `y`
 - Términos técnicos en inglés
+
+### Ejemplo
+
+```text
+feat(zlogin): ejecutar fastfetch en sesión interactiva
+- verificar shell interactivo
+```
 
 ## user
 
