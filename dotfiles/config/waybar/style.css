@@ -392,8 +392,10 @@ window#waybar {
 }
 */
 
+/* Contador mpd en tono del usuario (#7797af, tope de la paleta de cava):
+   hex explícito fuera de color.css por pedido directo. */
 #mpd {
-  color: @mauve;
+  color: #7797af;
 }
 
 #mpd.2,
