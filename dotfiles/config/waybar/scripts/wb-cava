@@ -3,6 +3,15 @@
 # │                    VISUALIZADOR CAVA                     │
 # ╘══════════════════════════════════════════════════════════╛
 # Cava audio visualizer para Waybar
+#
+# NOTA (2026-10-07): este script fue auditado por consumo de CPU y declarado
+# inocente. Mediciones con `top -b -n 6 -d 5` bajo las mismas condiciones
+# (audio en reproducción): waybar 9.4% con framerate 15, 8.8% con framerate 45
+# y 9.5% con la variante parcial; cava externo 1-3% en todos los casos.
+# El recorte de framerate no mueve la aguja de waybar. En silencio waybar baja
+# a ~5.4% aunque el stream sigue a 45 líneas/s, por lo que el costo correlacionado
+# al audio proviene de los módulos reactivos (mpris, privacy, wireplumber),
+# no de este visualizador. No reintroducir throttling como supuesta corrección.
 
 set -euo pipefail
 
