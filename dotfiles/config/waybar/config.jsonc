@@ -129,7 +129,7 @@
     "format": " PKG {}",
     "interval": 300,
     "exec-if": "ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1",
-    "exec": "~/.config/sway/scripts/waybar-check-updates",
+    "exec": "~/.config/waybar/scripts/wb-check-updates",
     "on-click": "kitty -e paru -Syu",
     "signal": 8
   },
@@ -268,7 +268,7 @@
   // ── Visualizador De Audio (Cava) ───────────────────────────
   "custom/cava-internal": {
     "format": "{}",
-    "exec": "~/.config/sway/scripts/waybar-cava",
+    "exec": "~/.config/waybar/scripts/wb-cava",
     "on-click": "pkill -x waybar; swaymsg reload"
   },
 
