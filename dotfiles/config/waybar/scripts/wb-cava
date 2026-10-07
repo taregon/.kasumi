@@ -23,15 +23,14 @@ pkill -f "cava -p $config_file" 2> /dev/null || true
 sleep 0.1
 
 # Cava emite dígitos 0-7; sed los envuelve en spans Pango con el tono
-# verde del nivel (waybar interpreta markup con escape desactivado):
+# del nivel (waybar interpreta markup con escape desactivado):
 # 0→▁ 1→▂ 2→▃ 3→▄ 4→▅ 5→▆ 6→▇ 7→█
 # Idea problable "⢀⢠⢰⢸"
-# Paleta del usuario (2026-10-07, 2.ª escala): el nivel 7 usa el tono
-# más claro y desciende hacia el nivel 0. De los 9 tonos recibidos se
-# usan los 8 primeros; se descarta #2f3837 (casi indistinguible del
-# fondo en el nivel mínimo).
+# Paleta del usuario (2026-10-07, 14.ª escala): el nivel 7 usa el tono
+# más claro y desciende hacia el nivel 0. Los 8 tonos recibidos cubren
+# los 8 niveles sin descartes.
 bar_glyphs="▁▂▃▄▅▆▇█"
-bar_colors=(3a4641 45554b 516554 5d755e 698568 759672 82a67d 8fb887)
+bar_colors=(3b4852 43535e 4c5e6b 546978 5d7485 657f93 6e8ba1 7797af)
 # Sin espaciado con s/./& /g: esa regla insertaría espacios dentro
 # de las etiquetas y rompería el markup. La separación se repone con
 # un espacio tras cada </span>, fuera de las etiquetas.
