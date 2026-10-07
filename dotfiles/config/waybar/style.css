@@ -104,6 +104,7 @@ window#waybar {
 #bluetooth,
 #clock,
 #cpu,
+#custom-cava-internal,
 #custom-clipboard,
 #custom-launcher,
 #custom-pacman,
@@ -132,6 +133,12 @@ window#waybar {
   border: none;
   padding: 6px 8px;
   margin: 8px 0;
+}
+
+/* Visualizador cava contenido en caja base: su ancho fijo ya no empuja
+   a los módulos vecinos en cada frame. */
+#custom-cava-internal {
+  color: @overlay1;
 }
 
 /*

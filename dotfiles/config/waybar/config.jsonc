@@ -266,9 +266,11 @@
   },
 
   // ── Visualizador De Audio (Cava) ───────────────────────────
+  // Sin tooltip propio: su refresco continuo opacaba los tooltips vecinos.
   "custom/cava-internal": {
     "format": "{}",
     "exec": "~/.config/waybar/scripts/wb-cava",
+    "tooltip": false,
     "on-click": "pkill -x waybar; swaymsg reload"
   },
 
