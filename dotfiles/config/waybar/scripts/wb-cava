@@ -22,16 +22,29 @@ config_file="$HOME/.config/cava/cava-waybar.conf"
 pkill -f "cava -p $config_file" 2> /dev/null || true
 sleep 0.1
 
-# Cava emite dígitos 0-7; sed los reemplaza por glifos de barra en la salida:
+# Cava emite dígitos 0-7; sed los envuelve en spans Pango con el tono
+# verde del nivel (waybar interpreta markup con escape desactivado):
 # 0→▁ 1→▂ 2→▃ 3→▄ 4→▅ 5→▆ 6→▇ 7→█
 # Idea problable "⢀⢠⢰⢸"
+# Paleta del usuario (2026-10-07, 2.ª escala): el nivel 7 usa el tono
+# más claro y desciende hacia el nivel 0. De los 9 tonos recibidos se
+# usan los 8 primeros; se descarta #2f3837 (casi indistinguible del
+# fondo en el nivel mínimo).
 bar_glyphs="▁▂▃▄▅▆▇█"
-sed_script="s/;//g"
+bar_colors=(3a4641 45554b 516554 5d755e 698568 759672 82a67d 8fb887)
+# Sin espaciado con s/./& /g: esa regla insertaría espacios dentro
+# de las etiquetas y rompería el markup. La separación se repone con
+# un espacio tras cada </span>, fuera de las etiquetas.
+# Doble etapa: los hex del span contienen dígitos, por lo que sustituir
+# 0-7 en secuencia corrompería los spans ya insertados. Se transliteran
+# primero a mayúsculas A-H (ausentes en hex y etiquetas) y luego cada
+# letra se expande a su span.
+sed_script="s/;//g;y/01234567/ABCDEFGH/"
+bar_placeholders="ABCDEFGH"
 bar_length=${#bar_glyphs}
 for ((i = 0; i < bar_length; i++)); do
-    sed_script+=";s/$i/${bar_glyphs:$i:1}/g"
+    sed_script+=";s/${bar_placeholders:$i:1}/<span color='#${bar_colors[$i]}'>${bar_glyphs:$i:1}<\/span> /g"
 done
-sed_script+=";s/./& /g"
 
 cat > "$config_file" << 'EOF'
 [general]
