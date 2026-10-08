@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Compila orbit-ws desde el espejo desplegado e instala el binario.
+# Ruta: ~/.local/bin/kasumi/helpers/orbit-ws-install
+# Idempotente: recompila e instala en cada ejecución.
+
+set -euo pipefail
+
+# ── Setup ─────────────────────────────────────────────────────────────
+readonly SRC_DIR="$HOME/.config/waybar/orbit-ws"
+readonly DEST="$HOME/.local/bin/kasumi/orbit-ws"
+
+# ── Helpers de bajo nivel ─────────────────────────────────────────────
+orbit_die() {
+  printf 'orbit-ws-install: %s\n' "$1" >&2
+  exit 1
+}
+
+# ── Lógica intermedia ─────────────────────────────────────────────────
+orbit_check_prereqs() {
+  command -v cargo >/dev/null 2>&1 \
+    || orbit_die "cargo no encontrado; instalar toolchain Rust (rustup)"
+  [[ -f "$SRC_DIR/Cargo.toml" ]] \
+    || orbit_die "espejo ausente en $SRC_DIR; ejecutar dotdrop install -p kasumi"
+}
+
+orbit_build_install() {
+  (
+    cd "$SRC_DIR"
+    cargo build --release
+    install -m755 target/release/orbit-ws "$DEST"
+    rm -rf target Cargo.lock
+  )
+}
+
+# ── Punto de entrada ──────────────────────────────────────────────────
+orbit_check_prereqs
+orbit_build_install
+printf 'orbit-ws-install: instalado en %s\n' "$DEST"

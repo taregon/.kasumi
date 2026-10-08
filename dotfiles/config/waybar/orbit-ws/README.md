@@ -19,14 +19,11 @@ módulos ni assets) y configuración.
 Requiere toolchain Rust (`rustup` con canal estable).
 
 ```bash
-cd ~/.config/waybar/orbit-ws
-cargo build --release
-install -m755 target/release/orbit-ws ~/.local/bin/orbit-ws
-rm -rf target Cargo.lock
+orbit-ws-install
 ```
 
-`rm -rf target Cargo.lock` evita dejar artefactos de compilación en la
-configuración desplegada (`Cargo.lock` se regenera en cada build).
+El helper compila este espejo e instala en `~/.local/bin/kasumi/orbit-ws`,
+limpiando artefactos (`target/`, `Cargo.lock`) al terminar.
 
 ## Despliegue
 
@@ -35,8 +32,9 @@ dotdrop install -p kasumi   # enlaza workspaces.toml en ~/.config/waybar/orbit-w
 swaymsg reload              # recarga waybar con el nuevo exec
 ```
 
-Waybar ejecuta `orbit-ws ~/.config/waybar/orbit-ws/workspaces.toml` (ver
-`custom/workspaces` en `../config.jsonc`).
+Waybar ejecuta `~/.local/bin/kasumi/orbit-ws
+~/.config/waybar/orbit-ws/workspaces.toml` (ver `custom/workspaces` en
+`../config.jsonc`; ruta absoluta porque `kasumi/` no está en `PATH`).
 
 ## Sincronización con el repositorio
 

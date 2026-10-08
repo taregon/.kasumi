@@ -6,6 +6,9 @@
 *.bk
 *.old
 
+# Binario instalado por helpers/orbit-ws-install — regenerable via cargo
+dotfiles/scripts/orbit-ws
+
 # Zsh cache — regenerable via compinit
 .zcompdump*
 *.zcompdump*
