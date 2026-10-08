@@ -3,39 +3,39 @@
  *
  * Kasumi palette
  *
- * ── Referencia colores-waybar ──────────────────────────
- * Variable    Hex       Apariciones  Uso
- * ──────────────────────────────────────────────────────
- * @base       #242a2e   10           Fondos de barra y módulos
- * @text       #d8dee9    2           tooltip label, battery
- * @overlay0   #5a656c    2           Borde de tooltip
- * @overlay1   #5D6C74   10           Estados desactivados, secundarios
- * @lavender   #b7bdf8    2           Color default en #waybar *
- * @sky        #91d7e3    4           Reloj, cpu, memory, expand hover
- * @teal       #8bd5ca    1           temperature
- * @green      #a6da95    6           network, bluetooth, disk, playing
- * @yellow     #eed49f    5           Warnings, backlight, capslock
- * @red        #bf616a    7           Crítico, error, custom-power
- * @mauve      #c6a0f6    6           mode, mpris, mpd, scratchpad
- * @flamingo   #f0c6c6    2           wireplumber audio
+ * ── Referencia colores-waybar ───────────────────
+ * Variable    Apariciones  Uso
+ * ───────────────────────────────────────────────
+ * @overlay1   11           Estados desactivados, secundarios
+ * @base        9           Fondos de barra y módulos
+ * @red         7           Crítico, error, custom-power
+ * @green       6           network, bluetooth, disk, playing
+ * @yellow      6           Warnings, backlight, capslock
+ * @mauve       6           mode, mpris, mpd, scratchpad
+ * @sky         4           Reloj, cpu, memory, expand hover
+ * @text        2           tooltip label, battery
+ * @overlay0    2           Borde de tooltip
+ * @lavender    2           Color default en #waybar *
+ * @flamingo    2           wireplumber audio
+ * @teal        1           temperature
  */
 
 /* ── Fondos ───────────────────────────────────────────────*/
-@define-color base   #242a2e;
+@define-color base       #242a2e;
 
 /* ── Texto ────────────────────────────────────────────────*/
-@define-color text     #d8dee9;
+@define-color text       #d8dee9;
 
 /* ── Overlay ──────────────────────────────────────────────*/
-@define-color overlay0 #5a656c;
-@define-color overlay1 #5d6c74;
+@define-color overlay0   #5a656c;
+@define-color overlay1   #5d6c74;
 
 /* ── Acentos ──────────────────────────────────────────────*/
-@define-color lavender  #b7bdf8;
-@define-color sky       #91d7e3;
-@define-color teal      #89DCEB;
-@define-color green     #aadb9c;
-@define-color yellow    #eed49f;
-@define-color red       #F86E88;
-@define-color mauve     #9795e5;
-@define-color flamingo  #FF9DCD;
+@define-color lavender   #b7bdf8;
+@define-color sky        #91d7e3;
+@define-color teal       #89DCEB;
+@define-color green      #aadb9c;
+@define-color yellow     #eed49f;
+@define-color red        #F86E88;
+@define-color mauve      #9795e5;
+@define-color flamingo   #FF9DCD;
