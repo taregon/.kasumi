@@ -59,7 +59,7 @@
 
   // ── Workspaces (Orbit-Ws) ──────────────────────────────────
   "custom/workspaces": {
-    "exec": "~/indicator/orbit-ws/target/release/orbit-ws ~/.kasumi/dotfiles/config/waybar/workspaces.toml",
+    "exec": "orbit-ws ~/.config/waybar/orbit-ws/workspaces.toml",
     "return-type": "json",
     "format": "{}",
     "on-click": "swaymsg workspace next",
