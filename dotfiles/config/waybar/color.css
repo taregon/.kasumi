@@ -3,6 +3,21 @@
  *
  * Kasumi palette
  *
+ * ── Referencia colores-waybar ──────────────────────────
+ * Variable    Hex       Apariciones  Uso
+ * ──────────────────────────────────────────────────────
+ * @base       #242a2e   10           Fondos de barra y módulos
+ * @text       #d8dee9    2           tooltip label, battery
+ * @overlay0   #5a656c    2           Borde de tooltip
+ * @overlay1   #5D6C74   10           Estados desactivados, secundarios
+ * @lavender   #b7bdf8    2           Color default en #waybar *
+ * @sky        #91d7e3    4           Reloj, cpu, memory, expand hover
+ * @teal       #8bd5ca    1           temperature
+ * @green      #a6da95    6           network, bluetooth, disk, playing
+ * @yellow     #eed49f    5           Warnings, backlight, capslock
+ * @red        #bf616a    7           Crítico, error, custom-power
+ * @mauve      #c6a0f6    6           mode, mpris, mpd, scratchpad
+ * @flamingo   #f0c6c6    2           wireplumber audio
  */
 
 /* ── Fondos ───────────────────────────────────────────────*/
@@ -18,9 +33,9 @@
 /* ── Acentos ──────────────────────────────────────────────*/
 @define-color lavender  #b7bdf8;
 @define-color sky       #91d7e3;
-@define-color teal      #8bd5ca;
-@define-color green     #a6da95;
+@define-color teal      #89DCEB;
+@define-color green     #aadb9c;
 @define-color yellow    #eed49f;
-@define-color red       #bf616a;
-@define-color mauve     #c6a0f6;
-@define-color flamingo  #f0c6c6;
+@define-color red       #F86E88;
+@define-color mauve     #9795e5;
+@define-color flamingo  #FF9DCD;

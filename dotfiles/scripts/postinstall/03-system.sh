@@ -195,10 +195,11 @@ install_sys_fonts() {
     echo -e "${C_STEP}  Instalando fuentes y tipografías${C_RST}"
     local pkgs
     pkgs=(
-        noto-fonts                  # Fuentes noto (sans, serif, mono)
-        noto-fonts-cjk              # Fuentes noto para chino, japonés, coreano
-        noto-fonts-emoji            # Fuentes noto con emojis
-        ttf-ibm-plex                # Fuente IBM Plex (sans, mono, serif)
+        noto-fonts       # Fuentes noto (sans, serif, mono)
+        noto-fonts-cjk   # Fuentes noto para chino, japonés, coreano
+        noto-fonts-emoji # Fuentes noto con emojis
+        ttf-ibm-plex     # Fuente IBM Plex (sans, mono, serif)
+        otf-departure-mono-nerd
         ttf-iosevka-nerd            # Fuente monoespaciada con ligaduras (Iosevka)
         ttf-jetbrains-mono-nerd     # Fuente JetBrains Mono
         ttf-juliamono               # Fuente JuliaMono
@@ -320,11 +321,12 @@ install_app_general() {
     echo -e "${C_STEP}  Instalando aplicaciones generales${C_RST}"
     local pkgs
     pkgs=(
-        iwgtk            # Interfaz GTK para redes inalámbricas con iwd
-        keepassxc        # Gestor de contraseñas local con base de datos cifrada
-        localsend-bin    # Compartir archivos en red local sin configuración compleja
-        spek-x-git       # Analizador visual de frecuencias en archivos de audio
-        syncthing        # Sincronización privada y cifrada entre dispositivos
+        iwgtk         # Interfaz GTK para redes inalámbricas con iwd
+        keepassxc     # Gestor de contraseñas local con base de datos cifrada
+        localsend-bin # Compartir archivos en red local sin configuración compleja
+        spek          # Analizador visual de frecuencias en archivos de audio
+        syncthing     # Sincronización privada y cifrada entre dispositivos
+        obs-studio obs-v4l2sink
         transmission-cli # Cliente BitTorrent en línea de comandos
         upscayl-bin      # Mejora y reescalado de imágenes con IA
         # Libre Office
@@ -400,27 +402,28 @@ install_utils_terminal() {
         htmlq              # Similar a jq, pero para HTML
         httpx-bin          # Toolkit HTTP multipropósito para reconocimiento web
         jq                 # Procesador de JSON en CLI
-        kitty              # Emulador de terminal acelerado por GPU
-        less               # Paginador de texto para terminal
-        lnav               # Visor avanzado de logs (TUI)
-        mlr                # Procesador de datos estilo awk (Miller)
-        opencode-bin       # Asistente interactivo de IA para desarrollo de software
-        pacman-contrib     # Utilidades adicionales para pacman
-        pandoc             # Conversor de documentos markup entre formatos
-        pastel             # Generación, análisis, conversión y manipulación de colores
-        pup-bin            # Parseador de HTML desde la línea de comandos
-        python-curl_cffi   # Dependencia de impersonación de yt-dlp
-        python-pipx        # Ejecuta aplicaciones Python en entornos aislados
-        ripdrag            # drag & drop desde terminal
-        ripgrep            # Búsqueda recursiva rápida (rg)
-        source-highlight   # Resaltado de sintaxis para less y otros
-        stow               # Gestor minimalista de dotfiles basado en symlinks modulares y reversibles
-        toilet             # Generador de texto ASCII estilizado
-        vivid              # Generador moderno de LS_COLORS con temas
-        xan                # Utilidad para procesamiento de tablas CSV
-        zoxide             # Navegación inteligente entre directorios
-        zsh                # Shell interactivo avanzada
-        zsh-completions    # Autocompletado adicional para zsh
+        ugrep
+        kitty            # Emulador de terminal acelerado por GPU
+        less             # Paginador de texto para terminal
+        lnav             # Visor avanzado de logs (TUI)
+        mlr              # Procesador de datos estilo awk (Miller)
+        opencode-bin     # Asistente interactivo de IA para desarrollo de software
+        pacman-contrib   # Utilidades adicionales para pacman
+        pastel           # Generación, análisis, conversión y manipulación de colores
+        pup-bin          # Parseador de HTML desde la línea de comandos
+        python-curl_cffi # Dependencia de impersonación de yt-dlp
+        python-pipx      # Ejecuta aplicaciones Python en entornos aislados
+        ripdrag          # drag & drop desde terminal
+        ripgrep          # Búsqueda recursiva rápida (rg)
+        source-highlight # Resaltado de sintaxis para less y otros
+        stow             # Gestor minimalista de dotfiles basado en symlinks modulares y reversibles
+        toilet           # Generador de texto ASCII estilizado
+        go-yq            # portable command-line YAML, JSON, XML, CSV, TOML, HCL and properties processor
+        vivid            # Generador moderno de LS_COLORS con temas
+        xan              # Utilidad para procesamiento de tablas CSV
+        zoxide           # Navegación inteligente entre directorios
+        zsh              # Shell interactivo avanzada
+        zsh-completions  # Autocompletado adicional para zsh
     )
     install_pkgs "${pkgs[@]}"
 

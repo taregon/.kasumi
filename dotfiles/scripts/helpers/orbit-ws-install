@@ -11,25 +11,25 @@ readonly DEST="$HOME/.local/bin/kasumi/orbit-ws"
 
 # ── Helpers de bajo nivel ─────────────────────────────────────────────
 orbit_die() {
-  printf 'orbit-ws-install: %s\n' "$1" >&2
-  exit 1
+    printf 'orbit-ws-install: %s\n' "$1" >&2
+    exit 1
 }
 
 # ── Lógica intermedia ─────────────────────────────────────────────────
 orbit_check_prereqs() {
-  command -v cargo >/dev/null 2>&1 \
-    || orbit_die "cargo no encontrado; instalar toolchain Rust (rustup)"
-  [[ -f "$SRC_DIR/Cargo.toml" ]] \
-    || orbit_die "espejo ausente en $SRC_DIR; ejecutar dotdrop install -p kasumi"
+    command -v cargo > /dev/null 2>&1 \
+        || orbit_die "cargo no encontrado; instalar toolchain Rust (rustup)"
+    [[ -f "$SRC_DIR/Cargo.toml" ]] \
+        || orbit_die "espejo ausente en $SRC_DIR; ejecutar dotdrop install -p kasumi"
 }
 
 orbit_build_install() {
-  (
-    cd "$SRC_DIR"
-    cargo build --release
-    install -m755 target/release/orbit-ws "$DEST"
-    rm -rf target Cargo.lock
-  )
+    (
+        cd "$SRC_DIR"
+        cargo build --release
+        install -m755 target/release/orbit-ws "$DEST"
+        rm -rf target Cargo.lock
+    )
 }
 
 # ── Punto de entrada ──────────────────────────────────────────────────

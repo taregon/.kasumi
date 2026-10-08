@@ -1,4 +1,3 @@
----
 # El manual por si necesitas mas ajustes
 # https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
@@ -23,8 +22,7 @@ gui:
     #   - cyan
     # defaultFgColor:
     #   - '#a9b7ba'
-
 git:
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --paging=never
+      command: delta --paging=never

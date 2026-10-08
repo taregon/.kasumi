@@ -47,7 +47,7 @@ start_recording() {
     fi
 
     # Limite de 120s; timeout o el toggle manual detienen wf-recorder
-    timeout -s INT 120 wf-recorder -g "$geometry" --file="$filename" "${encoder_args[@]}" || true
+    timeout -s INT 1200 wf-recorder -g "$geometry" --file="$filename" "${encoder_args[@]}" || true
     rm -f "$LOCKFILE"
     notify-send -t 2500 "󰿏  Grabación" "Finalizada"
 }

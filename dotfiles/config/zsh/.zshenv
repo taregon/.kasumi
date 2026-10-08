@@ -6,6 +6,21 @@
 # Precedencia: aquí se ajustan PATH y SSH_AUTH_SOCK;
 # tiene prioridad sobre bootstrap para env no interactivo.
 # No re-exportar ZDOTDIR (ya seteado por ~/.zshenv).
+# ly: ZDOTDIR hereda vía ly→sway (proc); XDG_STATE_HOME no en sway environ.
+# /etc/ly/setup.sh:28 re-exec zsh → ~/.zshenv (ZDOTDIR) antes, luego $ZDOTDIR/.zprofile.
+# Cada zsh hijo re-sourcea ZDOTDIR/.zshenv; systemctl --user show-environment no lo refleja.
+
+# ──「 Xdg State 」───────────────────────────────────────────
+# State persistente no portable (historial, logs) — spec 0.8 https://specifications.freedesktop.org/basedir/latest/
+# Default ~/.local/state si no exportada; idempotente via :-
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+[[ -d "$XDG_STATE_HOME" ]] || mkdir -p -m 0700 "$XDG_STATE_HOME"
+
+# ──「 Xdg Data 」────────────────────────────────────────────
+# Datos persistentes (plugins, assets) — spec 0.8 https://specifications.freedesktop.org/basedir/latest/
+# Default ~/.local/share si no exportada; idempotente via :-
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+[[ -d "$XDG_DATA_HOME" ]] || mkdir -p -m 0700 "$XDG_DATA_HOME"
 
 # ──「 Ssh Agent 」───────────────────────────────────────────
 # Permite usar claves SSH sin pedir passphrase cada vez

@@ -1,11 +1,7 @@
-# ███████╗██╗    ██╗ █████╗ ██╗   ██╗
-# ██╔════╝██║    ██║██╔══██╗╚██╗ ██╔╝
-# ███████╗██║ █╗ ██║███████║ ╚████╔╝
-# ╚════██║██║███╗██║██╔══██║  ╚██╔╝
-# ███████║╚███╔███╔╝██║  ██║   ██║
-# ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝
-# https://swaywm.org/sway_wiki/
-
+# vim: filetype=swayconfig
+# ╒═════════════════════════════════════════════════════════════╕
+# │                    CONFIGURACIÓN PRINCIPAL                  │
+# ╘═════════════════════════════════════════════════════════════╛
 # Punto de entrada: carga secuencial de módulos en config.d/.
 # El orden define dependencias: variables en 10-input se usan en 50-keybindings.
 # No mover el include fuera de este archivo.

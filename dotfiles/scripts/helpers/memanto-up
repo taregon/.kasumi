@@ -5,7 +5,9 @@
 
 set -euo pipefail
 
-# ── Fix: red host + permisos para embeddings ─────────────────────────
+# ╒══════════════════════════════════════════════════════════╕
+# │         FIX: RED HOST + PERMISOS PARA EMBEDDINGS         │
+# ╘══════════════════════════════════════════════════════════╛
 # Si moorcheh queda con items:0 y el job de embedding falla con
 # "failed calling ollama embeddings endpoint", aplicar estos pasos:
 #
@@ -27,9 +29,8 @@ set -euo pipefail
 # Verificar con: curl http://localhost:8080/health | grep items
 # La causa raíz: Ollama escucha solo en 127.0.0.1, y el contenedor
 # en bridge no puede alcanzarlo via host.docker.internal (Linux).
-# ─────────────────────────────────────────────────────────────────────
 
-# ── Constantes ──────────────────────────────────────────────────────
+# ──「 Constantes 」──────────────────────────────────────────
 
 MOORCHEH_URL="http://localhost:8080"
 MEMANTO_URL="http://localhost:8000"
@@ -45,7 +46,7 @@ memanto_cleanup() {
 }
 trap memanto_cleanup EXIT
 
-# ── Helpers ─────────────────────────────────────────────────────────
+# ──「 Helpers 」─────────────────────────────────────────────
 
 memanto_health() {
     curl -sf "$1/health" -o /dev/null 2> /dev/null
@@ -100,7 +101,7 @@ memanto_activate_agent() {
     fi
 }
 
-# ── Orquestacion ────────────────────────────────────────────────────
+# ──「 Orquestacion 」────────────────────────────────────────
 
 echo -e "\n  Iniciando MEMANTO"
 
@@ -120,7 +121,7 @@ echo "    API:     $MEMANTO_URL"
 echo "    Backend: $MOORCHEH_URL"
 echo "    Agente:  $AGENT_ID"
 
-# ── Verificar persistencia ─────────────────────────────────────────
+# ──「 Verificar Persistencia 」──────────────────────────────
 # Si items es 0 el pipeline de embeddings falló (Ollama inalcanzable
 # desde el contenedor). Ver sección "Fix: red host + permisos" arriba.
 items=$(curl -sf "$MOORCHEH_URL/health" | python3 -c "

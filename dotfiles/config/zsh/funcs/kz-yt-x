@@ -13,6 +13,11 @@
 # Uso: kz-yt-x <url>
 #      kz-yt-x -a <archivo_de_enlaces>
 
+# ╒══════════════════════════════════════════════════════════╕
+# │             DESCARGA DE TWEETS DE X/TWITTER              │
+# ╘══════════════════════════════════════════════════════════╛
+
+# ──「 CONFIGURACIÓN Y DEPENDENCIAS 」────────────────────────
 # Navegador: firefox, chrome, chromium, brave, edge, opera, vivaldi, whale
 readonly BROWSER="firefox"
 
@@ -22,7 +27,7 @@ readonly ARCHIVE_FILE="$HOME/.cache/.d4ta/t"
 # shell-colors: STEP/HELP/INFO -> C_BLU; WARN/SKIP -> C_YEL;
 # PASS -> C_GRN; FAIL -> C_RED. Sub-tareas (~>) y notas van sin color.
 readonly C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_GRN=$'\033[0;32m' \
-         C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+    C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 
 # Dependencias externas requeridas: fallo temprano y sin ruido si faltan.
 local dep
@@ -54,7 +59,7 @@ local -a yt_args=(
 # Impersonate requiere curl_cffi compatible; versiones incompatibles
 # lo marcan unavailable y abortan. Se verifica soporte antes de usar.
 if yt-dlp --list-impersonate-targets 2>&1 | ugrep -q 'Chrome.*curl_cffi.*unavailable'; then
-        printf '%s>>INFO Omitiendo impersonate (curl_cffi incompatible).%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>INFO Omitiendo impersonate (curl_cffi incompatible).%s\n' "$C_BLU" "$C_RST"
 else
     yt_args+=(--impersonate chrome)
 fi
@@ -85,7 +90,7 @@ if [[ -z "${targets[1]:-}" ]]; then
     return 0
 fi
 
-# ──「 Limpieza De Urls 」────────────────────────────────────
+# ──「 LIMPIEZA DE URLS 」────────────────────────────────────
 # Enlaces de share de X llevan query de tracking (?t=...&s=09) que no
 # afecta a la descarga; se descarta para pasar la URL canonica a yt-dlp.
 # Un perfil (x.com/<usuario>) no tiene tweet descargable; se marca ERR
@@ -112,6 +117,7 @@ if ((${#targets} == 0)); then
     return 1
 fi
 
+# ──「 VALIDACIÓN DE ENLACES 」───────────────────────────────
 local tmpdir url code
 tmpdir=$(mktemp -d)
 # Limpieza garantizada del temporal en cualquier salida de la funcion.
@@ -134,7 +140,7 @@ for url in "${targets[@]}"; do
     fi
 done
 
-# ──「 Filtro De Redireccion Externa 」───────────────────────
+# ──「 FILTRO DE REDIRECCIÓN EXTERNA 」───────────────────────
 # Tweets que solo enlazan a otro sitio (link-posts) o no tienen video
 # nativo: yt-dlp intentaria seguir el enlace externo y no descargaria.
 # La syndication publica de X devuelve el media del tweet por ID, sin auth.
@@ -166,6 +172,8 @@ if ((${#final_links} == 0)); then
     printf '%s>>FAIL Ningún enlace válido.%s\n' "$C_RED" "$C_RST" >&2
     return 1
 fi
+
+# ──「 DESCARGA 」────────────────────────────────────────────
 if yt-dlp "${yt_args[@]}" "${final_links[@]}"; then
     printf '%s>>PASS Descarga completada.%s\n' "$C_GRN" "$C_RST"
     return 0

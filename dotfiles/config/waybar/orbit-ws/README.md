@@ -32,9 +32,11 @@ dotdrop install -p kasumi   # enlaza workspaces.toml en ~/.config/waybar/orbit-w
 swaymsg reload              # recarga waybar con el nuevo exec
 ```
 
-Waybar ejecuta `~/.local/bin/kasumi/orbit-ws
-~/.config/waybar/orbit-ws/workspaces.toml` (ver `custom/workspaces` en
-`../config.jsonc`; ruta absoluta porque `kasumi/` no está en `PATH`).
+Waybar ejecuta
+`~/.local/bin/kasumi/orbit-ws
+~/.config/waybar/orbit-ws/workspaces.toml` (ver
+`custom/workspaces` en `../config.jsonc`; ruta absoluta porque `kasumi/` no está
+en `PATH`).
 
 ## Sincronización con el repositorio
 
