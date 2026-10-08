@@ -58,10 +58,12 @@
   },
 
   // ── Workspaces (Orbit-Ws) ──────────────────────────────────
+  // Sin tooltip propio: el área es solo indicador visual.
   "custom/workspaces": {
     "exec": "~/.local/bin/kasumi/orbit-ws ~/.config/waybar/orbit-ws/workspaces.toml",
     "return-type": "json",
     "format": "{}",
+    "tooltip": false,
     "on-click": "swaymsg workspace next",
     "on-scroll-up": "swaymsg workspace prev",
     "on-scroll-down": "swaymsg workspace next"
