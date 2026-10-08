@@ -18,7 +18,7 @@ readonly ICC_PROFILE="$HOME/.config/lf/icc/sRGB-v2-magic.icc"
 # Dependencias requeridas (documentación y verificación opcional)
 # xxhsum (xxhash), magick (imagemagick), chafa, kitty, pdftoppm (poppler),
 # ffmpegthumbnailer, als (atool), aria2c, 7z (p7zip), ffprobe (ffmpeg),
-# bat, jq, pandoc
+# bat, jq, pandoc (pandoc-bin AUR, sin deps Haskell)
 
 mkdir -p "$CACHE_DIR"
 
@@ -34,7 +34,10 @@ lfpreview_check_deps() {
         command -v "$dep" > /dev/null || missing+=("$dep")
     done
     if ((${#missing[@]} > 0)); then
-        printf 'lfpreview: dependencias faltantes: %s\n' "${missing[*]}" >&2
+        # Causa: lf solo renderiza stdout en el panel; stderr queda oculto y el fallo parece panel vacío.
+        local msg="lfpreview: dependencias faltantes: ${missing[*]}"
+        printf '%s\n' "$msg" >&2
+        printf '%s\n' "$msg"
         return 1
     fi
     return 0
