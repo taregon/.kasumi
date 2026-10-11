@@ -1,28 +1,120 @@
 # vim: filetype=zsh
-# Compara la interpolación de colores en RGB, HSL, Lab y OkLab.
-# Permite visualizar cómo cada espacio de color genera transiciones
-# diferentes entre los mismos colores de origen y destino.
+# Compara la interpolacion RGB/HSL/Lab/OkLab entre dos colores y emite
+# el degradado de un espacio como lista hexadecimal copiable.
+
+setopt localoptions noksharrays
 
 local color1="$1"
 local color2="$2"
 local steps="${3:-10}"
 local view="${4:-d}"
+local space_arg="${5:-oklab}"
 local gradient
 local -a rgb_gradient hsl_gradient lab_gradient oklab_gradient
+local C_BLU C_RED C_RST set_space canon lview lspace space i
 
-[ -z "$color1" ] || [ -z "$color2" ] && {
-    echo "Uso: kzpastel-gradient-spaces <color1> <color2> [pasos] [vista]"
-    echo ""
-    echo "  Vistas:"
-    echo "    d|default  Default — bloques compactos"
-    echo "    t|table    Tabla   — bloques anchos"
-    return 1
-}
+if [[ -t 1 ]]; then
+    C_BLU=$'\033[0;34m'
+    C_RED=$'\033[0;31m'
+    C_RST=$'\033[0m'
+else
+    C_BLU=''
+    C_RED=''
+    C_RST=''
+fi
 
-((steps > 1)) || {
-    echo "Se requieren al menos 2 pasos"
+if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
+    printf '%s>>HELP Uso: kzpastel-gradient-spaces <color1> <color2> [pasos] [vista] [espacio]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Vistas\n'
+    printf '      d, default               Bloques compactos por paso (defecto)\n'
+    printf '      t, table                 Bloques anchos por paso\n'
+    printf '      s, set                   Lista hex plana del espacio dado\n'
+    printf '      rgb|hsl|lab|oklab|lch    Alias directo de set para ese espacio\n'
+    printf '  :: Espacio (solo con s|set)\n'
+    printf '      rgb|hsl|lab|oklab|lch    Espacio de interpolacion (defecto: oklab)\n'
+    printf '  :: Opciones\n'
+    printf '      -h, --help               Muestra esta ayuda\n'
+    return 0
+fi
+
+# ──「 VALIDACION 」────────────────────────────────────────────
+if [[ -z "$color1" || -z "$color2" ]]; then
+    printf '%s>>FAIL Faltan colores de origen y destino.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Pasa <color1> <color2>; usa -h para ver el uso.\n' >&2
+    return 2
+fi
+
+if ! command -v pastel > /dev/null 2>&1; then
+    printf '%s>>FAIL pastel no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Instala pastel para generar gradientes.\n' >&2
     return 1
-}
+fi
+
+if [[ "$steps" != <-> ]]; then
+    printf '%s>>FAIL Pasos no es un entero: %s.%s\n' "$C_RED" "$steps" "$C_RST" >&2
+    printf '   Pasa un entero mayor o igual a 2.\n' >&2
+    return 2
+fi
+
+if ((steps < 2)); then
+    printf '%s>>FAIL Se requieren al menos 2 pasos.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Pasa un valor mayor o igual a 2.\n' >&2
+    return 2
+fi
+
+lview="${view:l}"
+lspace="${space_arg:l}"
+case "$lview" in
+    d | default | t | table)
+        set_space=''
+        ;;
+    s | set)
+        set_space="$lspace"
+        ;;
+    rgb | hsl | lab | oklab | lch)
+        set_space="$lview"
+        ;;
+    *)
+        printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
+        printf '   Usa d, t, s o un espacio (rgb|hsl|lab|oklab|lch); usa -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
+
+# ──「 GENERACION 」────────────────────────────────────────────
+if [[ -n "$set_space" ]]; then
+    case "$set_space" in
+        rgb)
+            canon='RGB'
+            ;;
+        hsl)
+            canon='HSL'
+            ;;
+        lab)
+            canon='Lab'
+            ;;
+        oklab)
+            canon='OkLab'
+            ;;
+        lch)
+            canon='LCh'
+            ;;
+        *)
+            printf '%s>>FAIL Espacio invalido: %s.%s\n' "$C_RED" "$space_arg" "$C_RST" >&2
+            printf '   Usa rgb|hsl|lab|oklab|lch.\n' >&2
+            return 2
+            ;;
+    esac
+
+    gradient="$(pastel gradient --colorspace "$canon" "$color1" "$color2" --number "$steps" | pastel format hex)"
+    if [[ -z "$gradient" ]]; then
+        printf '%s>>FAIL Gradiente vacio en espacio %s.%s\n' "$C_RED" "$canon" "$C_RST" >&2
+        printf '   Revisa los colores de origen y destino.\n' >&2
+        return 1
+    fi
+    printf '%s\n' "${(@f)gradient}"
+    return 0
+fi
 
 local spaces=(
     RGB
@@ -31,72 +123,53 @@ local spaces=(
     OkLab
 )
 
-# Genera cuatro gradientes entre los mismos colores variando únicamente
-# el espacio de interpolación (RGB, HSL, Lab y OkLab).
-#
-# pastel gradient devuelve un color por línea. La salida se normaliza a
-# hexadecimal mediante 'pastel format hex' para que todos los espacios
-# puedan compararse con la misma representación.
-#
-# La expansión '${(@f)...}' divide la cadena multilínea en un array; cada
-# posición del array representa el mismo paso dentro del gradiente:
-#
-#   rgb_gradient[1]   → primer color RGB
-#   hsl_gradient[1]   → primer color HSL
-#   lab_gradient[1]   → primer color Lab
-#   oklab_gradient[1] → primer color OkLab
-
+# pastel gradient emite un color por linea; se normaliza a hexadecimal
+# para comparar espacios con la misma representacion. '${(@f)...}'
+# parte por newline y cada posicion representa el mismo paso.
 for space in "${spaces[@]}"; do
-    gradient=$(
+    gradient="$(
         pastel gradient \
             --colorspace "$space" \
             "$color1" \
             "$color2" \
             --number "$steps" \
             | pastel format hex
-    )
+    )"
 
     case "$space" in
-        RGB) rgb_gradient=("${(@f)gradient}") ;;
-        HSL) hsl_gradient=("${(@f)gradient}") ;;
-        Lab) lab_gradient=("${(@f)gradient}") ;;
-        OkLab) oklab_gradient=("${(@f)gradient}") ;;
+        RGB)
+            rgb_gradient=("${(@f)gradient}")
+            ;;
+        HSL)
+            hsl_gradient=("${(@f)gradient}")
+            ;;
+        Lab)
+            lab_gradient=("${(@f)gradient}")
+            ;;
+        OkLab)
+            oklab_gradient=("${(@f)gradient}")
+            ;;
     esac
-
 done
 
-# Impresión de múltiples segmentos coloreados en una misma línea.
-#
-# pastel paint agrega un salto de línea al finalizar. La opción '-n'
-# (no newline) evita ese comportamiento y permite encadenar múltiples
-# bloques coloreados en una única fila.
-#
-# Ejemplo:
-#
-#   pastel paint -n yellow "YELLOW"
-#   echo -n " message without color"
-#   echo -n " RED" | pastel paint -n red
-#   echo " GREEN" | pastel paint -n green
-#
-# Resultado:
-#
-#   YELLOW message without color RED GREEN
-#
-# Esto permite construir tablas y comparadores visuales de colores
-# imprimiendo varios bloques consecutivos y emitiendo un único salto
-# de línea al final de cada fila.
+if ((${#rgb_gradient[@]} == 0)); then
+    printf '%s>>FAIL Gradiente vacio para la comparativa.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Revisa los colores de origen y destino.\n' >&2
+    return 1
+fi
 
-case "$view" in
+# ──「 VISTAS 」────────────────────────────────────────────────
+# pastel paint -n no emite salto; cada fila cierra con un unico printf.
+case "$lview" in
     d | default)
         for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
             pastel paint -n "${hsl_gradient[i]}" "🮍███🮌 HSL ${hsl_gradient[i]} "
             pastel paint -n "${rgb_gradient[i]}" "🮍███🮌 RGB ${rgb_gradient[i]} "
             pastel paint -n "${lab_gradient[i]}" "🮍███🮌 Lab ${lab_gradient[i]} "
             pastel paint -n "${oklab_gradient[i]}" "🮍███🮌 OkLab ${oklab_gradient[i]} "
-            echo # <- único responsable del salto de línea en este ciclo.
+            printf '\n'
         done
         ;;
-
     t | table)
         for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
             pastel paint -n "${hsl_gradient[i]}" \
@@ -107,12 +180,7 @@ case "$view" in
                 " 🮔 ╠═════   ═════╣ Lab ${lab_gradient[i]} "
             pastel paint -n "${oklab_gradient[i]}" \
                 " 🮔 ╠═════   ═════╣ OkLab ${oklab_gradient[i]} "
-            echo
+            printf '\n'
         done
         ;;
-    *)
-        echo "Vista inválida: $view"
-        return 1
-        ;;
-
 esac
