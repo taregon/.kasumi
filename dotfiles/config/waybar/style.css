@@ -8,14 +8,16 @@
 @import "color.css";
 
 tooltip {
-  background: @base;
+  background: alpha(@base, 0.88);
   border: 1px solid @overlay0;
   border-color: @overlay0;
-  border-radius: 4px;
+  border-radius: 0;
 }
 tooltip label {
   color: @text;
   padding: 4px 8px;
+  font-family: "JetbrainsMono Nerd Font";
+  font-size: 14px;
 }
 
 #waybar * {

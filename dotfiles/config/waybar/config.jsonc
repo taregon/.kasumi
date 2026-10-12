@@ -115,7 +115,7 @@
     "path": "/",
     "interval": 60,
     "format": " {percentage_used}%",
-    "tooltip-format": "{used} / {total}  ({percentage_used}%)",
+    "tooltip-format": "{used} ({percentage_used}%) / {total}",
     "states": {
       "warning": 80,
       "critical": 90
@@ -410,7 +410,7 @@
     "format": "󰂯 {status}", // Encendido sin conexión
     "format-disabled": "󰂲", // Apagado
     "format-connected": "󰂰 {num_connections}", // Dispositivo conectado
-    "tooltip-format": "Dispositivo(s): {device_alias}",
+    "tooltip-format": "Device: {device_alias}\n{device_battery_percentage}% 󰂎",
     "on-click": "blueberry"
   },
 
@@ -422,8 +422,8 @@
     "format-disconnected": "󰌙 Off",
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "tooltip": true,
-    "tooltip-format-wifi": "{essid}  ({signalStrength}%)  {frequency}GHz\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
-    "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⬇ {bandwidthDownBytes}  ⬆ {bandwidthUpBytes}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ipaddr}/{cidr}",
     "on-click": "iwgtk"
   },
 
@@ -438,7 +438,7 @@
     "interval": 15,
     "design-capacity": true,
     "tooltip": true,
-    "tooltip-format": "{timeTo}    {cycles}    {health}%",
+    "tooltip-format": " {health}%\n{timeTo}  {cycles}",
     "events": {
       "on-discharging-warning": "notify-send -u normal '󱇏  Batería baja' 'Queda poco...'",
       "on-discharging-critical": "notify-send -u critical '󰯈  Batería crítica' 'Conectá el cargador'"
