@@ -294,30 +294,43 @@
   },
 
   // ── Media (Mpris) ──────────────────────────────────────────
-  // Acciones built-in:
-  //    • Click izquierdo -> play_pause       • Boton 8/9  -> previous/next
-  //    • Scroll up/down  -> position +/-5    • Click der/med -> deshabilitados
+  // Acciones internas (libplayerctl): click = play-pause, medio = previous,
+  // derecho = next, atras/adelante (boton 8/9) = previous/next.
+  // Scroll ejecuta playerctl position (comando generico, no accion interna).
   // Doc: https://github.com/Alexays/Waybar/wiki/Module:-MPRIS
   "mpris": {
-    "format": "{player_icon} {status_icon} {dynamic}",
-    "format-paused": "{player_icon} {status_icon} {dynamic}",
-    "player-icons": {
-      //   "mpd": "󰎆",
-      //   "firefox": "󰌀",
-      //   "default": "_music"
-    },
-    "status-icons": {
-      "playing": "",
-      "paused": "",
-      "stopped": ""
-    },
+    "player": "playerctld",
+
+    // ── Formato principal (por estado) ───────────────────────
+    "format": "{dynamic}",
+    "format-playing": "{dynamic}",
+    // "format-paused": "<i>{dynamic}</i>",
+    "format-stopped": "",
+
+    // ── Truncado inteligente ─────────────────────────────────
+    "title-len": 30,
+    "artist-len": 20,
+    "album-len": 30,
+    "dynamic-len": 30,
     "dynamic-order": ["title", "artist"],
-    "on-click-right": "",
-    "on-click-middle": "",
-    "on-scroll-up": "playerctl position 5+",
-    "on-scroll-down": "playerctl position 5-",
+    "dynamic-importance-order": ["title", "artist"],
+    "dynamic-separator": " • ",
+    "truncate-hours": true,
+    "ellipsis": "‥",
+
+    // ── Tooltips (texto plano, sin Pango; sin {elapsed}, propio de mpd) ──
     "tooltip": true,
-    "max-length": 26
+    "tooltip-format": "{title}\n{artist}\n{album}",
+    "tooltip-format-playing": "{title}\n{artist}\n{album}",
+    "tooltip-format-paused": "{title}\n{artist}\n{album}",
+    "enable-tooltip-len-limits": true,
+    "max-length": 32,
+
+    // ── Acciones (click der/med deshabilitados; scroll salta posición) ──
+    "on-click-middle": "",
+    "on-click-right": "",
+    "on-scroll-up": "playerctl position 5+",
+    "on-scroll-down": "playerctl position 5-"
   },
 
   // ── Media (Scrollmpris — Fallback) ─────────────────────────
