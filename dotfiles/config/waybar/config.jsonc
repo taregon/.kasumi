@@ -406,6 +406,8 @@
       "default": ["󰍮", "󰍮", "󰍬"]
     },
     "scroll-step": 2,
+    "tooltip": true,
+    "tooltip-format": "{node_name}  {volume}%",
     "on-click": "kitty --title wiremix -e wiremix",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
   },
@@ -414,7 +416,8 @@
   "backlight": {
     "format": "{icon} {percent: >1}%",
     "format-icons": ["", ""],
-    "scroll-step": 5
+    "scroll-step": 5,
+    "tooltip": false
   },
 
   // ── Conectividad ───────────────────────────────────────────
