@@ -174,6 +174,9 @@ export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 # Ctrl+t: archivos (via fd)
 export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 
+# Alt+c: directorios (via fd, mismos excludes que Ctrl+t)
+export FZF_ALT_C_COMMAND="fd --type d ${FZF_FD_OPTS[@]}"
+
 # ──「 History 」─────────────────────────────────────────────
 # █   █ ▀▀█▀▀ ▄▀▀▀▀ ▀▀█▀▀ ▄▀▀▀▄ █▀▀▀▄ █   █
 # █▀▀▀█   █    ▀▀▀▄   █   █   █ █▀▀▀▄ ▀▀▀▀█
@@ -239,7 +242,7 @@ zshaddhistory() {
 # Flujos multi-paso: kzsys-zinit-update, kzsys-zinit-repair.
 
 # Autocompletado extra para cientos de comandos; usa zicompinit+zicdreplay (Turbo).
-zinit ice wait'0' lucid blockf atload'zicompinit; zicdreplay'
+zinit ice wait'0' lucid blockf atload'zicompinit; zicdreplay' atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
 zinit ice wait'0' lucid blockf # interfaz avanzada para autocompletado con fzf
