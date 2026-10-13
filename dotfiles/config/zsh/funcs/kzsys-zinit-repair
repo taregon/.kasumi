@@ -1,0 +1,10 @@
+# vim: filetype=zsh
+# Repara completions gestionadas por zinit (tras update con completions rotas)
+
+(($+functions[zinit])) || {
+    echo 'zinit no disponible en esta sesión'
+    return 1
+}
+zinit cclear || return 2
+zinit creinstall zsh-users/zsh-completions || return 3
+zinit cdreplay -q || return 4
