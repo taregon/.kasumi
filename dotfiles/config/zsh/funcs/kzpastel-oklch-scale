@@ -1,0 +1,226 @@
+# vim: filetype=zsh
+# Genera una escala de 9 pasos (100-900) en Oklch con ancla movil.
+# La conversion sRGB <-> Oklch la hace `pastel` (extra/pastel);
+# la interpolacion polar y la inversion idempotente viven aqui.
+#
+# Metodo (espacio Oklch de Bjorn Ottosson, hue constante):
+# ancla en paso 200, progress = (step-200)/700,
+# endpoint light = max(0.97, L0), endpoint dark = min(0.18, L0),
+# C_step = C0 * (1-progress*0.5).
+# Ancla movil: si A != 200 se invierte la formula para hallar el
+# 200 implicito (C200 = CA/(1-progressA*0.5); L200 despejado por
+# rama de endpoint validando su condicion); el ancla 900 se
+# rechaza porque L900 = endpoint no determina L200 (ambiguo).
+# Gamut: pastel recorta en vez de fallar, asi que el ajuste
+# reduce chroma (*0.9, hasta 24 intentos) hasta que el ida y
+# vuelta via pastel coincide (tol L/C 0.004, hue 2 grados).
+# Precision conocida (frontera de gamut de pastel): pasos en
+# gamut exactos; extremo 900 +/-2 RGB; cromas altas con mismo
+# hue pero chroma hasta ~0.015 mayor que la referencia a mitad
+# de escala; idempotencia +/-1 RGB por redondeo a 4 decimales.
+# Verificado contra la paleta kasumi local (verde y rojo).
+
+setopt localoptions noksharrays
+
+local color="${1:-}"
+local anchor="${2:-200}"
+local mode="${3:-dark}"
+local view="${4:-}"
+local C_BLU C_RED C_RST
+
+if [[ -t 1 ]]; then
+    C_BLU=$'\033[0;34m'
+    C_RED=$'\033[0;31m'
+    C_RST=$'\033[0m'
+else
+    C_BLU=''
+    C_RED=''
+    C_RST=''
+fi
+
+local lview="${view:l}"
+if [[ -z "$lview" ]]; then
+    if [[ -t 1 ]]; then
+        lview='d'
+    else
+        lview='s'
+    fi
+fi
+
+case "$lview" in
+    d | default | s | set | clean)
+        ;;
+    *)
+        printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
+        printf '   Usa d (bloques) o clean (lista plana); -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
+
+if [[ "$color" == "-h" || "$color" == "--help" ]]; then
+    printf '%s>>HELP Uso: kzpastel-oklch-scale <color> [paso-ancla] [modo] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Argumentos\n'
+    printf '      <color>        Hex original, ej: #80c8a1\n'
+    printf '      [paso-ancla]   Paso donde vive el color (100-800, defecto: 200)\n'
+    printf '      [modo]         light|dark (defecto: dark)\n'
+    printf '      [vista]        d|default|s|set|clean (defecto: d en terminal, s en pipe)\n'
+    printf '  :: Vistas\n'
+    printf '      d, default               Bloques con color por paso\n'
+    printf '      s, set, clean            Lista hex plana (consumo agentico)\n'
+    printf '  :: Notas\n'
+    printf '      El ancla 900 no se admite: no deja pasos superiores e\n'
+    printf '      impide reconstruir el 200 implicito (solucion ambigua).\n'
+    printf '      La conversion Oklch la delega en pastel; la escala\n'
+    printf '      usa interpolacion polar en Oklch con hue constante.\n'
+    return 0
+fi
+
+if [[ -z "$color" ]]; then
+    printf '%s>>FAIL Falta el color de origen.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Uso: kzpastel-oklch-scale <color> [paso-ancla] [modo] [vista].\n' >&2
+    return 2
+fi
+
+if ! command -v pastel > /dev/null 2>&1; then
+    printf '%s>>FAIL pastel no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Instala con: paru -S pastel.\n' >&2
+    return 1
+fi
+
+if ! command -v python3 > /dev/null 2>&1; then
+    printf '%s>>FAIL python3 no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
+
+local raw rc
+raw="$(
+    python3 - "$color" "$anchor" "$mode" << 'PY'
+import re
+import subprocess
+import sys
+
+def run_pastel(*args):
+    proc = subprocess.run(
+        ["pastel", *args],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise SystemExit(f"pastel fallo: {proc.stderr.strip()}")
+    return proc.stdout.strip()
+
+OKLCH_RE = re.compile(
+    r"oklch\(\s*([0-9.]+)\s*,?\s+([0-9.]+)\s*,?\s+([0-9.]+)\s*\)",
+    re.IGNORECASE,
+)
+
+def to_oklch(color):
+    out = run_pastel("format", "oklch", color)
+    match = OKLCH_RE.search(out)
+    if not match:
+        raise SystemExit(f"No se pudo leer Oklch de {color}: {out}")
+    return float(match.group(1)), float(match.group(2)), float(match.group(3))
+
+def to_hex(l, c, h):
+    l = min(1.0, max(0.0, l))
+    c = max(0.0, c)
+    h = h % 360.0
+    return run_pastel("format", "hex", f"oklch({l:.6f} {c:.6f} {h:.4f})")
+
+def hue_distance(a, b):
+    return abs(((a - b) % 360.0 + 540.0) % 360.0 - 180.0)
+
+def fit_hex(l, c, h, l_tol=0.004, c_tol=0.004, h_tol=2.0):
+    # Replica fitOklch: reduce chroma hasta que el ida y vuelta
+    # via pastel coincida; pastel recorta gamut, no falla.
+    l = min(1.0, max(0.0, l))
+    c = max(0.0, c)
+    h = h % 360.0
+    candidate = c
+    for _ in range(24):
+        rendered = to_hex(l, candidate, h)
+        bl, bc, bh = to_oklch(rendered)
+        dl = abs(bl - l)
+        dc = abs(bc - candidate)
+        dh = hue_distance(bh, h)
+        hue_ok = dh <= h_tol or candidate < 0.01 or bc < 0.005
+        if dl <= l_tol and dc <= c_tol and hue_ok:
+            return rendered
+        candidate *= 0.9
+    return to_hex(l, 0.0, h)
+
+color, anchor_raw, mode = sys.argv[1], sys.argv[2], sys.argv[3].lower()
+
+try:
+    anchor = int(anchor_raw)
+except ValueError:
+    raise SystemExit(f"Ancla invalida: {anchor_raw} (usa 100-800 en pasos de 100)")
+if anchor not in range(100, 901, 100):
+    raise SystemExit(f"Ancla invalida: {anchor} (usa 100-800 en pasos de 100)")
+if anchor == 900:
+    raise SystemExit("El ancla 900 no deja pasos superiores para interpolar")
+if mode not in ("light", "dark"):
+    raise SystemExit(f"Modo invalido: {mode} (usa light|dark)")
+
+anchor_hex = run_pastel("format", "hex", color)
+la, ca, ha = to_oklch(anchor_hex)
+
+if anchor == 200:
+    l200, c200, h200 = la, ca, ha
+else:
+    progress_a = (anchor - 200) / 700.0
+    denom = 1.0 - progress_a
+    c200 = ca / (1.0 - progress_a * 0.5)
+    # Invierte LA = L200 + (endpoint(L200)-L200)*progressA por rama,
+    # validando la condicion de la rama (max/min del endpoint).
+    l200 = None
+    if mode == "light":
+        # Rama endpoint = 0.97 (vale si L200 < 0.97).
+        candidate = (la - 0.97 * progress_a) / denom
+        if candidate < 0.97:
+            l200 = candidate
+        else:
+            # Rama endpoint = L200: entonces LA = L200.
+            l200 = la
+    else:
+        # Rama endpoint = 0.18 (vale si L200 > 0.18).
+        candidate = (la - 0.18 * progress_a) / denom
+        if candidate > 0.18:
+            l200 = candidate
+        else:
+            l200 = la
+    h200 = ha
+
+endpoint = max(0.97, l200) if mode == "light" else min(0.18, l200)
+
+for step in range(100, 901, 100):
+    if step == anchor:
+        print(f"{step} {anchor_hex}")
+        continue
+    progress = (step - 200) / 700.0
+    l = l200 + (endpoint - l200) * progress
+    c = c200 * (1.0 - progress * 0.5)
+    print(f"{step} {fit_hex(l, c, h200)}")
+PY
+)"
+rc=$?
+if ((rc != 0)); then
+    return "$rc"
+fi
+
+# pastel paint -n no emite salto; cada fila cierra con un unico printf.
+local line step hex
+for line in "${(@f)raw}"; do
+    step="${line%% *}"
+    hex="${line##* }"
+    case "$lview" in
+        d | default)
+            pastel paint -n "$hex" "🮍███🮌 ${step} ${hex} "
+            printf '\n'
+            ;;
+        *)
+            printf '%s %s\n' "$step" "$hex"
+            ;;
+    esac
+done
