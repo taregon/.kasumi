@@ -23,6 +23,7 @@
 # gamut exactos; extremo 900 +/-2 RGB; cromas altas con mismo hue pero chroma hasta
 # ~0.015 mayor que la referencia a mitad de escala; idempotencia +/-1 RGB por redondeo
 # a 4 decimales. Verificado contra la paleta kasumi local (verde y rojo).
+# La linea del ancla lleva [*] en ambas vistas (filtrable con grep).
 
 setopt localoptions noksharrays
 
@@ -67,7 +68,7 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '  :: Vistas\n'
     printf '      block          Bloques con color por paso\n'
     printf '      set            Lista hex plana (consumo agentico)\n'
-    printf '      Formato set:   PASO HEX a 3 digitos, una linea por paso\n'
+    printf '      Formato set:   PASO HEX a 3 digitos + [*] en el ancla\n'
     printf '  :: Notas\n'
     printf '      Las anclas 900 y 950 no se admiten: no dejan pasos superiores ni\n'
     printf '      margen para reconstruir el 200 implicito (900 ambiguo).\n'
@@ -237,17 +238,23 @@ if ((rc != 0)); then
 fi
 
 # pastel paint -n no emite salto; cada fila cierra con un unico printf.
-local line step hex
+# 10# fuerza base 10: los pasos vienen a 3 digitos y 050 seria octal.
+local line step hex mark
 for line in "${(@f)raw}"; do
     step="${line%% *}"
     hex="${line##* }"
+    if ((10#$step == 10#$anchor)); then
+        mark=' [*]'
+    else
+        mark=''
+    fi
     case "$lview" in
         block)
-            pastel paint -n "$hex" "🮍███🮌 ${step} ${hex} "
+            pastel paint -n "$hex" "🮍███🮌 ${step} ${hex}${mark} "
             printf '\n'
             ;;
         *)
-            printf '%s %s\n' "$step" "$hex"
+            printf '%s %s%s\n' "$step" "$hex" "$mark"
             ;;
     esac
 done
