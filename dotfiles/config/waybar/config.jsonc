@@ -302,9 +302,8 @@
     "player": "playerctld",
 
     // ── Formato principal (por estado) ───────────────────────
-    "format": "{dynamic}",
-    "format-playing": "{dynamic}",
-    // "format-paused": "<i>{dynamic}</i>",
+    "format": " {dynamic}",
+    "format-playing": " {dynamic}",
     "format-stopped": "",
 
     // ── Truncado inteligente ─────────────────────────────────
