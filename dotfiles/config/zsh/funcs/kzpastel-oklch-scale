@@ -8,19 +8,19 @@
 # endpoint dark = min(0.18, L0), C_step = C0 * (1-progress*0.5). La rampa es
 # heuristica local, no parte de la norma: solo define conversion, hue powerless en
 # acromaticos e interpolacion polar. Escala 100-900: convencion Material/Tailwind
-# (posiciones de claro a oscuro, 500 como identidad); aqui 9 pasos sin 50/950 y ancla
-# por defecto en 200 para tintes claros de fondo. Ancla movil: si A != 200 se invierte
-# la formula para hallar el 200 implicito (C200 = CA/(1-progressA*0.5); L200 despejado
-# por rama de endpoint validando su condicion); el ancla 900 se rechaza porque
-# L900 = endpoint no determina L200 (ambiguo). Gamut: Oklch no tiene gamut, sRGB si;
-# pastel recorta en vez de fallar, asi que el ajuste aproxima fitOklch reduciendo chroma
-# (*0.9, hasta 24 intentos) hasta que el ida y vuelta via pastel coincide
-# (tol L/C 0.004, hue 2 grados, hue libre en casi acromaticos). El fallback a C=0
-# siempre mapea porque el eje acromatico con L in [0,1] esta en gamut. Precision
-# conocida (frontera de gamut de pastel): pasos en gamut exactos; extremo 900 +/-2 RGB;
-# cromas altas con mismo hue pero chroma hasta ~0.015 mayor que la referencia a mitad
-# de escala; idempotencia +/-1 RGB por redondeo a 4 decimales. Verificado contra la
-# paleta kasumi local (verde y rojo).
+# (posiciones de claro a oscuro, 500 como identidad); aqui 9 pasos sin 50/950 por
+# decision local, sin apego estricto; ancla por defecto en 200 para tintes claros de
+# fondo. Ancla movil: si A != 200 se invierte la formula para hallar el 200 implicito
+# (C200 = CA/(1-progressA*0.5); L200 despejado por rama de endpoint validando su
+# condicion); el ancla 900 se rechaza porque L900 = endpoint no determina L200 (ambiguo).
+# Gamut: Oklch no tiene gamut, sRGB si; pastel recorta en vez de fallar, asi que el
+# ajuste aproxima fitOklch reduciendo chroma (*0.9, hasta 24 intentos) hasta que el ida
+# y vuelta via pastel coincide (tol L/C 0.004, hue 2 grados, hue libre en casi
+# acromaticos). El fallback a C=0 siempre mapea porque el eje acromatico con
+# L in [0,1] esta en gamut. Precision conocida (frontera de gamut de pastel): pasos en
+# gamut exactos; extremo 900 +/-2 RGB; cromas altas con mismo hue pero chroma hasta
+# ~0.015 mayor que la referencia a mitad de escala; idempotencia +/-1 RGB por redondeo
+# a 4 decimales. Verificado contra la paleta kasumi local (verde y rojo).
 
 setopt localoptions noksharrays
 
@@ -28,16 +28,10 @@ local color="${1:-}"
 local anchor="${2:-200}"
 local mode="${3:-dark}"
 local view="${4:-}"
-local C_BLU C_RED C_RST
-
 if [[ -t 1 ]]; then
-    C_BLU=$'\033[0;34m'
-    C_RED=$'\033[0;31m'
-    C_RST=$'\033[0m'
+    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 else
-    C_BLU=''
-    C_RED=''
-    C_RST=''
+    local -r C_BLU='' C_RED='' C_RST=''
 fi
 
 local lview="${view:l}"
@@ -101,6 +95,23 @@ import re
 import subprocess
 import sys
 
+# Trazabilidad: base y divisor de progress; endpoints de la rampa local;
+# decaimiento de croma; intentos de ajuste; tolerancias del ida y vuelta.
+BASE_STEP = 200
+SPAN = 700.0
+L_LIGHT = 0.97
+L_DARK = 0.18
+C_DECAY = 0.5
+FIT_TRIES = 24
+FIT_FACTOR = 0.9
+TOL_L = 0.004
+TOL_C = 0.004
+TOL_H = 2.0
+STEP_MIN = 100
+STEP_MAX = 900
+STEP = 100
+HUE_MAX = 360.0
+
 def run_pastel(*args):
     proc = subprocess.run(
         ["pastel", *args],
@@ -127,20 +138,21 @@ def to_oklch(color):
 def to_hex(l, c, h):
     l = min(1.0, max(0.0, l))
     c = max(0.0, c)
-    h = h % 360.0
+    h = h % HUE_MAX
     return run_pastel("format", "hex", f"oklch({l:.6f} {c:.6f} {h:.4f})")
 
 def hue_distance(a, b):
-    return abs(((a - b) % 360.0 + 540.0) % 360.0 - 180.0)
+    # 540 = HUE_MAX + 180: desplaza para medir distancia circular con signo.
+    return abs(((a - b) % HUE_MAX + 540.0) % HUE_MAX - 180.0)
 
-def fit_hex(l, c, h, l_tol=0.004, c_tol=0.004, h_tol=2.0):
+def fit_hex(l, c, h, l_tol=TOL_L, c_tol=TOL_C, h_tol=TOL_H):
     # Aproxima fitOklch de CSS Color 4: reduce chroma hasta que el ida y vuelta
     # via pastel coincida; pastel recorta gamut, no falla.
     l = min(1.0, max(0.0, l))
     c = max(0.0, c)
-    h = h % 360.0
+    h = h % HUE_MAX
     candidate = c
-    for _ in range(24):
+    for _ in range(FIT_TRIES):
         rendered = to_hex(l, candidate, h)
         bl, bc, bh = to_oklch(rendered)
         dl = abs(bl - l)
@@ -149,7 +161,7 @@ def fit_hex(l, c, h, l_tol=0.004, c_tol=0.004, h_tol=2.0):
         hue_ok = dh <= h_tol or candidate < 0.01 or bc < 0.005
         if dl <= l_tol and dc <= c_tol and hue_ok:
             return rendered
-        candidate *= 0.9
+        candidate *= FIT_FACTOR
     return to_hex(l, 0.0, h)
 
 color, anchor_raw, mode = sys.argv[1], sys.argv[2], sys.argv[3].lower()
@@ -158,9 +170,9 @@ try:
     anchor = int(anchor_raw)
 except ValueError:
     raise SystemExit(f"Ancla invalida: {anchor_raw} (usa 100-800 en pasos de 100)")
-if anchor not in range(100, 901, 100):
+if anchor not in range(STEP_MIN, STEP_MAX + 1, STEP):
     raise SystemExit(f"Ancla invalida: {anchor} (usa 100-800 en pasos de 100)")
-if anchor == 900:
+if anchor == STEP_MAX:
     raise SystemExit("El ancla 900 no deja pasos superiores para interpolar")
 if mode not in ("light", "dark"):
     raise SystemExit(f"Modo invalido: {mode} (usa light|dark)")
@@ -168,41 +180,41 @@ if mode not in ("light", "dark"):
 anchor_hex = run_pastel("format", "hex", color)
 la, ca, ha = to_oklch(anchor_hex)
 
-if anchor == 200:
+if anchor == BASE_STEP:
     l200, c200, h200 = la, ca, ha
 else:
-    progress_a = (anchor - 200) / 700.0
+    progress_a = (anchor - BASE_STEP) / SPAN
     denom = 1.0 - progress_a
-    c200 = ca / (1.0 - progress_a * 0.5)
+    c200 = ca / (1.0 - progress_a * C_DECAY)
     # Invierte LA = L200 + (endpoint(L200)-L200)*progressA por rama,
     # validando la condicion de la rama (max/min del endpoint).
     l200 = None
     if mode == "light":
-        # Rama endpoint = 0.97 (vale si L200 < 0.97).
-        candidate = (la - 0.97 * progress_a) / denom
-        if candidate < 0.97:
+        # Rama endpoint = L_LIGHT (vale si L200 < L_LIGHT).
+        candidate = (la - L_LIGHT * progress_a) / denom
+        if candidate < L_LIGHT:
             l200 = candidate
         else:
             # Rama endpoint = L200: entonces LA = L200.
             l200 = la
     else:
-        # Rama endpoint = 0.18 (vale si L200 > 0.18).
-        candidate = (la - 0.18 * progress_a) / denom
-        if candidate > 0.18:
+        # Rama endpoint = L_DARK (vale si L200 > L_DARK).
+        candidate = (la - L_DARK * progress_a) / denom
+        if candidate > L_DARK:
             l200 = candidate
         else:
             l200 = la
     h200 = ha
 
-endpoint = max(0.97, l200) if mode == "light" else min(0.18, l200)
+endpoint = max(L_LIGHT, l200) if mode == "light" else min(L_DARK, l200)
 
-for step in range(100, 901, 100):
+for step in range(STEP_MIN, STEP_MAX + 1, STEP):
     if step == anchor:
         print(f"{step} {anchor_hex}")
         continue
-    progress = (step - 200) / 700.0
+    progress = (step - BASE_STEP) / SPAN
     l = l200 + (endpoint - l200) * progress
-    c = c200 * (1.0 - progress * 0.5)
+    c = c200 * (1.0 - progress * C_DECAY)
     print(f"{step} {fit_hex(l, c, h200)}")
 PY
 )"
