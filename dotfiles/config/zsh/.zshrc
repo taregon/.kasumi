@@ -171,6 +171,9 @@ export FZF_CTRL_R_OPTS="$FZF_DEFAULT_OPTS
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
 
+# Default: lista base de fzf desnudo (via fd)
+export FZF_DEFAULT_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
+
 # Ctrl+t: archivos (via fd)
 export FZF_CTRL_T_COMMAND="fd --type f ${FZF_FD_OPTS[@]}"
 
