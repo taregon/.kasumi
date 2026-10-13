@@ -3,17 +3,25 @@
 # La conversion sRGB <-> Oklch la hace `pastel` (extra/pastel);
 # la interpolacion polar y la inversion idempotente viven aqui.
 #
-# Metodo (espacio Oklch de Bjorn Ottosson, hue constante):
+# Metodo (Oklch de CSS Color 4, hue constante; matrices de Bjorn Ottosson):
 # ancla en paso 200, progress = (step-200)/700,
 # endpoint light = max(0.97, L0), endpoint dark = min(0.18, L0),
-# C_step = C0 * (1-progress*0.5).
+# C_step = C0 * (1-progress*0.5). La rampa es heuristica local,
+# no parte de la norma: la norma solo define conversion,
+# hue powerless en acromaticos e interpolacion polar.
+# Escala 100-900: convencion Material/Tailwind (posiciones de
+# claro a oscuro, 500 como identidad); aqui 9 pasos sin 50/950
+# y ancla por defecto en 200 para tintes claros de fondo.
 # Ancla movil: si A != 200 se invierte la formula para hallar el
 # 200 implicito (C200 = CA/(1-progressA*0.5); L200 despejado por
 # rama de endpoint validando su condicion); el ancla 900 se
 # rechaza porque L900 = endpoint no determina L200 (ambiguo).
-# Gamut: pastel recorta en vez de fallar, asi que el ajuste
-# reduce chroma (*0.9, hasta 24 intentos) hasta que el ida y
-# vuelta via pastel coincide (tol L/C 0.004, hue 2 grados).
+# Gamut: Oklch no tiene gamut, sRGB si; pastel recorta en vez
+# de fallar, asi que el ajuste aproxima fitOklch reduciendo
+# chroma (*0.9, hasta 24 intentos) hasta que el ida y vuelta
+# via pastel coincide (tol L/C 0.004, hue 2 grados, hue libre
+# en casi acromaticos). El fallback a C=0 siempre mapea porque
+# el eje acromatico con L in [0,1] esta en gamut.
 # Precision conocida (frontera de gamut de pastel): pasos en
 # gamut exactos; extremo 900 +/-2 RGB; cromas altas con mismo
 # hue pero chroma hasta ~0.015 mayor que la referencia a mitad
@@ -132,7 +140,7 @@ def hue_distance(a, b):
     return abs(((a - b) % 360.0 + 540.0) % 360.0 - 180.0)
 
 def fit_hex(l, c, h, l_tol=0.004, c_tol=0.004, h_tol=2.0):
-    # Replica fitOklch: reduce chroma hasta que el ida y vuelta
+    # Aproxima fitOklch de CSS Color 4: reduce chroma hasta que el ida y vuelta
     # via pastel coincida; pastel recorta gamut, no falla.
     l = min(1.0, max(0.0, l))
     c = max(0.0, c)
