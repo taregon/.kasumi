@@ -234,6 +234,10 @@ zshaddhistory() {
 # ▄▀▀▀    █   █ ▀▄█   █     █
 # ▀▀▀▀▀ ▀▀▀▀▀ ▀   ▀ ▀▀▀▀▀   ▀
 
+# NOTA: Runbook on-demand (sin envoltorio): zinit times -s -m, status --all,
+# changes <plugin>, report, bindkeys, completions/csearch/cdlist, recall/glance.
+# Flujos multi-paso: kzsys-zinit-update, kzsys-zinit-repair.
+
 # Autocompletado extra para cientos de comandos; usa zicompinit+zicdreplay (Turbo).
 zinit ice wait'0' lucid blockf atload'zicompinit; zicdreplay'
 zinit light zsh-users/zsh-completions
