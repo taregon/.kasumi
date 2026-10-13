@@ -1,5 +1,5 @@
 # vim: filetype=zsh
-# Genera una escala de 11 pasos (50-950) en Oklch con ancla movil.
+# Genera una escala base de 9 pasos (100-900), 11 con full (50-950), en Oklch.
 # La conversion sRGB <-> Oklch la hace `pastel` (extra/pastel); la interpolacion
 # polar y la inversion idempotente viven aqui.
 #
@@ -10,8 +10,8 @@
 # acromaticos e interpolacion polar. Escala 50-950: convencion Material/Tailwind
 # (posiciones de claro a oscuro, 500 como identidad); base de 9 pasos, full agrega
 # 50 y 950 por decision local, sin apego estricto; pasos a 3 digitos (050) para no
-# romper alineacion. Ancla por defecto en 200 para tintes claros de fondo. Ancla movil: si A != 200 se
-# invierte la formula para hallar el 200 implicito
+# romper alineacion. Ancla por defecto en 200 para tintes claros de fondo.
+# Ancla movil: si A != 200 se invierte la formula para hallar el 200 implicito
 # (C200 = CA/(1-progressA*0.5); L200 despejado por rama de endpoint validando su
 # condicion); las anclas 900 y 950 se rechazan porque no dejan pasos superiores
 # (900 ambiguo: L900 = endpoint no determina L200). El 50 y el 950 extrapolan la rampa.
@@ -60,13 +60,14 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpastel-oklch-scale <color> [paso-ancla] [modo] [vista] [extras]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
     printf '      <color>        Hex original, ej: #80c8a1\n'
-    printf '      [paso-ancla]   Paso donde vive el color (50-800, defecto: 200)\n'
+    printf '      [paso-ancla]   Paso donde vive el color (defecto: 200; 50-800 en full)\n'
     printf '      [modo]         light|dark|l|d (defecto: dark)\n'
     printf '      [vista]        block|set (defecto: block en terminal, set en pipe)\n'
     printf '      [extras]       base|full (defecto: base; full agrega 50 y 950)\n'
     printf '  :: Vistas\n'
     printf '      block          Bloques con color por paso\n'
     printf '      set            Lista hex plana (consumo agentico)\n'
+    printf '      Formato set:   PASO HEX a 3 digitos, una linea por paso\n'
     printf '  :: Notas\n'
     printf '      Las anclas 900 y 950 no se admiten: no dejan pasos superiores ni\n'
     printf '      margen para reconstruir el 200 implicito (900 ambiguo).\n'
@@ -114,7 +115,6 @@ TOL_H = 2.0
 # Escala base de 9 pasos; full agrega 50 y 950 (extremos de la rampa clasica).
 BASE_STEPS = (100, 200, 300, 400, 500, 600, 700, 800, 900)
 EXTRA_STEPS = (50, 950)
-ANCHOR_MIN = 50
 ANCHOR_MAX = 800
 HUE_MAX = 360.0
 # Abreviaturas de modo.
@@ -182,7 +182,7 @@ mode = MODE_ABBR.get(mode, mode)
 try:
     anchor = int(anchor_raw)
 except ValueError:
-    raise SystemExit(f"Ancla invalida: {anchor_raw} (usa 100-800 en pasos de 100)")
+    raise SystemExit(f"Ancla invalida: {anchor_raw} (usa {STEPS[0]}-800 en pasos de 100)")
 if anchor not in STEPS:
     raise SystemExit(f"Ancla invalida: {anchor} (usa {STEPS[0]}-800 en pasos de 100)")
 if anchor > ANCHOR_MAX:
