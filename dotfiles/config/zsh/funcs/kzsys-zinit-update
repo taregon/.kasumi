@@ -1,0 +1,11 @@
+# vim: filetype=zsh
+# Actualiza plugins y zinit con parada ante fallo (requiere zinit cargado)
+
+(($+functions[zinit])) || {
+    echo 'zinit no disponible en esta sesión'
+    return 1
+}
+zinit status --all || return 2
+zinit update --parallel || return 3
+zinit self-update --no-pager || return 4
+echo 'Reinicia con: exec zsh'
