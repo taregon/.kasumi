@@ -19,7 +19,9 @@
 # ajuste aproxima fitOklch reduciendo chroma (*0.9, hasta 24 intentos) hasta que el ida
 # y vuelta via pastel coincide (tol L/C 0.004, hue 2 grados, hue libre en casi
 # acromaticos). El fallback a C=0 siempre mapea porque el eje acromatico con
-# L in [0,1] esta en gamut. Precision conocida (frontera de gamut de pastel): pasos en
+# L in [0,1] esta en gamut. Refs: Ottosson 2020 (matrices D65), MDN oklch()
+# (L C H), CSS Color 4 (gamut mapping con JND 0.02 en deltaEOK; aqui descenso
+# *0.9 con tol 0.004). Precision conocida (frontera de gamut de pastel): pasos en
 # gamut exactos; extremo 900 (950 en full) +/-2 RGB; cromas altas con mismo hue pero
 # chroma hasta ~0.015 mayor que la referencia a mitad de escala; idempotencia
 # +/-1 RGB por redondeo a 4 decimales. Verificado contra la paleta kasumi local.
@@ -76,6 +78,7 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      margen para reconstruir el 200 implicito (900 ambiguo).\n'
     printf '      La conversion Oklch la delega en pastel; la escala\n'
     printf '      usa interpolacion polar en Oklch con hue constante.\n'
+    printf '      Rampas de luminosidad (incluida Oklab-L): ver kzpastel-ramp.\n'
     return 0
 fi
 
@@ -256,7 +259,7 @@ for line in "${(@f)raw}"; do
     fi
     case "$lview" in
         block)
-            pastel paint -n "$hex" "▋  ${ICON}   Lorem ipsum dolor sit amet  │ Oklch ├── ${hex} ── C ${chroma} ── ${step} ──┤  🮍███🮌${mark} "
+            pastel paint -n "$hex" "▋  ${ICON}   Lorem ipsum dolor sit amet  │ Oklch ├── ${hex} ──  ${step}  ── C ${chroma} ──┤  🮍███🮌${mark} "
             printf '\n'
             ;;
         *)
