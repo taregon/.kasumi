@@ -31,6 +31,7 @@ local hex_color property label light_level light_pct
 [[ -z "$base" || -z "$steps" ]] && {
     echo "Uso: kzpastel-ramp <color> <min> <max> <pasos> [modo]"
     echo "  modo: l | o | h (default: o)"
+    echo "  %: nivel de luminosidad aplicado (min-max)"
     return 1
 }
 
