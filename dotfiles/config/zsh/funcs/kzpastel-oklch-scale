@@ -1,7 +1,7 @@
 # vim: filetype=zsh
 # Genera una escala base de 9 pasos (100-900), 11 con full (50-950), en Oklch.
 # La conversion sRGB <-> Oklch la hace `pastel` (extra/pastel); la interpolacion
-# polar y la inversion idempotente viven aqui.
+# polar, la inversion idempotente y el ajuste a gamut viven aqui.
 #
 # Metodo (Oklch de CSS Color 4, hue constante; matrices de Bjorn Ottosson):
 # ancla en paso 200, progress = (step-200)/700, endpoint light = max(0.97, L0),
@@ -24,7 +24,7 @@
 # *0.9 con tol 0.004). Precision conocida (frontera de gamut de pastel): pasos en
 # gamut exactos; extremo 900 (950 en full) +/-2 RGB; cromas altas con mismo hue pero
 # chroma hasta ~0.015 mayor que la referencia a mitad de escala; idempotencia
-# +/-1 RGB por redondeo a 4 decimales. Verificado contra la paleta kasumi local.
+# +/-1 RGB por redondeo a 4 decimales. Verificado contra la paleta kasumi local
 # (verde y rojo).
 # La linea del ancla lleva [*] en ambas vistas (filtrable con grep).
 
@@ -41,6 +41,10 @@ else
     local -r C_BLU='' C_RED='' C_RST=''
 fi
 
+# ──「 VALIDACION 」──────────────────────────────────────────
+# Normaliza la vista (block en terminal, set en pipe) y valida vista,
+# argumentos y dependencias. Uso invalido en zsh devuelve 2; la validacion
+# via python devuelve 1.
 local lview="${view:l}"
 if [[ -z "$lview" ]]; then
     if [[ -t 1 ]]; then
@@ -60,6 +64,7 @@ case "$lview" in
         ;;
 esac
 
+# ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpastel-oklch-scale <color> [paso-ancla] [modo] [vista] [extras]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
@@ -78,7 +83,7 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      margen para reconstruir el 200 implicito (900 ambiguo).\n'
     printf '      La conversion Oklch la delega en pastel; la escala\n'
     printf '      usa interpolacion polar en Oklch con hue constante.\n'
-    printf '      Rampas de luminosidad (incluida Oklab-L): ver kzpastel-ramp.\n'
+    printf '      Rampas de luminosidad (incluida Oklab-L): ver kzpastel-lightramp.\n'
     return 0
 fi
 
@@ -88,6 +93,7 @@ if [[ -z "$color" ]]; then
     return 2
 fi
 
+# ──「 DEPENDENCIAS 」────────────────────────────────────────
 if ! command -v pastel > /dev/null 2>&1; then
     printf '%s>>FAIL pastel no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
     printf '   Instala con: paru -S pastel.\n' >&2
@@ -99,6 +105,10 @@ if ! command -v python3 > /dev/null 2>&1; then
     return 1
 fi
 
+# ──「 GENERACION 」──────────────────────────────────────────
+# Un solo proceso python calcula la rampa completa (inversion del ancla,
+# interpolacion polar y ajuste a gamut) y emite lineas PASO HEX CROMA.
+# Falla con el mensaje de python en stderr y propaga su codigo.
 local raw rc
 raw="$(
     python3 - "$color" "$anchor" "$mode" "$extras" << 'PY'
@@ -106,8 +116,10 @@ import re
 import subprocess
 import sys
 
-# Trazabilidad: base y divisor de progress; endpoints de la rampa local;
-# decaimiento de croma; intentos de ajuste; tolerancias del ida y vuelta.
+# ──「 CONSTANTES 」──────────────────────────────────────────
+# Rampa (BASE_STEP, SPAN), endpoints (L_LIGHT, L_DARK), croma (C_DECAY),
+# ajuste (FIT_TRIES, FIT_FACTOR, TOL_*), pasos (BASE/EXTRA_STEPS,
+# ANCHOR_MAX), angulo (HUE_MAX) y modos (MODE_ABBR).
 BASE_STEP = 200
 SPAN = 700.0
 L_LIGHT = 0.97
@@ -126,6 +138,8 @@ HUE_MAX = 360.0
 # Abreviaturas de modo.
 MODE_ABBR = {"l": "light", "d": "dark"}
 
+# ──「 CONVERSION 」──────────────────────────────────────────
+# Ida y vuelta sRGB <-> Oklch delegada en pastel.
 def run_pastel(*args):
     proc = subprocess.run(
         ["pastel", *args],
@@ -159,9 +173,10 @@ def hue_distance(a, b):
     # 540 = HUE_MAX + 180: desplaza para medir distancia circular con signo.
     return abs(((a - b) % HUE_MAX + 540.0) % HUE_MAX - 180.0)
 
+# ──「 AJUSTE 」──────────────────────────────────────────────
+# Aproxima fitOklch reduciendo chroma hasta que el ida y vuelta via pastel
+# coincida; pastel recorta gamut, no falla.
 def fit_hex(l, c, h, l_tol=TOL_L, c_tol=TOL_C, h_tol=TOL_H):
-    # Aproxima fitOklch de CSS Color 4: reduce chroma hasta que el ida y vuelta
-    # via pastel coincida; pastel recorta gamut, no falla. Devuelve (hex, croma).
     l = min(1.0, max(0.0, l))
     c = max(0.0, c)
     h = h % HUE_MAX
@@ -178,6 +193,9 @@ def fit_hex(l, c, h, l_tol=TOL_L, c_tol=TOL_C, h_tol=TOL_H):
         candidate *= FIT_FACTOR
     return to_hex(l, 0.0, h), 0.0
 
+# ──「 ESCALA 」──────────────────────────────────────────────
+# Valida ancla/modo, invierte el 200 implicito si el ancla no es 200
+# e interpola cada paso con hue constante.
 color, anchor_raw, mode = sys.argv[1], sys.argv[2], sys.argv[3].lower()
 extras = sys.argv[4].lower() if len(sys.argv) > 4 else "base"
 if extras not in ("base", "full"):
@@ -227,6 +245,7 @@ else:
 
 endpoint = max(L_LIGHT, l200) if mode == "light" else min(L_DARK, l200)
 
+# ──「 EMISION 」─────────────────────────────────────────────
 for step in STEPS:
     if step == anchor:
         print(f"{step:03d} {anchor_hex} {ca:.3f}")
@@ -243,8 +262,11 @@ if ((rc != 0)); then
     return "$rc"
 fi
 
-# pastel paint -n no emite salto; cada fila cierra con un unico printf.
-# 10# fuerza base 10: los pasos vienen a 3 digitos y 050 seria octal.
+# ──「 VISTAS 」──────────────────────────────────────────────
+# Renderiza las lineas PASO HEX CROMA segun la vista; la linea del ancla
+# lleva [*] en ambas (filtrable con grep). pastel paint -n no emite salto:
+# cada fila cierra con un unico printf. 10# fuerza base 10, porque los
+# pasos vienen a 3 digitos y 050 seria octal en aritmetica zsh.
 local -r ICON=$'\uf4ee'
 local line step hex rest chroma mark
 for line in "${(@f)raw}"; do
