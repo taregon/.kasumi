@@ -24,7 +24,7 @@ else
 fi
 
 if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpastel-gradient-spaces <color1> <color2> [pasos] [vista] [espacio]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-spaces-blend <color1> <color2> [pasos] [vista] [espacio]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Vistas\n'
     printf '      d, default               Bloques compactos por paso (defecto)\n'
     printf '      t, table                 Bloques anchos por paso\n'

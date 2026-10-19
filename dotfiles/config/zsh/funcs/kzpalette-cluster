@@ -1,0 +1,250 @@
+# vim: filetype=zsh
+# Genera un racimo de colores indistinguibles del ancla: los que caen bajo
+# el umbral dEOKr2 respecto del color de origen.
+#
+# Muestrea una rejilla determinista en Oklch alrededor del ancla (sin azar:
+# misma entrada, misma salida) y conserva los candidatos bajo el umbral. La
+# conversion sRGB <-> Oklch la hace `pastel` (extra/pastel); el dE se calcula
+# directo en Oklab con a/b escalados x2 y toe (dEOKr2, CSS Color 4 seccion
+# 20.5), sin ida y vuelta por candidato: el vecindario es tan chico que el
+# recorte de gamut no aplica (los aceptados se verifican al renderizar).
+# La metrica y el umbral siguen el catalogo dE (fx-deltae): dEOKr2 con JND
+# 0.02 en escala Oklab (CSS Color 4, gamut mapping), conservador en croma.
+#
+# Uso: kzpalette-cluster <color> [n] [umbral] [vista]
+#   n       Cantidad a emitir (defecto: 8)
+#   umbral  dEOKr2 maximo (defecto: 0.02, JND de trabajo)
+#   vista   block|set (defecto: block en terminal, set en pipe)
+
+setopt localoptions noksharrays
+
+local color="${1:-}"
+local count="${2:-8}"
+local limit="${3:-0.02}"
+local view="${4:-}"
+if [[ -t 1 ]]; then
+    local -r C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+else
+    local -r C_BLU='' C_YEL='' C_RED='' C_RST=''
+fi
+
+# ──「 VALIDACION 」──────────────────────────────────────────
+# Normaliza la vista (block en terminal, set en pipe) y valida argumentos y
+# dependencias antes de tocar pastel o python. Uso invalido devuelve 2; la
+# dependencia ausente devuelve 1.
+local lview="${view:l}"
+if [[ -z "$lview" ]]; then
+    if [[ -t 1 ]]; then
+        lview='block'
+    else
+        lview='set'
+    fi
+fi
+
+local int_re='^[0-9]+$'
+local num_re='^[0-9]+(\.[0-9]+)?$'
+local zero_re='^0+(\.0+)?$'
+
+# ──「 AYUDA 」───────────────────────────────────────────────
+if [[ "$color" == "-h" || "$color" == "--help" ]]; then
+    printf '%s>>HELP Uso: kzpalette-cluster <color> [n] [umbral] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Argumentos\n'
+    printf '      <color>    Hex ancla, ej: #80c8a1\n'
+    printf '      [n]        Cantidad a emitir, entero >= 1 (defecto: 8)\n'
+    printf '      [umbral]   dEOKr2 maximo mayor que 0 (defecto: 0.02)\n'
+    printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
+    printf '  :: Vistas\n'
+    printf '      block      Bloques con color y dE por candidato\n'
+    printf '      set        Lista hex plana: HEX dE (consumo agentico)\n'
+    printf '  :: Notas\n'
+    printf '      Conserva solo los colores con dEOKr2 < umbral y los ordena de menor\n'
+    printf '      a mayor distancia. El umbral 0.02 es el JND de trabajo (escala Oklab).\n'
+    printf '      Rampas de luminosidad: ver kzpalette-light-ramp; escala Oklch: ver\n'
+    printf '      kzpalette-oklch-scale.\n'
+    return 0
+fi
+
+if [[ -z "$color" ]]; then
+    printf '%s>>FAIL Falta el color de origen.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Uso: kzpalette-cluster <color> [n] [umbral] [vista].\n' >&2
+    return 2
+fi
+
+case "$lview" in
+    block | set)
+        ;;
+    *)
+        printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
+        printf '   Usa block (bloques con color) o set (lista plana); -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
+
+if [[ ! "$count" =~ $int_re ]]; then
+    printf '%s>>FAIL n debe ser un entero mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Recibido: n=%s.\n' "$count" >&2
+    return 2
+fi
+
+# 10# fuerza base 10, porque un conteo con cero inicial (08) seria octal en
+# aritmetica zsh y rompe la comparacion.
+if ((10#$count < 1)); then
+    printf '%s>>FAIL n debe ser mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Recibido: n=%s.\n' "$count" >&2
+    return 2
+fi
+count=$((10#$count))
+
+if [[ ! "$limit" =~ $num_re || "$limit" =~ $zero_re ]]; then
+    printf '%s>>FAIL umbral debe ser un numero mayor que 0.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Recibido: umbral=%s.\n' "$limit" >&2
+    return 2
+fi
+
+# ──「 DEPENDENCIAS 」────────────────────────────────────────
+if ! command -v pastel > /dev/null 2>&1; then
+    printf '%s>>FAIL pastel no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Instala con: paru -S pastel.\n' >&2
+    return 1
+fi
+
+if ! command -v python3 > /dev/null 2>&1; then
+    printf '%s>>FAIL python3 no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
+
+# Valida el ancla antes de muestrear: pastel resuelve cualquier notacion que
+# reconozca (hex, nombre, formato propio) y falla temprano si no es un color.
+if ! pastel format hex "$color" > /dev/null 2>&1; then
+    printf '%s>>FAIL color invalido: %s.%s\n' "$C_RED" "$color" "$C_RST" >&2
+    printf '   Usa un hex o un nombre que pastel reconozca.\n' >&2
+    return 2
+fi
+
+# ──「 GENERACION 」──────────────────────────────────────────
+# Un solo proceso python muestrea la rejilla, calcula dEOKr2 y emite una
+# linea HEX dE por candidato, ordenada de menor a mayor distancia. La causa
+# de un fallo interno la imprime el propio python en stderr.
+local raw rc
+raw="$(
+    python3 - "$color" "$count" "$limit" << 'PY'
+import math
+import re
+import subprocess
+import sys
+
+# ──「 CONSTANTES 」──────────────────────────────────────────
+# toe (CSS Color 4, seccion 20.5) y paso de la rejilla alrededor del ancla:
+# L y croma en milesimas, matiz en medios grados (medido: basta para poblar
+# el JND sin salir del gamut en anclas sRGB).
+K1, K2 = 0.206, 0.03
+K3 = (1 + K1) / (1 + K2)
+STEP_L = 0.001
+STEP_C = 0.001
+STEP_H = 0.5
+GRID_L = [i * STEP_L for i in range(-6, 7)]
+GRID_C = [i * STEP_C for i in range(-3, 4)]
+GRID_H = [i * STEP_H for i in range(-2, 3)]
+
+# ──「 CONVERSION 」──────────────────────────────────────────
+# Ida y vuelta sRGB <-> Oklch delegada en pastel.
+def run_pastel(*args):
+    proc = subprocess.run(
+        ["pastel", *args],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise SystemExit(f"pastel fallo: {proc.stderr.strip()}")
+    return proc.stdout.strip()
+
+OKLCH_RE = re.compile(
+    r"oklch\(\s*([0-9.]+)\s*,?\s+([0-9.]+)\s*,?\s+([0-9.]+)\s*\)",
+    re.IGNORECASE,
+)
+
+def toe(x):
+    return 0.5 * (K3 * x - K1 + math.sqrt((K3 * x - K1) ** 2 + 4 * K2 * K3 * x))
+
+# Oklab cartesiano con a/b escalados x2 (dEOK2, Ottosson); la ligereza pasa
+# por toe (dEOKr2). El dE es la distancia euclidea en este espacio.
+def to_lab(l, c, h):
+    rad = math.radians(h)
+    return toe(l), 2 * c * math.cos(rad), 2 * c * math.sin(rad)
+
+# ──「 MUESTREO 」────────────────────────────────────────────
+color, count_raw, limit_raw = sys.argv[1], sys.argv[2], sys.argv[3]
+count = int(count_raw)
+limit = float(limit_raw)
+
+anchor_hex = run_pastel("format", "hex", color)
+match = OKLCH_RE.search(run_pastel("format", "oklch", anchor_hex))
+if not match:
+    raise SystemExit(f"no se pudo leer Oklch de {color}")
+l0, c0, h0 = float(match.group(1)), float(match.group(2)), float(match.group(3))
+anchor = to_lab(l0, c0, h0)
+
+# Conserva el menor dE por hex unico; descarta el centro y el propio ancla.
+found = {}
+for dl in GRID_L:
+    for dc in GRID_C:
+        for dh in GRID_H:
+            if dl == 0 and dc == 0 and dh == 0:
+                continue
+            c = max(0.0, c0 + dc)
+            v = math.dist(to_lab(l0 + dl, c, (h0 + dh) % 360.0), anchor)
+            if v >= limit:
+                continue
+            hx = run_pastel("format", "hex",
+                            f"oklch({l0 + dl:.6f} {c:.6f} {(h0 + dh) % 360.0:.4f})")
+            if hx.lower() == anchor_hex.lower():
+                continue
+            if hx.lower() not in found or v < found[hx.lower()][0]:
+                found[hx.lower()] = (v, hx)
+
+# ──「 EMISION 」─────────────────────────────────────────────
+for v, hx in sorted(found.values())[:count]:
+    print(f"{hx} {v:.4f}")
+PY
+)"
+rc=$?
+if ((rc != 0)); then
+    printf '%s>>FAIL no se pudo generar el racimo.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Revisa el color ancla y la version de pastel.\n' >&2
+    return 1
+fi
+
+if [[ -z "$raw" ]]; then
+    printf '%s>>FAIL sin colores bajo el umbral %s.%s\n' "$C_RED" "$limit" "$C_RST" >&2
+    printf '   Amplia el umbral o revisa el color ancla.\n' >&2
+    return 1
+fi
+
+# ──「 VISTAS 」─────────────────────────────────────────────
+# pastel paint -n no emite salto; cada fila cierra con un unico printf.
+local -r ICON=$'\uf4ee'
+local line hex dE total
+local -a lines=("${(@f)raw}")
+total=${#lines[@]}
+if ((total < count)); then
+    printf '%s>>WARN generados %s de %s colores bajo el umbral %s.%s\n' \
+        "$C_YEL" "$total" "$count" "$limit" "$C_RST" >&2
+    printf '   Amplia el umbral para cubrir mas candidatos.\n' >&2
+fi
+
+case "$lview" in
+    block)
+        for line in "${lines[@]}"; do
+            hex="${line%% *}"
+            dE="${line##* }"
+            pastel paint -n "$hex" \
+                "▋  ${ICON}   Lorem ipsum dolor sit amet  │ dEOKr2 ├── ${hex} ── dE ${dE} ──┤  🮍███🮌 "
+            printf '\n'
+        done
+        ;;
+    *)
+        printf '%s\n' "${lines[@]}"
+        ;;
+esac
+return 0

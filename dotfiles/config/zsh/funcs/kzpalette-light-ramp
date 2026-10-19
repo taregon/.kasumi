@@ -20,7 +20,7 @@
 # los delega en `pastel` (extra/pastel). La propiedad se resuelve una
 # vez fuera del bucle porque es constante en la ejecucion.
 #
-# Uso: kzpastel-lightramp <color> <min> <max> <pasos> [modo]
+# Uso: kzpalette-light-ramp <color> <min> <max> <pasos> [modo]
 #   modo — l | o | h (default: o)
 #
 # Cada color generado se convierte a hexadecimal y se muestra como una
@@ -47,7 +47,7 @@ local int_re='^[0-9]+$'
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpastel-lightramp <color> [min] [max] [pasos] [modo]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [modo]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
     printf '      <color>        Color base (hex, nombre o formato pastel)\n'
     printf '      [min]          Luminosidad inicial 0-100 (defecto: 30)\n'
@@ -61,13 +61,13 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '  :: Salida\n'
     printf '      Muestra por paso: etiqueta, hex, %% aplicado y C (croma Oklch).\n'
     printf '      Los modos solo mueven luminosidad; no fijan croma ni matiz.\n'
-    printf '      Oklch cilindrico (croma/hue): ver kzpastel-oklch-scale.\n'
+    printf '      Oklch cilindrico (croma/hue): ver kzpalette-oklch-scale.\n'
     return 0
 fi
 
 if [[ -z "$base" ]]; then
     printf '%s>>FAIL Falta el color base.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpastel-lightramp <color> [min] [max] [pasos] [modo].\n' >&2
+    printf '   Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [modo].\n' >&2
     return 2
 fi
 

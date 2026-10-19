@@ -66,7 +66,7 @@ esac
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpastel-oklch-scale <color> [paso-ancla] [modo] [vista] [extras]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-oklch-scale <color> [paso-ancla] [modo] [vista] [extras]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
     printf '      <color>        Hex original, ej: #80c8a1\n'
     printf '      [paso-ancla]   Paso donde vive el color (defecto: 200; 50-800 en full)\n'
@@ -83,13 +83,13 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      margen para reconstruir el 200 implicito (900 ambiguo).\n'
     printf '      La conversion Oklch la delega en pastel; la escala\n'
     printf '      usa interpolacion polar en Oklch con hue constante.\n'
-    printf '      Rampas de luminosidad (incluida Oklab-L): ver kzpastel-lightramp.\n'
+    printf '      Rampas de luminosidad (incluida Oklab-L): ver kzpalette-light-ramp.\n'
     return 0
 fi
 
 if [[ -z "$color" ]]; then
     printf '%s>>FAIL Falta el color de origen.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpastel-oklch-scale <color> [paso-ancla] [modo] [vista] [extras].\n' >&2
+    printf '   Uso: kzpalette-oklch-scale <color> [paso-ancla] [modo] [vista] [extras].\n' >&2
     return 2
 fi
 

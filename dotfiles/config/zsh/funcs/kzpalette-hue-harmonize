@@ -135,7 +135,7 @@ local angles=(
 )
 
 [ -z "$base" ] && {
-    echo "Uso: kzpastel-harmonies <color> [modo]"
+    echo "Uso: kzpalette-hue-harmonize <color> [modo]"
     echo ""
     echo "  Modos:"
     echo "    d    Default — score y muestra cromática"
