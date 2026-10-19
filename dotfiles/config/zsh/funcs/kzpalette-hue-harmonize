@@ -126,7 +126,8 @@
 #           Funciona para jerarquías sutiles en interfaces monocromáticas.
 
 local base=$1
-local mode="${2:-d}"
+local level="${2:-default}"
+local view="${3:-}"
 local angles=(
     # -180° y 180° son equivalentes (mismo color resultante);
     # se incluyen ambos para cubrir la notación simétrica.
@@ -134,14 +135,82 @@ local angles=(
     2.5 5 7.5 10 15 22.5 30 45 60 68.754 75 90 105 120 135 137.508 150 165 180
 )
 
-[ -z "$base" ] && {
-    echo "Uso: kzpalette-hue-harmonize <color> [modo]"
-    echo ""
-    echo "  Modos:"
-    echo "    d    Default — score y muestra cromática"
-    echo "    i    Info    — agrega OkLCh y ángulo de rotación"
+if [[ -t 1 ]]; then
+    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+else
+    local -r C_BLU='' C_RED='' C_RST=''
+fi
+
+# ──「 AYUDA 」───────────────────────────────────────────────
+if [[ "$base" == "-h" || "$base" == "--help" ]]; then
+    printf '%s>>HELP Uso: kzpalette-hue-harmonize <color> [nivel] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Argumentos\n'
+    printf '      <color>    Color base (hex, nombre o formato pastel)\n'
+    printf '      [nivel]    default|d | info|i (defecto: default)\n'
+    printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
+    printf '  :: Niveles\n'
+    printf '      default    Score y muestra cromatica\n'
+    printf '      info       Agrega OkLCh y angulo de rotacion\n'
+    printf '  :: Vistas\n'
+    printf '      block      Muestra coloreada por armonia (defecto en terminal)\n'
+    printf '      set        Lista hex plana (consumo agentico)\n'
+    printf '  :: Notas\n'
+    printf '      Rota solo el matiz en HSL; luminosidad y croma perceptuales\n'
+    printf '      no se conservan. Angulos: -180..180 en 38 pasos.\n'
+    return 0
+fi
+
+if [[ -z "$base" ]]; then
+    printf '%s>>FAIL Falta el color base.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Uso: kzpalette-hue-harmonize <color> [nivel] [vista].\n' >&2
+    return 2
+fi
+
+# ──「 DEPENDENCIAS 」────────────────────────────────────────
+if ! command -v pastel > /dev/null 2>&1; then
+    printf '%s>>FAIL pastel no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Instala con: paru -S pastel.\n' >&2
     return 1
-}
+fi
+
+if ! command -v bc > /dev/null 2>&1; then
+    printf '%s>>FAIL bc no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Instala con: pacman -S bc.\n' >&2
+    return 1
+fi
+
+# ──「 VALIDACION 」──────────────────────────────────────────
+case "$level" in
+    default | d)
+        level='default'
+        ;;
+    info | i)
+        level='info'
+        ;;
+    *)
+        printf '%s>>FAIL Nivel invalido: %s.%s\n' "$C_RED" "$level" "$C_RST" >&2
+        printf '   Usa default|d o info|i; -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
+
+local lview="${view:l}"
+if [[ -z "$lview" ]]; then
+    if [[ -t 1 ]]; then
+        lview='block'
+    else
+        lview='set'
+    fi
+fi
+case "$lview" in
+    block | set)
+        ;;
+    *)
+        printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
+        printf '   Usa block (muestra coloreada) o set (lista plana); -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
 
 for degrees in "${angles[@]}"; do
     # Rotación del matiz en el espacio HSL.
@@ -149,6 +218,11 @@ for degrees in "${angles[@]}"; do
         pastel rotate -- "$degrees" "$base" \
             | pastel format hex
     )
+
+    if [[ "$lview" == 'set' ]]; then
+        printf '%s\n' "$color"
+        continue
+    fi
 
     # Representaciones del color en espacios perceptuales:
     # - oklch: representación polar (L = luminosidad, C = croma, h = matiz)
@@ -182,13 +256,13 @@ for degrees in "${angles[@]}"; do
         "
     )
 
-    case "$mode" in
+    case "$level" in
 
-        i)
+        info)
             pastel paint "$color" \
                 "$color ◖████◗ ─ ScoreOkLab: $oklab_score ─ $oklch_val ─ RotateHSL: ${degrees}°"
             ;;
-        d)
+        default)
             # Pts: puntuación perceptual derivada de coordenadas OkLab.
             # Escala interna del script; no corresponde a una unidad física.
             oklab_score_pct=$(bc -l <<< "
@@ -200,10 +274,6 @@ for degrees in "${angles[@]}"; do
 
             pastel paint "$color" \
                 "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct"
-            ;;
-        *)
-            echo "Modo inválido: $mode"
-            return 1
             ;;
     esac
 done

@@ -11,7 +11,7 @@
 # La metrica y el umbral siguen el catalogo dE (fx-deltae): dEOKr2 con JND
 # 0.02 en escala Oklab (CSS Color 4, gamut mapping), conservador en croma.
 #
-# Uso: kzpalette-cluster <color> [n] [umbral] [vista]
+# Uso: kzpalette-cluster <color> [pasos] [umbral] [vista]
 #   n       Cantidad a emitir (defecto: 8)
 #   umbral  dEOKr2 maximo (defecto: 0.02, JND de trabajo)
 #   vista   block|set (defecto: block en terminal, set en pipe)
@@ -19,8 +19,8 @@
 setopt localoptions noksharrays
 
 local color="${1:-}"
-local count="${2:-8}"
-local limit="${3:-0.02}"
+local steps="${2:-8}"
+local threshold="${3:-0.02}"
 local view="${4:-}"
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
@@ -47,10 +47,10 @@ local zero_re='^0+(\.0+)?$'
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-cluster <color> [n] [umbral] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-cluster <color> [pasos] [umbral] [vista]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
     printf '      <color>    Hex ancla, ej: #80c8a1\n'
-    printf '      [n]        Cantidad a emitir, entero >= 1 (defecto: 8)\n'
+    printf '      [pasos]    Cantidad a emitir, entero >= 1 (defecto: 8)\n'
     printf '      [umbral]   dEOKr2 maximo mayor que 0 (defecto: 0.02)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
@@ -66,7 +66,7 @@ fi
 
 if [[ -z "$color" ]]; then
     printf '%s>>FAIL Falta el color de origen.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpalette-cluster <color> [n] [umbral] [vista].\n' >&2
+    printf '   Uso: kzpalette-cluster <color> [pasos] [umbral] [vista].\n' >&2
     return 2
 fi
 
@@ -80,24 +80,24 @@ case "$lview" in
         ;;
 esac
 
-if [[ ! "$count" =~ $int_re ]]; then
-    printf '%s>>FAIL n debe ser un entero mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Recibido: n=%s.\n' "$count" >&2
+if [[ ! "$steps" =~ $int_re ]]; then
+    printf '%s>>FAIL pasos debe ser un entero mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Recibido: pasos=%s.\n' "$steps" >&2
     return 2
 fi
 
 # 10# fuerza base 10, porque un conteo con cero inicial (08) seria octal en
 # aritmetica zsh y rompe la comparacion.
-if ((10#$count < 1)); then
-    printf '%s>>FAIL n debe ser mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Recibido: n=%s.\n' "$count" >&2
+if ((10#$steps < 1)); then
+    printf '%s>>FAIL pasos debe ser mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Recibido: pasos=%s.\n' "$steps" >&2
     return 2
 fi
-count=$((10#$count))
+steps=$((10#$steps))
 
-if [[ ! "$limit" =~ $num_re || "$limit" =~ $zero_re ]]; then
+if [[ ! "$threshold" =~ $num_re || "$threshold" =~ $zero_re ]]; then
     printf '%s>>FAIL umbral debe ser un numero mayor que 0.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Recibido: umbral=%s.\n' "$limit" >&2
+    printf '   Recibido: umbral=%s.\n' "$threshold" >&2
     return 2
 fi
 
@@ -127,7 +127,7 @@ fi
 # de un fallo interno la imprime el propio python en stderr.
 local raw rc
 raw="$(
-    python3 - "$color" "$count" "$limit" << 'PY'
+    python3 - "$color" "$steps" "$threshold" << 'PY'
 import math
 import re
 import subprocess
@@ -174,9 +174,9 @@ def to_lab(l, c, h):
     return toe(l), 2 * c * math.cos(rad), 2 * c * math.sin(rad)
 
 # ──「 MUESTREO 」────────────────────────────────────────────
-color, count_raw, limit_raw = sys.argv[1], sys.argv[2], sys.argv[3]
-count = int(count_raw)
-limit = float(limit_raw)
+color, steps_raw, threshold_raw = sys.argv[1], sys.argv[2], sys.argv[3]
+steps = int(steps_raw)
+threshold = float(threshold_raw)
 
 anchor_hex = run_pastel("format", "hex", color)
 match = OKLCH_RE.search(run_pastel("format", "oklch", anchor_hex))
@@ -194,7 +194,7 @@ for dl in GRID_L:
                 continue
             c = max(0.0, c0 + dc)
             v = math.dist(to_lab(l0 + dl, c, (h0 + dh) % 360.0), anchor)
-            if v >= limit:
+            if v >= threshold:
                 continue
             hx = run_pastel("format", "hex",
                             f"oklch({l0 + dl:.6f} {c:.6f} {(h0 + dh) % 360.0:.4f})")
@@ -204,7 +204,7 @@ for dl in GRID_L:
                 found[hx.lower()] = (v, hx)
 
 # ──「 EMISION 」─────────────────────────────────────────────
-for v, hx in sorted(found.values())[:count]:
+for v, hx in sorted(found.values())[:steps]:
     print(f"{hx} {v:.4f}")
 PY
 )"
@@ -216,7 +216,7 @@ if ((rc != 0)); then
 fi
 
 if [[ -z "$raw" ]]; then
-    printf '%s>>FAIL sin colores bajo el umbral %s.%s\n' "$C_RED" "$limit" "$C_RST" >&2
+    printf '%s>>FAIL sin colores bajo el umbral %s.%s\n' "$C_RED" "$threshold" "$C_RST" >&2
     printf '   Amplia el umbral o revisa el color ancla.\n' >&2
     return 1
 fi
@@ -227,9 +227,9 @@ local -r ICON=$'\uf4ee'
 local line hex dE total
 local -a lines=("${(@f)raw}")
 total=${#lines[@]}
-if ((total < count)); then
+if ((total < steps)); then
     printf '%s>>WARN generados %s de %s colores bajo el umbral %s.%s\n' \
-        "$C_YEL" "$total" "$count" "$limit" "$C_RST" >&2
+        "$C_YEL" "$total" "$steps" "$threshold" "$C_RST" >&2
     printf '   Amplia el umbral para cubrir mas candidatos.\n' >&2
 fi
 

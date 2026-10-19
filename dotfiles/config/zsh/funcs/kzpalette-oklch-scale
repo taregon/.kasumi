@@ -32,9 +32,9 @@ setopt localoptions noksharrays
 
 local color="${1:-}"
 local anchor="${2:-200}"
-local mode="${3:-dark}"
-local view="${4:-}"
-local extras="${5:-base}"
+local direction="${3:-dark}"
+local scope="${4:-base}"
+local view="${5:-}"
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 else
@@ -66,13 +66,13 @@ esac
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-oklch-scale <color> [paso-ancla] [modo] [vista] [extras]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-oklch-scale <color> [ancla] [sentido] [alcance] [vista]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
-    printf '      <color>        Hex original, ej: #80c8a1\n'
-    printf '      [paso-ancla]   Paso donde vive el color (defecto: 200; 50-800 en full)\n'
-    printf '      [modo]         light|dark|l|d (defecto: dark)\n'
-    printf '      [vista]        block|set (defecto: block en terminal, set en pipe)\n'
-    printf '      [extras]       base|full (defecto: base; full agrega 50 y 950)\n'
+    printf '      <color>     Hex original, ej: #80c8a1\n'
+    printf '      [ancla]     Paso donde vive el color (defecto: 200; 50-800 en full)\n'
+    printf '      [sentido]   light|dark|l|d (defecto: dark)\n'
+    printf '      [alcance]   base|full (defecto: base; full agrega 50 y 950)\n'
+    printf '      [vista]     block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
     printf '      block          Bloques con color por paso\n'
     printf '      set            Lista hex plana (consumo agentico)\n'
@@ -89,7 +89,7 @@ fi
 
 if [[ -z "$color" ]]; then
     printf '%s>>FAIL Falta el color de origen.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpalette-oklch-scale <color> [paso-ancla] [modo] [vista] [extras].\n' >&2
+    printf '   Uso: kzpalette-oklch-scale <color> [ancla] [sentido] [alcance] [vista].\n' >&2
     return 2
 fi
 
@@ -111,7 +111,7 @@ fi
 # Falla con el mensaje de python en stderr y propaga su codigo.
 local raw rc
 raw="$(
-    python3 - "$color" "$anchor" "$mode" "$extras" << 'PY'
+    python3 - "$color" "$anchor" "$direction" "$scope" << 'PY'
 import re
 import subprocess
 import sys
@@ -119,7 +119,7 @@ import sys
 # ──「 CONSTANTES 」──────────────────────────────────────────
 # Rampa (BASE_STEP, SPAN), endpoints (L_LIGHT, L_DARK), croma (C_DECAY),
 # ajuste (FIT_TRIES, FIT_FACTOR, TOL_*), pasos (BASE/EXTRA_STEPS,
-# ANCHOR_MAX), angulo (HUE_MAX) y modos (MODE_ABBR).
+# ANCHOR_MAX), angulo (HUE_MAX) y sentidos (DIRECTION_ABBR).
 BASE_STEP = 200
 SPAN = 700.0
 L_LIGHT = 0.97
@@ -135,8 +135,8 @@ BASE_STEPS = (100, 200, 300, 400, 500, 600, 700, 800, 900)
 EXTRA_STEPS = (50, 950)
 ANCHOR_MAX = 800
 HUE_MAX = 360.0
-# Abreviaturas de modo.
-MODE_ABBR = {"l": "light", "d": "dark"}
+# Abreviaturas de sentido.
+DIRECTION_ABBR = {"l": "light", "d": "dark"}
 
 # ──「 CONVERSION 」──────────────────────────────────────────
 # Ida y vuelta sRGB <-> Oklch delegada en pastel.
@@ -194,14 +194,14 @@ def fit_hex(l, c, h, l_tol=TOL_L, c_tol=TOL_C, h_tol=TOL_H):
     return to_hex(l, 0.0, h), 0.0
 
 # ──「 ESCALA 」──────────────────────────────────────────────
-# Valida ancla/modo, invierte el 200 implicito si el ancla no es 200
+# Valida ancla/sentido, invierte el 200 implicito si el ancla no es 200
 # e interpola cada paso con hue constante.
-color, anchor_raw, mode = sys.argv[1], sys.argv[2], sys.argv[3].lower()
-extras = sys.argv[4].lower() if len(sys.argv) > 4 else "base"
-if extras not in ("base", "full"):
-    raise SystemExit(f"Escala invalida: {extras} (usa base|full)")
-STEPS = tuple(sorted(BASE_STEPS + EXTRA_STEPS)) if extras == "full" else BASE_STEPS
-mode = MODE_ABBR.get(mode, mode)
+color, anchor_raw, direction = sys.argv[1], sys.argv[2], sys.argv[3].lower()
+scope = sys.argv[4].lower() if len(sys.argv) > 4 else "base"
+if scope not in ("base", "full"):
+    raise SystemExit(f"Alcance invalido: {scope} (usa base|full)")
+STEPS = tuple(sorted(BASE_STEPS + EXTRA_STEPS)) if scope == "full" else BASE_STEPS
+direction = DIRECTION_ABBR.get(direction, direction)
 
 try:
     anchor = int(anchor_raw)
@@ -211,8 +211,8 @@ if anchor not in STEPS:
     raise SystemExit(f"Ancla invalida: {anchor} (usa {STEPS[0]}-800 en pasos de 100)")
 if anchor > ANCHOR_MAX:
     raise SystemExit("Las anclas 900 y 950 no dejan pasos superiores para interpolar")
-if mode not in ("light", "dark"):
-    raise SystemExit(f"Modo invalido: {mode} (usa light|dark|l|d)")
+if direction not in ("light", "dark"):
+    raise SystemExit(f"Sentido invalido: {direction} (usa light|dark|l|d)")
 
 anchor_hex = run_pastel("format", "hex", color)
 la, ca, ha = to_oklch(anchor_hex)
@@ -226,7 +226,7 @@ else:
     # Invierte LA = L200 + (endpoint(L200)-L200)*progressA por rama,
     # validando la condicion de la rama (max/min del endpoint).
     l200 = None
-    if mode == "light":
+    if direction == "light":
         # Rama endpoint = L_LIGHT (vale si L200 < L_LIGHT).
         candidate = (la - L_LIGHT * progress_a) / denom
         if candidate < L_LIGHT:
@@ -243,7 +243,7 @@ else:
             l200 = la
     h200 = ha
 
-endpoint = max(L_LIGHT, l200) if mode == "light" else min(L_DARK, l200)
+endpoint = max(L_LIGHT, l200) if direction == "light" else min(L_DARK, l200)
 
 # ──「 EMISION 」─────────────────────────────────────────────
 for step in STEPS:

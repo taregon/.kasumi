@@ -3,14 +3,14 @@
 # de claridad mediante distintas propiedades de luminosidad disponibles
 # en Pastel.
 #
-# Modos disponibles (mueven un escalar via `pastel set`; ningun modo fija
+# Propiedades disponibles (mueven un escalar via `pastel set`; ninguna fija
 # croma ni matiz, y pastel recorta fuera de gamut en vez de ajustar):
-#   l : propiedad 'lightness'; croma contenida y matiz acotado
-#       (medido: C 0.086-0.092, deriva H ~2 grados)
-#   o : componente L de OkLab, luminosidad perceptualmente uniforme
-#       (default); no fija C/h (medido: C 0.079-0.092, deriva H ~8 grados)
-#   h : luminosidad HSL (geometrica, no perceptual); lava la croma en
-#       extremos y deriva el matiz (medido: C 0.010-0.118, deriva H ~8 grados)
+#   lightness     : propiedad 'lightness'; croma contenida y matiz acotado
+#                   (medido: C 0.086-0.092, deriva H ~2 grados)
+#   oklab-l       : componente L de OkLab, luminosidad perceptualmente uniforme
+#                   (default); no fija C/h (medido: C 0.079-0.092, deriva H ~8 grados)
+#   hsl-lightness : luminosidad HSL (geometrica, no perceptual); lava la croma
+#                   en extremos y deriva el matiz (medido: C 0.010-0.118, deriva H ~8 grados)
 # Medido sobre #80c8a1, rampa 30-96 en 5 pasos.
 #
 # La propiedad seleccionada se interpola linealmente entre los valores
@@ -20,11 +20,12 @@
 # los delega en `pastel` (extra/pastel). La propiedad se resuelve una
 # vez fuera del bucle porque es constante en la ejecucion.
 #
-# Uso: kzpalette-light-ramp <color> <min> <max> <pasos> [modo]
-#   modo — l | o | h (default: o)
+# Uso: kzpalette-light-ramp <color> <min> <max> <pasos> [propiedad] [vista]
+#   propiedad — lightness|l | oklab-l|o | hsl-lightness|hs (default: oklab-l)
+#   vista     — block | set (default: block en terminal, set en pipe)
 #
-# Cada color generado se convierte a hexadecimal y se muestra como una
-# muestra coloreada directamente en la terminal.
+# Cada color generado se convierte a hexadecimal. En block se muestra como
+# muestra coloreada; en set se emite la lista hex plana.
 
 setopt localoptions noksharrays
 
@@ -32,7 +33,8 @@ local base="${1:-}"
 local light_min="${2:-30}"
 local light_max="${3:-96}"
 local steps="${4:-20}"
-local mode="${5:-o}"
+local property="${5:-oklab-l}"
+local view="${6:-}"
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 else
@@ -47,27 +49,32 @@ local int_re='^[0-9]+$'
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [modo]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [propiedad] [vista]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
     printf '      <color>        Color base (hex, nombre o formato pastel)\n'
     printf '      [min]          Luminosidad inicial 0-100 (defecto: 30)\n'
     printf '      [max]          Luminosidad final 0-100 (defecto: 96)\n'
     printf '      [pasos]        Numero de pasos, entero >= 2 (defecto: 20)\n'
-    printf '      [modo]         l|o|h (defecto: o)\n'
-    printf '  :: Modos\n'
-    printf '      l              Propiedad lightness de pastel\n'
-    printf '      o              Componente L de Oklab (0-100 se divide a 0.0-1.0)\n'
-    printf '      h              Luminosidad HSL (0-100 se divide a 0.0-1.0)\n'
-    printf '  :: Salida\n'
-    printf '      Muestra por paso: etiqueta, hex, %% aplicado y C (croma Oklch).\n'
-    printf '      Los modos solo mueven luminosidad; no fijan croma ni matiz.\n'
+    printf '      [propiedad]    lightness|l | oklab-l|o | hsl-lightness|hs\n'
+    printf '                     (defecto: oklab-l)\n'
+    printf '      [vista]        block|set (defecto: block en terminal, set en pipe)\n'
+    printf '  :: Propiedades\n'
+    printf '      lightness      Propiedad lightness de pastel\n'
+    printf '      oklab-l        Componente L de Oklab (0-100 se divide a 0.0-1.0)\n'
+    printf '      hsl-lightness  Luminosidad HSL (0-100 se divide a 0.0-1.0)\n'
+    printf '  :: Vistas\n'
+    printf '      block          Bloques con color (defecto en terminal)\n'
+    printf '      set            Lista hex plana (consumo agentico)\n'
+    printf '  :: Notas\n'
+    printf '      En block, cada paso muestra hex, %% aplicado y C (croma Oklch).\n'
+    printf '      Las propiedades solo mueven luminosidad; no fijan croma ni matiz.\n'
     printf '      Oklch cilindrico (croma/hue): ver kzpalette-oklch-scale.\n'
     return 0
 fi
 
 if [[ -z "$base" ]]; then
     printf '%s>>FAIL Falta el color base.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [modo].\n' >&2
+    printf '   Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [propiedad] [vista].\n' >&2
     return 2
 fi
 
@@ -114,27 +121,47 @@ if ! command -v bc > /dev/null 2>&1; then
     return 1
 fi
 
+# Normaliza la vista: block en terminal, set en pipe.
+local lview="${view:l}"
+if [[ -z "$lview" ]]; then
+    if [[ -t 1 ]]; then
+        lview='block'
+    else
+        lview='set'
+    fi
+fi
+
+case "$lview" in
+    block | set)
+        ;;
+    *)
+        printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
+        printf '   Usa block (bloques con color) o set (lista plana); -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
+
 # ──「 GENERACION 」──────────────────────────────────────────
 # Resuelve la propiedad pastel una vez; el bucle solo interpola el
-# escalar y pinta. o/h dividen a 0.0-1.0 porque pastel las espera
-# normalizadas, mientras l trabaja en porcentaje directo.
-local property label
-case "$mode" in
-    l)
-        property="lightness"
+# escalar. oklab-l/hsl-lightness dividen a 0.0-1.0 porque pastel las
+# espera normalizadas, mientras lightness trabaja en porcentaje directo.
+local pastel_property label
+case "$property" in
+    lightness | l)
+        pastel_property="lightness"
         label="Light"
         ;;
-    o)
-        property="oklab-l"
+    oklab-l | o)
+        pastel_property="oklab-l"
         label="Oklab"
         ;;
-    h)
-        property="hsl-lightness"
+    hsl-lightness | hs)
+        pastel_property="hsl-lightness"
         label="HSL L"
         ;;
     *)
-        printf '%s>>FAIL Modo invalido: %s.%s\n' "$C_RED" "$mode" "$C_RST" >&2
-        printf '   Usa l=lightness | o=oklab-l | h=hsl-lightness (defecto: o).\n' >&2
+        printf '%s>>FAIL Propiedad invalida: %s.%s\n' "$C_RED" "$property" "$C_RST" >&2
+        printf '   Usa lightness|l | oklab-l|o | hsl-lightness|hs (defecto: oklab-l).\n' >&2
         return 2
         ;;
 esac
@@ -145,7 +172,7 @@ for ((i = 0; i < steps; i++)); do
     # Pct en 0-100 con 4 decimales; light_level adapta la escala que
     # pastel espera segun la propiedad ya resuelta.
     pct=$(bc -l <<< "scale=4; $light_min + $i * ($light_max - $light_min) / ($steps - 1)")
-    case "$property" in
+    case "$pastel_property" in
         lightness)
             light_level="$pct"
             ;;
@@ -157,21 +184,25 @@ for ((i = 0; i < steps; i++)); do
 
     # Aplica el nivel al color base y convierte a hexadecimal; fail-stop
     # si pastel no reconoce el color (hex vacio).
-    hex_color="$(pastel set "$property" "$light_level" "$base" | pastel format hex)"
+    hex_color="$(pastel set "$pastel_property" "$light_level" "$base" | pastel format hex)"
     if [[ -z "$hex_color" ]]; then
         printf '%s>>FAIL pastel no genero color para %s.%s\n' "$C_RED" "$base" "$C_RST" >&2
         printf '   Revisa el color base y el nivel %s.\n' "$light_pct" >&2
         return 1
     fi
 
-    # Croma Oklch del color generado, por expansion (sin subshell extra
-    # mas alla de la consulta a pastel); expone la perdida de saturacion.
-    oklch="$(pastel format oklch "$hex_color")"
-    chroma="${oklch#*, }"
-    chroma="${chroma%%,*}"
-    chroma="$(printf '%.3f' "$chroma")"
+    if [[ "$lview" == 'block' ]]; then
+        # Croma Oklch del color generado, por expansion (sin subshell extra
+        # mas alla de la consulta a pastel); expone la perdida de saturacion.
+        oklch="$(pastel format oklch "$hex_color")"
+        chroma="${oklch#*, }"
+        chroma="${chroma%%,*}"
+        chroma="$(printf '%.3f' "$chroma")"
 
-    # Muestra visual junto con el valor hexadecimal generado.
-    pastel paint "$hex_color" \
-        "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ── C $chroma ──┤  🮍███🮌"
+        # Muestra visual junto con el valor hexadecimal generado.
+        pastel paint "$hex_color" \
+            "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ── C $chroma ──┤  🮍███🮌"
+    else
+        printf '%s\n' "$hex_color"
+    fi
 done

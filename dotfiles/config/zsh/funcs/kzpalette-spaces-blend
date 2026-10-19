@@ -7,11 +7,11 @@ setopt localoptions noksharrays
 local color1="$1"
 local color2="$2"
 local steps="${3:-10}"
-local view="${4:-d}"
-local space_arg="${5:-oklab}"
+local space_arg="${4:-oklab}"
+local view="${5:-}"
 local gradient
 local -a rgb_gradient hsl_gradient lab_gradient oklab_gradient
-local C_BLU C_RED C_RST set_space canon lview lspace space i
+local C_BLU C_RED C_RST canon lview lspace space i
 
 if [[ -t 1 ]]; then
     C_BLU=$'\033[0;34m'
@@ -24,23 +24,28 @@ else
 fi
 
 if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-spaces-blend <color1> <color2> [pasos] [vista] [espacio]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-spaces-blend <color> <color2> [pasos] [espacio] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Argumentos\n'
+    printf '      <color>     Color de origen\n'
+    printf '      <color2>    Color de destino\n'
+    printf '      [pasos]     Numero de pasos, entero >= 2 (defecto: 10)\n'
+    printf '      [espacio]   rgb|hsl|lab|oklab|lch (defecto: oklab)\n'
+    printf '      [vista]     block|table|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
-    printf '      d, default               Bloques compactos por paso (defecto)\n'
-    printf '      t, table                 Bloques anchos por paso\n'
-    printf '      s, set                   Lista hex plana del espacio dado\n'
-    printf '      rgb|hsl|lab|oklab|lch    Alias directo de set para ese espacio\n'
-    printf '  :: Espacio (solo con s|set)\n'
-    printf '      rgb|hsl|lab|oklab|lch    Espacio de interpolacion (defecto: oklab)\n'
-    printf '  :: Opciones\n'
-    printf '      -h, --help               Muestra esta ayuda\n'
+    printf '      block       Bloques compactos por paso (defecto en terminal)\n'
+    printf '      table       Bloques anchos por paso\n'
+    printf '      set         Lista hex plana del espacio dado (consumo agentico)\n'
+    printf '  :: Notas\n'
+    printf '      block y table comparan RGB, HSL, Lab y OkLab en paralelo; set\n'
+    printf '      interpola solo el espacio indicado.\n'
+    printf '      -h, --help  Muestra esta ayuda\n'
     return 0
 fi
 
 # ──「 VALIDACION 」────────────────────────────────────────────
 if [[ -z "$color1" || -z "$color2" ]]; then
     printf '%s>>FAIL Faltan colores de origen y destino.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Pasa <color1> <color2>; usa -h para ver el uso.\n' >&2
+    printf '   Pasa <color> <color2>; usa -h para ver el uso.\n' >&2
     return 2
 fi
 
@@ -63,49 +68,57 @@ if ((steps < 2)); then
 fi
 
 lview="${view:l}"
-lspace="${space_arg:l}"
+if [[ -z "$lview" ]]; then
+    if [[ -t 1 ]]; then
+        lview='block'
+    else
+        lview='set'
+    fi
+fi
 case "$lview" in
-    d | default | t | table)
-        set_space=''
+    block | d)
+        lview='block'
         ;;
-    s | set)
-        set_space="$lspace"
+    table | t)
+        lview='table'
         ;;
-    rgb | hsl | lab | oklab | lch)
-        set_space="$lview"
+    set | s)
+        lview='set'
         ;;
     *)
         printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
-        printf '   Usa d, t, s o un espacio (rgb|hsl|lab|oklab|lch); usa -h para ver el uso.\n' >&2
+        printf '   Usa block, table o set; usa -h para ver el uso.\n' >&2
+        return 2
+        ;;
+esac
+
+lspace="${space_arg:l}"
+case "$lspace" in
+    rgb)
+        canon='RGB'
+        ;;
+    hsl)
+        canon='HSL'
+        ;;
+    lab)
+        canon='Lab'
+        ;;
+    oklab)
+        canon='OkLab'
+        ;;
+    lch)
+        canon='LCh'
+        ;;
+    *)
+        printf '%s>>FAIL Espacio invalido: %s.%s\n' "$C_RED" "$space_arg" "$C_RST" >&2
+        printf '   Usa rgb|hsl|lab|oklab|lch.\n' >&2
         return 2
         ;;
 esac
 
 # ──「 GENERACION 」────────────────────────────────────────────
-if [[ -n "$set_space" ]]; then
-    case "$set_space" in
-        rgb)
-            canon='RGB'
-            ;;
-        hsl)
-            canon='HSL'
-            ;;
-        lab)
-            canon='Lab'
-            ;;
-        oklab)
-            canon='OkLab'
-            ;;
-        lch)
-            canon='LCh'
-            ;;
-        *)
-            printf '%s>>FAIL Espacio invalido: %s.%s\n' "$C_RED" "$space_arg" "$C_RST" >&2
-            printf '   Usa rgb|hsl|lab|oklab|lch.\n' >&2
-            return 2
-            ;;
-    esac
-
+# set interpola solo el espacio dado; block y table comparan los cuatro.
+if [[ "$lview" == 'set' ]]; then
     gradient="$(pastel gradient --colorspace "$canon" "$color1" "$color2" --number "$steps" | pastel format hex)"
     if [[ -z "$gradient" ]]; then
         printf '%s>>FAIL Gradiente vacio en espacio %s.%s\n' "$C_RED" "$canon" "$C_RST" >&2
@@ -161,7 +174,7 @@ fi
 # ──「 VISTAS 」────────────────────────────────────────────────
 # pastel paint -n no emite salto; cada fila cierra con un unico printf.
 case "$lview" in
-    d | default)
+    block)
         for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
             pastel paint -n "${hsl_gradient[i]}" "🮍███🮌 HSL ${hsl_gradient[i]} "
             pastel paint -n "${rgb_gradient[i]}" "🮍███🮌 RGB ${rgb_gradient[i]} "
@@ -170,16 +183,16 @@ case "$lview" in
             printf '\n'
         done
         ;;
-    t | table)
+    table)
         for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
             pastel paint -n "${hsl_gradient[i]}" \
-                " 🮔 ╠═════   ═════╣ HSL ${hsl_gradient[i]} "
+                " 🮔 ╠═════  ═════╣ HSL ${hsl_gradient[i]} "
             pastel paint -n "${rgb_gradient[i]}" \
-                " 🮔 ╠═════   ═════╣ RGB ${rgb_gradient[i]} "
+                " 🮔 ╠═════  ═════╣ RGB ${rgb_gradient[i]} "
             pastel paint -n "${lab_gradient[i]}" \
-                " 🮔 ╠═════   ═════╣ Lab ${lab_gradient[i]} "
+                " 🮔 ╠═════  ═════╣ Lab ${lab_gradient[i]} "
             pastel paint -n "${oklab_gradient[i]}" \
-                " 🮔 ╠═════   ═════╣ OkLab ${oklab_gradient[i]} "
+                " 🮔 ╠═════  ═════╣ OkLab ${oklab_gradient[i]} "
             printf '\n'
         done
         ;;
