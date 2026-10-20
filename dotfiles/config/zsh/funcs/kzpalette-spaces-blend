@@ -24,6 +24,8 @@ fi
 
 if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpalette-spaces-blend <color> <color2> [pasos] [espacio] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Que hace\n'
+    printf '      Mezcla dos colores y muestra la transicion entre ellos.\n'
     printf '  :: Argumentos\n'
     printf '      <color>     Color de origen\n'
     printf '      <color2>    Color de destino\n'

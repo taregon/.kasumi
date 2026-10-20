@@ -49,6 +49,8 @@ local zero_re='^0+(\.0+)?$'
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpalette-cluster <color> [cantidad] [umbral] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Que hace\n'
+    printf '      Encuentra colores muy parecidos al tuyo, casi indistinguibles a simple vista.\n'
     printf '  :: Argumentos\n'
     printf '      <color>    Color base, ej: #80c8a1\n'
     printf '      [cantidad] Cantidad a emitir, entero >= 1 (defecto: 8)\n'

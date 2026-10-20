@@ -67,6 +67,9 @@ esac
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpalette-oklch-scale <color> [nivel] [lado] [alcance] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Que hace\n'
+    printf '      Crea una escala de pasos, como una paleta de interfaz, hacia\n'
+    printf '      tonos claros u oscuros.\n'
     printf '  :: Argumentos\n'
     printf '      <color>     Color base, ej: #80c8a1\n'
     printf '      [nivel]     Paso donde vive el color (defecto: 200; 50-800 en full)\n'

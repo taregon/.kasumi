@@ -144,6 +144,8 @@ fi
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpalette-hue-harmonize <color> [detalle] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Que hace\n'
+    printf '      Gira el tono para recorrer la rueda de color: vecinos, opuestos e intermedios.\n'
     printf '  :: Argumentos\n'
     printf '      <color>    Color base (hex, nombre o formato pastel)\n'
     printf '      [detalle]  base|full (defecto: base)\n'

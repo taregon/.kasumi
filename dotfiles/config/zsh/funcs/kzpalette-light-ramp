@@ -51,6 +51,8 @@ local int_re='^[0-9]+$'
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '%s>>HELP Uso: kzpalette-light-ramp <color> [min] [max] [pasos] [propiedad] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Que hace\n'
+    printf '      Hace una rampa de claridad a partir de un color, de mas oscuro a mas claro.\n'
     printf '  :: Argumentos\n'
     printf '      <color>        Color base (hex, nombre o formato pastel)\n'
     printf '      [min]          Luminosidad inicial 0-100 (defecto: 30)\n'
