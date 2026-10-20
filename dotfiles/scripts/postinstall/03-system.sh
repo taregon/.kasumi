@@ -402,12 +402,13 @@ install_utils_terminal() {
         htmlq              # Similar a jq, pero para HTML
         httpx-bin          # Toolkit HTTP multipropósito para reconocimiento web
         jq                 # Procesador de JSON en CLI
+        pandoc-bin
         ugrep
         kitty            # Emulador de terminal acelerado por GPU
         less             # Paginador de texto para terminal
         lnav             # Visor avanzado de logs (TUI)
         mlr              # Procesador de datos estilo awk (Miller)
-        opencode-bin     # Asistente interactivo de IA para desarrollo de software
+        opencode         # Asistente interactivo de IA para desarrollo de software
         pacman-contrib   # Utilidades adicionales para pacman
         pastel           # Generación, análisis, conversión y manipulación de colores
         pup-bin          # Parseador de HTML desde la línea de comandos
