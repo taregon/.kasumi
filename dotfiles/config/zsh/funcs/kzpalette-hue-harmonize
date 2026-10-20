@@ -212,49 +212,78 @@ case "$lview" in
         ;;
 esac
 
+# pastel rotate exige una llamada por angulo, pero format acepta varios
+# colores: se agrupan las conversiones en pocos procesos y el score se
+# calcula en un unico bc.
+local i lab degrees color oklch_val oklab_score oklab_score_pct
+local -a cols hexs lchs oklabs scores pcts rows xyz
 for degrees in "${angles[@]}"; do
-    # Rotación del matiz en el espacio HSL.
-    color=$(
-        pastel rotate -- "$degrees" "$base" \
-            | pastel format hex
-    )
+    cols+=("$(pastel rotate -- "$degrees" "$base")")
+done
+hexs=("${(@f)$(pastel format hex "${cols[@]}")}")
+if ((${#hexs[@]} != ${#angles[@]})); then
+    printf '%s>>FAIL no se pudieron rotar los %s angulos.%s\n' "$C_RED" "${#angles[@]}" "$C_RST" >&2
+    printf '   Revisa el color base.\n' >&2
+    return 1
+fi
 
-    if [[ "$lview" == 'set' ]]; then
-        printf '%s\n' "$color"
-        continue
-    fi
+if [[ "$lview" == 'set' ]]; then
+    printf '%s\n' "${hexs[@]}"
+    return 0
+fi
 
-    # Representaciones del color en espacios perceptuales:
-    # - oklch: representación polar (L = luminosidad, C = croma, h = matiz)
-    # - oklab: representación cartesiana (L, a, b) para análisis y cálculos
-    oklch_val=$(pastel format oklch "$color")
-    oklab_l=$(pastel format oklab-l "$color")
-    oklab_a=$(pastel format oklab-a "$color")
-    oklab_b=$(pastel format oklab-b "$color")
+# Representaciones del color en espacios perceptuales:
+# - oklch: representación polar (L = luminosidad, C = croma, h = matiz)
+# - oklab: representación cartesiana (L, a, b) para análisis y cálculos
+lchs=("${(@f)$(pastel format oklch "${hexs[@]}")}")
+oklabs=("${(@f)$(pastel format oklab "${hexs[@]}")}")
+if ((${#lchs[@]} != ${#angles[@]} || ${#oklabs[@]} != ${#angles[@]})); then
+    printf '%s>>FAIL no se pudieron leer las coordenadas de los colores.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
 
-    # ── Score perceptual ──────────────────────────────────────────────
-    #   0.6·L + 0.4·√(a² + b²)
-    #   L           ->  Luminosidad en OkLab (0–1). Claridad percibida
-    #                   del color, independiente del matiz.
-    #   √(a² + b²)  ->  Croma en OkLab. Distancia desde el gris neutro
-    #                   en el plano cromático; a mayor valor, mayor
-    #                   intensidad cromática.
-    #   Pesos:
-    #     0.6·L     ->  Prioriza la contribución de luminosidad a la
-    #                   percepción visual global.#
-    #     0.4·croma ->  Añade intensidad cromática sin dominar la claridad.
-    #
-    #   El resultado es una medida de “intensidad visual percibida”,
-    #   útil para comparar colores dentro de paletas y evaluar
-    #   estabilidad en transformaciones de hue.
-    oklab_score=$(
-        bc -l <<< "
-        scale=10;
-        x = (0.6 * $oklab_l) + (0.4 * sqrt(($oklab_a*$oklab_a) + ($oklab_b*$oklab_b)));
-        scale=4;
-        x/1
-        "
-    )
+# ── Score perceptual ──────────────────────────────────────────────
+#   0.6·L + 0.4·√(a² + b²)
+#   L           ->  Luminosidad en OkLab (0–1). Claridad percibida
+#                   del color, independiente del matiz.
+#   √(a² + b²)  ->  Croma en OkLab. Distancia desde el gris neutro
+#                   en el plano cromático; a mayor valor, mayor
+#                   intensidad cromática.
+#   Pesos:
+#     0.6·L     ->  Prioriza la contribución de luminosidad a la
+#                   percepción visual global.#
+#     0.4·croma ->  Añade intensidad cromática sin dominar la claridad.
+#
+#   El resultado es una medida de “intensidad visual percibida”,
+#   útil para comparar colores dentro de paletas y evaluar
+#   estabilidad en transformaciones de hue.
+local bc_in="scale=10;"
+for i in {1..$#oklabs}; do
+    lab="${oklabs[i]}"
+    lab="${lab#'OkLab('}"
+    lab="${lab%')'}"
+    lab="${lab//, / }"
+    xyz=(${=lab})
+    # Reproduce el calculo original: score truncado a 4 decimales y Pts a 2,
+    # con el score ya truncado como entrada de Pts.
+    bc_in+="scale=10;x=(0.6*${xyz[1]})+(0.4*sqrt((${xyz[2]}*${xyz[2]})+(${xyz[3]}*${xyz[3]})));scale=4;s=x/1;scale=4;p=s*100;scale=2;p=p/1;print s,\" \",p,\"\n\";"
+done
+rows=("${(@f)$(print -r -- "$bc_in" | bc -l)}")
+if ((${#rows[@]} != ${#angles[@]})); then
+    printf '%s>>FAIL no se pudo calcular el score de los colores.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
+for i in {1..$#rows}; do
+    scores+=("${rows[i]%% *}")
+    pcts+=("${rows[i]##* }")
+done
+
+for i in {1..$#hexs}; do
+    color="${hexs[i]}"
+    degrees="${angles[i]}"
+    oklch_val="${lchs[i]}"
+    oklab_score="${scores[i]}"
+    oklab_score_pct="${pcts[i]}"
 
     case "$detail" in
 
@@ -265,13 +294,6 @@ for degrees in "${angles[@]}"; do
         base)
             # Pts: puntuación perceptual derivada de coordenadas OkLab.
             # Escala interna del script; no corresponde a una unidad física.
-            oklab_score_pct=$(bc -l <<< "
-            scale=4;
-            x = $oklab_score * 100;
-            scale=2;
-            x/1
-            ")
-
             pastel paint "$color" \
                 "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct"
             ;;
