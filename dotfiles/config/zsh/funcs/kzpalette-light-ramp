@@ -25,7 +25,7 @@
 #   vista     — block | set (default: block en terminal, set en pipe)
 #
 # Cada color generado se convierte a hexadecimal. En block se muestra como
-# muestra coloreada; en set se emite la lista hex plana.
+# muestra coloreada; en set se emite hex con L y C medidos.
 
 setopt localoptions noksharrays
 
@@ -67,7 +67,8 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '      set            Tabla: hex L_oklch C_oklch (consumo agentico)\n'
     printf '                     Cabecera: >>INFO Columnas y >>INFO Propiedad.\n'
     printf '  :: Notas\n'
-    printf '      En block, cada paso muestra hex, %% aplicado y C (croma Oklch).\n'
+    printf '      En block, cada paso muestra hex y %% aplicado.\n'
+    printf '      [*] en block marca el color mas cercano al base por dEOKr2 (sin umbral).\n'
     printf '      En set, L_oklch y C_oklch son las coordenadas medidas del hex\n'
     printf '      generado, no el escalar aplicado; el recorte a gamut puede moverlas.\n'
     printf '      Las propiedades solo mueven luminosidad; no fijan croma ni matiz.\n'
@@ -170,8 +171,8 @@ case "$property" in
 esac
 
 local -r ICON=$'\uf4ee'
-local i pctv lvl light_pct hex_color oklch chroma col lch Lval Cval rest
-local -a rows levels pcts cols hexes lchs
+local i pctv lvl light_pct hex_color oklch col lch Lval Cval rest closest marker lab
+local -a rows levels pcts cols hexes lchs oklabs des base_xyz xyz
 # Un solo bc calcula todos los niveles. El divisor depende de la propiedad:
 # oklab-l/hsl-lightness esperan 0.0-1.0 y lightness usa 0-100.
 local divisor=100
@@ -214,31 +215,67 @@ if ((${#hexes[@]} != steps)); then
     printf '%s>>FAIL pastel no convirtio los %s colores a hex.%s\n' "$C_RED" "$steps" "$C_RST" >&2
     return 1
 fi
-lchs=("${(@f)$(pastel format oklch "${hexes[@]}")}")
-if ((${#lchs[@]} != steps)); then
-    printf '%s>>FAIL pastel no devolvio el croma de los colores.%s\n' "$C_RED" "$C_RST" >&2
-    return 1
-fi
-
 if [[ "$lview" == 'set' ]]; then
+    lchs=("${(@f)$(pastel format oklch "${hexes[@]}")}")
+    if ((${#lchs[@]} != steps)); then
+        printf '%s>>FAIL pastel no devolvio L/C de los colores.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
     printf '>>INFO Columnas: hex L_oklch C_oklch\n'
     printf '>>INFO Propiedad: %s\n' "$pastel_property"
+fi
+
+if [[ "$lview" == 'block' ]]; then
+    # dEOKr2 identifica el paso mas cercano al base. El base va primero
+    # en el lote para comparar contra cada color generado.
+    oklabs=("${(@f)$(pastel format oklab "$base" "${hexes[@]}")}")
+    if ((${#oklabs[@]} != steps + 1)); then
+        printf '%s>>FAIL no se pudieron leer las coordenadas del base y los colores.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
+
+    lab="${oklabs[1]}"
+    lab="${lab#'OkLab('}"
+    lab="${lab%')'}"
+    lab="${lab//, / }"
+    base_xyz=(${=lab})
+    # Misma metrica que hue-harmonize: toe(L) y a/b escalados x2;
+    # distancia euclidea en ese espacio, sin umbral.
+    local bc_in="scale=10;k=0.206;m=0.03;q=(1+k)/(1+m);"
+    bc_in+="u=${base_xyz[1]};v=${base_xyz[2]};w=${base_xyz[3]};"
+    bc_in+="g=0.5*(q*u-k+sqrt((q*u-k)^2+4*m*q*u));i=2*v;h=2*w;"
+    for ((i = 1; i <= steps; i++)); do
+        lab="${oklabs[i + 1]}"
+        lab="${lab#'OkLab('}"
+        lab="${lab%')'}"
+        lab="${lab//, / }"
+        xyz=(${=lab})
+        bc_in+="scale=10;b=${xyz[1]};d=${xyz[2]};f=${xyz[3]};n=0.5*(q*b-k+sqrt((q*b-k)^2+4*m*q*b));o=2*d;r=2*f;z=sqrt((n-g)^2+(o-i)^2+(r-h)^2);print z,\"\n\";"
+    done
+    des=("${(@f)$(print -r -- "$bc_in" | bc -l)}")
+    if ((${#des[@]} != steps)); then
+        printf '%s>>FAIL no se pudo calcular la distancia al base.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
+
+    # Ante empate exacto gana el primero en el orden de la rampa.
+    closest="$(printf '%s\n' "${des[@]}" | awk 'NR == 1 || $1 < min { min = $1; idx = NR } END { print idx }')"
+    if [[ -z "$closest" ]]; then
+        printf '%s>>FAIL no se pudo identificar el color mas cercano al base.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
 fi
 
 for ((i = 1; i <= steps; i++)); do
     hex_color="${hexes[i]}"
     if [[ "$lview" == 'block' ]]; then
         light_pct=$(printf '%4.1f' "${pcts[i]}")
-        # Croma Oklch del color generado, tomada del lote; expone la
-        # perdida de saturacion.
-        oklch="${lchs[i]}"
-        chroma="${oklch#*, }"
-        chroma="${chroma%%,*}"
-        chroma="$(printf '%.3f' "$chroma")"
+        marker=''
+        ((i == closest)) && marker=' [*]'
 
         # Muestra visual junto con el valor hexadecimal generado.
         pastel paint "$hex_color" \
-            "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ── C $chroma ──┤  🮍███🮌"
+            "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ──┤  🮍███🮌${marker}"
     else
         # Coordenadas medidas del hex, con nombre y unidad inferibles.
         oklch="${lchs[i]}"
