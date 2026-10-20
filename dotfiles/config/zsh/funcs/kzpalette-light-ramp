@@ -64,9 +64,12 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '      hsl-lightness  Luminosidad HSL (0-100 se divide a 0.0-1.0)\n'
     printf '  :: Vistas\n'
     printf '      block          Bloques con color (defecto en terminal)\n'
-    printf '      set            Lista hex plana (consumo agentico)\n'
+    printf '      set            Tabla: hex L_oklch C_oklch (consumo agentico)\n'
+    printf '                     Cabecera: >>INFO Columnas y >>INFO Propiedad.\n'
     printf '  :: Notas\n'
     printf '      En block, cada paso muestra hex, %% aplicado y C (croma Oklch).\n'
+    printf '      En set, L_oklch y C_oklch son las coordenadas medidas del hex\n'
+    printf '      generado, no el escalar aplicado; el recorte a gamut puede moverlas.\n'
     printf '      Las propiedades solo mueven luminosidad; no fijan croma ni matiz.\n'
     printf '      Oklch cilindrico (croma/hue): ver kzpalette-oklch-scale.\n'
     return 0
@@ -167,7 +170,7 @@ case "$property" in
 esac
 
 local -r ICON=$'\uf4ee'
-local i pctv lvl light_pct hex_color oklch chroma col
+local i pctv lvl light_pct hex_color oklch chroma col lch Lval Cval rest
 local -a rows levels pcts cols hexes lchs
 # Un solo bc calcula todos los niveles. El divisor depende de la propiedad:
 # oklab-l/hsl-lightness esperan 0.0-1.0 y lightness usa 0-100.
@@ -211,18 +214,21 @@ if ((${#hexes[@]} != steps)); then
     printf '%s>>FAIL pastel no convirtio los %s colores a hex.%s\n' "$C_RED" "$steps" "$C_RST" >&2
     return 1
 fi
-if [[ "$lview" == 'block' ]]; then
-    lchs=("${(@f)$(pastel format oklch "${hexes[@]}")}")
-    if ((${#lchs[@]} != steps)); then
-        printf '%s>>FAIL pastel no devolvio el croma de los colores.%s\n' "$C_RED" "$C_RST" >&2
-        return 1
-    fi
+lchs=("${(@f)$(pastel format oklch "${hexes[@]}")}")
+if ((${#lchs[@]} != steps)); then
+    printf '%s>>FAIL pastel no devolvio el croma de los colores.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
+
+if [[ "$lview" == 'set' ]]; then
+    printf '>>INFO Columnas: hex L_oklch C_oklch\n'
+    printf '>>INFO Propiedad: %s\n' "$pastel_property"
 fi
 
 for ((i = 1; i <= steps; i++)); do
     hex_color="${hexes[i]}"
-    light_pct=$(printf '%4.1f' "${pcts[i]}")
     if [[ "$lview" == 'block' ]]; then
+        light_pct=$(printf '%4.1f' "${pcts[i]}")
         # Croma Oklch del color generado, tomada del lote; expone la
         # perdida de saturacion.
         oklch="${lchs[i]}"
@@ -234,6 +240,13 @@ for ((i = 1; i <= steps; i++)); do
         pastel paint "$hex_color" \
             "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ── C $chroma ──┤  🮍███🮌"
     else
-        printf '%s\n' "$hex_color"
+        # Coordenadas medidas del hex, con nombre y unidad inferibles.
+        oklch="${lchs[i]}"
+        lch="${oklch#*\(}"
+        lch="${lch%')'}"
+        Lval="${lch%%,*}"
+        rest="${lch#*, }"
+        Cval="${rest%%,*}"
+        printf '%s %s %s\n' "$hex_color" "$Lval" "$Cval"
     fi
 done

@@ -54,8 +54,9 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      [umbral]   dEOKr2 maximo mayor que 0 (defecto: 0.02)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
-    printf '      block      Bloques con color y dE por candidato\n'
-    printf '      set        Lista hex plana: HEX dE (consumo agentico)\n'
+    printf '      block      Bloques con color y dEOKr2 por candidato\n'
+    printf '      set        Tabla: hex dEOKr2 (consumo agentico)\n'
+    printf '                 Cabecera: >>INFO Columnas y >>INFO Umbral.\n'
     printf '  :: Notas\n'
     printf '      Conserva solo los colores con dEOKr2 < umbral y los ordena de menor\n'
     printf '      a mayor distancia. El umbral 0.02 es el JND de trabajo (escala Oklab).\n'
@@ -233,6 +234,11 @@ if ((total < count)); then
     printf '   Amplia el umbral para cubrir mas candidatos.\n' >&2
 fi
 
+if [[ "$lview" == 'set' ]]; then
+    printf '>>INFO Columnas: hex dEOKr2\n'
+    printf '>>INFO Umbral: %s\n' "$threshold"
+fi
+
 case "$lview" in
     block)
         for line in "${lines[@]}"; do
@@ -244,7 +250,11 @@ case "$lview" in
         done
         ;;
     *)
-        printf '%s\n' "${lines[@]}"
+        for line in "${lines[@]}"; do
+            hex="${line%% *}"
+            dE="${line##* }"
+            printf '%s %s\n' "$hex" "$dE"
+        done
         ;;
 esac
 return 0

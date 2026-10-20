@@ -153,7 +153,11 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '      full       Agrega OkLCh y angulo de rotacion\n'
     printf '  :: Vistas\n'
     printf '      block      Muestra coloreada por armonia (defecto en terminal)\n'
-    printf '      set        Lista hex plana (consumo agentico)\n'
+    printf '      set        Tabla para consumo agentico\n'
+    printf '      Formato:   >>INFO Columnas: hex score_oklab [rotate_deg]\n'
+    printf '                 >>INFO Base: HEX\n'
+    printf '                 score en 0-1; rotate_deg en grados (-180..180).\n'
+    printf '                 base omite rotate_deg; full lo agrega.\n'
     printf '  :: Notas\n'
     printf '      Rota solo el matiz en HSL; luminosidad y croma perceptuales\n'
     printf '      no se conservan. Angulos: -180..180 en 38 pasos.\n'
@@ -215,7 +219,7 @@ esac
 # pastel rotate exige una llamada por angulo, pero format acepta varios
 # colores: se agrupan las conversiones en pocos procesos y el score se
 # calcula en un unico bc.
-local i lab degrees color oklch_val oklab_score oklab_score_pct
+local i lab degrees color oklch_val oklab_score oklab_score_pct sv base_hex
 local -a cols hexs lchs oklabs scores pcts rows xyz
 for degrees in "${angles[@]}"; do
     cols+=("$(pastel rotate -- "$degrees" "$base")")
@@ -227,17 +231,11 @@ if ((${#hexs[@]} != ${#angles[@]})); then
     return 1
 fi
 
-if [[ "$lview" == 'set' ]]; then
-    printf '%s\n' "${hexs[@]}"
-    return 0
-fi
-
 # Representaciones del color en espacios perceptuales:
 # - oklch: representación polar (L = luminosidad, C = croma, h = matiz)
 # - oklab: representación cartesiana (L, a, b) para análisis y cálculos
-lchs=("${(@f)$(pastel format oklch "${hexs[@]}")}")
 oklabs=("${(@f)$(pastel format oklab "${hexs[@]}")}")
-if ((${#lchs[@]} != ${#angles[@]} || ${#oklabs[@]} != ${#angles[@]})); then
+if ((${#oklabs[@]} != ${#angles[@]})); then
     printf '%s>>FAIL no se pudieron leer las coordenadas de los colores.%s\n' "$C_RED" "$C_RST" >&2
     return 1
 fi
@@ -277,6 +275,39 @@ for i in {1..$#rows}; do
     scores+=("${rows[i]%% *}")
     pcts+=("${rows[i]##* }")
 done
+
+# set: base expone score_oklab; full agrega rotate_deg. El score se normaliza
+# con cero inicial solo aqui para no alterar la vista block.
+if [[ "$lview" == 'set' ]]; then
+    base_hex="$(pastel format hex "$base")"
+    if [[ -z "$base_hex" ]]; then
+        printf '%s>>FAIL color base invalido: %s.%s\n' "$C_RED" "$base" "$C_RST" >&2
+        return 2
+    fi
+    if [[ "$detail" == 'full' ]]; then
+        printf '>>INFO Columnas: hex score_oklab rotate_deg\n'
+    else
+        printf '>>INFO Columnas: hex score_oklab\n'
+    fi
+    printf '>>INFO Base: %s\n' "$base_hex"
+    for i in {1..$#hexs}; do
+        sv="${scores[i]}"
+        [[ "$sv" == .* ]] && sv="0$sv"
+        if [[ "$detail" == 'full' ]]; then
+            printf '%s %s %s\n' "${hexs[i]}" "$sv" "${angles[i]}"
+        else
+            printf '%s %s\n' "${hexs[i]}" "$sv"
+        fi
+    done
+    return 0
+fi
+
+# Solo block muestra la representacion polar completa.
+lchs=("${(@f)$(pastel format oklch "${hexs[@]}")}")
+if ((${#lchs[@]} != ${#angles[@]})); then
+    printf '%s>>FAIL no se pudo leer OkLCh de los colores.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
 
 for i in {1..$#hexs}; do
     color="${hexs[i]}"

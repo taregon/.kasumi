@@ -34,7 +34,8 @@ if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
     printf '  :: Vistas\n'
     printf '      block       Bloques compactos por paso (defecto en terminal)\n'
     printf '      table       Bloques anchos por paso\n'
-    printf '      set         Lista hex plana del espacio dado (consumo agentico)\n'
+    printf '      set         Tabla: hex (consumo agentico)\n'
+    printf '                  Cabecera: >>INFO Columnas y >>INFO Espacio.\n'
     printf '  :: Notas\n'
     printf '      block y table comparan RGB, HSL, Lab y OkLab en paralelo; set\n'
     printf '      interpola solo el espacio indicado.\n'
@@ -125,6 +126,8 @@ if [[ "$lview" == 'set' ]]; then
         printf '   Revisa los colores de origen y destino.\n' >&2
         return 1
     fi
+    printf '>>INFO Columnas: hex\n'
+    printf '>>INFO Espacio: %s\n' "$lspace"
     printf '%s\n' "${(@f)gradient}"
     return 0
 fi

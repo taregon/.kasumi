@@ -26,7 +26,7 @@
 # chroma hasta ~0.015 mayor que la referencia a mitad de escala; idempotencia
 # +/-1 RGB por redondeo a 4 decimales. Verificado contra la paleta kasumi local
 # (verde y rojo).
-# La linea del ancla lleva [*] en ambas vistas (filtrable con grep).
+# En block la linea del ancla lleva [*] (filtrable con grep); en set, anchor=1.
 
 setopt localoptions noksharrays
 
@@ -75,10 +75,12 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      [vista]     block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
     printf '      block          Bloques con color por paso\n'
-    printf '      set            Lista hex plana (consumo agentico)\n'
-    printf '      Formato set:   PASO HEX CROMA a 3 digitos + [*] en el ancla\n'
+    printf '      set            Tabla para consumo agentico\n'
+    printf '      Formato set:   >>INFO Columnas: hex step C_oklch anchor\n'
+    printf '                     >>INFO Direccion: light|dark\n'
+    printf '                     Filas: HEX PASO CROMA 0|1; PASO a 3 digitos (050-950).\n'
     printf '  :: Notas\n'
-    printf '      En block, C es la croma Oklch del paso.\n'
+    printf '      En block, C es la croma Oklch del paso y [*] marca el ancla.\n'
     printf '      Las anclas 900 y 950 no se admiten: no dejan pasos superiores ni\n'
     printf '      margen para reconstruir el 200 implicito (900 ambiguo).\n'
     printf '      La conversion Oklch la delega en pastel; la escala\n'
@@ -268,7 +270,22 @@ fi
 # cada fila cierra con un unico printf. 10# fuerza base 10, porque los
 # pasos vienen a 3 digitos y 050 seria octal en aritmetica zsh.
 local -r ICON=$'\uf4ee'
-local line step hex rest chroma mark
+local line step hex rest chroma mark af dir_label
+if [[ "$lview" == 'set' ]]; then
+    case "${direction:l}" in
+        l | light)
+            dir_label='light'
+            ;;
+        d | dark)
+            dir_label='dark'
+            ;;
+        *)
+            dir_label="$direction"
+            ;;
+    esac
+    printf '>>INFO Columnas: hex step C_oklch anchor\n'
+    printf '>>INFO Direccion: %s\n' "$dir_label"
+fi
 for line in "${(@f)raw}"; do
     step="${line%% *}"
     rest="${line#* }"
@@ -285,7 +302,12 @@ for line in "${(@f)raw}"; do
             printf '\n'
             ;;
         *)
-            printf '%s %s %s%s\n' "$step" "$hex" "$chroma" "$mark"
+            if [[ -n "$mark" ]]; then
+                af=1
+            else
+                af=0
+            fi
+            printf '%s %s %s %s\n' "$hex" "$step" "$chroma" "$af"
             ;;
     esac
 done
