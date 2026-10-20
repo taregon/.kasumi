@@ -161,6 +161,7 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '  :: Notas\n'
     printf '      Rota solo el matiz en HSL; luminosidad y croma perceptuales\n'
     printf '      no se conservan. Angulos: -180..180 en 38 pasos.\n'
+    printf '      [*] en block marca el color mas cercano al base por dEOKr2.\n'
     return 0
 fi
 
@@ -219,8 +220,8 @@ esac
 # pastel rotate exige una llamada por angulo, pero format acepta varios
 # colores: se agrupan las conversiones en pocos procesos y el score se
 # calcula en un unico bc.
-local i lab degrees color oklch_val oklab_score oklab_score_pct sv base_hex
-local -a cols hexs lchs oklabs scores pcts rows xyz
+local i lab degrees color oklch_val oklab_score oklab_score_pct sv base_hex closest marker
+local -a cols hexs lchs oklabs scores pcts des rows xyz fields base_xyz
 for degrees in "${angles[@]}"; do
     cols+=("$(pastel rotate -- "$degrees" "$base")")
 done
@@ -234,8 +235,9 @@ fi
 # Representaciones del color en espacios perceptuales:
 # - oklch: representación polar (L = luminosidad, C = croma, h = matiz)
 # - oklab: representación cartesiana (L, a, b) para análisis y cálculos
-oklabs=("${(@f)$(pastel format oklab "${hexs[@]}")}")
-if ((${#oklabs[@]} != ${#angles[@]})); then
+# El base va primero para calcular dEOKr2 contra cada rotación.
+oklabs=("${(@f)$(pastel format oklab "$base" "${hexs[@]}")}")
+if ((${#oklabs[@]} != ${#angles[@]} + 1)); then
     printf '%s>>FAIL no se pudieron leer las coordenadas de los colores.%s\n' "$C_RED" "$C_RST" >&2
     return 1
 fi
@@ -255,16 +257,29 @@ fi
 #   El resultado es una medida de “intensidad visual percibida”,
 #   útil para comparar colores dentro de paletas y evaluar
 #   estabilidad en transformaciones de hue.
-local bc_in="scale=10;"
-for i in {1..$#oklabs}; do
-    lab="${oklabs[i]}"
+#
+# dEOKr2 marca el color más cercano al base:
+#   toe(L) y a/b escalados x2; distancia euclídea en ese espacio.
+#   Misma métrica que kzpalette-cluster (CSS Color 4, fx-deltae).
+lab="${oklabs[1]}"
+lab="${lab#'OkLab('}"
+lab="${lab%')'}"
+lab="${lab//, / }"
+base_xyz=(${=lab})
+# bc solo admite variables de una letra: u/v/w base, b/d/f color,
+# g/i/h base transformada, n/o/r color transformado, z distancia.
+local bc_in="scale=10;k=0.206;m=0.03;q=(1+k)/(1+m);"
+bc_in+="u=${base_xyz[1]};v=${base_xyz[2]};w=${base_xyz[3]};"
+bc_in+="g=0.5*(q*u-k+sqrt((q*u-k)^2+4*m*q*u));i=2*v;h=2*w;"
+for i in {1..$#angles}; do
+    lab="${oklabs[i + 1]}"
     lab="${lab#'OkLab('}"
     lab="${lab%')'}"
     lab="${lab//, / }"
     xyz=(${=lab})
     # Reproduce el calculo original: score truncado a 4 decimales y Pts a 2,
     # con el score ya truncado como entrada de Pts.
-    bc_in+="scale=10;x=(0.6*${xyz[1]})+(0.4*sqrt((${xyz[2]}*${xyz[2]})+(${xyz[3]}*${xyz[3]})));scale=4;s=x/1;scale=4;p=s*100;scale=2;p=p/1;print s,\" \",p,\"\n\";"
+    bc_in+="scale=10;b=${xyz[1]};d=${xyz[2]};f=${xyz[3]};x=(0.6*b)+(0.4*sqrt((d*d)+(f*f)));scale=4;s=x/1;scale=4;p=s*100;scale=2;p=p/1;scale=10;n=0.5*(q*b-k+sqrt((q*b-k)^2+4*m*q*b));o=2*d;r=2*f;z=sqrt((n-g)^2+(o-i)^2+(r-h)^2);print s,\" \",p,\" \",z,\"\n\";"
 done
 rows=("${(@f)$(print -r -- "$bc_in" | bc -l)}")
 if ((${#rows[@]} != ${#angles[@]})); then
@@ -272,8 +287,10 @@ if ((${#rows[@]} != ${#angles[@]})); then
     return 1
 fi
 for i in {1..$#rows}; do
-    scores+=("${rows[i]%% *}")
-    pcts+=("${rows[i]##* }")
+    fields=(${=rows[i]})
+    scores+=("${fields[1]}")
+    pcts+=("${fields[2]}")
+    des+=("${fields[3]}")
 done
 
 # set: base expone score_oklab; full agrega rotate_deg. El score se normaliza
@@ -309,24 +326,34 @@ if ((${#lchs[@]} != ${#angles[@]})); then
     return 1
 fi
 
+# El minimo dEOKr2 identifica la rotacion mas cercana al base. Ante empate
+# exacto gana el primero en el orden de angulos (comparacion estricta).
+closest="$(printf '%s\n' "${des[@]}" | awk 'NR == 1 || $1 < min { min = $1; idx = NR } END { print idx }')"
+if [[ -z "$closest" ]]; then
+    printf '%s>>FAIL no se pudo identificar el color mas cercano al base.%s\n' "$C_RED" "$C_RST" >&2
+    return 1
+fi
+
 for i in {1..$#hexs}; do
     color="${hexs[i]}"
     degrees="${angles[i]}"
     oklch_val="${lchs[i]}"
     oklab_score="${scores[i]}"
     oklab_score_pct="${pcts[i]}"
+    marker=''
+    ((i == closest)) && marker=' [*]'
 
     case "$detail" in
 
         full)
             pastel paint "$color" \
-                "$color ◖████◗ ─ ScoreOkLab: $oklab_score ─ $oklch_val ─ RotateHSL: ${degrees}°"
+                "$color ◖████◗ ─ ScoreOkLab: $oklab_score ─ $oklch_val ─ RotateHSL: ${degrees}°${marker}"
             ;;
         base)
             # Pts: puntuación perceptual derivada de coordenadas OkLab.
             # Escala interna del script; no corresponde a una unidad física.
             pastel paint "$color" \
-                "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct"
+                "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct${marker}"
             ;;
     esac
 done
