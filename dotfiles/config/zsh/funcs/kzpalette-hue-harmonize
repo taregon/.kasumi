@@ -161,6 +161,7 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '  :: Notas\n'
     printf '      Rota solo el matiz en HSL; luminosidad y croma perceptuales\n'
     printf '      no se conservan. Angulos: -180..180 en 38 pasos.\n'
+    printf '      En full, L y C se miden del hex generado, no son valores HSL.\n'
     printf '      Pts = 100*(0.6*L + 0.4*C) en OkLab; indice interno.\n'
     printf '      [*] en block marca el color mas cercano al base por dEOKr2 (sin umbral).\n'
     return 0
