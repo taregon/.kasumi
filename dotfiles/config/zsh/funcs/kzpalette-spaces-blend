@@ -76,13 +76,13 @@ if [[ -z "$lview" ]]; then
     fi
 fi
 case "$lview" in
-    block | d)
+    block)
         lview='block'
         ;;
-    table | t)
+    table)
         lview='table'
         ;;
-    set | s)
+    set)
         lview='set'
         ;;
     *)

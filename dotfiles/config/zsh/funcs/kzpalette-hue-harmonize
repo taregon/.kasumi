@@ -126,7 +126,7 @@
 #           Funciona para jerarquías sutiles en interfaces monocromáticas.
 
 local base=$1
-local level="${2:-default}"
+local detail="${2:-base}"
 local view="${3:-}"
 local angles=(
     # -180° y 180° son equivalentes (mismo color resultante);
@@ -143,14 +143,14 @@ fi
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-hue-harmonize <color> [nivel] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-hue-harmonize <color> [detalle] [vista]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
     printf '      <color>    Color base (hex, nombre o formato pastel)\n'
-    printf '      [nivel]    default|d | info|i (defecto: default)\n'
+    printf '      [detalle]  base|full (defecto: base)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
-    printf '  :: Niveles\n'
-    printf '      default    Score y muestra cromatica\n'
-    printf '      info       Agrega OkLCh y angulo de rotacion\n'
+    printf '  :: Detalle\n'
+    printf '      base       Score y muestra cromatica\n'
+    printf '      full       Agrega OkLCh y angulo de rotacion\n'
     printf '  :: Vistas\n'
     printf '      block      Muestra coloreada por armonia (defecto en terminal)\n'
     printf '      set        Lista hex plana (consumo agentico)\n'
@@ -162,7 +162,7 @@ fi
 
 if [[ -z "$base" ]]; then
     printf '%s>>FAIL Falta el color base.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpalette-hue-harmonize <color> [nivel] [vista].\n' >&2
+    printf '   Uso: kzpalette-hue-harmonize <color> [detalle] [vista].\n' >&2
     return 2
 fi
 
@@ -180,16 +180,16 @@ if ! command -v bc > /dev/null 2>&1; then
 fi
 
 # ──「 VALIDACION 」──────────────────────────────────────────
-case "$level" in
-    default | d)
-        level='default'
+case "$detail" in
+    base)
+        detail='base'
         ;;
-    info | i)
-        level='info'
+    full)
+        detail='full'
         ;;
     *)
-        printf '%s>>FAIL Nivel invalido: %s.%s\n' "$C_RED" "$level" "$C_RST" >&2
-        printf '   Usa default|d o info|i; -h para ver el uso.\n' >&2
+        printf '%s>>FAIL Detalle invalido: %s.%s\n' "$C_RED" "$detail" "$C_RST" >&2
+        printf '   Usa base o full; -h para ver el uso.\n' >&2
         return 2
         ;;
 esac
@@ -256,13 +256,13 @@ for degrees in "${angles[@]}"; do
         "
     )
 
-    case "$level" in
+    case "$detail" in
 
-        info)
+        full)
             pastel paint "$color" \
                 "$color ◖████◗ ─ ScoreOkLab: $oklab_score ─ $oklch_val ─ RotateHSL: ${degrees}°"
             ;;
-        default)
+        base)
             # Pts: puntuación perceptual derivada de coordenadas OkLab.
             # Escala interna del script; no corresponde a una unidad física.
             oklab_score_pct=$(bc -l <<< "

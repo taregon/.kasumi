@@ -66,11 +66,11 @@ esac
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-oklch-scale <color> [ancla] [sentido] [alcance] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-oklch-scale <color> [nivel] [lado] [alcance] [vista]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Argumentos\n'
-    printf '      <color>     Hex original, ej: #80c8a1\n'
-    printf '      [ancla]     Paso donde vive el color (defecto: 200; 50-800 en full)\n'
-    printf '      [sentido]   light|dark|l|d (defecto: dark)\n'
+    printf '      <color>     Color base, ej: #80c8a1\n'
+    printf '      [nivel]     Paso donde vive el color (defecto: 200; 50-800 en full)\n'
+    printf '      [lado]      light|dark|l|d (defecto: dark)\n'
     printf '      [alcance]   base|full (defecto: base; full agrega 50 y 950)\n'
     printf '      [vista]     block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
@@ -89,7 +89,7 @@ fi
 
 if [[ -z "$color" ]]; then
     printf '%s>>FAIL Falta el color de origen.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Uso: kzpalette-oklch-scale <color> [ancla] [sentido] [alcance] [vista].\n' >&2
+    printf '   Uso: kzpalette-oklch-scale <color> [nivel] [lado] [alcance] [vista].\n' >&2
     return 2
 fi
 
