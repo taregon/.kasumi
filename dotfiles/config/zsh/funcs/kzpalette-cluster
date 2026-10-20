@@ -4,10 +4,11 @@
 #
 # Muestrea una rejilla determinista en Oklch alrededor del ancla (sin azar:
 # misma entrada, misma salida) y conserva los candidatos bajo el umbral. La
-# conversion sRGB <-> Oklch la hace `pastel` (extra/pastel); el dE se calcula
-# directo en Oklab con a/b escalados x2 y toe (dEOKr2, CSS Color 4 seccion
-# 20.5), sin ida y vuelta por candidato: el vecindario es tan chico que el
-# recorte de gamut no aplica (los aceptados se verifican al renderizar).
+# conversion sRGB <-> Oklch/OkLab la hace `pastel` (extra/pastel). El dE se
+# calcula en Oklab con a/b escalados x2 y toe (dEOKr2, CSS Color 4
+# seccion 20.5). El candidato Oklch solo prefiltra; el dE emitido se
+# recalcula sobre el hex final, porque la cuantizacion a 8 bits y el recorte
+# de gamut pueden moverlo.
 # La metrica y el umbral siguen el catalogo dE (fx-deltae): dEOKr2 con JND
 # 0.02 en escala Oklab (CSS Color 4, gamut mapping), conservador en croma.
 #
@@ -54,12 +55,14 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      [umbral]   dEOKr2 maximo mayor que 0 (defecto: 0.02)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
-    printf '      block      Bloques con color y dEOKr2 por candidato\n'
+    printf '      block      Bloques con color y dEOKr2 del hex emitido\n'
     printf '      set        Tabla: hex dEOKr2 (consumo agentico)\n'
     printf '                 Cabecera: >>INFO Columnas y >>INFO Umbral.\n'
     printf '  :: Notas\n'
     printf '      Conserva solo los colores con dEOKr2 < umbral y los ordena de menor\n'
     printf '      a mayor distancia. El umbral 0.02 es el JND de trabajo (escala Oklab).\n'
+    printf '      El dEOKr2 emitido se mide sobre el hex final; el candidato Oklch\n'
+    printf '      solo prefiltra antes de convertir. El hex cuantiza a 8 bits.\n'
     printf '      Rampas de luminosidad: ver kzpalette-light-ramp; escala Oklch: ver\n'
     printf '      kzpalette-oklch-scale.\n'
     return 0
@@ -164,6 +167,10 @@ OKLCH_RE = re.compile(
     r"oklch\(\s*([0-9.]+)\s*,?\s+([0-9.]+)\s*,?\s+([0-9.]+)\s*\)",
     re.IGNORECASE,
 )
+OKLAB_RE = re.compile(
+    r"oklab\(\s*(-?[0-9.]+)\s*,?\s+(-?[0-9.]+)\s*,?\s+(-?[0-9.]+)\s*\)",
+    re.IGNORECASE,
+)
 
 def toe(x):
     return 0.5 * (K3 * x - K1 + math.sqrt((K3 * x - K1) ** 2 + 4 * K2 * K3 * x))
@@ -184,9 +191,16 @@ match = OKLCH_RE.search(run_pastel("format", "oklch", anchor_hex))
 if not match:
     raise SystemExit(f"no se pudo leer Oklch de {color}")
 l0, c0, h0 = float(match.group(1)), float(match.group(2)), float(match.group(3))
-anchor = to_lab(l0, c0, h0)
+# El ancla se lee en OkLab directo para no arrastrar el redondeo de Oklch.
+match = OKLAB_RE.search(run_pastel("format", "oklab", anchor_hex))
+if not match:
+    raise SystemExit(f"no se pudo leer OkLab de {color}")
+al, aa, ab = (float(match.group(i)) for i in (1, 2, 3))
+anchor = (toe(al), 2 * aa, 2 * ab)
 
-# Conserva el menor dE por hex unico; descarta el centro y el propio ancla.
+# Conserva el hex unico; el dE del candidato solo prefiltra. Descarta el
+# centro y el propio ancla. El prefiltro evita convertir candidatos lejanos;
+# el umbral definitivo se aplica al dE medido del hex.
 found = {}
 for dl in GRID_L:
     for dc in GRID_C:
@@ -201,11 +215,28 @@ for dl in GRID_L:
                             f"oklch({l0 + dl:.6f} {c:.6f} {(h0 + dh) % 360.0:.4f})")
             if hx.lower() == anchor_hex.lower():
                 continue
-            if hx.lower() not in found or v < found[hx.lower()][0]:
-                found[hx.lower()] = (v, hx)
+            found.setdefault(hx.lower(), hx)
+
+# El dE emitido se mide sobre el hex final: la conversion a 8 bits y el
+# recorte de gamut pueden separarlo del candidato Oklch. Se pide OkLab
+# directo para no sumar el redondeo de una conversion intermedia por Oklch.
+hexes = list(found.values())
+measured = []
+if hexes:
+    lines = run_pastel("format", "oklab", *hexes).splitlines()
+    if len(lines) != len(hexes):
+        raise SystemExit("pastel no devolvio OkLab de todos los hex")
+    for hx, line in zip(hexes, lines):
+        match = OKLAB_RE.search(line)
+        if not match:
+            raise SystemExit(f"no se pudo leer OkLab de {hx}")
+        hl, ha, hb = (float(match.group(i)) for i in (1, 2, 3))
+        v = math.dist((toe(hl), 2 * ha, 2 * hb), anchor)
+        if v < threshold:
+            measured.append((v, hx))
 
 # ──「 EMISION 」─────────────────────────────────────────────
-for v, hx in sorted(found.values())[:count]:
+for v, hx in sorted(measured)[:count]:
     print(f"{hx} {v:.4f}")
 PY
 )"
