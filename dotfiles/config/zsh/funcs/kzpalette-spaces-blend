@@ -1,16 +1,16 @@
 # vim: filetype=zsh
-# Genera el degradado entre dos colores en el espacio elegido y lo emite
-# como lista hexadecimal o como bloques con color.
+# Genera el degradado entre dos colores en el espacio elegido o compara
+# todos los espacios, y lo emite como lista hexadecimal o bloques con color.
 
 setopt localoptions noksharrays
 
 local color1="$1"
 local color2="$2"
 local steps="${3:-10}"
-local space_arg="${4:-oklab}"
+local space_arg="${4:-all}"
 local view="${5:-}"
-local -a gradient
-local C_BLU C_RED C_RST canon lview lspace i
+local -a grads keys labels g row colnames
+local C_BLU C_RED C_RST canon lview lspace i j key raw
 
 if [[ -t 1 ]]; then
     C_BLU=$'\033[0;34m'
@@ -28,15 +28,15 @@ if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
     printf '      <color>     Color de origen\n'
     printf '      <color2>    Color de destino\n'
     printf '      [pasos]     Numero de pasos, entero >= 2 (defecto: 10)\n'
-    printf '      [espacio]   rgb|hsl|lab|oklab|lch (defecto: oklab)\n'
+    printf '      [espacio]   hsl|lch|rgb|lab|oklab|all (defecto: all)\n'
     printf '      [vista]     block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
-    printf '      block       Bloques con color del espacio elegido (defecto en terminal)\n'
-    printf '      set         Tabla: hex (consumo agentico)\n'
+    printf '      block       Bloques con color; all compara los cinco espacios\n'
+    printf '      set         Tabla: hex; all emite una columna por espacio\n'
     printf '                  Cabecera: >>INFO Columnas y >>INFO Espacio.\n'
     printf '  :: Notas\n'
-    printf '      Ambas vistas interpolan solo el espacio indicado. block muestra\n'
-    printf '      una fila por paso; set emite hex para filtrado.\n'
+    printf '      Sin espacio, all interpola y compara hsl, lch, rgb, lab y oklab.\n'
+    printf '      Con un espacio explicito, ambas vistas usan solo ese espacio.\n'
     printf '      -h, --help  Muestra esta ayuda\n'
     return 0
 fi
@@ -105,34 +105,86 @@ case "$lspace" in
     lch)
         canon='LCh'
         ;;
+    all)
+        canon=''
+        ;;
     *)
         printf '%s>>FAIL Espacio invalido: %s.%s\n' "$C_RED" "$space_arg" "$C_RST" >&2
-        printf '   Usa rgb|hsl|lab|oklab|lch.\n' >&2
+        printf '   Usa hsl|lch|rgb|lab|oklab|all.\n' >&2
         return 2
         ;;
 esac
 
 # ──「 GENERACION 」────────────────────────────────────────────
 # pastel gradient emite un color por linea; format hex normaliza la salida.
-gradient=("${(@f)$(pastel gradient --colorspace "$canon" "$color1" "$color2" --number "$steps" | pastel format hex)}")
-if ((${#gradient[@]} != steps)); then
-    printf '%s>>FAIL gradiente vacio o incompleto en espacio %s.%s\n' "$C_RED" "$canon" "$C_RST" >&2
-    printf '   Revisa los colores de origen y destino.\n' >&2
-    return 1
+# all recorre los espacios en el orden de la ayuda; cada gradiente queda
+# como texto con saltos internos para transponerlo al imprimir.
+grads=()
+if [[ "$lspace" == 'all' ]]; then
+    keys=(hsl lch rgb lab oklab)
+    labels=(HSL LCh RGB Lab OkLab)
+    for ((j = 1; j <= ${#keys[@]}; j++)); do
+        raw="$(pastel gradient --colorspace "${labels[j]}" "$color1" "$color2" --number "$steps" | pastel format hex)"
+        g=("${(@f)raw}")
+        if ((${#g[@]} != steps)); then
+            printf '%s>>FAIL gradiente vacio o incompleto en espacio %s.%s\n' "$C_RED" "${labels[j]}" "$C_RST" >&2
+            printf '   Revisa los colores de origen y destino.\n' >&2
+            return 1
+        fi
+        grads+=("$raw")
+    done
+else
+    raw="$(pastel gradient --colorspace "$canon" "$color1" "$color2" --number "$steps" | pastel format hex)"
+    g=("${(@f)raw}")
+    if ((${#g[@]} != steps)); then
+        printf '%s>>FAIL gradiente vacio o incompleto en espacio %s.%s\n' "$C_RED" "$canon" "$C_RST" >&2
+        printf '   Revisa los colores de origen y destino.\n' >&2
+        return 1
+    fi
+    grads=("$raw")
 fi
 
 # ──「 VISTAS 」────────────────────────────────────────────────
 case "$lview" in
     set)
-        printf '>>INFO Columnas: hex\n'
-        printf '>>INFO Espacio: %s\n' "$lspace"
-        printf '%s\n' "${gradient[@]}"
+        if [[ "$lspace" == 'all' ]]; then
+            # Una columna por espacio; cada fila conserva el mismo paso.
+            colnames=()
+            for key in "${keys[@]}"; do
+                colnames+=("hex_$key")
+            done
+            printf '>>INFO Columnas: %s\n' "${(j: :)colnames}"
+            printf '>>INFO Espacio: all\n'
+            for ((i = 1; i <= steps; i++)); do
+                row=()
+                for ((j = 1; j <= ${#keys[@]}; j++)); do
+                    g=("${(@f)grads[j]}")
+                    row+=("${g[i]}")
+                done
+                printf '%s\n' "${(j: :)row}"
+            done
+        else
+            printf '>>INFO Columnas: hex\n'
+            printf '>>INFO Espacio: %s\n' "$lspace"
+            printf '%s\n' "${(@f)grads[1]}"
+        fi
         ;;
     block)
         # pastel paint -n no emite salto; cada fila cierra con un printf.
-        for ((i = 1; i <= ${#gradient[@]}; i++)); do
-            pastel paint -n "${gradient[i]}" "🮍███🮌 ${canon} ${gradient[i]} "
-            printf '\n'
-        done
+        if [[ "$lspace" == 'all' ]]; then
+            for ((i = 1; i <= steps; i++)); do
+                for ((j = 1; j <= ${#keys[@]}; j++)); do
+                    g=("${(@f)grads[j]}")
+                    pastel paint -n "${g[i]}" "🮍███🮌 ${labels[j]} ${g[i]} "
+                done
+                printf '\n'
+            done
+        else
+            g=("${(@f)grads[1]}")
+            for ((i = 1; i <= ${#g[@]}; i++)); do
+                pastel paint -n "${g[i]}" "🮍███🮌 ${canon} ${g[i]} "
+                printf '\n'
+            done
+        fi
         ;;
 esac
