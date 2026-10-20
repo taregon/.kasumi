@@ -149,8 +149,8 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '      [detalle]  base|full (defecto: base)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Detalle\n'
-    printf '      base       Score y muestra cromatica\n'
-    printf '      full       Agrega OkLCh y angulo de rotacion\n'
+    printf '      base       Pts y muestra cromatica\n'
+    printf '      full       L, C, dEOKr2 y angulo de rotacion\n'
     printf '  :: Vistas\n'
     printf '      block      Muestra coloreada por armonia (defecto en terminal)\n'
     printf '      set        Tabla para consumo agentico\n'
@@ -161,7 +161,8 @@ if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '  :: Notas\n'
     printf '      Rota solo el matiz en HSL; luminosidad y croma perceptuales\n'
     printf '      no se conservan. Angulos: -180..180 en 38 pasos.\n'
-    printf '      [*] en block marca el color mas cercano al base por dEOKr2.\n'
+    printf '      Pts = 100*(0.6*L + 0.4*C) en OkLab; indice interno.\n'
+    printf '      [*] en block marca el color mas cercano al base por dEOKr2 (sin umbral).\n'
     return 0
 fi
 
@@ -220,8 +221,8 @@ esac
 # pastel rotate exige una llamada por angulo, pero format acepta varios
 # colores: se agrupan las conversiones en pocos procesos y el score se
 # calcula en un unico bc.
-local i lab degrees color oklch_val oklab_score oklab_score_pct sv base_hex closest marker
-local -a cols hexs lchs oklabs scores pcts des rows xyz fields base_xyz
+local i lab degrees color oklab_score_pct sv base_hex closest marker lch de_disp
+local -a cols hexs lchs oklabs scores pcts des rows xyz fields base_xyz lchv
 for degrees in "${angles[@]}"; do
     cols+=("$(pastel rotate -- "$degrees" "$base")")
 done
@@ -258,9 +259,10 @@ fi
 #   útil para comparar colores dentro de paletas y evaluar
 #   estabilidad en transformaciones de hue.
 #
-# dEOKr2 marca el color más cercano al base:
+# dEOKr2 mide la distancia perceptual al base:
 #   toe(L) y a/b escalados x2; distancia euclídea en ese espacio.
-#   Misma métrica que kzpalette-cluster (CSS Color 4, fx-deltae).
+#   Sin umbral: el marcador es el mínimo de las rotaciones
+#   (CSS Color 4, fx-deltae).
 lab="${oklabs[1]}"
 lab="${lab#'OkLab('}"
 lab="${lab%')'}"
@@ -334,12 +336,22 @@ if [[ -z "$closest" ]]; then
     return 1
 fi
 
+# Pts solo existe en la vista por defecto; full muestra las metricas
+# desglosadas.
+if [[ "$detail" == 'base' ]]; then
+    printf '>>INFO Pts: 0-100; mas alto = color mas claro y vivo.\n'
+fi
+
 for i in {1..$#hexs}; do
     color="${hexs[i]}"
     degrees="${angles[i]}"
-    oklch_val="${lchs[i]}"
-    oklab_score="${scores[i]}"
     oklab_score_pct="${pcts[i]}"
+    lch="${lchs[i]}"
+    lch="${lch#'OkLCh('}"
+    lch="${lch%')'}"
+    lch="${lch//, / }"
+    lchv=(${=lch})
+    printf -v de_disp '%.4f' "${des[i]}"
     marker=''
     ((i == closest)) && marker=' [*]'
 
@@ -347,7 +359,7 @@ for i in {1..$#hexs}; do
 
         full)
             pastel paint "$color" \
-                "$color ◖████◗ ─ ScoreOkLab: $oklab_score ─ $oklch_val ─ RotateHSL: ${degrees}°${marker}"
+                "$color ◖████◗ ─ L: ${lchv[1]} ─ C: ${lchv[2]} ─ dEOKr2: $de_disp ─ RotateHSL: ${degrees}°${marker}"
             ;;
         base)
             # Pts: puntuación perceptual derivada de coordenadas OkLab.
