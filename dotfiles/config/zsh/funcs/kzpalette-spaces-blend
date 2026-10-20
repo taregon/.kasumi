@@ -1,6 +1,6 @@
 # vim: filetype=zsh
-# Compara la interpolacion RGB/HSL/Lab/OkLab entre dos colores y emite
-# el degradado de un espacio como lista hexadecimal copiable.
+# Genera el degradado entre dos colores en el espacio elegido y lo emite
+# como lista hexadecimal o como bloques con color.
 
 setopt localoptions noksharrays
 
@@ -9,9 +9,8 @@ local color2="$2"
 local steps="${3:-10}"
 local space_arg="${4:-oklab}"
 local view="${5:-}"
-local gradient
-local -a rgb_gradient hsl_gradient lab_gradient oklab_gradient
-local C_BLU C_RED C_RST canon lview lspace space i
+local -a gradient
+local C_BLU C_RED C_RST canon lview lspace i
 
 if [[ -t 1 ]]; then
     C_BLU=$'\033[0;34m'
@@ -30,15 +29,14 @@ if [[ "$color1" == "-h" || "$color1" == "--help" ]]; then
     printf '      <color2>    Color de destino\n'
     printf '      [pasos]     Numero de pasos, entero >= 2 (defecto: 10)\n'
     printf '      [espacio]   rgb|hsl|lab|oklab|lch (defecto: oklab)\n'
-    printf '      [vista]     block|table|set (defecto: block en terminal, set en pipe)\n'
+    printf '      [vista]     block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
-    printf '      block       Bloques compactos por paso (defecto en terminal)\n'
-    printf '      table       Bloques anchos por paso\n'
+    printf '      block       Bloques con color del espacio elegido (defecto en terminal)\n'
     printf '      set         Tabla: hex (consumo agentico)\n'
     printf '                  Cabecera: >>INFO Columnas y >>INFO Espacio.\n'
     printf '  :: Notas\n'
-    printf '      block y table comparan RGB, HSL, Lab y OkLab en paralelo; set\n'
-    printf '      interpola solo el espacio indicado.\n'
+    printf '      Ambas vistas interpolan solo el espacio indicado. block muestra\n'
+    printf '      una fila por paso; set emite hex para filtrado.\n'
     printf '      -h, --help  Muestra esta ayuda\n'
     return 0
 fi
@@ -80,15 +78,12 @@ case "$lview" in
     block)
         lview='block'
         ;;
-    table)
-        lview='table'
-        ;;
     set)
         lview='set'
         ;;
     *)
         printf '%s>>FAIL Vista invalida: %s.%s\n' "$C_RED" "$view" "$C_RST" >&2
-        printf '   Usa block, table o set; usa -h para ver el uso.\n' >&2
+        printf '   Usa block o set; usa -h para ver el uso.\n' >&2
         return 2
         ;;
 esac
@@ -118,84 +113,25 @@ case "$lspace" in
 esac
 
 # ──「 GENERACION 」────────────────────────────────────────────
-# set interpola solo el espacio dado; block y table comparan los cuatro.
-if [[ "$lview" == 'set' ]]; then
-    gradient="$(pastel gradient --colorspace "$canon" "$color1" "$color2" --number "$steps" | pastel format hex)"
-    if [[ -z "$gradient" ]]; then
-        printf '%s>>FAIL Gradiente vacio en espacio %s.%s\n' "$C_RED" "$canon" "$C_RST" >&2
-        printf '   Revisa los colores de origen y destino.\n' >&2
-        return 1
-    fi
-    printf '>>INFO Columnas: hex\n'
-    printf '>>INFO Espacio: %s\n' "$lspace"
-    printf '%s\n' "${(@f)gradient}"
-    return 0
-fi
-
-local spaces=(
-    RGB
-    HSL
-    Lab
-    OkLab
-)
-
-# pastel gradient emite un color por linea; se normaliza a hexadecimal
-# para comparar espacios con la misma representacion. '${(@f)...}'
-# parte por newline y cada posicion representa el mismo paso.
-for space in "${spaces[@]}"; do
-    gradient="$(
-        pastel gradient \
-            --colorspace "$space" \
-            "$color1" \
-            "$color2" \
-            --number "$steps" \
-            | pastel format hex
-    )"
-
-    case "$space" in
-        RGB)
-            rgb_gradient=("${(@f)gradient}")
-            ;;
-        HSL)
-            hsl_gradient=("${(@f)gradient}")
-            ;;
-        Lab)
-            lab_gradient=("${(@f)gradient}")
-            ;;
-        OkLab)
-            oklab_gradient=("${(@f)gradient}")
-            ;;
-    esac
-done
-
-if ((${#rgb_gradient[@]} == 0)); then
-    printf '%s>>FAIL Gradiente vacio para la comparativa.%s\n' "$C_RED" "$C_RST" >&2
+# pastel gradient emite un color por linea; format hex normaliza la salida.
+gradient=("${(@f)$(pastel gradient --colorspace "$canon" "$color1" "$color2" --number "$steps" | pastel format hex)}")
+if ((${#gradient[@]} != steps)); then
+    printf '%s>>FAIL gradiente vacio o incompleto en espacio %s.%s\n' "$C_RED" "$canon" "$C_RST" >&2
     printf '   Revisa los colores de origen y destino.\n' >&2
     return 1
 fi
 
 # ──「 VISTAS 」────────────────────────────────────────────────
-# pastel paint -n no emite salto; cada fila cierra con un unico printf.
 case "$lview" in
-    block)
-        for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
-            pastel paint -n "${hsl_gradient[i]}" "🮍███🮌 HSL ${hsl_gradient[i]} "
-            pastel paint -n "${rgb_gradient[i]}" "🮍███🮌 RGB ${rgb_gradient[i]} "
-            pastel paint -n "${lab_gradient[i]}" "🮍███🮌 Lab ${lab_gradient[i]} "
-            pastel paint -n "${oklab_gradient[i]}" "🮍███🮌 OkLab ${oklab_gradient[i]} "
-            printf '\n'
-        done
+    set)
+        printf '>>INFO Columnas: hex\n'
+        printf '>>INFO Espacio: %s\n' "$lspace"
+        printf '%s\n' "${gradient[@]}"
         ;;
-    table)
-        for ((i = 1; i <= ${#rgb_gradient[@]}; i++)); do
-            pastel paint -n "${hsl_gradient[i]}" \
-                " 🮔 ╠═════  ═════╣ HSL ${hsl_gradient[i]} "
-            pastel paint -n "${rgb_gradient[i]}" \
-                " 🮔 ╠═════  ═════╣ RGB ${rgb_gradient[i]} "
-            pastel paint -n "${lab_gradient[i]}" \
-                " 🮔 ╠═════  ═════╣ Lab ${lab_gradient[i]} "
-            pastel paint -n "${oklab_gradient[i]}" \
-                " 🮔 ╠═════  ═════╣ OkLab ${oklab_gradient[i]} "
+    block)
+        # pastel paint -n no emite salto; cada fila cierra con un printf.
+        for ((i = 1; i <= ${#gradient[@]}; i++)); do
+            pastel paint -n "${gradient[i]}" "🮍███🮌 ${canon} ${gradient[i]} "
             printf '\n'
         done
         ;;
