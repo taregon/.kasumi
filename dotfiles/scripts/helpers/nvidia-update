@@ -14,8 +14,8 @@ declare -ra AUR_BASES=(nvidia-580xx-utils nvidia-580xx-settings)
 # Splits que produce cada pkgbase; la purga y la transaccion solo operan
 # sobre estos nombres y nunca sobre otras fuentes del clon.
 declare -rA BASE_SPLITS=(
-    [nvidia - 580xx - utils]="nvidia-580xx-utils opencl-nvidia-580xx nvidia-580xx-dkms"
-    [nvidia - 580xx - settings]="nvidia-580xx-settings libxnvctrl-580xx"
+    ["nvidia-580xx-utils"]="nvidia-580xx-utils opencl-nvidia-580xx nvidia-580xx-dkms"
+    ["nvidia-580xx-settings"]="nvidia-580xx-settings libxnvctrl-580xx"
 )
 # Linea dedicada en [options]; al ser lista acumulativa, coexiste con otras.
 readonly IGNORE_LINE="IgnorePkg   = nvidia-580xx-utils nvidia-580xx-dkms \
