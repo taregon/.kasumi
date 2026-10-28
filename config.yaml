@@ -5,17 +5,17 @@ config:
   impignore:
     - '*.wants'
     - '*.socket'
-    - '.zcompdump*'
+    - .zcompdump*
     - '*.zwc'
-    - '_archive/**'
+    - _archive/**
     - '*.bk'
     - '*.bak'
   upignore:
     - '*.wants'
     - '*.socket'
-    - '.zcompdump*'
+    - .zcompdump*
     - '*.zwc'
-    - '_archive/**'
+    - _archive/**
     - '*.bk'
     - '*.bak'
   link_dotfile_default: absolute
@@ -161,6 +161,10 @@ dotfiles:
     dst: ~/.config/lnav/config.json
     link: absolute
     chmod: '600'
+  f_mimeapps:
+    src: config/mimeapps.list
+    dst: ~/.config/mimeapps.list
+    link: absolute
   f_nanorc:
     src: nanorc
     dst: ~/.nanorc
@@ -210,14 +214,15 @@ profiles:
       - d_vivid
       - d_wallpapers
       - d_zathura
+      - d_zsh
       - f_cava
       - f_gitconfig
       - f_lazygit
+      - f_mimeapps
       - f_nanorc
       - f_rc.conf
       - f_redshift
       - f_tmux
-      - d_zsh
   kasumi_extras:
     dotfiles:
       - d_aria2
