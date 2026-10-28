@@ -183,7 +183,7 @@ lfpreview_main() {
             application/zstd | application/vnd.ms-cab-compressed)
             lfpreview_archive
             ;;
-        audio/*)
+        audio/* | application/ogg)
             lfpreview_audio
             ;;
         image/gif)
