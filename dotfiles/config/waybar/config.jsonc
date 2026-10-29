@@ -426,7 +426,7 @@
     "format-disabled": "󰂲", // Apagado
     "format-connected": "󰂰 {num_connections}", // Dispositivo conectado
     "tooltip-format": "Device: {device_alias}\n{device_battery_percentage}% 󰂎",
-    "on-click": "blueberry"
+    "on-click": "blueman-manager"
   },
 
   "network": {
