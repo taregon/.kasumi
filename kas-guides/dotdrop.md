@@ -1,39 +1,44 @@
-# Dotdrop (guía de operación)
+# Dotdrop
 
-Gestor de dotfiles: almacena cada dotfile una sola vez y lo despliega con
-contenido variable según host o configuración.
+Guía para mantener y desplegar los archivos gestionados por Dotdrop en este
+repositorio.
 
 ## Configuración
 
-- Claves: `d_*` directorios, `f_*` ficheros. `link: absolute`.
+- `config.yaml` define las entradas y perfiles; `dotpath` es `dotfiles`, por lo
+  que cada `src` se resuelve desde esa carpeta y cada `dst` desde `HOME`.
+- El prefijo `d_` identifica directorios y `f_` archivos. El enlace
+  predeterminado es absoluto.
+- Perfiles independientes: `kasumi`, `kasumi_extras` y `kasumi_wayland`. Usa un
+  perfil por ejecución.
+- `impignore` y `upignore` excluyen patrones de las operaciones `import` y
+  `update`; por ejemplo, sockets y archivos de bytecode de zsh.
 
-## Comandos (desde la raíz del repo)
+## Operaciones
+
+Ejecuta los comandos desde la raíz del repositorio.
 
 ```bash
 dotdrop profiles                            # listar perfiles
-dotdrop files -p kasumi                     # listar dotfiles del perfil
-dotdrop detail -p kasumi <clave>            # inspeccionar src/dst/link
-dotdrop compare -p kasumi                   # diff sin escribir
-dotdrop compare -p kasumi -C <ruta>         # comparar un dotfile (ej. ~/.gitconfig)
-dotdrop install -p kasumi -t -f             # instalar en /tmp para revisión
-dotdrop install -p kasumi --showdiff        # diff antes de sobrescribir
-dotdrop install -p kasumi                   # crear symlinks src→dst
-dotdrop compare -p kasumi_extras            # verificar extras
-dotdrop update <ruta-en-HOME>               # importar cambio de HOME al repo
-dotdrop import -p kasumi <ruta>             # nuevo dotfile → entrada en config.yaml
+dotdrop files -p kasumi                     # listar entradas de un perfil
+dotdrop detail -p kasumi <clave>            # ver src, dst y link
+dotdrop compare -p kasumi                   # revisar diferencias
+dotdrop compare -p kasumi -C <ruta>         # revisar una ruta
+dotdrop install -p kasumi -t                # instalar en temporal para revisar
+dotdrop install -p kasumi --showdiff        # mostrar cambios antes de instalar
+dotdrop install -p kasumi                   # desplegar en HOME
+dotdrop import -p kasumi <ruta>             # incorporar un archivo nuevo
+dotdrop update <ruta-en-HOME>               # importar cambios desde HOME
 ```
 
 ## Reglas
 
-- Añadir dotfiles vía `dotdrop import`; editar `config.yaml` solo para
-  `link`/`chmod`.
-- Verificar con `compare` antes de `install`.
-- `~/.config/zsh` y `~/.zshenv` ilustran `d_*` vs `f_*`: `zshenv` solo bootstrap
-  (`ZDOTDIR`); el resto en `$ZDOTDIR`.
-
-## Advertencias
-
-- Destructivos excluidos: `remove`, `uninstall`, `--force`, `--remove-existing`,
+- Incorpora archivos nuevos con `dotdrop import`; usa `dotdrop update` para
+  importar cambios de archivos ya gestionados.
+- Modifica `config.yaml` manualmente solo para ajustar `link` o `chmod`.
+- Ejecuta `compare` antes de desplegar. Usa `--showdiff` cuando quieras revisar
+  el diff durante la instalación.
+- Para zsh, `~/.zshenv` solo configura el bootstrap (`ZDOTDIR`); el resto de la
+  configuración vive en `~/.config/zsh`.
+- No uses `remove`, `uninstall`, `--force`, `--remove-existing` ni
   `-W/--workdir-clear`.
-- Revisar sin tocar `HOME`: `install -t -f` (instala en `/tmp`).
-- `--showdiff` muestra el diff antes de sobrescribir.
