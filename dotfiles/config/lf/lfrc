@@ -5,6 +5,23 @@
 # └────────┘
 # https://man.archlinux.org/man/lf.1.en
 # ────────────────────────────────────────────────────────────
+# Expansión $f/$fx en comandos zsh: zsh no reparte por palabras las
+# variables de entorno (SH_WORD_SPLIT desactivado), por lo que las listas
+# ($fx, $fs) llegan como una sola palabra con \n embebido. Para listas
+# usar ${(f)fx}, que parte por líneas y preserva espacios; con $f (una
+# ruta) no se necesita. Con sh/bash, $fx se reparte por espacios e es
+# inseguro con nombres que contienen espacios.
+# Síntoma con varios archivos seleccionados en zsh: apack/aunpack reciben
+# un argumento inválido y generan un archivo vacío en silencio (>/dev/null).
+# Fix validado en lf r42: ${(f)fx} (prueba con dos archivos, uno con espacios).
+# Los archivos seleccionados llegan con ruta absoluta; apack incluiría esa
+# ruta en el archivo. Se recorta a basename con ${${(f)fx}##*/}, así el
+# archivo queda plano (solo nombres de archivo), sin rutas.
+# Si se activa la selección entre directorios (selmode all), dos archivos
+# con el mismo basename chocarían dentro del archivo; con selmode dir
+# (default) no hay colisión.
+# El man advierte: la opción ifs se inyecta como prefijo POSIX (IFS=...;)
+# y "puede fallar en shells no-POSIX" (lf.1, §ifs).
 # NOTE: Los comandos interactivos usan zsh; previewer/cleaner usan bash por latencia y sintaxis batch. Unificar degrada el scroll.
   set shell zsh
   set shellopts '-eu'
@@ -15,6 +32,7 @@
   set icons true
   set ignorecase true
   set incsearch true
+  set smartdia true
   set period 3
   set preview true
   set scrolloff 10
@@ -43,7 +61,7 @@
   map y
   map yy copy
 # Copia la ruta del archivo
-  map yp %echo $fx | wl-copy
+  map yp %printf '%s\n' ${(f)fx} | wl-copy
 # Abre una ventana GTK4, carga archivos desde CLI
 # y permite arrastrarlos a aplicaciones gráficas
 # map o $printf '%s\n' $fs | sed 's#.*/##' | ripdrag -I
@@ -129,13 +147,48 @@ cmd extract ${{
     clear
 	case "$reply" in
 		[yYsS])
-			aunpack $fx >/dev/null 2>&1
+			# ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
+			aunpack ${(f)fx} >/dev/null 2>&1
 			lf -remote "send $id echo Extracción completada"
 			;;
 	esac
 }}
 
 map E extract
+
+# ─[ PACK ]─────────────────────────────────────────────────────
+# Crea un archivo comprimido a partir de los archivos seleccionados.
+# Formato deducido por la extensión: .zip, .tar.gz, .7z, .tar.xz, .tgz.
+# Sin extensión, se usa .tar.gz por defecto.
+cmd pack ${{
+	clear
+	tput cup $(($(tput lines)/3))
+	tput bold
+	set -f
+
+	printf '%s\n' $fx
+	printf "\t¿Empaquetar? [s/N] "
+	read -r reply
+	clear
+	case "$reply" in
+		[yYsS])
+			printf 'Nombre del archivo: '
+			read -r name
+			clear
+			[ -z "$name" ] && exit
+			case "$name" in
+				*.*) ;;
+				*) name="$name.tar.gz" ;;
+			esac
+			# ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
+			# ${...##*/}: deja solo el nombre de archivo, sin rutas absolutas
+			apack "$name" ${${(f)fx}##*/} >/dev/null 2>&1
+			lf -remote "send $id echo Empaquetado completado"
+			;;
+	esac
+}}
+
+map A pack
 
 # ─[ ZOXIDE ]─────────────────────────────────────────────
 # Navega a directorios con zoxide.
