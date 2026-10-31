@@ -1,7 +1,7 @@
 # KASUMI dotfiles
 
-Dotdrop administra los archivos de configuración del usuario desde `dotfiles/`
-y los despliega en `HOME`. Para operarlo, sigue `kas-guides/dotdrop.md`.
+Dotdrop administra los archivos de configuración del usuario desde `dotfiles/` y
+los despliega en `HOME`. Para operarlo, sigue `kas-guides/dotdrop.md`.
 
 ## Sistema
 
@@ -24,8 +24,8 @@ y los despliega en `HOME`. Para operarlo, sigue `kas-guides/dotdrop.md`.
 
 ## Rutas principales
 
-| Tipo | Ruta |
-| --- | --- |
-| Scripts bash | `dotfiles/scripts/`, `dotfiles/config/*/scripts/` |
-| Helpers zsh | `dotfiles/config/zsh/funcs/` (reglas locales en su `AGENTS.md`) |
-| Ejecutables compartidos | `dotfiles/scripts/helpers/` |
+| Tipo                    | Ruta                                                            |
+| ----------------------- | --------------------------------------------------------------- |
+| Scripts bash            | `dotfiles/scripts/`, `dotfiles/config/*/scripts/`               |
+| Helpers zsh             | `dotfiles/config/zsh/funcs/` (reglas locales en su `AGENTS.md`) |
+| Ejecutables compartidos | `dotfiles/scripts/helpers/`                                     |
