@@ -57,9 +57,14 @@ require("conform").setup({
 				"--fix",
 				"--unsafe-fixes",
 				"--no-cache",
-				-- "--exit-zero",
-				-- "--stdin-filename",
-				-- "$FILENAME",
+				-- `ruff check` sale con 1 ante violación no corregible y conform lo
+				-- trata como error; `--exit-zero` conserva la corrección y evita que
+				-- la cadena se aborte antes de `ruff_format`.
+				"--exit-zero",
+				-- Sin nombre para stdin, el diagnóstico se ancla a `-` y se saltean
+				-- `exclude` y `per-file-ignores` del proyecto.
+				"--stdin-filename",
+				"$FILENAME",
 				"-",
 			},
 		},

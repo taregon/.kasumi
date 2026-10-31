@@ -155,6 +155,11 @@ augroup("Fmt_On_Save", function(group)
 		group = group,
 		pattern = "*",
 		callback = function(args)
+			-- Los insumos de evaluación codifican defectos a propósito: formatearlos
+			-- los corrige y deja de medir lo que el caso declara.
+			if vim.api.nvim_buf_get_name(args.buf):match("/evals/files/") then
+				return
+			end
 			require("conform").format({ bufnr = args.buf })
 		end,
 	})

@@ -128,10 +128,6 @@ dotfiles:
     src: config/waybar
     dst: ~/.config/waybar
     link: absolute
-  d_wofi:
-    src: config/wofi
-    dst: ~/.config/wofi
-    link: absolute
   d_zathura:
     src: config/zathura
     dst: ~/.config/zathura
@@ -238,4 +234,3 @@ profiles:
       - d_sway
       - d_swaylock
       - d_waybar
-      - d_wofi

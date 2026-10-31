@@ -1,0 +1,15 @@
+Reglas que merecen revision (extraidas de AGENTS.md auditado)
+
+- "Dotfiles para Arch Linux (pacman/paru, Sway/Wayland, Kitty, rmpc, dotdrop)"
+  la lista de stack puede quedar obsoleta; verificar periodicamente
+- "paru es el helper AUR estandar del repo": confirmar que sigue siendo el helper
+  estandar y no se migro a otro
+- Paquetes NVIDIA 580xx en IgnorePkg: verificar que el pin sigue vigente tras
+  actualizaciones de driver
+- "Preferir herramientas nativas Wayland; proponer equivalentes Wayland": la
+  segunda clausula es ambigua; definir criterio de propuesta
+- "Mantener rofi como launcher/selector estandar": confirmar que no se migro a
+  otro launcher
+- Prefijo NN- para scripts con orden de ejecucion: confirmar convencion vigente
+- Codigo legacy scripts-legacy/.bk/.old: verificar que el directorio sigue
+  existiendo y su politica de uso
