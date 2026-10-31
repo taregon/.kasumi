@@ -140,7 +140,7 @@ dotfiles:
     src: config/cava/kasumi-cava.conf
     dst: ~/.config/cava/kasumi-cava.conf
     link: absolute
-  f_fonts:
+  d_fonts:
     src: config/fontconfig
     dst: ~/.config/fontconfig
     link: absolute
@@ -224,7 +224,7 @@ profiles:
       - d_opencode_theme
       - d_paru
       - d_rmpc
-      - f_fonts
+      - d_fonts
       - f_lnav
       - f_ssh
       - f_starttree

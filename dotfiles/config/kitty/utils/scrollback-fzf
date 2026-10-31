@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
+# Descripción: Permite seleccionar interactivamente una línea del scrollback de kitty y
+# enviarla de vuelta a la terminal activa. Atajo definido en kitty.conf: Ctrl+Alt+E
 
 INPUT=$(
     sed -E $'s/\x1B\\[[0-9;]*[[:alpha:]]//g' \
         | awk 'NF' \
-        | fzf --tac --exact
+        | fzf --tac --exact --multi
 ) || exit 0
 
 printf "%s" "$INPUT" | kitty @ send-text --match recent:1 --stdin
