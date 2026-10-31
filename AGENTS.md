@@ -17,6 +17,8 @@ Convenciones de este sistema y gestor de paquetes.
 - keys: `d_*` dirs, `f_*` files. `link: absolute`.
 - profiles: `kasumi`, `kasumi_extras`, `kasumi_wayland` (independientes; un
   `-p <profile>` por ejecución).
+- `impignore`/`upignore`: patrones globales ignorados en import/update (ej.
+  `*.socket`, `.zcompdump*`).
 - leer `kas-guides/dotdrop.md` en full antes de operar.
 
 ## Environment

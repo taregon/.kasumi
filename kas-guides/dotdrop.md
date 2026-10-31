@@ -3,16 +3,6 @@
 Gestor de dotfiles: almacena cada dotfile una sola vez y lo despliega con
 contenido variable según host o configuración.
 
-## Configuración
-
-- `config.yaml` es la fuente de verdad. `dotpath: dotfiles` — `src` relativo a
-  `dotfiles/`, `dst` absoluto en `HOME`.
-- Claves: `d_*` directorios, `f_*` ficheros. `link: absolute`.
-- Perfiles independientes, sin `include`: `kasumi`, `kasumi_extras`,
-  `kasumi_wayland`. Una invocación = un `-p <perfil>`.
-- `impignore`/`upignore`: patrones globales ignorados en import/update (ej.
-  `*.socket`, `.zcompdump*`).
-
 ## Comandos (desde la raíz del repo)
 
 ```bash
