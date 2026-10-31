@@ -296,12 +296,12 @@ install_app_cli_fm() {
     pkgs=(
         atool               # Manejo de archivos comprimidos desde CLI
         imagemagick         # Conversión y procesamiento de imágenes
+        lf                  # Gestor de archivos en terminal (estilo VI)
         mediainfo           # Muestra metadatos de audio y video
         perl-image-exiftool # Lectura y extracción de metadatos (EXIF/IPTC/XMP)
         poppler             # Utilidades y herramientas para PDF
         python-chardet      # Detección de codificación de texto
         python-pillow       # Procesamiento de imágenes en Python (PIL)
-        ranger              # Gestor de archivos en terminal (estilo VI)
         trash-cli           # Envía archivos a la papelera desde CLI
     )
     install_pkgs "${pkgs[@]}"

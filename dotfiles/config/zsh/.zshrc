@@ -99,14 +99,12 @@ zstyle ':fzf-tab:complete:git-show:*' \
 # █▀▀▀█ █▀▀▀  █▀▀▀  █▀▀   █▀▀▀█ █▀▀▀▄ █▀▀▀█ █ ▀▄█ █     █▀▀
 # ▀   ▀ ▀     ▀     ▀▀▀▀▀ ▀   ▀ ▀   ▀ ▀   ▀ ▀   ▀  ▀▀▀▀ ▀▀▀▀▀
 # Kitty ya exporta xterm-kitty (kitty.conf term); no forzar TERM.
-# Ranger preview kitty depende de TERM nativo; tmux gestiona el suyo.
+# La vista previa en kitty depende de TERM nativo; tmux gestiona el suyo.
 # ArchWiki Kitty#Terminal_issues_with_SSH: kitten ssh copia terminfo al remoto.
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='kitty +kitten ssh'
 
 export EDITOR="nvim" # editor por defecto (terminal/GUI)
 export VISUAL="nvim" # idem
-
-export RANGER_LOAD_DEFAULT_RC=FALSE # desactiva rc.conf predeterminado de ranger
 
 export STARSHIP_CONFIG=~/.config/starship/kasumi.toml # configuración starship
 TRANSIENT_PROMPT_TRANSIENT_PROMPT=' '                 # prompt transitorio vacío
@@ -219,7 +217,7 @@ setopt RM_STAR_WAIT           # espera 10s en 'rm *'
 setopt SHARE_HISTORY          # comparte entre sesiones (implica APPEND/INC_APPEND)
 
 # Filtra historial: solo comandos existentes, excluye HISTORY_IGNORE
-HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|ranger|yt-mp3"
+HISTORY_IGNORE="* --help|clear|exa|exit|ls|lsd|man *|pwd|q|yt-mp3"
 
 # Hook historial: filtra qué guardar
 zshaddhistory() {

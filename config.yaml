@@ -171,10 +171,6 @@ dotfiles:
     link: absolute
     actions:
       - dir-nano-backup
-  f_rc.conf:
-    src: config/ranger/rc.conf
-    dst: ~/.config/ranger/rc.conf
-    link: absolute
   f_redshift:
     src: config/redshift/redshift.conf
     dst: ~/.config/redshift/redshift.conf
@@ -220,7 +216,6 @@ profiles:
       - f_lazygit
       - f_mimeapps
       - f_nanorc
-      - f_rc.conf
       - f_redshift
       - f_tmux
   kasumi_extras:
