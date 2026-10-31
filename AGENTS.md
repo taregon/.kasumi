@@ -12,9 +12,8 @@ Convenciones de este sistema y gestor de paquetes.
 
 ## Dotdrop
 
-`config.yaml` es la fuente de verdad. `dotpath: dotfiles` — `src` relativo a
-`dotfiles/`, `dst` absoluto en `HOME`.
-
+- `config.yaml` es la fuente de verdad. `dotpath: dotfiles` — `src` relativo a
+  `dotfiles/`, `dst` absoluto en `HOME`.
 - keys: `d_*` dirs, `f_*` files. `link: absolute`.
 - profiles: `kasumi`, `kasumi_extras`, `kasumi_wayland` (independientes; un
   `-p <profile>` por ejecución).
@@ -22,7 +21,7 @@ Convenciones de este sistema y gestor de paquetes.
 
 ## Environment
 
-Packages:
+### Packages
 
 - `paru` = standard AUR helper. `pacman` para repos oficiales, `paru` para
   AUR/mixed. Usar `--needed` en instalaciones.
@@ -31,7 +30,7 @@ Packages:
   `dotfiles/scripts/helpers/nvidia-update` (atomic, fail-stop, transacción única
   de `pacman -U`).
 
-Graphics:
+### Graphics
 
 - preferir herramientas nativas Wayland.
 - `rofi` = standard launcher/selector.
@@ -39,12 +38,12 @@ Graphics:
 
 ## Organization
 
-Files:
+### Files
 
 - prefijo `NN-` para secuencias ordenadas (`postinstall/`, `config.d/`,
   `kasumi.d/`).
 - sin prefijo para scripts/helpers sueltos.
 
-Legacy:
+### Legacy
 
 - `.old` son referencia de migración; usar equivalentes activos cuando existan.
