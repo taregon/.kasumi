@@ -1,50 +1,31 @@
-# KASUMI dotfiles — AGENTS
+# KASUMI dotfiles
 
-Contexto: Arch Linux (pacman/paru, Sway/Wayland, Kitty, rmpc, dotdrop).
-Convenciones de este sistema y gestor de paquetes.
+Dotdrop administra los archivos de configuración del usuario desde `dotfiles/`
+y los despliega en `HOME`. Para operarlo, sigue `kas-guides/dotdrop.md`.
 
-## Paths
+## Sistema
 
-- scripts bash: `dotfiles/scripts/`, `dotfiles/config/*/scripts/`
-- helpers zsh: `dotfiles/config/zsh/funcs/`
-- ejecutables: `dotfiles/scripts/helpers/` → `~/.local/bin/kasumi/helpers/` (en
-  PATH)
+- Arch Linux; `pacman` gestiona paquetes oficiales y `paru` paquetes AUR o
+  instalaciones mixtas. Las instalaciones usan `--needed`.
+- NVIDIA 580xx está en `IgnorePkg`. Actualizar esos paquetes únicamente con
+  `dotfiles/scripts/helpers/nvidia-update`, que compila el conjunto y lo instala
+  en una sola transacción `pacman -U`.
+- En Sway/Wayland, preferir herramientas nativas de Wayland. `rofi` es el
+  selector estándar; los servicios gráficos de sesión se gestionan con
+  `systemctl --user` y el entorno Wayland.
 
-## Dotdrop
+## Organización
 
-- `config.yaml` es la fuente de verdad. `dotpath: dotfiles` — `src` relativo a
-  `dotfiles/`, `dst` absoluto en `HOME`.
-- profiles: `kasumi`, `kasumi_extras`, `kasumi_wayland` (independientes; un
-  `-p <profile>` por ejecución).
-- `impignore`/`upignore`: patrones globales ignorados en import/update (ej.
-  `*.socket`, `.zcompdump*`).
-- leer `kas-guides/dotdrop.md` en full antes de operar.
+- Usar prefijos `NN-` para secuencias ordenadas, como `postinstall/`,
+  `config.d/` y `kasumi.d/`. Los scripts y helpers independientes no llevan
+  prefijo.
+- Los archivos `.old` sirven como referencia de migración; preferir el
+  equivalente activo cuando exista.
 
-## Environment
+## Rutas principales
 
-### Packages
-
-- `paru` = standard AUR helper. `pacman` para repos oficiales, `paru` para
-  AUR/mixed. Usar `--needed` en instalaciones.
-- NVIDIA 580xx (`nvidia-580xx-utils`, `-dkms`, `-settings`,
-  `opencl-nvidia-580xx`, `libxnvctrl-580xx`) en `IgnorePkg`; actualizar solo vía
-  `dotfiles/scripts/helpers/nvidia-update` (atomic, fail-stop, transacción única
-  de `pacman -U`).
-
-### Graphics
-
-- preferir herramientas nativas Wayland.
-- `rofi` = standard launcher/selector.
-- usar `systemctl --user` + env vars Wayland para servicios de sesión gráfica.
-
-## Organization
-
-### Files
-
-- prefijo `NN-` para secuencias ordenadas (`postinstall/`, `config.d/`,
-  `kasumi.d/`).
-- sin prefijo para scripts/helpers sueltos.
-
-### Legacy
-
-- `.old` son referencia de migración; usar equivalentes activos cuando existan.
+| Tipo | Ruta |
+| --- | --- |
+| Scripts bash | `dotfiles/scripts/`, `dotfiles/config/*/scripts/` |
+| Helpers zsh | `dotfiles/config/zsh/funcs/` (reglas locales en su `AGENTS.md`) |
+| Ejecutables compartidos | `dotfiles/scripts/helpers/` |
