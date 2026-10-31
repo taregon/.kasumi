@@ -1,4 +1,6 @@
+# vim: filetype=config
+
 # cmds/follow_link.lf — sigue el enlace simbólico y selecciona su destino
-cmd follow_link %{{
-	lf -remote "send ${id} select \"$(readlink $f)\""
-}}
+  cmd follow_link %{{
+    lf -remote "send ${id} select \"$(readlink $f)\""
+  }}

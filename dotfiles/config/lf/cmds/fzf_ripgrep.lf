@@ -1,3 +1,4 @@
+# vim: filetype=config                                        
 # cmds/fzf_ripgrep.lf — búsqueda por contenido (rg + fzf + bat)
 cmd fzf_ripgrep ${{
   rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"

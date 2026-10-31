@@ -1,3 +1,4 @@
+# vim: filetype=config                                        
 # cmds/pack.lf — crea un archivo comprimido a partir de los seleccionados
 # Formato deducido por la extensión: .zip, .tar.gz, .7z, .tar.xz, .tgz.
 # Sin extensión, se usa .tar.gz por defecto.

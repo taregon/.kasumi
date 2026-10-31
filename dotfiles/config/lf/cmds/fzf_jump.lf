@@ -1,3 +1,4 @@
+# vim: filetype=config                                        
 # cmds/fzf_jump.lf — búsqueda rápida de archivos y directorios (fd + fzf)
 # Reutilización de FZF_CTRL_T_COMMAND desde zshrc; preserva exclusiones y opciones.
 cmd fzf_jump ${{

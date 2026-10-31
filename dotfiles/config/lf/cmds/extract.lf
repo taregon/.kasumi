@@ -1,20 +1,22 @@
+# vim: filetype=config
+
 # cmds/extract.lf — extrae archivos comprimidos con atool
-cmd extract ${{
-	clear
-	tput cup $(($(tput lines)/3))
-	tput bold
-	set -f
+  cmd extract ${{
+  	clear
+  	tput cup $(($(tput lines)/3))
+  	tput bold
+  	set -f
 
-	printf '%s\n' $fx
-	printf "\t¿Extraer? [s/N] "
+  	printf '%s\n' $fx
+  	printf "\t¿Extraer? [s/N] "
 
-	read -r reply
-    clear
-	case "$reply" in
-		[yYsS])
+  	read -r reply
+  clear
+  	case "$reply" in
+  		[yYsS])
 			# ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
-			aunpack ${(f)fx} >/dev/null 2>&1
-			lf -remote "send $id echo Extracción completada"
+  			aunpack ${(f)fx} >/dev/null 2>&1
+  			lf -remote "send $id echo Extracción completada"
 			;;
-	esac
-}}
+  	esac
+  }}
