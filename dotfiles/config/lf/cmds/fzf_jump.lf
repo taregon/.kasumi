@@ -1,0 +1,17 @@
+# cmds/fzf_jump.lf — búsqueda rápida de archivos y directorios (fd + fzf)
+# Reutilización de FZF_CTRL_T_COMMAND desde zshrc; preserva exclusiones y opciones.
+cmd fzf_jump ${{
+  # Reemplaza --type f por --type f --type d de forma más limpia
+  fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
+
+  selected_path="$(eval "$fd_cmd" 2>/dev/null | \
+    fzf --reverse --header='  Buscar directorio o archivo')"
+
+  [ -z "$selected_path" ] && exit
+
+  if [ -d "$selected_path" ]; then
+    lf -remote "send $id cd \"$selected_path\""
+  else
+    lf -remote "send $id select \"$selected_path\""
+  fi
+}}

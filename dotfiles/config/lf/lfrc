@@ -68,6 +68,12 @@
 # map o $while IFS= read -r f; do printf '%s\n' "${f##*/}"; done <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
   map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 
+  map <c-f> :fzf_jump
+  map <c-g> :fzf_ripgrep
+  map gl follow_link
+  map E extract
+  map A pack
+
 # ─[ POR DEFECTO ]──────────────────────────────────────────────
 #   🟆  copy          'y'     🟆  rename        'r'
 #   🟆  cut           'd'     🟆  sort          's'
@@ -76,129 +82,12 @@
 #   🟆  invert        'v      🟆  shell         'w'
 #   🟆  unselect      'u'     🟆  toggle hidden 'zh''
 
-# ╒═════════════════════════════════════════════════════════════╕
-# │                    NAVEGACIÓN Y BÚSQUEDA                    │
-# ╘═════════════════════════════════════════════════════════════╛
-# Forzar redraw completo tras cada selección (crucial en tmux)
-cmd on-select &{{
-  lf -remote "send $id redraw"
-}}
-
-# ─[ FZF JUMP ]─────────────────────────────────────────────────
-# Búsqueda rápida de archivos y directorios mediante fd + fzf.
-# Reutilización de FZF_CTRL_T_COMMAND desde zshrc.
-# Preserva exclusiones y opciones configuradas.
-cmd fzf_jump ${{
-  # Reemplaza --type f por --type f --type d de forma más limpia
-  fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
-
-  selected_path="$(eval "$fd_cmd" 2>/dev/null | \
-    fzf --reverse --header='  Buscar directorio o archivo')"
-
-  [ -z "$selected_path" ] && exit
-
-  if [ -d "$selected_path" ]; then
-    lf -remote "send $id cd \"$selected_path\""
-  else
-    lf -remote "send $id select \"$selected_path\""
-  fi
-}}
-
-  map <c-f> :fzf_jump
-
-# ─[ FZF SEARCH ]───────────────────────────────────────────────
-# Búsqueda de contenido en archivos mediante ripgrep + fzf.
-# Recarga dinámica al modificar la consulta.
-cmd fzf_ripgrep ${{
-  rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
-
-  fzf --ansi \
-    --disabled \
-    --header='  Buscar archivos usando su contenido' \
-    --delimiter ':' \
-    --bind "change:reload:$rg_cmd {q} || true" \
-    --bind "enter:execute(lf -remote 'send $id select \"{1}\"')+abort" \
-    --preview '[ -n {2} ] && bat --color=always --style=plain {1} --highlight-line {2}' \
-    2>/dev/null
-}}
-
-  map <c-g> :fzf_ripgrep
-
-# ─[ FOLLOW LINK ]──────────────────────────────────────────
-# Sigue el enlace simbólico y selecciona su destino.
-cmd follow_link %{{
-	lf -remote "send ${id} select \"$(readlink $f)\""
-}}
-
-map gl follow_link
-
-# ─[ EXTRACT ]─────────────────────────────────────────────
-# Extrae archivos comprimidos con atool.
-cmd extract ${{
-	clear
-	tput cup $(($(tput lines)/3))
-	tput bold
-	set -f
-
-	printf '%s\n' $fx
-	printf "\t¿Extraer? [s/N] "
-
-	read -r reply
-    clear
-	case "$reply" in
-		[yYsS])
-			# ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
-			aunpack ${(f)fx} >/dev/null 2>&1
-			lf -remote "send $id echo Extracción completada"
-			;;
-	esac
-}}
-
-map E extract
-
-# ─[ PACK ]─────────────────────────────────────────────────────
-# Crea un archivo comprimido a partir de los archivos seleccionados.
-# Formato deducido por la extensión: .zip, .tar.gz, .7z, .tar.xz, .tgz.
-# Sin extensión, se usa .tar.gz por defecto.
-cmd pack ${{
-	clear
-	tput cup $(($(tput lines)/3))
-	tput bold
-	set -f
-
-	printf '%s\n' $fx
-	printf "\t¿Empaquetar? [s/N] "
-	read -r reply
-	clear
-	case "$reply" in
-		[yYsS])
-			printf 'Nombre del archivo: '
-			read -r name
-			clear
-			[ -z "$name" ] && exit
-			case "$name" in
-				*.*) ;;
-				*) name="$name.tar.gz" ;;
-			esac
-			# ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
-			# ${...##*/}: deja solo el nombre de archivo, sin rutas absolutas
-			apack "$name" ${${(f)fx}##*/} >/dev/null 2>&1
-			lf -remote "send $id echo Empaquetado completado"
-			;;
-	esac
-}}
-
-map A pack
-
-# ─[ ZOXIDE ]─────────────────────────────────────────────
-# Navega a directorios con zoxide.
-# cmd zoxide %{{
-#     dir="$(zoxide query -- "$*")"
-#
-#     [ -n "$dir" ] && \
-#         lf -remote "send ${id} cd \"$dir\""
-# }}
-#
-# map z<space> push :zoxide<space>
-
+# ────────────────────────────────────────────────────────────
+# Comandos externalizados en cmds/*.lf (verificado source con ~)
+  source ~/.config/lf/cmds/on-select.lf
+  source ~/.config/lf/cmds/fzf_jump.lf
+  source ~/.config/lf/cmds/fzf_ripgrep.lf
+  source ~/.config/lf/cmds/follow_link.lf
+  source ~/.config/lf/cmds/extract.lf
+  source ~/.config/lf/cmds/pack.lf
 # ────────────────────────────────────────────────────────────

@@ -1,0 +1,13 @@
+# cmds/fzf_ripgrep.lf — búsqueda por contenido (rg + fzf + bat)
+cmd fzf_ripgrep ${{
+  rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
+
+  fzf --ansi \
+    --disabled \
+    --header='  Buscar archivos usando su contenido' \
+    --delimiter ':' \
+    --bind "change:reload:$rg_cmd {q} || true" \
+    --bind "enter:execute(lf -remote 'send $id select \"{1}\"')+abort" \
+    --preview '[ -n {2} ] && bat --color=always --style=plain {1} --highlight-line {2}' \
+    2>/dev/null
+}}
