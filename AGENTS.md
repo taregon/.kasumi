@@ -14,7 +14,6 @@ Convenciones de este sistema y gestor de paquetes.
 
 - `config.yaml` es la fuente de verdad. `dotpath: dotfiles` — `src` relativo a
   `dotfiles/`, `dst` absoluto en `HOME`.
-- keys: `d_*` dirs, `f_*` files. `link: absolute`.
 - profiles: `kasumi`, `kasumi_extras`, `kasumi_wayland` (independientes; un
   `-p <profile>` por ejecución).
 - `impignore`/`upignore`: patrones globales ignorados en import/update (ej.

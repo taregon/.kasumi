@@ -3,6 +3,10 @@
 Gestor de dotfiles: almacena cada dotfile una sola vez y lo despliega con
 contenido variable según host o configuración.
 
+## Configuración
+
+- Claves: `d_*` directorios, `f_*` ficheros. `link: absolute`.
+
 ## Comandos (desde la raíz del repo)
 
 ```bash
