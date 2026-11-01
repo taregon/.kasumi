@@ -5,42 +5,31 @@
 # └────────┘
 # https://man.archlinux.org/man/lf.1.en
 # ────────────────────────────────────────────────────────────
-# Expansión $f/$fx en comandos zsh: zsh no reparte por palabras las
-# variables de entorno (SH_WORD_SPLIT desactivado), por lo que las listas
-# ($fx, $fs) llegan como una sola palabra con \n embebido. Para listas
-# usar ${(f)fx}, que parte por líneas y preserva espacios; con $f (una
-# ruta) no se necesita. Con sh/bash, $fx se reparte por espacios e es
-# inseguro con nombres que contienen espacios.
-# Síntoma con varios archivos seleccionados en zsh: apack/aunpack reciben
-# un argumento inválido y generan un archivo vacío en silencio (>/dev/null).
-# Fix validado en lf r42: ${(f)fx} (prueba con dos archivos, uno con espacios).
-# Los archivos seleccionados llegan con ruta absoluta; apack incluiría esa
-# ruta en el archivo. Se recorta a basename con ${${(f)fx}##*/}, así el
-# archivo queda plano (solo nombres de archivo), sin rutas.
-# Si se activa la selección entre directorios (selmode all), dos archivos
-# con el mismo basename chocarían dentro del archivo; con selmode dir
-# (default) no hay colisión.
-# El man advierte: la opción ifs se inyecta como prefijo POSIX (IFS=...;)
-# y "puede fallar en shells no-POSIX" (lf.1, §ifs).
-# NOTE: Los comandos interactivos usan zsh; previewer/cleaner usan bash por latencia y sintaxis batch. Unificar degrada el scroll.
+# SHELL
+# En zsh, ${(f)fx} divide las selecciones por líneas y conserva espacios.
+# Al crear archivos, se usan solo los nombres base para evitar rutas absolutas.
+# lfpreview y lfclean usan bash; los comandos interactivos, zsh.
   set shell zsh
   set shellopts '-eu'
   set ifs "\n"
 
+# INTERFAZ Y BÚSQUEDA
   set dircounts true
   set drawbox true
   set icons true
   set ignorecase true
   set incsearch true
   set smartdia true
-  set period 3
-  set preview true
   set scrolloff 10
 
+# VISTA PREVIA
+  set preview true
+  set period 3
   set previewer ~/.config/lf/lfpreview
   set cleaner ~/.config/lf/lfclean
   set ratios 1:2:2
 
+# INFORMACIÓN Y ORDEN
   set info ctime:size
   set infotimefmtnew "Jan _2 2006"
   set infotimefmtold "Jan _2 2006"
@@ -49,45 +38,34 @@
 # ╒═════════════════════════════════════════════════════════════╕
 # │                           ATAJOS                            │
 # ╘═════════════════════════════════════════════════════════════╛
+
+# Navegación y selección
   map <delete> delete
   map <enter> open
+  map gN cd ~/Syncthing/OsiriaFS/Notas
 
+# Archivos y directorios
   map . set hidden!
   map X $lf-basenames-null <<< "$fx" | xargs -0 trash-put
   map a push $mkdir<space>
 
-  map gN cd ~/Syncthing/OsiriaFS/Notas
-
+# Copiar y arrastrar
   map y
   map yy copy
-# Copia la ruta del archivo
   map yp %printf '%s\n' ${(f)fx} | wl-copy
-# Abre una ventana GTK4, carga archivos desde CLI
-# y permite arrastrarlos a aplicaciones gráficas
-# map o $printf '%s\n' $fs | sed 's#.*/##' | ripdrag -I
-# map o $while IFS= read -r f; do printf '%s\n' "${f##*/}"; done <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
   map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 
+# Comandos personalizados
   map <c-f> :fzf_find
   map <c-g> :search_content
   map gl follow_link
   map E extract
   map A create_archive
 
-# ─[ POR DEFECTO ]──────────────────────────────────────────────
-#   🟆  copy          'y'     🟆  rename        'r'
-#   🟆  cut           'd'     🟆  sort          's'
-#   🟆  paste         'p'     🟆  run           '$'
-#   🟆  clear         'c'     🟆  move middle   'M'
-#   🟆  invert        'v      🟆  shell         'w'
-#   🟆  unselect      'u'     🟆  toggle hidden 'zh''
-
-# ────────────────────────────────────────────────────────────
-# Comandos externalizados en cmds/*.lf (verificado source con ~)
+# Definiciones de comandos
   source ~/.config/lf/cmds/on-select.lf
   source ~/.config/lf/cmds/fzf_find.lf
   source ~/.config/lf/cmds/search_content.lf
   source ~/.config/lf/cmds/follow_link.lf
   source ~/.config/lf/cmds/extract.lf
   source ~/.config/lf/cmds/create_archive.lf
-# ────────────────────────────────────────────────────────────
