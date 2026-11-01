@@ -40,7 +40,7 @@
 # ──「 NAVEGACIÓN Y SELECCIÓN 」──────────────────────────────
   map <delete> delete
   map <enter> open
-  map ? !bat --style=plain ~/.config/lf/shortcuts.txt
+  map ? $rofi -dmenu -i -no-custom -p 'Atajos' -theme ~/.config/rofi/themes/keybind-helper.rasi < ~/.config/lf/shortcuts.txt
   map gN cd ~/Syncthing/OsiriaFS/Notas
 
 # ──「 ARCHIVOS Y DIRECTORIOS 」──────────────────────────────

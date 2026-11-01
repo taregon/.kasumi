@@ -1,22 +1,12 @@
 ─────────────────────────< USO COMÚN >─────────────────────────
-Tecla  Acción
-───────────────────────────────────────────────────────────────
-y      copy
-r      rename
-d      cut
-s      sort
-p      paste
-$      run
-c      clear
-M      move middle
-v      invert
-w      shell
-u      unselect
-zh     toggle hidden
+y      copy                   c      clear
+r      rename                 M      move middle
+d      cut                    v      invert
+s      sort                   w      shell
+p      paste                  u      unselect
+$      run                    zh     toggle hidden
 
 ───────────────────< ATAJOS PERSONALIZADOS >───────────────────
-Tecla   Acción       Descripción
-───────────────────────────────────────────────────────────────
 Supr    delete          # Elimina el elemento seleccionado.
 Enter   open            # Abre el elemento seleccionado.
 .       set hidden!     # Muestra u oculta archivos ocultos.
