@@ -1,0 +1,31 @@
+# vim: filetype=config
+# Crea un archivo comprimido con los elementos seleccionados.
+# El formato se deduce de la extensión; si falta, usa .tar.gz.
+
+cmd create_archive ${{
+  clear
+  tput cup $(($(tput lines)/3))
+  tput bold
+  set -f
+
+  printf '%s\n' $fx
+  printf "\t¿Empaquetar? [s/N] "
+  read -r reply
+  clear
+  case "$reply" in
+    [yYsS])
+      printf 'Nombre del archivo: '
+      read -r name
+      clear
+      [ -z "$name" ] && exit
+      case "$name" in
+        *.*) ;;
+        *) name="$name.tar.gz" ;;
+      esac
+      # ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
+      # ${...##*/}: deja solo el nombre de archivo, sin rutas absolutas
+      apack "$name" ${${(f)fx}##*/} >/dev/null 2>&1
+      lf -remote "send $id echo Empaquetado completado"
+      ;;
+  esac
+}}

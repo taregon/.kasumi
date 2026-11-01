@@ -68,11 +68,11 @@
 # map o $while IFS= read -r f; do printf '%s\n' "${f##*/}"; done <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
   map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 
-  map <c-f> :fzf_jump
-  map <c-g> :fzf_ripgrep
+  map <c-f> :fzf_find
+  map <c-g> :search_content
   map gl follow_link
   map E extract
-  map A pack
+  map A create_archive
 
 # ─[ POR DEFECTO ]──────────────────────────────────────────────
 #   🟆  copy          'y'     🟆  rename        'r'
@@ -85,9 +85,9 @@
 # ────────────────────────────────────────────────────────────
 # Comandos externalizados en cmds/*.lf (verificado source con ~)
   source ~/.config/lf/cmds/on-select.lf
-  source ~/.config/lf/cmds/fzf_jump.lf
-  source ~/.config/lf/cmds/fzf_ripgrep.lf
+  source ~/.config/lf/cmds/fzf_find.lf
+  source ~/.config/lf/cmds/search_content.lf
   source ~/.config/lf/cmds/follow_link.lf
   source ~/.config/lf/cmds/extract.lf
-  source ~/.config/lf/cmds/pack.lf
+  source ~/.config/lf/cmds/create_archive.lf
 # ────────────────────────────────────────────────────────────

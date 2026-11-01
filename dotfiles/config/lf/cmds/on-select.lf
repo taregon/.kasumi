@@ -1,5 +1,6 @@
-# vim: filetype=config                                        
-# cmds/on-select.lf — hook de redraw tras seleccionar (crucial en tmux)
+# vim: filetype=config
+# Redibuja la interfaz de lf después de seleccionar un elemento.
+
 cmd on-select &{{
   lf -remote "send $id redraw"
 }}
