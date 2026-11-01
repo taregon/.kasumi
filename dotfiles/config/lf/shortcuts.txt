@@ -1,25 +1,15 @@
 ─────────────────────────< USO COMÚN >─────────────────────────
-y      copy                   c      clear
-r      rename                 M      move middle
-d      cut                    v      invert
-s      sort                   w      shell
-p      paste                  u      unselect
-$      run                    zh     toggle hidden
-
+y       copy                   c      clear
+r       rename                 M      move middle
+d       cut                    v      invert
+s       sort                   w      shell
+p       paste                  u      unselect
+$       run                    zh     toggle hidden
 ───────────────────< ATAJOS PERSONALIZADOS >───────────────────
-Supr    delete          # Elimina el elemento seleccionado.
-Enter   open            # Abre el elemento seleccionado.
-.       set hidden!     # Muestra u oculta archivos ocultos.
-X       trash-put       # Envía los elementos seleccionados a la papelera.
-a       push $mkdir     # Escribe un nombre para crear un directorio.
-gN      cd .../Notas    # Cambia al directorio de notas de OsiriaFS.
-yy      copy            # Copia los elementos seleccionados.
-yp      wl-copy         # Copia las rutas seleccionadas al portapapeles.
-o       ripdrag         # Abre una ventana GTK4 para arrastrar la selección a otras aplicaciones.
-Ctrl+f  fzf_find        # Busca archivos y directorios y navega al resultado.
-Ctrl+g  search_content  # Busca texto dentro de archivos.
-gl      follow_link     # Selecciona el destino del enlace simbólico.
-E       extract         # Extrae los archivos comprimidos seleccionados.
-A       create_archive  # Crea un archivo comprimido con la selección.
-
-Los comandos personalizados están definidos en cmds/*.lf.
+Supr    Eliminar               o          Abrir ventana de arrastre
+.       Mostrar ocultos        Ctrl+f     Buscar archivos
+X       Enviar a papelera      Ctrl+g     Buscar contenido
+a       Crear directorio       gl         Seguir enlace
+gN      Ir a notas             E          Extraer archivos
+yy      Copiar selección       A          Crear archivo
+yp      Copiar rutas
