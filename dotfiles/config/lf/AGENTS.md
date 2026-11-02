@@ -17,6 +17,10 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   `comando | while` quedan en un subshell
 - Selección: partir `$fx` con `${(f)fx}`, porque zsh no divide parámetros sin
   comillas
+- Rutas: `$f` y `$fx` son absolutas; `${f%/*}` da el directorio y `${fx##*/}` el
+  nombre
+- Fzf: `{1}` y `{q}` llegan escapados por fzf; no envolverlos en comillas dentro
+  del comando remoto
 
 ## Parser de configuración
 
@@ -27,10 +31,19 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Salida: `%` escribe en la statline mientras dura el comando; `$` ejecuta sin
   interfaz
 
+## Atajos
+
+- Prefijo: una tecla con comando propio no inicia una secuencia; `t` ejecuta
+  `tag-toggle` y deja inalcanzables los atajos `t3*`
+
 ## Mensajes
 
-- Persistencia: `lf -remote "send $id echo …"` deja el mensaje en la statline
-- Recarga: `load` relee solo lo modificado; `reload` vacía la caché completa
+- Persistencia: `lf -remote "send $id echo …"` deja el mensaje en la statline;
+  `echoerr` lo marca como error; una comilla doble en el texto corta el comando
+- Recarga: lf relee el directorio al terminar un comando de shell; `load` relee
+  lo modificado y `reload` vacía la caché
+- Salida: capturar el error y enviarlo a la statline antes que redirigirlo a
+  `/dev/null`
 
 ## Portapapeles
 
