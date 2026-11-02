@@ -1,0 +1,31 @@
+# vim: filetype=config
+# Vaciar de la papelera solo lo que lleva más de 30 días, con confirmación.
+
+cmd trash_old %{{
+  # --dry-run cuenta sin borrar; cada elemento imprime su archivo y su
+  # .trashinfo, por eso solo se cuentan las rutas de Trash/files.
+  if ! listing="$(trash-empty --dry-run 30 2>&1)"; then
+    # La última línea del error de trash-cli es la excepción concreta.
+    message="$(printf '%s\n' "$listing" | grep -v '^[[:space:]]*$' |
+      tail -n 1 | tr -d '"')"
+    lf -remote "send $id echoerr No se pudo revisar la papelera: $message"
+    exit 1
+  fi
+  pending="$(printf '%s\n' "$listing" | grep -c '/files/' || true)"
+  if [ "$pending" -eq 0 ]; then
+    lf -remote "send $id echo Nada que vaciar con más de 30 días"
+    exit 0
+  fi
+
+  printf '¿Eliminar de la papelera %s elemento(s) con más de 30 días? [s/N] ' "$pending"
+  read -r answer
+  case "$answer" in
+    [sS])
+      if trash-empty 30; then
+        lf -remote "send $id echo Papelera vaciada hasta hace 30 días"
+      else
+        lf -remote "send $id echoerr No se pudo vaciar la papelera"
+      fi
+      ;;
+  esac
+}}

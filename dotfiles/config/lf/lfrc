@@ -59,6 +59,7 @@
   map <c-g> :search_content
   map gll follow_link
   map glp paste_link
+  map gxx trash_old
   map E extract
   map A create_archive
 
@@ -70,3 +71,4 @@
   source ~/.config/lf/cmds/extract.lf
   source ~/.config/lf/cmds/create_archive.lf
   source ~/.config/lf/cmds/paste_link.lf
+  source ~/.config/lf/cmds/trash_old.lf
