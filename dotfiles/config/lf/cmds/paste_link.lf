@@ -1,0 +1,35 @@
+# vim: filetype=config
+# Crear enlaces simbólicos en el directorio actual desde las rutas copiadas o cortadas en lf.
+cmd paste_link %{{
+  data_home="$HOME/.local/share"
+  [ -n "${XDG_DATA_HOME:-}" ] && data_home="$XDG_DATA_HOME"
+  [ -n "${LF_DATA_HOME:-}" ] && data_home="$LF_DATA_HOME"
+  filesfile="$data_home/lf/files"
+
+  if [ ! -r "$filesfile" ]; then
+    printf 'No se encuentra el portapapeles de lf: %s\n' "$filesfile"
+    exit 1
+  fi
+
+  mode="$(head -n 1 "$filesfile")"
+  case "$mode" in
+    copy|move) ;;
+    *) printf 'Formato de portapapeles de lf desconocido: %s\n' "$mode"; exit 1 ;;
+  esac
+
+  tail -n +2 "$filesfile" | while IFS= read -r source || [ -n "$source" ]; do
+    [ -n "$source" ] || continue
+    name="${source##*/}"
+    if [ -e "$source" ] || [ -L "$source" ]; then
+      if [ -e "./$name" ] || [ -L "./$name" ]; then
+        printf 'Ya existe; se omite: %s\n' "./$name"
+      else
+        ln -s -- "$source" .
+      fi
+    else
+      printf 'No existe el origen; se omite: %s\n' "$source"
+    fi
+  done
+
+  lf -remote "send $id load"
+}}

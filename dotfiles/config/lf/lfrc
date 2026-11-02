@@ -58,6 +58,7 @@
   map <c-f> :fzf_find
   map <c-g> :search_content
   map gl follow_link
+  map gm paste_link
   map E extract
   map A create_archive
 
@@ -68,3 +69,4 @@
   source ~/.config/lf/cmds/follow_link.lf
   source ~/.config/lf/cmds/extract.lf
   source ~/.config/lf/cmds/create_archive.lf
+  source ~/.config/lf/cmds/paste_link.lf
