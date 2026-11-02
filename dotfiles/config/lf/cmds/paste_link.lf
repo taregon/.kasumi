@@ -1,9 +1,11 @@
 # vim: filetype=config
-# Crear enlaces simbólicos en el directorio actual desde las rutas copiadas o cortadas en lf.
+# Crear enlaces simbólicos en el directorio actual desde el portapapeles de lf.
+# El modo move no se aplica: solo se enlaza y el origen permanece.
 cmd paste_link %{{
-  data_home="$HOME/.local/share"
-  [ -n "${XDG_DATA_HOME:-}" ] && data_home="$XDG_DATA_HOME"
-  [ -n "${LF_DATA_HOME:-}" ] && data_home="$LF_DATA_HOME"
+  # Misma precedencia que lf: LF_DATA_HOME > XDG_DATA_HOME > ~/.local/share.
+  # Sin expansión anidada: un cierre doble de llaves cerraría el comando.
+  data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
+  data_home="${LF_DATA_HOME:-$data_home}"
   filesfile="$data_home/lf/files"
 
   if [ ! -r "$filesfile" ]; then
@@ -11,25 +13,36 @@ cmd paste_link %{{
     exit 1
   fi
 
-  mode="$(head -n 1 "$filesfile")"
+  # El descriptor mantiene el bucle en este shell: con pipe, los contadores
+  # quedarían en un subshell.
+  exec 3< "$filesfile"
+  IFS= read -r mode <&3 || mode=""
   case "$mode" in
     copy|move) ;;
     *) printf 'Formato de portapapeles de lf desconocido: %s\n' "$mode"; exit 1 ;;
   esac
 
-  tail -n +2 "$filesfile" | while IFS= read -r source || [ -n "$source" ]; do
+  linked=0 omitted=0 failed=0
+  while IFS= read -r source <&3 || [ -n "$source" ]; do
     [ -n "$source" ] || continue
     name="${source##*/}"
-    if [ -e "$source" ] || [ -L "$source" ]; then
-      if [ -e "./$name" ] || [ -L "./$name" ]; then
-        printf 'Ya existe; se omite: %s\n' "./$name"
-      else
-        ln -s -- "$source" .
-      fi
-    else
+    if [ ! -e "$source" ] && [ ! -L "$source" ]; then
+      omitted=$((omitted + 1))
       printf 'No existe el origen; se omite: %s\n' "$source"
+    elif [ -e "./$name" ] || [ -L "./$name" ]; then
+      omitted=$((omitted + 1))
+      printf 'Ya existe; se omite: %s\n' "./$name"
+    # ln va en la condición: `set -e` abortaría el lote ante un fallo aislado.
+    elif ln -s -- "$source" .; then
+      linked=$((linked + 1))
+    else
+      failed=$((failed + 1))
+      printf 'No se pudo enlazar: %s\n' "$source"
     fi
   done
+  exec 3<&-
 
   lf -remote "send $id load"
+  # echo persiste en la statline; printf se borra al terminar el comando.
+  lf -remote "send $id echo Enlaces: $linked, omitidos: $omitted, fallidos: $failed"
 }}
