@@ -1,15 +1,27 @@
 # vim: filetype=config
-# Busca archivos y directorios con fd y fzf usando las opciones de FZF_CTRL_T_COMMAND.
-# Cambia al directorio elegido o selecciona el archivo encontrado.
+# Buscar archivos y directorios con fd y fzf usando las opciones de FZF_CTRL_T_COMMAND.
+# Cambiar al directorio elegido o seleccionar el archivo encontrado.
 
 cmd fzf_find ${{
-  # Reemplaza --type f por --type f --type d de forma más limpia
-  fd_cmd="${FZF_CTRL_T_COMMAND/--type f/--type f --type d}"
+  # La variable proviene de la integración de fzf en zsh; si falta, se usa un
+  # fd equivalente. El reemplazo añade directorios a la búsqueda original.
+  fd_cmd="${FZF_CTRL_T_COMMAND:-fd --type f --follow --hidden --strip-cwd-prefix}"
+  fd_cmd="${fd_cmd/--type f/--type f --type d}"
 
-  selected_path="$(eval "$fd_cmd" 2>/dev/null | \
-    fzf --reverse --header='  Buscar directorio o archivo')"
+  errfile="$(mktemp)"
+  trap 'rm -f "$errfile"' EXIT INT TERM
+  if ! selected_path="$(eval "$fd_cmd" 2>"$errfile" |
+    fzf --reverse --header='  Buscar directorio o archivo' 2>>"$errfile")"; then
+    selected_path=""
+  fi
+  # Cancelar en fzf también devuelve un estado distinto de cero; el archivo no
+  # vacío distingue ese caso del fallo real de fd.
+  if [ -s "$errfile" ]; then
+    message="$(head -n 1 "$errfile" | tr -d '"')"
+    lf -remote "send $id echoerr Búsqueda: $message"
+  fi
 
-  [ -z "$selected_path" ] && exit
+  [ -z "$selected_path" ] && exit 0
 
   if [ -d "$selected_path" ]; then
     lf -remote "send $id cd \"$selected_path\""

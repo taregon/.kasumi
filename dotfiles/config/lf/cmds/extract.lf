@@ -1,8 +1,9 @@
 # vim: filetype=config
-# Extrae los archivos comprimidos seleccionados con atool.
+# Extraer los archivos comprimidos seleccionados con atool.
 
 cmd extract ${{
   clear
+  tput sgr0
   tput cup $(($(tput lines)/3))
   tput bold
   set -f
@@ -14,9 +15,17 @@ cmd extract ${{
   clear
   case "$reply" in
     [yYsS])
-      # ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
-      aunpack ${(f)fx} >/dev/null 2>&1
-      lf -remote "send $id echo Extracción completada"
+      # -e extrae cada archivo: sin él, atool toma los demás como miembros del
+      # primero. stdin desde /dev/null evita esperar un prompt que no se ve.
+      if output="$(aunpack -e ${(f)fx} </dev/null 2>&1)"; then
+        lf -remote "send $id echo Extracción completada"
+      else
+        # Los avisos de locale de atool no describen el fallo.
+        message="$(printf '%s\n' "$output" |
+          sed '/^Wide character in setenv/d;/^[[:space:]]*$/d' |
+          head -n 2 | tr -d '"' | paste -sd ' ' -)"
+        lf -remote "send $id echoerr Falló la extracción: $message"
+      fi
       ;;
   esac
 }}

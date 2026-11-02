@@ -1,6 +1,14 @@
 # vim: filetype=config
-# Sigue el enlace simbólico seleccionado y selecciona su destino.
+# Seguir el enlace simbólico seleccionado y seleccionar su destino.
 
 cmd follow_link %{{
-  lf -remote "send ${id} select \"$(readlink $f)\""
+  if [ ! -L "$f" ]; then
+    lf -remote "send $id echoerr No es un enlace simbólico: $f"
+    exit 1
+  fi
+
+  target="$(readlink -- "$f")" || exit 1
+  # El destino se interpola entre comillas dobles para lf; una comilla en la
+  # ruta rompería el comando remoto.
+  lf -remote "send $id select \"$target\""
 }}

@@ -1,9 +1,10 @@
 # vim: filetype=config
-# Crea un archivo comprimido con los elementos seleccionados.
+# Empaquetar los elementos seleccionados en un archivo comprimido.
 # El formato se deduce de la extensión; si falta, usa .tar.gz.
 
 cmd create_archive ${{
   clear
+  tput sgr0
   tput cup $(($(tput lines)/3))
   tput bold
   set -f
@@ -17,15 +18,23 @@ cmd create_archive ${{
       printf 'Nombre del archivo: '
       read -r name
       clear
-      [ -z "$name" ] && exit
+      [ -z "$name" ] && exit 0
+      # ?*.* exige al menos un carácter antes del punto: un nombre como
+      # .copia no es una extensión válida para atool.
       case "$name" in
-        *.*) ;;
+        ?*.*) ;;
         *) name="$name.tar.gz" ;;
       esac
-      # ${(f)fx}: parte por líneas la lista de archivos (zsh no divide por defecto)
-      # ${...##*/}: deja solo el nombre de archivo, sin rutas absolutas
-      apack "$name" ${${(f)fx}##*/} >/dev/null 2>&1
-      lf -remote "send $id echo Empaquetado completado"
+      # stdin desde /dev/null evita un prompt de sobrescritura invisible.
+      if output="$(apack "$name" ${${(f)fx}##*/} </dev/null 2>&1)"; then
+        lf -remote "send $id echo Empaquetado completado"
+      else
+        # Los avisos de locale de atool no describen el fallo.
+        message="$(printf '%s\n' "$output" |
+          sed '/^Wide character in setenv/d;/^[[:space:]]*$/d' |
+          head -n 2 | tr -d '"' | paste -sd ' ' -)"
+        lf -remote "send $id echoerr Falló el empaquetado: $message"
+      fi
       ;;
   esac
 }}
