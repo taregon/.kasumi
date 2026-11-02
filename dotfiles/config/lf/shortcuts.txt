@@ -9,7 +9,8 @@ $       run                    zh     toggle hidden
 Supr    Eliminar               o          Abrir ventana de arrastre
 .       Mostrar ocultos        Ctrl+f     Buscar archivos
 X       Enviar a papelera      Ctrl+g     Buscar contenido
-a       Crear directorio       gl         Seguir enlace
+a       Crear directorio       gll        Seguir enlace
 gN      Ir a notas             E          Extraer archivos
 yy      Copiar selección       A          Crear archivo
 yp      Copiar rutas           gxx        Vaciar papelera antigua
+glp     Enlazar portapapeles
