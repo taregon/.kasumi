@@ -57,8 +57,8 @@
 # ──「 COMANDOS PERSONALIZADOS 」─────────────────────────────
   map <c-f> :fzf_find
   map <c-g> :search_content
-  map gl follow_link
-  map gm paste_link
+  map gll follow_link
+  map glp paste_link
   map E extract
   map A create_archive
 
