@@ -1,12 +1,28 @@
 # vim: filetype=config
 # Cifrar y descifrar archivos con age y la llave dedicada en
 # $XDG_CONFIG_HOME/age/kasumi.key (por defecto ~/.config/age/kasumi.key).
+# Si existe $XDG_CONFIG_HOME/age/recipients.txt, cifra para todos sus
+# destinatarios y debe incluir la clave pública propia.
 
 cmd age_encrypt %{{
-  keyfile="${XDG_CONFIG_HOME:-$HOME/.config}/age/kasumi.key"
+  agedir="${XDG_CONFIG_HOME:-$HOME/.config}/age"
+  keyfile="$agedir/kasumi.key"
+  recipients="$agedir/recipients.txt"
   if [ ! -r "$keyfile" ]; then
     lf -remote "send $id echoerr No se encuentra la llave de age: $keyfile"
     exit 1
+  fi
+
+  if [ -s "$recipients" ]; then
+    # Sin la clave propia en el archivo nadie aquí podría descifrar.
+    own="$(age-keygen -y "$keyfile")"
+    if ! grep -qF -- "$own" "$recipients"; then
+      lf -remote "send $id echoerr $recipients no incluye la clave propia"
+      exit 1
+    fi
+    target=(-R "$recipients")
+  else
+    target=(-i "$keyfile")
   fi
 
   encrypted=0 omitted=0 failed=0
@@ -17,7 +33,7 @@ cmd age_encrypt %{{
     # age sobrescribe la salida sin avisar; se comprueba antes.
     elif [ -e "$out" ]; then
       omitted=$((omitted + 1))
-    elif age -e -i "$keyfile" -o "$out" "$file"; then
+    elif age -e "${target[@]}" -o "$out" "$file"; then
       encrypted=$((encrypted + 1))
     else
       failed=$((failed + 1))

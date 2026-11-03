@@ -41,8 +41,8 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 ## Mensajes
 
 - Persistencia: `lf -remote "send $id echo …"` deja el mensaje en la statline;
-  `echoerr` lo marca como error; una comilla doble o un `;` en el texto corta
-  el comando
+  `echoerr` lo marca como error; una comilla doble o un `;` en el texto corta el
+  comando
 - Recarga: lf relee el directorio al terminar un comando de shell; `load` relee
   lo modificado y `reload` vacía la caché
 - Salida: capturar el error y enviarlo a la statline antes que redirigirlo a
