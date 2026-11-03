@@ -13,8 +13,8 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   lo contrario aborta el bloque
 - Aritmética: usar `x=$((x + 1))`; `((x++))` devuelve estado 1 con resultado 0 y
   el bloque termina
-- Contadores: leer el archivo con `exec 3< archivo` y `<&3`; con
-  `comando | while` quedan en un subshell
+- Contadores: leer la lista con `exec 3< archivo` y `<&3`; en zsh el pipe no
+  pierde los contadores, pero un `read` interno consumiría la lista
 - Selección: partir `$fx` con `${(f)fx}`, porque zsh no divide parámetros sin
   comillas
 - Rutas: `$f` y `$fx` son absolutas; `${f%/*}` da el directorio y `${fx##*/}` el
@@ -28,8 +28,8 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   una expansión o de un comentario, y no hay escape
 - Consecuencia: evitar `${a:-${b}}` y `}}` en comentarios; encadenar
   asignaciones
-- Salida: `%` escribe en la statline mientras dura el comando; `$` ejecuta sin
-  interfaz
+- Salida: `%` escribe en la statline mientras dura el comando; `$` pausa la
+  interfaz y usa la terminal
 
 ## Atajos
 
@@ -52,6 +52,15 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Ruta: `$LF_DATA_HOME/lf/files`, con precedencia `LF_DATA_HOME`,
   `XDG_DATA_HOME` y `~/.local/share`
 - Formato: primera línea `copy` o `move`, luego una ruta absoluta por línea
+
+## Cifrado
+
+- Llave: `$XDG_CONFIG_HOME/age/kasumi.key`, fuera del repositorio; sin ella no
+  se descifra y no debe copiarse a dotfiles
+- Salida: `age` sobrescribe sin aviso; comprobar la existencia antes de
+  invocarlo
+- Contraseñas: no leerlas en la statline, porque lf muestra lo tecleado; dejar
+  el prompt a `pinentry` o a un programa con tty
 
 ## Verificación
 
