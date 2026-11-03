@@ -1,0 +1,63 @@
+# vim: filetype=config
+# Cifrar y descifrar archivos con age y la llave dedicada en
+# $XDG_CONFIG_HOME/age/kasumi.key (por defecto ~/.config/age/kasumi.key).
+
+cmd age_encrypt %{{
+  keyfile="${XDG_CONFIG_HOME:-$HOME/.config}/age/kasumi.key"
+  if [ ! -r "$keyfile" ]; then
+    lf -remote "send $id echoerr No se encuentra la llave de age: $keyfile"
+    exit 1
+  fi
+
+  encrypted=0 omitted=0 failed=0
+  for file in ${(f)fx}; do
+    out="$file.age"
+    if [ ! -f "$file" ]; then
+      failed=$((failed + 1))
+    # age sobrescribe la salida sin avisar; se comprueba antes.
+    elif [ -e "$out" ]; then
+      omitted=$((omitted + 1))
+    elif age -e -i "$keyfile" -o "$out" "$file"; then
+      encrypted=$((encrypted + 1))
+    else
+      failed=$((failed + 1))
+    fi
+  done
+
+  if [ "$failed" -gt 0 ]; then
+    lf -remote "send $id echoerr Cifrado: $encrypted, omitidos: $omitted, fallidos: $failed"
+  else
+    lf -remote "send $id echo Cifrado: $encrypted, omitidos: $omitted"
+  fi
+}}
+
+cmd age_decrypt %{{
+  keyfile="${XDG_CONFIG_HOME:-$HOME/.config}/age/kasumi.key"
+  if [ ! -r "$keyfile" ]; then
+    lf -remote "send $id echoerr No se encuentra la llave de age: $keyfile"
+    exit 1
+  fi
+
+  decrypted=0 omitted=0 failed=0
+  for file in ${(f)fx}; do
+    case "$file" in
+      *.age) out="${file%.age}" ;;
+      *) failed=$((failed + 1)); continue ;;
+    esac
+    if [ ! -f "$file" ]; then
+      failed=$((failed + 1))
+    elif [ -e "$out" ]; then
+      omitted=$((omitted + 1))
+    elif age -d -i "$keyfile" -o "$out" "$file"; then
+      decrypted=$((decrypted + 1))
+    else
+      failed=$((failed + 1))
+    fi
+  done
+
+  if [ "$failed" -gt 0 ]; then
+    lf -remote "send $id echoerr Descifrado: $decrypted, omitidos: $omitted, fallidos: $failed"
+  else
+    lf -remote "send $id echo Descifrado: $decrypted, omitidos: $omitted"
+  fi
+}}

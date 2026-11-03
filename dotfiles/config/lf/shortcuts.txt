@@ -14,3 +14,4 @@ gN      Ir a notas             E          Extraer archivos
 yy      Copiar selección       A          Crear archivo
 yp      Copiar rutas           gxx        Vaciar papelera antigua
 glp     Enlazar portapapeles
+ge      Cifrar con age         gd         Descifrar con age
