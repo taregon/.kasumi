@@ -34,7 +34,7 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 ## Atajos
 
 - Prefijo: una tecla con comando propio no inicia una secuencia; `t` ejecuta
-  `tag-toggle` y deja inalcanzables los atajos `t3*`
+  `tag-toggle` y bloquea cualquier atajo que empiece por `t`
 - Registro: todo comando aprobado se anota en `shortcuts.txt` con su tecla y la
   columna alineada a las vecinas
 

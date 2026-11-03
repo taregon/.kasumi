@@ -5,6 +5,7 @@ d       cut                    v      invert
 s       sort                   w      shell
 p       paste                  u      unselect
 $       run                    zh     toggle hidden
+[       jump prev              ]      jump next
 ───────────────────< ATAJOS PERSONALIZADOS >───────────────────
 Supr    Eliminar               o          Abrir ventana de arrastre
 .       Mostrar ocultos        Ctrl+f     Buscar archivos
