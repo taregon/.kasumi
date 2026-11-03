@@ -13,8 +13,7 @@ cmd paste_link %{{
     exit 1
   fi
 
-  # El descriptor mantiene el bucle en este shell: con pipe, los contadores
-  # quedarían en un subshell.
+  # El descriptor evita el proceso de tail y deja stdin libre.
   exec 3< "$filesfile"
   IFS= read -r mode <&3 || mode=""
   case "$mode" in
