@@ -48,12 +48,12 @@ local zero_re='^0+(\.0+)?$'
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$color" == "-h" || "$color" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-cluster <color> [cantidad] [umbral] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-cluster <color> [cantidad|all] [umbral] [vista]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Que hace\n'
     printf '      Encuentra colores muy parecidos al tuyo, casi indistinguibles a simple vista.\n'
     printf '  :: Argumentos\n'
     printf '      <color>    Color base, ej: #80c8a1\n'
-    printf '      [cantidad] Cantidad a emitir, entero >= 1 (defecto: 8)\n'
+    printf '      [cantidad] Cantidad a emitir o all (defecto: 8)\n'
     printf '      [umbral]   dEOKr2 maximo mayor que 0 (defecto: 0.02)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
     printf '  :: Vistas\n'
@@ -65,6 +65,10 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      a mayor distancia. El umbral 0.02 es el JND de trabajo (escala Oklab).\n'
     printf '      El dEOKr2 emitido se mide sobre el hex final; el candidato Oklch\n'
     printf '      solo prefiltra antes de convertir. El hex cuantiza a 8 bits.\n'
+    printf '      Cantidad acepta all para emitir todos los candidatos bajo el umbral.\n'
+    printf '      Umbral: distancia maxima aceptada. Cantidad: cuantos se emiten.\n'
+    printf '      Si hay mas candidatos bajo el umbral, se emiten los mas cercanos.\n'
+    printf '      Para ver el efecto del umbral, sube cantidad.\n'
     printf '      Rampas de luminosidad: ver kzpalette-light-ramp; escala Oklch: ver\n'
     printf '      kzpalette-oklch-scale.\n'
     return 0
@@ -86,20 +90,24 @@ case "$lview" in
         ;;
 esac
 
-if [[ ! "$count" =~ $int_re ]]; then
-    printf '%s>>FAIL cantidad debe ser un entero mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Recibido: cantidad=%s.\n' "$count" >&2
-    return 2
-fi
+if [[ "${count:l}" == "all" ]]; then
+    :
+else
+    if [[ ! "$count" =~ $int_re ]]; then
+        printf '%s>>FAIL cantidad debe ser un entero mayor o igual a 1 o all.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   Recibido: cantidad=%s.\n' "$count" >&2
+        return 2
+    fi
 
-# 10# fuerza base 10, porque un conteo con cero inicial (08) seria octal en
-# aritmetica zsh y rompe la comparacion.
-if ((10#$count < 1)); then
-    printf '%s>>FAIL cantidad debe ser mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
-    printf '   Recibido: cantidad=%s.\n' "$count" >&2
-    return 2
+    # 10# fuerza base 10, porque un conteo con cero inicial (08) seria octal en
+    # aritmetica zsh y rompe la comparacion.
+    if ((10#$count < 1)); then
+        printf '%s>>FAIL cantidad debe ser mayor o igual a 1.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   Recibido: cantidad=%s.\n' "$count" >&2
+        return 2
+    fi
+    count=$((10#$count))
 fi
-count=$((10#$count))
 
 if [[ ! "$threshold" =~ $num_re || "$threshold" =~ $zero_re ]]; then
     printf '%s>>FAIL umbral debe ser un numero mayor que 0.%s\n' "$C_RED" "$C_RST" >&2
@@ -185,7 +193,12 @@ def to_lab(l, c, h):
 
 # ──「 MUESTREO 」────────────────────────────────────────────
 color, count_raw, threshold_raw = sys.argv[1], sys.argv[2], sys.argv[3]
-count = int(count_raw)
+if count_raw.lower() == "all":
+    count = None
+else:
+    count = int(count_raw)
+    if count < 1:
+        raise SystemExit("cantidad debe ser mayor o igual a 1 o all")
 threshold = float(threshold_raw)
 
 anchor_hex = run_pastel("format", "hex", color)
@@ -261,7 +274,7 @@ local -r ICON=$'\uf4ee'
 local line hex dE total
 local -a lines=("${(@f)raw}")
 total=${#lines[@]}
-if ((total < count)); then
+if [[ "$count" != "all" && "$total" -lt "$count" ]]; then
     printf '%s>>WARN generados %s de %s colores bajo el umbral %s.%s\n' \
         "$C_YEL" "$total" "$count" "$threshold" "$C_RST" >&2
     printf '   Amplia el umbral para cubrir mas candidatos.\n' >&2
