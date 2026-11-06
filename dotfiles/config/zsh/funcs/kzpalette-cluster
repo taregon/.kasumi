@@ -69,6 +69,7 @@ if [[ "$color" == "-h" || "$color" == "--help" ]]; then
     printf '      Umbral: distancia maxima aceptada. Cantidad: cuantos se emiten.\n'
     printf '      Si hay mas candidatos bajo el umbral, se emiten los mas cercanos.\n'
     printf '      Para ver el efecto del umbral, sube cantidad.\n'
+    printf '      Umbral mayor que 0; util hasta ~0.011. Por encima, incluye todo el vecindario.\n'
     printf '      Rampas de luminosidad: ver kzpalette-light-ramp; escala Oklch: ver\n'
     printf '      kzpalette-oklch-scale.\n'
     return 0
@@ -113,6 +114,10 @@ if [[ ! "$threshold" =~ $num_re || "$threshold" =~ $zero_re ]]; then
     printf '%s>>FAIL umbral debe ser un numero mayor que 0.%s\n' "$C_RED" "$C_RST" >&2
     printf '   Recibido: umbral=%s.\n' "$threshold" >&2
     return 2
+fi
+
+if python3 -c "import sys; sys.exit(0 if float('$threshold') > 0.02 else 1)"; then
+    printf '%s>>WARN umbral mayor que 0.02 no agrega candidatos; el vecindario termina en ~0.011.%s\n' "$C_YEL" "$C_RST" >&2
 fi
 
 # ──「 DEPENDENCIAS 」────────────────────────────────────────
