@@ -1,0 +1,58 @@
+# vim: filetype=zsh
+# Helper interno para obtener nombres de color desde la instancia local
+# de color.pizza (http://127.0.0.1:8080).
+#
+# Entrada: hexes por argumentos o stdin, separados por espacios o
+# saltos de línea. Acepta con o sin '#'.
+# Salida: un nombre por línea, en el mismo orden de entrada.
+# Si el servicio no responde o faltan curl/jaq, devuelve líneas vacías
+# para no romper el formato de las funciones que lo consumen.
+#
+# Uso:
+#   _kzpalette-color-name "#aaffcc" "#ffccaa"
+#   printf '%s\n' "#aaffcc" "#ffccaa" | _kzpalette-color-name
+#
+# Requiere: curl, jaq. Servicio: color-pizza (Docker, puerto 8080).
+
+emulate -L zsh
+
+local -a hexs
+if (($# > 0)); then
+    hexs=("$@")
+else
+    local line
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        hexs+=(${=line})
+    done
+fi
+
+((${#hexs[@]} == 0)) && return 0
+
+local -a normalized
+local h
+for h in "${hexs[@]}"; do
+    h="${h#\#}"
+    normalized+=("${h:l}")
+done
+
+if ! command -v curl > /dev/null 2>&1 || ! command -v jaq > /dev/null 2>&1; then
+    printf '\n%.0s' "${normalized[@]}"
+    return 0
+fi
+
+local joined="${(j:,:)normalized}"
+local resp
+resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${joined}" 2> /dev/null)" || resp=''
+if [[ -z "$resp" ]]; then
+    printf '\n%.0s' "${normalized[@]}"
+    return 0
+fi
+
+local -a names
+names=("${(@f)$(printf '%s' "$resp" | jaq -r '.colors[].name' 2> /dev/null)}")
+if ((${#names[@]} != ${#normalized[@]})); then
+    printf '\n%.0s' "${normalized[@]}"
+    return 0
+fi
+printf '%s\n' "${names[@]}"

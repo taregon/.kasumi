@@ -125,9 +125,18 @@
 #           Cambio cromático visible pero menor que 15°.
 #           Funciona para jerarquías sutiles en interfaces monocromáticas.
 
-local base=$1
-local detail="${2:-base}"
-local view="${3:-}"
+local show_names=0
+local -a _pos=()
+local _arg
+for _arg in "$@"; do
+    case "$_arg" in
+        --names) show_names=1 ;;
+        *) _pos+=("$_arg") ;;
+    esac
+done
+local base="${_pos[1]:-}"
+local detail="${_pos[2]:-base}"
+local view="${_pos[3]:-}"
 local angles=(
     # -180° y 180° son equivalentes (mismo color resultante);
     # se incluyen ambos para cubrir la notación simétrica.
@@ -143,13 +152,14 @@ fi
 
 # ──「 AYUDA 」───────────────────────────────────────────────
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
-    printf '%s>>HELP Uso: kzpalette-hue-harmonize <color> [detalle] [vista]%s\n' "$C_BLU" "$C_RST"
+    printf '%s>>HELP Uso: kzpalette-hue-harmonize <color> [detalle] [vista] [--names]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Que hace\n'
     printf '      Gira el tono para recorrer la rueda de color: vecinos, opuestos e intermedios.\n'
     printf '  :: Argumentos\n'
     printf '      <color>    Color base (hex, nombre o formato pastel)\n'
     printf '      [detalle]  base|full (defecto: base)\n'
     printf '      [vista]    block|set (defecto: block en terminal, set en pipe)\n'
+    printf '      [--names]  Muestra el nombre de color.pizza (instancia local) por color.\n'
     printf '  :: Detalle\n'
     printf '      base       Pts y muestra cromatica\n'
     printf '      full       L, C, dEOKr2 y angulo de rotacion\n'
@@ -186,6 +196,10 @@ if ! command -v bc > /dev/null 2>&1; then
     printf '%s>>FAIL bc no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
     printf '   Instala con: pacman -S bc.\n' >&2
     return 1
+fi
+
+if ! whence -w _kzpalette-color-name >/dev/null 2>&1; then
+    autoload -Uz _kzpalette-color-name 2>/dev/null || true
 fi
 
 # ──「 VALIDACION 」──────────────────────────────────────────
@@ -234,6 +248,12 @@ if ((${#hexs[@]} != ${#angles[@]})); then
     printf '%s>>FAIL no se pudieron rotar los %s angulos.%s\n' "$C_RED" "${#angles[@]}" "$C_RST" >&2
     printf '   Revisa el color base.\n' >&2
     return 1
+fi
+
+# Nombres opcionales desde color.pizza (instancia local).
+local -a color_names=()
+if (( show_names )); then
+    color_names=("${(@f)$(_kzpalette-color-name "${hexs[@]}")}")
 fi
 
 # Representaciones del color en espacios perceptuales:
@@ -306,19 +326,35 @@ if [[ "$lview" == 'set' ]]; then
         printf '%s>>FAIL color base invalido: %s.%s\n' "$C_RED" "$base" "$C_RST" >&2
         return 2
     fi
-    if [[ "$detail" == 'full' ]]; then
-        printf '>>INFO Columnas: hex score_oklab rotate_deg\n'
+    if (( show_names )); then
+        if [[ "$detail" == 'full' ]]; then
+            printf '>>INFO Columnas: hex score_oklab rotate_deg name\n'
+        else
+            printf '>>INFO Columnas: hex score_oklab name\n'
+        fi
     else
-        printf '>>INFO Columnas: hex score_oklab\n'
+        if [[ "$detail" == 'full' ]]; then
+            printf '>>INFO Columnas: hex score_oklab rotate_deg\n'
+        else
+            printf '>>INFO Columnas: hex score_oklab\n'
+        fi
     fi
     printf '>>INFO Base: %s\n' "$base_hex"
     for i in {1..$#hexs}; do
         sv="${scores[i]}"
         [[ "$sv" == .* ]] && sv="0$sv"
-        if [[ "$detail" == 'full' ]]; then
-            printf '%s %s %s\n' "${hexs[i]}" "$sv" "${angles[i]}"
+        if (( show_names )); then
+            if [[ "$detail" == 'full' ]]; then
+                printf '%s %s %s %s\n' "${hexs[i]}" "$sv" "${angles[i]}" "${color_names[i]}"
+            else
+                printf '%s %s %s\n' "${hexs[i]}" "$sv" "${color_names[i]}"
+            fi
         else
-            printf '%s %s\n' "${hexs[i]}" "$sv"
+            if [[ "$detail" == 'full' ]]; then
+                printf '%s %s %s\n' "${hexs[i]}" "$sv" "${angles[i]}"
+            else
+                printf '%s %s\n' "${hexs[i]}" "$sv"
+            fi
         fi
     done
     return 0
@@ -358,17 +394,27 @@ for i in {1..$#hexs}; do
     marker=''
     ((i == closest)) && marker=' [*]'
 
-    case "$detail" in
-
-        full)
-            pastel paint "$color" \
-                "$color ◖████◗ ─ L: ${lchv[1]} ─ C: ${lchv[2]} ─ dEOKr2: $de_disp ─ RotateHSL: ${degrees}°${marker}"
-            ;;
-        base)
-            # Pts: puntuación perceptual derivada de coordenadas OkLab.
-            # Escala interna del script; no corresponde a una unidad física.
-            pastel paint "$color" \
-                "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct${marker}"
-            ;;
-    esac
+    if (( show_names )); then
+        case "$detail" in
+            full)
+                pastel paint "$color" \
+                    "$color ◖████◗ ─ L: ${lchv[1]} ─ C: ${lchv[2]} ─ dEOKr2: $de_disp ─ RotateHSL: ${degrees}° ─ ${color_names[i]}${marker}"
+                ;;
+            base)
+                pastel paint "$color" \
+                    "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct ─ ${color_names[i]}${marker}"
+                ;;
+        esac
+    else
+        case "$detail" in
+            full)
+                pastel paint "$color" \
+                    "$color ◖████◗ ─ L: ${lchv[1]} ─ C: ${lchv[2]} ─ dEOKr2: $de_disp ─ RotateHSL: ${degrees}°${marker}"
+                ;;
+            base)
+                pastel paint "$color" \
+                    "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct${marker}"
+                ;;
+        esac
+    fi
 done
