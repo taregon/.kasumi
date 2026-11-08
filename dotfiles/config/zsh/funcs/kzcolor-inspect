@@ -267,13 +267,9 @@ printf '│\n'
 printf '│  %-10s %-25s│\n' "RGB" "$rgb_c"
 printf '│  %-10s %-25s│\n' "HSL" "$hsl_c"
 printf '│  %-10s %-25s│\n' "OKLCH" "$oklch_c"
-if [[ -n "$complement" ]]; then
-    printf '│  %-10s ' "COMPLEMENT"
-    _kzcolor-swatch "$complement"
-    printf '│\n'
-else
-    printf '│  %-10s %-25s│\n' "COMPLEMENT" "-"
-fi
+printf '│  %-10s ' "COMPLEMENT"
+_kzcolor-swatch "$complement"
+printf '│\n'
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "PALETTE MATCH"
 if [[ -n "$assigned" ]]; then
