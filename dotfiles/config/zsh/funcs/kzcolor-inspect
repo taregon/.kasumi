@@ -168,9 +168,10 @@ fi
 
 # ──「 ACCESIBILIDAD 」───────────────────────────────────────
 # Formula WCAG 2.1 sobre sRGB; se elige texto blanco o negro por contraste.
-# El umbral 0.179 es el punto donde ambos ratios se igualan. El recorte a
-# dos decimales por truncamiento reproduce la salida historica de bc.
-# Validado contra color.pizza con diferencia <= 5e-7.
+# El umbral 0.179 es el punto donde ambos ratios se igualan. Se trunca a dos
+# decimales en vez de redondear: nunca informa un ratio mayor que el real y
+# reproduce la salida historica de bc. Validado contra color.pizza con
+# diferencia <= 5e-7.
 local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
 local rr=$((16#$hr)) gg=$((16#$hg)) bb=$((16#$hb))
 local wcag
@@ -182,7 +183,7 @@ wcag="$(awk -v r="$rr" -v g="$gg" -v b="$bb" 'BEGIN {
     lum = 0.2126 * rl + 0.7152 * gl + 0.0722 * bl
     if (lum <= 0.179) { text = "white"; ratio = 1.05 / (lum + 0.05) }
     else { text = "black"; ratio = (lum + 0.05) / 0.05 }
-    printf "%.5f %s %d.%02d\n", lum, text, ratio, (ratio * 100) % 100
+    printf "%.5f %s %.2f\n", lum, text, int(ratio * 100) / 100
 }')"
 local -a wcag_field=(${=wcag})
 local luminance="${wcag_field[1]}" contrast="${wcag_field[2]}" ratio="${wcag_field[3]}:1"
