@@ -1,70 +1,133 @@
 # vim: filetype=zsh
-# Muestra informacion de un color (pastel + color.pizza).
-# Salida humana por defecto; --json para consumo agentico (JSON compacto).
+# Inspecciona un color y muestra sus coordenadas, el nombre asignado por
+# color.pizza y su contraste WCAG. Salida humana por defecto; --json para
+# consumo agentico.
 #
 # Uso: kzcolor-inspect <color> [--json] [--list LIST]
+#   <color>       Hex, nombre o cualquier formato que acepte pastel
+#   --json        JSON compacto de una linea (alias: --agent)
+#   --list LIST   Lista de color.pizza (defecto: default)
+#
+# Requiere: pastel. color.pizza es opcional: sin curl, sin jaq o sin el
+# servicio en 127.0.0.1:8080, los campos de nombre y descripcion quedan
+# vacios y el resto se calcula igual.
+# Niveles: >>HELP en stdout; >>FAIL en stderr.
+# Codigos: 0 exito; 1 falta pastel; 2 uso invalido o color no parseable.
 
 emulate -L zsh
 setopt localoptions noksharrays
 
-local base=""
-local json=0
-local list="default"
-local arg
-local -a pos=()
-for arg in "$@"; do
-    case "$arg" in
-        --json | --agent) json=1 ;;
-        --list=*) list="${arg#--list=}" ;;
-        --list) : ;;
-        --*) ;;
-        *) [[ -z "$base" ]] && base="$arg" || pos+=("$arg") ;;
-    esac
-done
-local prev=""
-for arg in "$@"; do
-    if [[ "$prev" == "--list" ]]; then
-        list="$arg"
-        prev=""
-        continue
-    fi
-    case "$arg" in --list) prev="$arg" ;; esac
-done
-[[ -z "$base" && ${#pos[@]} -gt 0 ]] && base="${pos[1]}"
+local -r USAGE='kzcolor-inspect <color> [--json] [--list LIST]'
+local -r SERVICE='http://127.0.0.1:8080/v1/'
+local -r SERVICE_TIMEOUT=3
 
-if [[ "$base" == "-h" || "$base" == "--help" ]]; then
-    printf '>>HELP Uso: kzcolor-inspect <color> [--json] [--list LIST]\n'
+if [[ -t 1 ]]; then
+    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+else
+    local -r C_BLU='' C_RED='' C_RST=''
+fi
+
+# ──「 ARGUMENTOS 」──────────────────────────────────────────
+# Parsea flags y operandos en una pasada; `--` corta la interpretacion de
+# flags y todo lo posterior se toma como color.
+local base='' json=0 list='default' help=0
+local -a operands=()
+local arg
+while (($# > 0)); do
+    case "$1" in
+        -h | --help) help=1 ;;
+        --json | --agent) json=1 ;;
+        --list)
+            shift
+            if (($# == 0)); then
+                printf '%s>>FAIL Falta el valor de --list.%s\n' "$C_RED" "$C_RST" >&2
+                printf '   Uso: %s.\n' "$USAGE" >&2
+                return 2
+            fi
+            list="$1"
+            ;;
+        --list=*) list="${1#--list=}" ;;
+        --)
+            shift
+            operands+=("$@")
+            break
+            ;;
+        -*)
+            printf '%s>>FAIL Opcion desconocida: %s.%s\n' "$C_RED" "$1" "$C_RST" >&2
+            printf '   Uso: %s.\n' "$USAGE" >&2
+            return 2
+            ;;
+        *) operands+=("$1") ;;
+    esac
+    shift
+done
+base="${operands[1]:-}"
+
+# ──「 AYUDA 」───────────────────────────────────────────────
+if ((help)); then
+    printf '%s>>HELP Uso: %s%s\n' "$C_BLU" "$USAGE" "$C_RST"
     printf '  :: Que hace\n'
-    printf '      Muestra informacion util de un color.\n'
+    printf '      Muestra coordenadas, nombre asignado y contraste WCAG de un color.\n'
     printf '  :: Argumentos\n'
-    printf '      <color>     Color base (hex, nombre o formato pastel)\n'
-    printf '      [--json]    Salida compacta para consumo agentico\n'
-    printf '      [--list L]  Lista de color.pizza (defecto: default)\n'
+    printf '      <color>         Color base (hex, nombre o formato pastel)\n'
+    printf '      --json          JSON compacto para consumo agentico (alias: --agent)\n'
+    printf '      --list LIST     Lista de color.pizza (defecto: default)\n'
+    printf '  :: Salida\n'
+    printf '      Humana: caja con color, coincidencia de paleta y accesibilidad.\n'
+    printf '      JSON: una linea con las claves hex, name, tagline, rgb, hsl, oklch,\n'
+    printf '      luminanceWCAG, bestContrast, contrast_ratio, assigned_hex, distance,\n'
+    printf '      temperature y adjectives. tagline solo se emite en JSON.\n'
+    printf '  :: Notas\n'
+    printf '      color.pizza es opcional; sin el servicio los campos de nombre,\n'
+    printf '      temperatura y coincidencia quedan vacios.\n'
+    printf '      La temperatura es un indice CCT del dataset color-description:\n'
+    printf '      orientativo, no una medicion fisica de la luz.\n'
     return 0
 fi
 
+# ──「 VALIDACION 」──────────────────────────────────────────
 if [[ -z "$base" ]]; then
-    printf '>>FAIL Falta el color.\n' >&2
-    printf '   Uso: kzcolor-inspect <color> [--json] [--list LIST].\n' >&2
+    printf '%s>>FAIL Falta el color.%s\n' "$C_RED" "$C_RST" >&2
+    printf '   Uso: %s.\n' "$USAGE" >&2
     return 2
 fi
 
+if ((${#operands[@]} > 1)); then
+    printf '%s>>FAIL Sobra un argumento posicional: %s.%s\n' "$C_RED" "${operands[2]}" "$C_RST" >&2
+    printf '   Uso: %s.\n' "$USAGE" >&2
+    return 2
+fi
+
+# El nombre de lista viaja en la URL del servicio; se acota a caracteres
+# seguros para no alterar la consulta.
+if [[ ! "$list" =~ '^[A-Za-z0-9_-]+$' ]]; then
+    printf '%s>>FAIL Lista invalida: %s.%s\n' "$C_RED" "$list" "$C_RST" >&2
+    printf '   Admitido: letras, digitos, guion y guion bajo.\n' >&2
+    return 2
+fi
+
+# ──「 DEPENDENCIAS 」────────────────────────────────────────
 if ! command -v pastel > /dev/null 2>&1; then
-    printf '>>FAIL pastel no esta instalado.\n' >&2
+    printf '%s>>FAIL pastel no esta instalado.%s\n' "$C_RED" "$C_RST" >&2
     return 1
 fi
 
-# ── pastel (offline) ──────────────────────────────────────
-local hex rgb hsl oklch
-hex="$(pastel format hex "$base" 2> /dev/null)" || {
-    printf '>>FAIL color invalido: %s.\n' "$base" >&2
+# ──「 PASTEL 」──────────────────────────────────────────────
+# La primera conversion valida el color; las siguientes ya no pueden fallar.
+local hex out
+out="$(pastel format hex "$base" 2>&1)" || {
+    printf '%s>>FAIL color invalido: %s.%s\n' "$C_RED" "$base" "$C_RST" >&2
+    printf '   pastel: %s\n' "${out%%$'\n'*}" >&2
     return 2
 }
+hex="$out"
+
+local rgb hsl oklch
 rgb="$(pastel format rgb "$base" 2> /dev/null)"
 hsl="$(pastel format hsl "$base" 2> /dev/null)"
 oklch="$(pastel format oklch "$base" 2> /dev/null)"
 
-# compactos (humanos)
+# Vistas compactas para la caja: se quita el nombre del espacio y el cierre.
 local rgb_c="${rgb#rgb\(}"
 rgb_c="${rgb_c%)}"
 local hsl_c="${hsl#hsl\(}"
@@ -72,67 +135,87 @@ hsl_c="${hsl_c%)}"
 local oklch_c="${oklch#OkLCh\(}"
 oklch_c="${oklch_c%)}"
 
-# ── color.pizza (local, opcional) ─────────────────────────
-local p_name="" p_tagline="" p_assigned="" p_distance="" p_lumwcag="" p_contrast="" p_adjectives="" p_temp="" p_cratio=""
+# ──「 COLOR.PIZZA 」─────────────────────────────────────────
+# El servicio solo aporta nombre y descripcion; su ausencia no degrada las
+# coordenadas ni el contraste, por eso no se emite aviso.
+local name='' tagline='' assigned='' distance='' temperature='' adjectives='null'
 if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
-    local hex_nohash="${hex#\#}"
     local resp
-    resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${hex_nohash}&list=${list}&description=true" 2> /dev/null)" || resp=""
+    resp="$(curl -fsS -m "$SERVICE_TIMEOUT" \
+        "${SERVICE}?values=${hex#\#}&list=${list}&description=true" 2> /dev/null)" || resp=''
     if [[ -n "$resp" ]]; then
-        p_name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2> /dev/null)"
-        p_tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2> /dev/null)"
-        # NOTA: tagline solo se emite en JSON (--json). No se muestra en
-        # la vista humana por verbosidad; no agregarlo a la caja.
-        p_assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2> /dev/null)"
-        p_distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2> /dev/null)"
-        p_adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2> /dev/null)"
-        p_temp="$(printf '%s' "$resp" | jaq -r '"\(.colors[0].description.temperature.descriptive // [] | join(", ")) (\(.colors[0].description.temperature.value // ""))"' 2> /dev/null)"
-        # La temperatura es un indice correlacionado (CCT en K) del
-        # dataset color-description: subjetivo, perspectiva occidental,
-        # no es una medicion fisica de la luz. Sirve como guia.
-        # LUMWC y BEST se calculan localmente (formula WCAG), validado
-        # contra pizza con diff <= 5e-7.
-        local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
-        local rr=$((16#$hr)) gg=$((16#$hg)) bb=$((16#$hb))
-        p_lumwcag="$(bc -l <<< "
-scale=10
-r=$rr/255; g=$gg/255; b=$bb/255
-if (r <= 0.03928) rl=r/12.92 else rl=e(2.4*l((r+0.055)/1.055))
-if (g <= 0.03928) gl=g/12.92 else gl=e(2.4*l((g+0.055)/1.055))
-if (b <= 0.03928) bl=b/12.92 else bl=e(2.4*l((b+0.055)/1.055))
-0.2126*rl + 0.7152*gl + 0.0722*bl
-")"
-        p_lumwcag="$(printf '%.5f' "$p_lumwcag")"
-        if (($(bc -l <<< "$p_lumwcag <= 0.179"))); then
-            p_contrast="white"
-        else
-            p_contrast="black"
+        name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2> /dev/null)"
+        tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2> /dev/null)"
+        assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2> /dev/null)"
+        distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2> /dev/null)"
+        adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2> /dev/null)"
+        adjectives="${adjectives:-null}"
+
+        # Indice CCT correlacionado del dataset, orientativo: no mide la luz.
+        local temp_desc temp_value
+        temp_desc="$(printf '%s' "$resp" | jaq -r '.colors[0].description.temperature.descriptive // [] | join(", ")' 2> /dev/null)"
+        temp_value="$(printf '%s' "$resp" | jaq -r '.colors[0].description.temperature.value // empty' 2> /dev/null)"
+        if [[ -n "$temp_desc" && -n "$temp_value" ]]; then
+            temperature="${temp_desc} (${temp_value})"
+        elif [[ -n "$temp_desc" ]]; then
+            temperature="$temp_desc"
+        elif [[ -n "$temp_value" ]]; then
+            temperature="$temp_value"
         fi
-        if [[ "$p_contrast" == "black" ]]; then
-            p_cratio="$(bc -l <<< "scale=2; ($p_lumwcag+0.05)/0.05")"
-        else
-            p_cratio="$(bc -l <<< "scale=2; 1.05/($p_lumwcag+0.05)")"
-        fi
-        p_cratio="${p_cratio}:1"
     fi
 fi
 
-# ── salida JSON (agentico) ────────────────────────────────
+# ──「 ACCESIBILIDAD 」───────────────────────────────────────
+# Formula WCAG 2.1 sobre sRGB; se elige texto blanco o negro por contraste.
+# El umbral 0.179 es el punto donde ambos ratios se igualan. El recorte a
+# dos decimales por truncamiento reproduce la salida historica de bc.
+# Validado contra color.pizza con diferencia <= 5e-7.
+local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
+local rr=$((16#$hr)) gg=$((16#$hg)) bb=$((16#$hb))
+local wcag
+wcag="$(awk -v r="$rr" -v g="$gg" -v b="$bb" 'BEGIN {
+    r /= 255; g /= 255; b /= 255
+    rl = (r <= 0.03928) ? r / 12.92 : ((r + 0.055) / 1.055) ^ 2.4
+    gl = (g <= 0.03928) ? g / 12.92 : ((g + 0.055) / 1.055) ^ 2.4
+    bl = (b <= 0.03928) ? b / 12.92 : ((b + 0.055) / 1.055) ^ 2.4
+    lum = 0.2126 * rl + 0.7152 * gl + 0.0722 * bl
+    if (lum <= 0.179) { text = "white"; ratio = 1.05 / (lum + 0.05) }
+    else { text = "black"; ratio = (lum + 0.05) / 0.05 }
+    printf "%.5f %s %d.%02d\n", lum, text, ratio, (ratio * 100) % 100
+}')"
+local -a wcag_field=(${=wcag})
+local luminance="${wcag_field[1]}" contrast="${wcag_field[2]}" ratio="${wcag_field[3]}:1"
+
+# ──「 SALIDA JSON 」─────────────────────────────────────────
 if ((json)); then
+    # Los textos libres se escapan porque el dataset puede incluir comillas.
+    local e_name="${name//\\/\\\\}"
+    e_name="${e_name//\"/\\\"}"
+    e_name="${e_name//$'\n'/\\n}"
+    local e_tagline="${tagline//\\/\\\\}"
+    e_tagline="${e_tagline//\"/\\\"}"
+    e_tagline="${e_tagline//$'\n'/\\n}"
+    local e_temperature="${temperature//\\/\\\\}"
+    e_temperature="${e_temperature//\"/\\\"}"
+    e_temperature="${e_temperature//$'\n'/\\n}"
+
     printf '{"hex":"%s","name":"%s","tagline":"%s","rgb":"%s","hsl":"%s","oklch":"%s","luminanceWCAG":"%s","bestContrast":"%s","contrast_ratio":"%s","assigned_hex":"%s","distance":"%s","temperature":"%s","adjectives":%s}\n' \
-        "$hex" "$p_name" "$p_tagline" \
+        "$hex" "$e_name" "$e_tagline" \
         "$rgb" "$hsl" "$oklch" \
-        "$p_lumwcag" "$p_contrast" \
-        "$p_cratio" \
-        "$p_assigned" "$p_distance" \
-        "$p_temp" \
-        "${p_adjectives:-null}"
+        "$luminance" "$contrast" "$ratio" \
+        "$assigned" "$distance" "$e_temperature" \
+        "$adjectives"
     return 0
 fi
 
-# ── salida humana (caja) ──────────────────────────────────
-local name_disp="${p_name:-"-"}"
+# ──「 SALIDA HUMANA 」───────────────────────────────────────
+# La caja mantiene 38 columnas interiores: 2 de margen, 10 de rotulo y 25
+# de valor, mas el espacio de cierre. tagline se omite por verbosidad: solo
+# viaja en JSON.
+local name_disp="${name:-"-"}"
 ((${#name_disp} > 35)) && name_disp="${name_disp[1,32]}..."
+local contrast_disp="${contrast:-"-"}"
+[[ "$contrast_disp" != "-" ]] && contrast_disp="${contrast_disp[1]:u}${contrast_disp[2,-1]}"
 
 printf '╭──────────────────────────────────────╮\n'
 printf '│  %-35s │\n' "$name_disp"
@@ -144,14 +227,12 @@ printf '│  %-10s %-25s│\n' "HSL" "$hsl_c"
 printf '│  %-10s %-25s│\n' "OKLCH" "$oklch_c"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "PALETTE MATCH"
-printf '│  %-10s %-25s│\n' "ASSIGNED" "${p_assigned:-"-"}"
-printf '│  %-10s %-25s│\n' "DISTANCE" "${p_distance:-"-"}"
+printf '│  %-10s %-25s│\n' "ASSIGNED" "${assigned:-"-"}"
+printf '│  %-10s %-25s│\n' "DISTANCE" "${distance:-"-"}"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "ACCESSIBILITY"
-local contrast_disp="${p_contrast:-"-"}"
-[[ "$contrast_disp" != "-" ]] && contrast_disp="${contrast_disp[1]:u}${contrast_disp[2,-1]}"
-printf '│  %-10s %-25s│\n' "LUMINANCE" "${p_lumwcag:-"-"}"
+printf '│  %-10s %-25s│\n' "LUMINANCE" "${luminance:-"-"}"
 printf '│  %-10s %-25s│\n' "CONTRAST" "$contrast_disp"
-printf '│  %-10s %-25s│\n' "TEMP" "${p_temp:-"-"}"
-printf '│  %-10s %-25s│\n' "CRATIO" "${p_cratio:-"-"}"
+printf '│  %-10s %-25s│\n' "TEMP" "${temperature:-"-"}"
+printf '│  %-10s %-25s│\n' "CRATIO" "${ratio:-"-"}"
 printf '╰──────────────────────────────────────╯\n'
