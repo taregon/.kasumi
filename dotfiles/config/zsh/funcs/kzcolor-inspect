@@ -20,6 +20,7 @@ setopt localoptions noksharrays
 local -r USAGE='kzcolor-inspect <color> [--json] [--list LIST]'
 local -r SERVICE='http://127.0.0.1:8080/v1/'
 local -r SERVICE_TIMEOUT=3
+local -r LIST_RE='^[A-Za-z0-9_-]+$'
 
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
@@ -100,7 +101,7 @@ fi
 
 # El nombre de lista viaja en la URL del servicio; se acota a caracteres
 # seguros para no alterar la consulta.
-if [[ ! "$list" =~ '^[A-Za-z0-9_-]+$' ]]; then
+if [[ ! "$list" =~ $LIST_RE ]]; then
     printf '%s>>FAIL Lista invalida: %s.%s\n' "$C_RED" "$list" "$C_RST" >&2
     printf '   Admitido: letras, digitos, guion y guion bajo.\n' >&2
     return 2
