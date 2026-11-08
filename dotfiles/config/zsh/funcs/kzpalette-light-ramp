@@ -139,8 +139,8 @@ if ! command -v bc > /dev/null 2>&1; then
     return 1
 fi
 
-if ! whence -w _kzpalette-color-name >/dev/null 2>&1; then
-    autoload -Uz _kzpalette-color-name 2>/dev/null || true
+if ! whence -w _kzcolor-color-name >/dev/null 2>&1; then
+    autoload -Uz _kzcolor-color-name 2>/dev/null || true
 fi
 
 # Normaliza la vista: block en terminal, set en pipe.
@@ -236,7 +236,7 @@ fi
 
 local -a color_names=()
 if (( show_names )); then
-    color_names=("${(@f)$(_kzpalette-color-name "${hexes[@]}")}")
+    color_names=("${(@f)$(_kzcolor-color-name "${hexes[@]}")}")
 fi
 if [[ "$lview" == 'set' ]]; then
     lchs=("${(@f)$(pastel format oklch "${hexes[@]}")}")

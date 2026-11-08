@@ -9,8 +9,8 @@
 # para no romper el formato de las funciones que lo consumen.
 #
 # Uso:
-#   _kzpalette-color-name "#aaffcc" "#ffccaa"
-#   printf '%s\n' "#aaffcc" "#ffccaa" | _kzpalette-color-name
+#   _kzcolor-color-name "#aaffcc" "#ffccaa"
+#   printf '%s\n' "#aaffcc" "#ffccaa" | _kzcolor-color-name
 #
 # Requiere: curl, jaq. Servicio: color-pizza (Docker, puerto 8080).
 
