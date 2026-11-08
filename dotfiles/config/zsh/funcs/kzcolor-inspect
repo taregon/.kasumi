@@ -218,18 +218,33 @@ local name_disp="${name:-"-"}"
 ((${#name_disp} > 35)) && name_disp="${name_disp[1,32]}..."
 local contrast_disp="${contrast:-"-"}"
 [[ "$contrast_disp" != "-" ]] && contrast_disp="${contrast_disp[1]:u}${contrast_disp[2,-1]}"
+# Color de texto legible para el hex asignado (si existe).
+local assigned_contrast='black'
+[[ -n "$assigned" ]] && assigned_contrast="$(pastel textcolor "$assigned" 2>/dev/null | pastel format hex - 2>/dev/null)"
 
 printf '╭──────────────────────────────────────╮\n'
 printf '│  %-35s │\n' "$name_disp"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "COLOR"
-printf '│  %-10s %-25s│\n' "HEX" "$hex"
+local hex_pad
+printf -v hex_pad '%-25s' " $hex"
+printf '│  %-10s ' "HEX"
+pastel paint "${contrast:-black}" -o "$hex" -n "$hex_pad"
+printf '│\n'
 printf '│  %-10s %-25s│\n' "RGB" "$rgb_c"
 printf '│  %-10s %-25s│\n' "HSL" "$hsl_c"
 printf '│  %-10s %-25s│\n' "OKLCH" "$oklch_c"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "PALETTE MATCH"
-printf '│  %-10s %-25s│\n' "ASSIGNED" "${assigned:-"-"}"
+if [[ -n "$assigned" ]]; then
+    local assigned_pad
+    printf -v assigned_pad '%-25s' " $assigned"
+    printf '│  %-10s ' "ASSIGNED"
+    pastel paint "${assigned_contrast:-black}" -o "$assigned" -n "$assigned_pad"
+    printf '│\n'
+else
+    printf '│  %-10s %-25s│\n' "ASSIGNED" "-"
+fi
 printf '│  %-10s %-25s│\n' "DISTANCE" "${distance:-"-"}"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "ACCESSIBILITY"
