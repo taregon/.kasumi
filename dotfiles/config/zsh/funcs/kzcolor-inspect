@@ -1,16 +1,34 @@
 # vim: filetype=zsh
-# Inspecciona un color y muestra sus coordenadas, el nombre asignado por
-# color.pizza y su contraste WCAG. Salida humana por defecto; --json para
+# Inspecciona un color y muestra sus coordenadas, el nombre y grupo descriptivo
+# de color.pizza, y su contraste WCAG. Salida humana por defecto; --json para
 # consumo agentico.
 #
 # Uso: kzcolor-inspect <color> [--json] [--list LIST]
 #   <color>       Hex, nombre o cualquier formato que acepte pastel
 #   --json        JSON compacto de una linea (alias: --agent)
-#   --list LIST   Lista de color.pizza (defecto: default)
+#   --list LIST   Lista de color.pizza (defecto: default; o --list=LIST)
 #
-# Requiere: pastel. color.pizza es opcional: sin curl, sin jaq o sin el
-# servicio en 127.0.0.1:8080, los campos de nombre y descripcion quedan
-# vacios y el resto se calcula igual.
+# Requiere: pastel. color.pizza es opcional: sin curl, sin jaq, sin el servicio
+# en 127.0.0.1:8080 o sin coincidencia en la lista, los campos de paleta y
+# descripcion quedan sin datos y el resto se calcula igual.
+#
+# Salida humana: HUE GROUP, HEX, RGB, HSL, OKLCH, COMPLEMENT, ASSIGNED,
+# DISTANCE y ACCESSIBILITY con LUMINANCE, PIZZA LUM., CONTRAST, TEMP y CRATIO.
+# JSON: una linea con las claves que lista --help.
+#
+# Campos sin datos: no son un valor calculado ni un cero, y no cambian el
+# codigo de salida. En JSON, name, hueGroup, tagline, luminancePizza,
+# assigned_hex, distance y temperature salen como cadena vacia, y nouns y
+# adjectives como null; en la vista humana se muestran como guion (-).
+#
+# Contraste: bestContrast elige entre negro y blanco, los dos extremos, por
+# ratio WCAG 2.1. No certifica contraste con otros colores de texto ni el
+# cumplimiento completo de una interfaz.
+#
+# Paleta: assigned_hex y distance describen la coincidencia del servicio; no
+# sustituyen el color de entrada ni se aplican a ningun archivo.
+#
+# --list acepta solo letras, digitos, guion y guion bajo.
 # Niveles: >>HELP en stdout; >>FAIL en stderr.
 # Codigos: 0 exito; 1 falta pastel; 2 uso invalido o color no parseable.
 
@@ -45,20 +63,23 @@ local -a help_lines
 help_lines=(
     "${C_BLU}>>HELP Uso: ${USAGE}${C_RST}"
     '  :: Que hace'
-    '      Muestra coordenadas, nombre y semantica, y contraste WCAG de un color.'
+    '      Muestra coordenadas, nombre, grupo descriptivo y luminancias.'
     '  :: Argumentos'
     '      <color>         Color base (hex, nombre o formato pastel)'
     '      --json          JSON compacto para consumo agentico (alias: --agent)'
-    '      --list LIST     Lista de color.pizza (defecto: default)'
+    '      --list LIST     Lista de color.pizza (defecto: default; o --list=LIST)'
     '  :: Salida'
     '      Humana: caja con color, coincidencia de paleta y accesibilidad.'
-    '      JSON: una linea con las claves hex, name, tagline, rgb, hsl, oklch,'
-    '      complement, luminanceWCAG, bestContrast, contrast_ratio,'
+    '      JSON: una linea con las claves hex, name, hueGroup, tagline, rgb, hsl, oklch,'
+    '      complement, luminanceWCAG, luminancePizza, bestContrast, contrast_ratio,'
     '      assigned_hex, distance, temperature, nouns y adjectives.'
     '      tagline y nouns solo se emiten en JSON.'
     '  :: Notas'
-    '      color.pizza es opcional; sin el servicio los campos de nombre,'
-    '      temperatura y coincidencia quedan vacios.'
+    '      color.pizza es opcional; sin color.pizza o sin coincidencia, los campos'
+    '      de nombre, grupo, luminancia, temperatura y coincidencia quedan sin'
+    '      datos: en JSON son cadena vacia o null; en la caja, guion (-).'
+    '      El grupo descriptivo se deriva de nouns; no es un campo group de la API.'
+    '      La luminancia de color.pizza usa escala 0-255; luminanceWCAG es relativa.'
     '      La temperatura es un indice CCT del dataset color-description:'
     '      orientativo, no una medicion fisica de la luz.'
 )
@@ -167,15 +188,17 @@ local oklch_c="${oklch#OkLCh\(}"
 oklch_c="${oklch_c%)}"
 
 # ──「 COLOR.PIZZA 」─────────────────────────────────────────
-# El servicio solo aporta nombre y descripcion; su ausencia no degrada las
-# coordenadas ni el contraste, por eso no se emite aviso.
-local name='' tagline='' assigned='' distance='' temperature='' adjectives='null' nouns='null'
+# El servicio aporta nombre, descripcion y coincidencia; su ausencia no degrada
+# las coordenadas ni el contraste, por eso no se emite aviso y la salida sigue
+# siendo exitosa.
+local name='' hue_group='' pizza_luminance='' tagline='' assigned='' distance='' temperature='' adjectives='null' nouns='null'
 if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
     local resp
     resp="$(curl -fsS -m "$SERVICE_TIMEOUT" \
         "${SERVICE}?values=${hex#\#}&list=${list}&description=true" 2> /dev/null)" || resp=''
     if [[ -n "$resp" ]]; then
         name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2> /dev/null)"
+        pizza_luminance="$(printf '%s' "$resp" | jaq -r '.colors[0].luminance // empty' 2> /dev/null)"
         tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2> /dev/null)"
         assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2> /dev/null)"
         distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2> /dev/null)"
@@ -187,6 +210,8 @@ if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
         nouns="$(printf '%s' "$resp" \
             | jaq -c '.colors[0].description.nouns // empty' 2> /dev/null)"
         nouns="${nouns:-null}"
+        hue_group="$(printf '%s' "$resp" | jaq -r \
+            '.colors[0].description.nouns // [] | join(", ")' 2> /dev/null)"
 
         # Indice CCT correlacionado del dataset, orientativo: no mide la luz.
         local temp_desc temp_value
@@ -239,10 +264,10 @@ if ((json)); then
     e_temperature="${e_temperature//\"/\\\"}"
     e_temperature="${e_temperature//$'\n'/\\n}"
 
-    printf '{"hex":"%s","name":"%s","tagline":"%s",''"rgb":"%s","hsl":"%s","oklch":"%s","complement":"%s",''"luminanceWCAG":"%s","bestContrast":"%s","contrast_ratio":"%s",''"assigned_hex":"%s","distance":"%s","temperature":"%s",''"nouns":%s,"adjectives":%s}\n' \
-        "$hex" "$e_name" "$e_tagline" \
+    printf '{"hex":"%s","name":"%s","hueGroup":"%s","tagline":"%s",''"rgb":"%s","hsl":"%s","oklch":"%s","complement":"%s",''"luminanceWCAG":"%s","luminancePizza":"%s","bestContrast":"%s","contrast_ratio":"%s",''"assigned_hex":"%s","distance":"%s","temperature":"%s",''"nouns":%s,"adjectives":%s}\n' \
+        "$hex" "$e_name" "$hue_group" "$e_tagline" \
         "$rgb" "$hsl" "$oklch" "$complement" \
-        "$luminance" "$contrast" "$ratio" \
+        "$luminance" "$pizza_luminance" "$contrast" "$ratio" \
         "$assigned" "$distance" "$e_temperature" \
         "$nouns" "$adjectives"
     return 0
@@ -263,6 +288,7 @@ printf '╭───────────────────────
 printf '│  %-*s │\n' "$NAME_WIDTH" "$name_disp"
 printf '├────────────────────────────────────────┤\n'
 printf '│  %-38s│\n' "COLOR"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "HUE GROUP" "$VALUE_WIDTH" "${hue_group:-"-"}"
 printf '│  %-*s' "$LABEL_WIDTH" "HEX"
 _kzcolor-swatch "$hex" "$contrast" "$VALUE_WIDTH"
 printf '│\n'
@@ -285,6 +311,7 @@ printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "DISTANCE" "$VALUE_WIDTH" "${distance
 printf '├────────────────────────────────────────┤\n'
 printf '│  %-38s│\n' "ACCESSIBILITY"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "LUMINANCE" "$VALUE_WIDTH" "$luminance"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "PIZZA LUM." "$VALUE_WIDTH" "${pizza_luminance:-"-"}"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "CONTRAST" "$VALUE_WIDTH" "$contrast_disp"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "TEMP" "$VALUE_WIDTH" "${temperature:-"-"}"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "CRATIO" "$VALUE_WIDTH" "$ratio"
