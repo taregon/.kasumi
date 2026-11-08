@@ -1,58 +1,72 @@
 # vim: filetype=zsh
-# Helper interno para obtener nombres de color desde la instancia local
-# de color.pizza (http://127.0.0.1:8080).
+# Helper interno de kzcolor: resuelve nombres desde la instancia local de
+# color.pizza (http://127.0.0.1:8080).
 #
-# Entrada: hexes por argumentos o stdin, separados por espacios o
-# saltos de línea. Acepta con o sin '#'.
-# Salida: un nombre por línea, en el mismo orden de entrada.
-# Si el servicio no responde o faltan curl/jaq, devuelve líneas vacías
-# para no romper el formato de las funciones que lo consumen.
+# Entrada: hexes por argumentos o stdin, separados por espacios o saltos de
+# linea. Acepta con o sin '#'.
+# Salida: un nombre por linea, en el mismo orden de entrada. Si faltan curl,
+# jaq o el servicio, emite una linea vacia por entrada para no desalinear a
+# quien consume la salida por posicion.
 #
 # Uso:
 #   _kzcolor-color-name "#aaffcc" "#ffccaa"
 #   printf '%s\n' "#aaffcc" "#ffccaa" | _kzcolor-color-name
 #
 # Requiere: curl, jaq. Servicio: color-pizza (Docker, puerto 8080).
+# Sin niveles: stdout transporta el artefacto y el retorno siempre es 0.
 
 emulate -L zsh
+setopt localoptions noksharrays
 
-local -a hexs
+local -r SERVICE='http://127.0.0.1:8080/v1/'
+local -r SERVICE_TIMEOUT=3
+
+# ──「 ENTRADA 」─────────────────────────────────────────────
+# Toma los hexes de los argumentos o de stdin; una linea puede traer varios
+# separados por espacios.
+local -a hexs=()
+local line
 if (($# > 0)); then
     hexs=("$@")
 else
-    local line
-    while IFS= read -r line; do
+    while IFS= read -r line || [[ -n "$line" ]]; do
         [[ -z "$line" ]] && continue
         hexs+=(${=line})
     done
 fi
 
+# Sin entradas no hay posiciones que conservar.
 ((${#hexs[@]} == 0)) && return 0
 
-local -a normalized
+# ──「 NORMALIZACION 」───────────────────────────────────────
+# El servicio espera hex sin '#' y en minusculas.
+local -a normalized=()
 local h
 for h in "${hexs[@]}"; do
     h="${h#\#}"
     normalized+=("${h:l}")
 done
 
-if ! command -v curl > /dev/null 2>&1 || ! command -v jaq > /dev/null 2>&1; then
-    printf '\n%.0s' "${normalized[@]}"
+# ──「 CONSULTA 」────────────────────────────────────────────
+# La salida se alinea por posicion: solo se acepta la lista completa. Ante
+# cualquier fallo se descarta entera para no mezclar nombres y entradas.
+local -a names=()
+if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
+    local joined="${(j:,:)normalized}"
+    local resp
+    resp="$(curl -fsS -m "$SERVICE_TIMEOUT" "${SERVICE}?values=${joined}" 2> /dev/null)" || resp=''
+    if [[ -n "$resp" ]]; then
+        names=("${(@f)$(printf '%s' "$resp" | jaq -r '.colors[].name // empty' 2> /dev/null)}")
+        ((${#names[@]} == ${#normalized[@]})) || names=()
+    fi
+fi
+
+# ──「 SALIDA 」──────────────────────────────────────────────
+if ((${#names[@]} == ${#normalized[@]})); then
+    printf '%s\n' "${names[@]}"
     return 0
 fi
 
-local joined="${(j:,:)normalized}"
-local resp
-resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${joined}" 2> /dev/null)" || resp=''
-if [[ -z "$resp" ]]; then
-    printf '\n%.0s' "${normalized[@]}"
-    return 0
-fi
-
-local -a names
-names=("${(@f)$(printf '%s' "$resp" | jaq -r '.colors[].name' 2> /dev/null)}")
-if ((${#names[@]} != ${#normalized[@]})); then
-    printf '\n%.0s' "${normalized[@]}"
-    return 0
-fi
-printf '%s\n' "${names[@]}"
+# Una linea vacia por entrada conserva la correspondencia posicional.
+printf '\n%.0s' "${normalized[@]}"
+return 0
