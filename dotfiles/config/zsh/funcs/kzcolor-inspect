@@ -2,7 +2,7 @@
 # Muestra informacion de un color (pastel + color.pizza).
 # Salida humana por defecto; --json para consumo agentico (JSON compacto).
 #
-# Uso: kzcolor-info <color> [--json] [--list LIST]
+# Uso: kzcolor-inspect <color> [--json] [--list LIST]
 
 emulate -L zsh
 setopt localoptions noksharrays
@@ -33,7 +33,7 @@ done
 [[ -z "$base" && ${#pos[@]} -gt 0 ]] && base="${pos[1]}"
 
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
-    printf '>>HELP Uso: kzcolor-info <color> [--json] [--list LIST]\n'
+    printf '>>HELP Uso: kzcolor-inspect <color> [--json] [--list LIST]\n'
     printf '  :: Que hace\n'
     printf '      Muestra informacion util de un color.\n'
     printf '  :: Argumentos\n'
@@ -45,7 +45,7 @@ fi
 
 if [[ -z "$base" ]]; then
     printf '>>FAIL Falta el color.\n' >&2
-    printf '   Uso: kzcolor-info <color> [--json] [--list LIST].\n' >&2
+    printf '   Uso: kzcolor-inspect <color> [--json] [--list LIST].\n' >&2
     return 2
 fi
 
