@@ -12,8 +12,9 @@
 # en 127.0.0.1:8080 o sin coincidencia en la lista, los campos de paleta y
 # descripcion quedan sin datos y el resto se calcula igual.
 #
-# Salida humana: HUE GROUP, HEX, RGB, HSL, OKLCH, COMPLEMENT, ASSIGNED,
-# DISTANCE y ACCESSIBILITY con LUMINANCE, PIZZA LUM., CONTRAST, TEMP y CRATIO.
+# Salida humana: rotulos HUE GROUP, HEX, RGB, HSL, OKLCH, COMPLEMENT, ASSIGNED,
+# DISTANCE y ACCESSIBILITY; este ultimo con LUMINANCE, PIZZA HSP, CONTRAST,
+# TEMP y CRATIO.
 # JSON: una linea con las claves que lista --help.
 #
 # Campos sin datos: no son un valor calculado ni un cero, y no cambian el
@@ -24,6 +25,10 @@
 # Contraste: bestContrast elige entre negro y blanco, los dos extremos, por
 # ratio WCAG 2.1. No certifica contraste con otros colores de texto ni el
 # cumplimiento completo de una interfaz.
+#
+# Brillo: PIZZA HSP es la etiqueta de luminancePizza, el brillo percibido HSP
+# de color.pizza en escala 0-255 (sqrt(0.299R^2 + 0.587G^2 + 0.114B^2)); no
+# es luminancia WCAG.
 #
 # Paleta: assigned_hex y distance describen la coincidencia del servicio; no
 # sustituyen el color de entrada ni se aplican a ningun archivo.
@@ -79,7 +84,8 @@ help_lines=(
     '      de nombre, grupo, luminancia, temperatura y coincidencia quedan sin'
     '      datos: en JSON son cadena vacia o null; en la caja, guion (-).'
     '      El grupo descriptivo se deriva de nouns; no es un campo group de la API.'
-    '      La luminancia de color.pizza usa escala 0-255; luminanceWCAG es relativa.'
+    '      PIZZA HSP es la etiqueta de luminancePizza: brillo percibido 0-255;'
+    '      luminanceWCAG es la luminancia relativa de WCAG.'
     '      La temperatura es un indice CCT del dataset color-description:'
     '      orientativo, no una medicion fisica de la luz.'
 )
@@ -311,7 +317,7 @@ printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "DISTANCE" "$VALUE_WIDTH" "${distance
 printf '├────────────────────────────────────────┤\n'
 printf '│  %-38s│\n' "ACCESSIBILITY"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "LUMINANCE" "$VALUE_WIDTH" "$luminance"
-printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "PIZZA LUM." "$VALUE_WIDTH" "${pizza_luminance:-"-"}"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "PIZZA HSP" "$VALUE_WIDTH" "${pizza_luminance:-"-"}"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "CONTRAST" "$VALUE_WIDTH" "$contrast_disp"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "TEMP" "$VALUE_WIDTH" "${temperature:-"-"}"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "CRATIO" "$VALUE_WIDTH" "$ratio"
