@@ -254,15 +254,14 @@ if ! whence -w _kzcolor-swatch > /dev/null 2>&1; then
 fi
 local name_disp="${name:-"-"}"
 ((${#name_disp} > NAME_WIDTH)) && name_disp="${name_disp[1,NAME_PREVIEW]}..."
-local contrast_disp="${contrast:-"-"}"
-[[ "$contrast_disp" != "-" ]] && contrast_disp="${contrast_disp[1]:u}${contrast_disp[2,-1]}"
+local contrast_disp="${contrast[1]:u}${contrast[2,-1]}"
 
 printf '╭──────────────────────────────────────╮\n'
 printf '│  %-*s │\n' "$NAME_WIDTH" "$name_disp"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "COLOR"
 printf '│  %-10s ' "HEX"
-_kzcolor-swatch "$hex" "${contrast:-black}"
+_kzcolor-swatch "$hex" "$contrast"
 printf '│\n'
 printf '│  %-10s %-25s│\n' "RGB" "$rgb_c"
 printf '│  %-10s %-25s│\n' "HSL" "$hsl_c"
@@ -282,8 +281,8 @@ fi
 printf '│  %-10s %-25s│\n' "DISTANCE" "${distance:-"-"}"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "ACCESSIBILITY"
-printf '│  %-10s %-25s│\n' "LUMINANCE" "${luminance:-"-"}"
+printf '│  %-10s %-25s│\n' "LUMINANCE" "$luminance"
 printf '│  %-10s %-25s│\n' "CONTRAST" "$contrast_disp"
 printf '│  %-10s %-25s│\n' "TEMP" "${temperature:-"-"}"
-printf '│  %-10s %-25s│\n' "CRATIO" "${ratio:-"-"}"
+printf '│  %-10s %-25s│\n' "CRATIO" "$ratio"
 printf '╰──────────────────────────────────────╯\n'
