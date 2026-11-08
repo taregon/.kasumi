@@ -25,8 +25,13 @@ local -r LIST_RE='^[A-Za-z0-9_-]+$'
 # el, el texto legible es negro.
 local -r WCAG_FLIP=0.179
 # Columnas del nombre en la caja; el recorte reserva 3 para los puntos.
-local -r NAME_WIDTH=35
+local -r NAME_WIDTH=37
 local -r NAME_PREVIEW=$((NAME_WIDTH - 3))
+# Rotulo de 14 columnas y valor de 24. El bloque de muestra ocupa una columna
+# del rotulo como relleno interno, asi el hex cae en la columna del valor.
+local -r LABEL_WIDTH=14
+local -r VALUE_WIDTH=24
+local -r SWATCH_LABEL_WIDTH=$((LABEL_WIDTH - 1))
 
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
@@ -245,9 +250,8 @@ if ((json)); then
 fi
 
 # ──「 SALIDA HUMANA 」───────────────────────────────────────
-# La caja mantiene 38 columnas interiores: 2 de margen, 10 de rotulo y 25
-# de valor, mas el espacio de cierre. tagline y nouns se omiten por
-# verbosidad: solo viajan en JSON.
+# La caja mantiene 40 columnas interiores: 2 de margen, 14 de rotulo y 24 de
+# valor. tagline y nouns se omiten por verbosidad: solo viajan en JSON.
 # Helper de render; autoload perezoso para no depender del orden de carga.
 if ! whence -w _kzcolor-swatch > /dev/null 2>&1; then
     autoload -Uz _kzcolor-swatch
@@ -256,33 +260,33 @@ local name_disp="${name:-"-"}"
 ((${#name_disp} > NAME_WIDTH)) && name_disp="${name_disp[1,NAME_PREVIEW]}..."
 local contrast_disp="${contrast[1]:u}${contrast[2,-1]}"
 
-printf '╭──────────────────────────────────────╮\n'
+printf '╭────────────────────────────────────────╮\n'
 printf '│  %-*s │\n' "$NAME_WIDTH" "$name_disp"
-printf '├──────────────────────────────────────┤\n'
-printf '│  %-36s│\n' "COLOR"
-printf '│  %-10s ' "HEX"
+printf '├────────────────────────────────────────┤\n'
+printf '│  %-38s│\n' "COLOR"
+printf '│  %-*s' "$SWATCH_LABEL_WIDTH" "HEX"
 _kzcolor-swatch "$hex" "$contrast"
 printf '│\n'
-printf '│  %-10s %-25s│\n' "RGB" "$rgb_c"
-printf '│  %-10s %-25s│\n' "HSL" "$hsl_c"
-printf '│  %-10s %-25s│\n' "OKLCH" "$oklch_c"
-printf '│  %-10s ' "COMPLEMENT"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "RGB" "$VALUE_WIDTH" "$rgb_c"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "HSL" "$VALUE_WIDTH" "$hsl_c"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "OKLCH" "$VALUE_WIDTH" "$oklch_c"
+printf '│  %-*s' "$SWATCH_LABEL_WIDTH" "COMPLEMENT"
 _kzcolor-swatch "$complement"
 printf '│\n'
-printf '├──────────────────────────────────────┤\n'
-printf '│  %-36s│\n' "PALETTE MATCH"
+printf '├────────────────────────────────────────┤\n'
+printf '│  %-38s│\n' "PALETTE MATCH"
 if [[ -n "$assigned" ]]; then
-    printf '│  %-10s ' "ASSIGNED"
+    printf '│  %-*s' "$SWATCH_LABEL_WIDTH" "ASSIGNED"
     _kzcolor-swatch "$assigned"
     printf '│\n'
 else
-    printf '│  %-10s %-25s│\n' "ASSIGNED" "-"
+    printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "ASSIGNED" "$VALUE_WIDTH" "-"
 fi
-printf '│  %-10s %-25s│\n' "DISTANCE" "${distance:-"-"}"
-printf '├──────────────────────────────────────┤\n'
-printf '│  %-36s│\n' "ACCESSIBILITY"
-printf '│  %-10s %-25s│\n' "LUMINANCE" "$luminance"
-printf '│  %-10s %-25s│\n' "CONTRAST" "$contrast_disp"
-printf '│  %-10s %-25s│\n' "TEMP" "${temperature:-"-"}"
-printf '│  %-10s %-25s│\n' "CRATIO" "$ratio"
-printf '╰──────────────────────────────────────╯\n'
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "DISTANCE" "$VALUE_WIDTH" "${distance:-"-"}"
+printf '├────────────────────────────────────────┤\n'
+printf '│  %-38s│\n' "ACCESSIBILITY"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "LUMINANCE" "$VALUE_WIDTH" "$luminance"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "CONTRAST" "$VALUE_WIDTH" "$contrast_disp"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "TEMP" "$VALUE_WIDTH" "${temperature:-"-"}"
+printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "CRATIO" "$VALUE_WIDTH" "$ratio"
+printf '╰────────────────────────────────────────╯\n'
