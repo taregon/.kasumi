@@ -27,11 +27,10 @@ local -r WCAG_FLIP=0.179
 # Columnas del nombre en la caja; el recorte reserva 3 para los puntos.
 local -r NAME_WIDTH=37
 local -r NAME_PREVIEW=$((NAME_WIDTH - 3))
-# Rotulo de 14 columnas y valor de 24. El bloque de muestra ocupa una columna
-# del rotulo como relleno interno, asi el hex cae en la columna del valor.
+# Rotulo de 14 columnas y valor de 24. El bloque de muestra tiene el mismo
+# ancho que el valor, sin relleno interno.
 local -r LABEL_WIDTH=14
 local -r VALUE_WIDTH=24
-local -r SWATCH_LABEL_WIDTH=$((LABEL_WIDTH - 1))
 
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
@@ -264,20 +263,20 @@ printf '╭───────────────────────
 printf '│  %-*s │\n' "$NAME_WIDTH" "$name_disp"
 printf '├────────────────────────────────────────┤\n'
 printf '│  %-38s│\n' "COLOR"
-printf '│  %-*s' "$SWATCH_LABEL_WIDTH" "HEX"
-_kzcolor-swatch "$hex" "$contrast"
+printf '│  %-*s' "$LABEL_WIDTH" "HEX"
+_kzcolor-swatch "$hex" "$contrast" "$VALUE_WIDTH"
 printf '│\n'
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "RGB" "$VALUE_WIDTH" "$rgb_c"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "HSL" "$VALUE_WIDTH" "$hsl_c"
 printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "OKLCH" "$VALUE_WIDTH" "$oklch_c"
-printf '│  %-*s' "$SWATCH_LABEL_WIDTH" "COMPLEMENT"
-_kzcolor-swatch "$complement"
+printf '│  %-*s' "$LABEL_WIDTH" "COMPLEMENT"
+_kzcolor-swatch "$complement" '' "$VALUE_WIDTH"
 printf '│\n'
 printf '├────────────────────────────────────────┤\n'
 printf '│  %-38s│\n' "PALETTE MATCH"
 if [[ -n "$assigned" ]]; then
-    printf '│  %-*s' "$SWATCH_LABEL_WIDTH" "ASSIGNED"
-    _kzcolor-swatch "$assigned"
+    printf '│  %-*s' "$LABEL_WIDTH" "ASSIGNED"
+    _kzcolor-swatch "$assigned" '' "$VALUE_WIDTH"
     printf '│\n'
 else
     printf '│  %-*s%-*s│\n' "$LABEL_WIDTH" "ASSIGNED" "$VALUE_WIDTH" "-"

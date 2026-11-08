@@ -9,6 +9,7 @@
 #
 # Salida: bloque coloreado sin salto de linea. Sin tty, pastel omite los
 # escapes y el bloque queda con el mismo ancho en texto plano.
+# El texto queda pegado al borde izquierdo del bloque (sin espacio interno).
 #
 # Requiere: pastel. Retorno: 0 exito; 2 hex invalido.
 
@@ -31,5 +32,5 @@ if [[ -z "$text_color" ]]; then
 fi
 
 local pad
-printf -v pad "%-${width}s" " $hex_norm"
+printf -v pad "%-${width}s" "$hex_norm"
 pastel paint "$text_color" -o "$hex_norm" -n "$pad"
