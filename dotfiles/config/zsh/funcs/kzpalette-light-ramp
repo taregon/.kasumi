@@ -46,9 +46,9 @@ local steps="${_pos[4]:-20}"
 local property="${_pos[5]:-oklab-l}"
 local view="${_pos[6]:-}"
 if [[ -t 1 ]]; then
-    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+    local -r C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 else
-    local -r C_BLU='' C_RED='' C_RST=''
+    local -r C_BLU='' C_YEL='' C_RED='' C_RST=''
 fi
 
 # ──「 VALIDACION 」──────────────────────────────────────────
@@ -139,10 +139,6 @@ if ! command -v bc > /dev/null 2>&1; then
     return 1
 fi
 
-if ! whence -w _kzcolor-color-name >/dev/null 2>&1; then
-    autoload -Uz _kzcolor-color-name 2>/dev/null || true
-fi
-
 # Normaliza la vista: block en terminal, set en pipe.
 local lview="${view:l}"
 if [[ -z "$lview" ]]; then
@@ -189,7 +185,7 @@ case "$property" in
 esac
 
 local -r ICON=$'\uf4ee'
-local i pctv lvl light_pct hex_color oklch col lch Lval Cval rest closest marker lab
+local i pctv lvl light_pct hex_color oklch col lch Lval Cval rest closest marker lab name_suffix
 local -a rows levels pcts cols hexes lchs oklabs des base_xyz xyz
 # Un solo bc calcula todos los niveles. El divisor depende de la propiedad:
 # oklab-l/hsl-lightness esperan 0.0-1.0 y lightness usa 0-100.
@@ -234,9 +230,21 @@ if ((${#hexes[@]} != steps)); then
     return 1
 fi
 
+# Nombres opcionales desde color.pizza (instancia local). La lista se acepta
+# solo completa: el helper degrada a lineas vacias y (@f) las colapsa, asi
+# que una cantidad distinta desalinearia los nombres.
 local -a color_names=()
-if (( show_names )); then
-    color_names=("${(@f)$(_kzcolor-color-name "${hexes[@]}")}")
+if ((show_names)); then
+    if ! whence -w _kzcolor-color-name > /dev/null 2>&1; then
+        autoload -Uz _kzcolor-color-name 2> /dev/null || true
+    fi
+    # Un helper ausente falla en la llamada; el conteo lo trata como degradacion.
+    color_names=("${(@f)$(_kzcolor-color-name "${hexes[@]}" 2> /dev/null)}")
+    if ((${#color_names[@]} != ${#hexes[@]})); then
+        color_names=()
+        show_names=0
+        printf '%s>>WARN nombres no disponibles; se omite --names.%s\n' "$C_YEL" "$C_RST" >&2
+    fi
 fi
 if [[ "$lview" == 'set' ]]; then
     lchs=("${(@f)$(pastel format oklch "${hexes[@]}")}")
@@ -244,7 +252,7 @@ if [[ "$lview" == 'set' ]]; then
         printf '%s>>FAIL pastel no devolvio L/C de los colores.%s\n' "$C_RED" "$C_RST" >&2
         return 1
     fi
-    if (( show_names )); then
+    if ((show_names)); then
         printf '>>INFO Columnas: hex L_oklch C_oklch name\n'
     else
         printf '>>INFO Columnas: hex L_oklch C_oklch\n'
@@ -301,9 +309,11 @@ for ((i = 1; i <= steps; i++)); do
         ((i == closest)) && marker=' [*]'
 
         # Muestra visual junto con el valor hexadecimal generado.
-        if (( show_names )); then
+        if ((show_names)); then
+            name_suffix=''
+            [[ -n "${color_names[i]:-}" ]] && name_suffix=" ── ${color_names[i]}"
             pastel paint "$hex_color" \
-                "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ──┤  🮍███🮌 ─ ${color_names[i]}${marker}"
+                "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ──┤  🮍███🮌${name_suffix}${marker}"
         else
             pastel paint "$hex_color" \
                 "▋  ${ICON}   Lorem ipsum dolor sit amet  │ $label ├── $hex_color ── $light_pct% ──┤  🮍███🮌${marker}"
@@ -316,7 +326,7 @@ for ((i = 1; i <= steps; i++)); do
         Lval="${lch%%,*}"
         rest="${lch#*, }"
         Cval="${rest%%,*}"
-        if (( show_names )); then
+        if ((show_names)); then
             printf '%s %s %s %s\n' "$hex_color" "$Lval" "$Cval" "${color_names[i]}"
         else
             printf '%s %s %s\n' "$hex_color" "$Lval" "$Cval"

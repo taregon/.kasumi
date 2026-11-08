@@ -125,6 +125,8 @@
 #           Cambio cromático visible pero menor que 15°.
 #           Funciona para jerarquías sutiles en interfaces monocromáticas.
 
+setopt localoptions noksharrays
+
 local show_names=0
 local -a _pos=()
 local _arg
@@ -145,9 +147,9 @@ local angles=(
 )
 
 if [[ -t 1 ]]; then
-    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+    local -r C_BLU=$'\033[0;34m' C_YEL=$'\033[0;33m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
 else
-    local -r C_BLU='' C_RED='' C_RST=''
+    local -r C_BLU='' C_YEL='' C_RED='' C_RST=''
 fi
 
 # ──「 AYUDA 」───────────────────────────────────────────────
@@ -198,10 +200,6 @@ if ! command -v bc > /dev/null 2>&1; then
     return 1
 fi
 
-if ! whence -w _kzcolor-color-name >/dev/null 2>&1; then
-    autoload -Uz _kzcolor-color-name 2>/dev/null || true
-fi
-
 # ──「 VALIDACION 」──────────────────────────────────────────
 case "$detail" in
     base)
@@ -238,7 +236,7 @@ esac
 # pastel rotate exige una llamada por angulo, pero format acepta varios
 # colores: se agrupan las conversiones en pocos procesos y el score se
 # calcula en un unico bc.
-local i lab degrees color oklab_score_pct sv base_hex closest marker lch de_disp
+local i lab degrees color oklab_score_pct sv base_hex closest marker lch de_disp name_suffix
 local -a cols hexs lchs oklabs scores pcts des rows xyz fields base_xyz lchv
 for degrees in "${angles[@]}"; do
     cols+=("$(pastel rotate -- "$degrees" "$base")")
@@ -250,10 +248,21 @@ if ((${#hexs[@]} != ${#angles[@]})); then
     return 1
 fi
 
-# Nombres opcionales desde color.pizza (instancia local).
+# Nombres opcionales desde color.pizza (instancia local). La lista se acepta
+# solo completa: el helper degrada a lineas vacias y (@f) las colapsa, asi
+# que una cantidad distinta desalinearia los nombres.
 local -a color_names=()
-if (( show_names )); then
-    color_names=("${(@f)$(_kzcolor-color-name "${hexs[@]}")}")
+if ((show_names)); then
+    if ! whence -w _kzcolor-color-name > /dev/null 2>&1; then
+        autoload -Uz _kzcolor-color-name 2> /dev/null || true
+    fi
+    # Un helper ausente falla en la llamada; el conteo lo trata como degradacion.
+    color_names=("${(@f)$(_kzcolor-color-name "${hexs[@]}" 2> /dev/null)}")
+    if ((${#color_names[@]} != ${#hexs[@]})); then
+        color_names=()
+        show_names=0
+        printf '%s>>WARN nombres no disponibles; se omite --names.%s\n' "$C_YEL" "$C_RST" >&2
+    fi
 fi
 
 # Representaciones del color en espacios perceptuales:
@@ -326,7 +335,7 @@ if [[ "$lview" == 'set' ]]; then
         printf '%s>>FAIL color base invalido: %s.%s\n' "$C_RED" "$base" "$C_RST" >&2
         return 2
     fi
-    if (( show_names )); then
+    if ((show_names)); then
         if [[ "$detail" == 'full' ]]; then
             printf '>>INFO Columnas: hex score_oklab rotate_deg name\n'
         else
@@ -343,7 +352,7 @@ if [[ "$lview" == 'set' ]]; then
     for i in {1..$#hexs}; do
         sv="${scores[i]}"
         [[ "$sv" == .* ]] && sv="0$sv"
-        if (( show_names )); then
+        if ((show_names)); then
             if [[ "$detail" == 'full' ]]; then
                 printf '%s %s %s %s\n' "${hexs[i]}" "$sv" "${angles[i]}" "${color_names[i]}"
             else
@@ -394,15 +403,17 @@ for i in {1..$#hexs}; do
     marker=''
     ((i == closest)) && marker=' [*]'
 
-    if (( show_names )); then
+    if ((show_names)); then
+        name_suffix=''
+        [[ -n "${color_names[i]:-}" ]] && name_suffix=" ── ${color_names[i]}"
         case "$detail" in
             full)
                 pastel paint "$color" \
-                    "$color ◖████◗ ─ L: ${lchv[1]} ─ C: ${lchv[2]} ─ dEOKr2: $de_disp ─ RotateHSL: ${degrees}° ─ ${color_names[i]}${marker}"
+                    "$color ◖████◗ ─ L: ${lchv[1]} ─ C: ${lchv[2]} ─ dEOKr2: $de_disp ─ RotateHSL: ${degrees}°${name_suffix}${marker}"
                 ;;
             base)
                 pastel paint "$color" \
-                    "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct ─ ${color_names[i]}${marker}"
+                    "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── $oklab_score_pct${name_suffix}${marker}"
                 ;;
         esac
     else
@@ -413,7 +424,7 @@ for i in {1..$#hexs}; do
                 ;;
             base)
                 pastel paint "$color" \
-                    "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── Pts: $oklab_score_pct${marker}"
+                    "$color ◖████◗ Sphinx of black quartz, judge my vow. ──   ── $oklab_score_pct${marker}"
                 ;;
         esac
     fi
