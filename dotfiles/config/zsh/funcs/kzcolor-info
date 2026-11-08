@@ -21,7 +21,6 @@ for arg in "$@"; do
         *) [[ -z "$base" ]] && base="$arg" || pos+=("$arg") ;;
     esac
 done
-# Consumir valor de --list LIST (sin =)
 local prev=""
 for arg in "$@"; do
     if [[ "$prev" == "--list" ]]; then list="$arg"; prev=""; continue; fi
@@ -32,7 +31,7 @@ done
 if [[ "$base" == "-h" || "$base" == "--help" ]]; then
     printf '>>HELP Uso: kzcolor-info <color> [--json] [--list LIST]\n'
     printf '  :: Que hace\n'
-    printf '      Muestra toda la informacion disponible de un color.\n'
+    printf '      Muestra informacion util de un color.\n'
     printf '  :: Argumentos\n'
     printf '      <color>     Color base (hex, nombre o formato pastel)\n'
     printf '      [--json]    Salida compacta para consumo agentico\n'
@@ -52,55 +51,57 @@ if ! command -v pastel > /dev/null 2>&1; then
 fi
 
 # ── pastel (offline) ──────────────────────────────────────
-local hex rgb hsl hsv lab lch oklab oklch cmyk textcolor brightness luminance_p
+local hex rgb hsl oklch
 hex="$(pastel format hex "$base" 2>/dev/null)" || { printf '>>FAIL color invalido: %s.\n' "$base" >&2; return 2; }
 rgb="$(pastel format rgb "$base" 2>/dev/null)"
 hsl="$(pastel format hsl "$base" 2>/dev/null)"
-hsv="$(pastel format hsv "$base" 2>/dev/null)"
-lab="$(pastel format lab "$base" 2>/dev/null)"
-lch="$(pastel format lch "$base" 2>/dev/null)"
-oklab="$(pastel format oklab "$base" 2>/dev/null)"
 oklch="$(pastel format oklch "$base" 2>/dev/null)"
-cmyk="$(pastel format cmyk "$base" 2>/dev/null)"
-textcolor="$(pastel textcolor "$base" 2>/dev/null | pastel format hex - 2>/dev/null)"
-brightness="$(pastel format brightness "$base" 2>/dev/null)"
-luminance_p="$(pastel format luminance "$base" 2>/dev/null)"
 
 # compactos (humanos)
 local rgb_c="${rgb#rgb\(}"; rgb_c="${rgb_c%)}"
 local hsl_c="${hsl#hsl\(}"; hsl_c="${hsl_c%)}"
-local hsv_c="${hsv#hsv\(}"; hsv_c="${hsv_c%)}"
-local lab_c="${lab#Lab\(}"; lab_c="${lab_c%)}"
-local lch_c="${lch#LCh\(}"; lch_c="${lch_c%)}"
-local oklab_c="${oklab#OkLab\(}"; oklab_c="${oklab_c%)}"
 local oklch_c="${oklch#OkLCh\(}"; oklch_c="${oklch_c%)}"
-local cmyk_c="${cmyk#cmyk\(}"; cmyk_c="${cmyk_c%)}"
 
-# ── color.pizza (local) ───────────────────────────────────
-local p_name="" p_tagline="" p_assigned="" p_distance="" p_lum="" p_lumwcag="" p_contrast="" p_desc=""
+# ── color.pizza (local, opcional) ─────────────────────────
+local p_name="" p_assigned="" p_distance="" p_lumwcag="" p_contrast="" p_adjectives=""
 if command -v curl >/dev/null 2>&1 && command -v jaq >/dev/null 2>&1; then
     local hex_nohash="${hex#\#}"
     local resp
     resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${hex_nohash}&list=${list}&description=true" 2>/dev/null)" || resp=""
     if [[ -n "$resp" ]]; then
         p_name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2>/dev/null)"
-        p_tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2>/dev/null)"
         p_assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2>/dev/null)"
         p_distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2>/dev/null)"
-        p_lum="$(printf '%s' "$resp" | jaq -r '.colors[0].luminance // empty' 2>/dev/null)"
-        p_lumwcag="$(printf '%s' "$resp" | jaq -r '.colors[0].luminanceWCAG // empty' 2>/dev/null)"
-        p_contrast="$(printf '%s' "$resp" | jaq -r '.colors[0].bestContrast // empty' 2>/dev/null)"
-        p_desc="$(printf '%s' "$resp" | jaq -c '.colors[0].description // empty' 2>/dev/null)"
+        p_adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2>/dev/null)"
+        # LUMWC y BEST se calculan localmente (formula WCAG), validado
+        # contra pizza con diff <= 5e-7.
+        local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
+        local rr=$((16#$hr)) gg=$((16#$hg)) bb=$((16#$hb))
+        p_lumwcag="$(bc -l <<< "
+scale=10
+r=$rr/255; g=$gg/255; b=$bb/255
+if (r <= 0.03928) rl=r/12.92 else rl=e(2.4*l((r+0.055)/1.055))
+if (g <= 0.03928) gl=g/12.92 else gl=e(2.4*l((g+0.055)/1.055))
+if (b <= 0.03928) bl=b/12.92 else bl=e(2.4*l((b+0.055)/1.055))
+0.2126*rl + 0.7152*gl + 0.0722*bl
+")"
+        p_lumwcag="$(printf '%.5f' "$p_lumwcag")"
+        if (( $(bc -l <<< "$p_lumwcag <= 0.179") )); then
+            p_contrast="white"
+        else
+            p_contrast="black"
+        fi
     fi
 fi
 
 # ── salida JSON (agentico) ────────────────────────────────
 if (( json )); then
-    printf '{"hex":"%s","name":"%s","tagline":"%s","assigned_hex":"%s","distance":"%s","rgb":"%s","hsl":"%s","hsv":"%s","lab":"%s","lch":"%s","oklab":"%s","oklch":"%s","cmyk":"%s","textcolor":"%s","brightness":"%s","luminance":"%s","luminanceWCAG":"%s","bestContrast":"%s","description":%s}\n' \
-        "$hex" "$p_name" "$p_tagline" "$p_assigned" "$p_distance" \
-        "$rgb" "$hsl" "$hsv" "$lab" "$lch" "$oklab" "$oklch" "$cmyk" \
-        "$textcolor" "$brightness" "$p_lum" "$p_lumwcag" "$p_contrast" \
-        "${p_desc:-null}"
+    printf '{"hex":"%s","name":"%s","rgb":"%s","hsl":"%s","oklch":"%s","luminanceWCAG":"%s","bestContrast":"%s","assigned_hex":"%s","distance":"%s","adjectives":%s}\n' \
+        "$hex" "$p_name" \
+        "$rgb" "$hsl" "$oklch" \
+        "$p_lumwcag" "$p_contrast" \
+        "$p_assigned" "$p_distance" \
+        "${p_adjectives:-null}"
     return 0
 fi
 
@@ -112,38 +113,18 @@ printf '╭───────────────────────
 printf '│  %-35s │\n' "$name_disp"
 printf '├──────────────────────────────────────┤\n'
 printf '│  %-36s│\n' "COLOR"
-printf '│  %-8s %-27s│\n' "HEX" "$hex"
-printf '│  %-8s %-27s│\n' "RGB" "$rgb_c"
-printf '│  %-8s %-27s│\n' "HSL" "$hsl_c"
-printf '│  %-8s %-27s│\n' "HSV" "$hsv_c"
-printf '│  %-8s %-27s│\n' "LAB" "$lab_c"
-printf '│  %-8s %-27s│\n' "LCH" "$lch_c"
-printf '│  %-8s %-27s│\n' "OKLAB" "$oklab_c"
-printf '│  %-8s %-27s│\n' "OKLCH" "$oklch_c"
-printf '│  %-8s %-27s│\n' "CMYK" "$cmyk_c"
+printf '│  %-10s %-25s│\n' "HEX" "$hex"
+printf '│  %-10s %-25s│\n' "RGB" "$rgb_c"
+printf '│  %-10s %-25s│\n' "HSL" "$hsl_c"
+printf '│  %-10s %-25s│\n' "OKLCH" "$oklch_c"
 printf '├──────────────────────────────────────┤\n'
-printf '│  %-36s│\n' "PIZZA"
-printf '│  %-8s %-27s│\n' "NAME" "$name_disp"
-local tag_disp="${p_tagline:-"-"}"
-(( ${#tag_disp} > 27 )) && tag_disp="${tag_disp[1,24]}..."
-printf '│  %-8s %-27s│\n' "TAG" "$tag_disp"
-printf '│  %-8s %-27s│\n' "ASGN" "${p_assigned:-"-"}"
-printf '│  %-8s %-27s│\n' "DIST" "${p_distance:-"-"}"
-printf '│  %-8s %-27s│\n' "LUM" "${p_lum:-"-"}"
-printf '│  %-8s %-27s│\n' "LUMWC" "${p_lumwcag:-"-"}"
-printf '│  %-8s %-27s│\n' "BEST" "${p_contrast:-"-"}"
-printf '│  %-8s %-27s│\n' "TEXT" "${textcolor:-"-"}"
-printf '│  %-8s %-27s│\n' "BRIGHT" "${brightness:-"-"}"
-printf '│  %-8s %-27s│\n' "LUMP" "${luminance_p:-"-"}"
+printf '│  %-36s│\n' "PALETTE MATCH"
+printf '│  %-10s %-25s│\n' "ASSIGNED" "${p_assigned:-"-"}"
+printf '│  %-10s %-25s│\n' "DISTANCE" "${p_distance:-"-"}"
+printf '├──────────────────────────────────────┤\n'
+printf '│  %-36s│\n' "ACCESSIBILITY"
+local contrast_disp="${p_contrast:-"-"}"
+[[ "$contrast_disp" != "-" ]] && contrast_disp="${contrast_disp[1]:u}${contrast_disp[2,-1]}"
+printf '│  %-10s %-25s│\n' "LUMINANCE" "${p_lumwcag:-"-"}"
+printf '│  %-10s %-25s│\n' "CONTRAST" "$contrast_disp"
 printf '╰──────────────────────────────────────╯\n'
-
-if [[ -n "$p_desc" && "$p_desc" != "null" && "$p_desc" != "empty" ]]; then
-    printf '%s\n' "$p_desc" | jaq -r '
-        "nouns: " + (.nouns // [] | join(", ")),
-        "adjectives: " + (.adjectives // [] | join(", ")),
-        "meanings: " + (.meanings // [] | join(", ")),
-        "effects: " + (.effects // [] | join(", ")),
-        "usage: " + (.usage // [] | join(", ")),
-        "temperature: \(.temperature.descriptive // [] | join(", ")) (\(.temperature.value // ""))"
-    ' 2>/dev/null
-fi
