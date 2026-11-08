@@ -14,7 +14,7 @@ local arg
 local -a pos=()
 for arg in "$@"; do
     case "$arg" in
-        --json|--agent) json=1 ;;
+        --json | --agent) json=1 ;;
         --list=*) list="${arg#--list=}" ;;
         --list) : ;;
         --*) ;;
@@ -23,7 +23,11 @@ for arg in "$@"; do
 done
 local prev=""
 for arg in "$@"; do
-    if [[ "$prev" == "--list" ]]; then list="$arg"; prev=""; continue; fi
+    if [[ "$prev" == "--list" ]]; then
+        list="$arg"
+        prev=""
+        continue
+    fi
     case "$arg" in --list) prev="$arg" ;; esac
 done
 [[ -z "$base" && ${#pos[@]} -gt 0 ]] && base="${pos[1]}"
@@ -52,27 +56,37 @@ fi
 
 # ── pastel (offline) ──────────────────────────────────────
 local hex rgb hsl oklch
-hex="$(pastel format hex "$base" 2>/dev/null)" || { printf '>>FAIL color invalido: %s.\n' "$base" >&2; return 2; }
-rgb="$(pastel format rgb "$base" 2>/dev/null)"
-hsl="$(pastel format hsl "$base" 2>/dev/null)"
-oklch="$(pastel format oklch "$base" 2>/dev/null)"
+hex="$(pastel format hex "$base" 2> /dev/null)" || {
+    printf '>>FAIL color invalido: %s.\n' "$base" >&2
+    return 2
+}
+rgb="$(pastel format rgb "$base" 2> /dev/null)"
+hsl="$(pastel format hsl "$base" 2> /dev/null)"
+oklch="$(pastel format oklch "$base" 2> /dev/null)"
 
 # compactos (humanos)
-local rgb_c="${rgb#rgb\(}"; rgb_c="${rgb_c%)}"
-local hsl_c="${hsl#hsl\(}"; hsl_c="${hsl_c%)}"
-local oklch_c="${oklch#OkLCh\(}"; oklch_c="${oklch_c%)}"
+local rgb_c="${rgb#rgb\(}"
+rgb_c="${rgb_c%)}"
+local hsl_c="${hsl#hsl\(}"
+hsl_c="${hsl_c%)}"
+local oklch_c="${oklch#OkLCh\(}"
+oklch_c="${oklch_c%)}"
 
 # ── color.pizza (local, opcional) ─────────────────────────
-local p_name="" p_assigned="" p_distance="" p_lumwcag="" p_contrast="" p_adjectives=""
-if command -v curl >/dev/null 2>&1 && command -v jaq >/dev/null 2>&1; then
+local p_name="" p_tagline="" p_assigned="" p_distance="" p_lumwcag="" p_contrast="" p_adjectives="" p_temp="" p_cratio=""
+if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
     local hex_nohash="${hex#\#}"
     local resp
-    resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${hex_nohash}&list=${list}&description=true" 2>/dev/null)" || resp=""
+    resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${hex_nohash}&list=${list}&description=true" 2> /dev/null)" || resp=""
     if [[ -n "$resp" ]]; then
         p_name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2>/dev/null)"
-        p_assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2>/dev/null)"
-        p_distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2>/dev/null)"
-        p_adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2>/dev/null)"
+        p_tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2>/dev/null)"
+        # NOTA: tagline solo se emite en JSON (--json). No se muestra en
+        # la vista humana por verbosidad; no agregarlo a la caja.
+        p_assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2> /dev/null)"
+        p_distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2> /dev/null)"
+        p_adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2> /dev/null)"
+        p_temp="$(printf '%s' "$resp" | jaq -r '"\(.colors[0].description.temperature.descriptive // [] | join(", ")) (\(.colors[0].description.temperature.value // ""))"' 2>/dev/null)"
         # LUMWC y BEST se calculan localmente (formula WCAG), validado
         # contra pizza con diff <= 5e-7.
         local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
@@ -86,28 +100,36 @@ if (b <= 0.03928) bl=b/12.92 else bl=e(2.4*l((b+0.055)/1.055))
 0.2126*rl + 0.7152*gl + 0.0722*bl
 ")"
         p_lumwcag="$(printf '%.5f' "$p_lumwcag")"
-        if (( $(bc -l <<< "$p_lumwcag <= 0.179") )); then
+        if (($(bc -l <<< "$p_lumwcag <= 0.179"))); then
             p_contrast="white"
         else
             p_contrast="black"
         fi
+        if [[ "$p_contrast" == "black" ]]; then
+            p_cratio="$(bc -l <<< "scale=2; ($p_lumwcag+0.05)/0.05")"
+        else
+            p_cratio="$(bc -l <<< "scale=2; 1.05/($p_lumwcag+0.05)")"
+        fi
+        p_cratio="${p_cratio}:1"
     fi
 fi
 
 # ── salida JSON (agentico) ────────────────────────────────
-if (( json )); then
-    printf '{"hex":"%s","name":"%s","rgb":"%s","hsl":"%s","oklch":"%s","luminanceWCAG":"%s","bestContrast":"%s","assigned_hex":"%s","distance":"%s","adjectives":%s}\n' \
-        "$hex" "$p_name" \
+if ((json)); then
+    printf '{"hex":"%s","name":"%s","tagline":"%s","rgb":"%s","hsl":"%s","oklch":"%s","luminanceWCAG":"%s","bestContrast":"%s","contrast_ratio":"%s","assigned_hex":"%s","distance":"%s","temperature":"%s","adjectives":%s}\n' \
+        "$hex" "$p_name" "$p_tagline" \
         "$rgb" "$hsl" "$oklch" \
         "$p_lumwcag" "$p_contrast" \
+        "$p_cratio" \
         "$p_assigned" "$p_distance" \
+        "$p_temp" \
         "${p_adjectives:-null}"
     return 0
 fi
 
 # ── salida humana (caja) ──────────────────────────────────
 local name_disp="${p_name:-"-"}"
-(( ${#name_disp} > 35 )) && name_disp="${name_disp[1,32]}..."
+((${#name_disp} > 35)) && name_disp="${name_disp[1,32]}..."
 
 printf '╭──────────────────────────────────────╮\n'
 printf '│  %-35s │\n' "$name_disp"
@@ -127,4 +149,6 @@ local contrast_disp="${p_contrast:-"-"}"
 [[ "$contrast_disp" != "-" ]] && contrast_disp="${contrast_disp[1]:u}${contrast_disp[2,-1]}"
 printf '│  %-10s %-25s│\n' "LUMINANCE" "${p_lumwcag:-"-"}"
 printf '│  %-10s %-25s│\n' "CONTRAST" "$contrast_disp"
+printf '│  %-10s %-25s│\n' "TEMP" "${p_temp:-"-"}"
+printf '│  %-10s %-25s│\n' "CRATIO" "${p_cratio:-"-"}"
 printf '╰──────────────────────────────────────╯\n'
