@@ -87,6 +87,9 @@ if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
         p_distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2> /dev/null)"
         p_adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2> /dev/null)"
         p_temp="$(printf '%s' "$resp" | jaq -r '"\(.colors[0].description.temperature.descriptive // [] | join(", ")) (\(.colors[0].description.temperature.value // ""))"' 2> /dev/null)"
+        # La temperatura es un indice correlacionado (CCT en K) del
+        # dataset color-description: subjetivo, perspectiva occidental,
+        # no es una medicion fisica de la luz. Sirve como guia.
         # LUMWC y BEST se calculan localmente (formula WCAG), validado
         # contra pizza con diff <= 5e-7.
         local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
