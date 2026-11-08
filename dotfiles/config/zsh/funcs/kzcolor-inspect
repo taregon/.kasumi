@@ -79,14 +79,14 @@ if command -v curl > /dev/null 2>&1 && command -v jaq > /dev/null 2>&1; then
     local resp
     resp="$(curl -sS -m 3 "http://127.0.0.1:8080/v1/?values=${hex_nohash}&list=${list}&description=true" 2> /dev/null)" || resp=""
     if [[ -n "$resp" ]]; then
-        p_name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2>/dev/null)"
-        p_tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2>/dev/null)"
+        p_name="$(printf '%s' "$resp" | jaq -r '.colors[0].name // empty' 2> /dev/null)"
+        p_tagline="$(printf '%s' "$resp" | jaq -r '.colors[0].tagline // empty' 2> /dev/null)"
         # NOTA: tagline solo se emite en JSON (--json). No se muestra en
         # la vista humana por verbosidad; no agregarlo a la caja.
         p_assigned="$(printf '%s' "$resp" | jaq -r '.colors[0].hex // empty' 2> /dev/null)"
         p_distance="$(printf '%s' "$resp" | jaq -r '.colors[0].distance // empty' 2> /dev/null)"
         p_adjectives="$(printf '%s' "$resp" | jaq -c '.colors[0].description.adjectives // empty' 2> /dev/null)"
-        p_temp="$(printf '%s' "$resp" | jaq -r '"\(.colors[0].description.temperature.descriptive // [] | join(", ")) (\(.colors[0].description.temperature.value // ""))"' 2>/dev/null)"
+        p_temp="$(printf '%s' "$resp" | jaq -r '"\(.colors[0].description.temperature.descriptive // [] | join(", ")) (\(.colors[0].description.temperature.value // ""))"' 2> /dev/null)"
         # LUMWC y BEST se calculan localmente (formula WCAG), validado
         # contra pizza con diff <= 5e-7.
         local hr="${hex:1:2}" hg="${hex:3:2}" hb="${hex:5:2}"
