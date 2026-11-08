@@ -1,0 +1,35 @@
+# vim: filetype=zsh
+# Helper interno de kzcolor: imprime un hex con su propio color de fondo y
+# texto legible, rellenado a un ancho fijo para alinear cajas.
+#
+# Uso: _kzcolor-swatch <hex> [text-color] [width]
+#   <hex>         Color de fondo en cualquier formato que acepte pastel
+#   [text-color]  Color del texto; por defecto lo elige pastel por contraste
+#   [width]       Columnas del bloque con relleno (defecto: 25)
+#
+# Salida: bloque coloreado sin salto de linea. Sin tty, pastel omite los
+# escapes y el bloque queda con el mismo ancho en texto plano.
+#
+# Requiere: pastel. Retorno: 0 exito; 2 hex invalido.
+
+emulate -L zsh
+
+local -r DEFAULT_WIDTH=25
+
+local hex="${1:-}"
+local text_color="${2:-}"
+local width="${3:-$DEFAULT_WIDTH}"
+
+# Normaliza el fondo y valida el color en una sola conversion.
+local hex_norm
+hex_norm="$(pastel format hex "$hex" 2> /dev/null)" || return 2
+
+if [[ -z "$text_color" ]]; then
+    text_color="$(pastel textcolor "$hex_norm" 2> /dev/null \
+        | pastel format hex - 2> /dev/null)"
+    [[ -z "$text_color" ]] && text_color='black'
+fi
+
+local pad
+printf -v pad "%-${width}s" " $hex_norm"
+pastel paint "$text_color" -o "$hex_norm" -n "$pad"
