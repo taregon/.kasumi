@@ -278,6 +278,9 @@ for file in $ZSH_CONF/aliases/*.zsh(N); do
 done
 
 # Directorios de funciones (autoload)
+# typeset -U: conserva solo la primera ocurrencia; re-sourcear el rc no duplica
+# $ZSH_CONF/funcs en fpath (patrón ya usado para path/PATH en .zshenv).
+typeset -U fpath
 fpath=(
     $ZSH_CONF/funcs
     ${fpath[@]}
