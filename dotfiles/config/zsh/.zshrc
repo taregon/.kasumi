@@ -202,6 +202,7 @@ SAVEHIST=30000                # en disco
 setopt BANG_HIST              # expansión de '!' en historial
 setopt COMPLETE_ALIASES       # completa alias
 setopt EXTENDED_HISTORY       # guarda timestamp ':inicio:duración;comando'
+setopt INTERACTIVE_COMMENTS   # acepta '#' al inicio de línea interactiva como comentario; sin esto zsh intenta ejecutarlo ('command not found: #'); no se guarda en historial
 setopt HIST_ALLOW_CLOBBER     # historial puede sobrescribir con CLOBBER off
 setopt HIST_BEEP              # beep si historial inexistente
 setopt HIST_EXPIRE_DUPS_FIRST # purga duplicados al límite HISTSIZE
