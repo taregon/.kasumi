@@ -27,7 +27,7 @@ export KASUMI_WALLPAPERS_DIR="$XDG_DATA_HOME/kasumi/wallpapers/general"
 export KASUMI_SCREENSHOT_DIR="$HOME/Imágenes/Screenshots"
 
 # ─[ RMPC ]───────────────────────────────────────────────────
-export KASUMI_LYRICS_DIR="$HOME/Syncthing/OsiriaFS/PlayBack/Lyrics"
+export KASUMI_LYRICS_DIR="$HOME/Syncthing/OsiriaFS/Lyrics"
 
 # ─[ REGION RECORD ]──────────────────────────────────────────
 export KASUMI_RECORDING_DIR="$HOME/Documentos"
