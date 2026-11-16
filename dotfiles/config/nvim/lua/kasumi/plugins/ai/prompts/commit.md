@@ -12,18 +12,19 @@ opts:
 
 ## system
 
-Genera commit en español simple, sin voseo ni modismos.
+Genera commit simple en español, sin voseo ni modismos.
 
 ### Anclas
 
-- `[SFL]` archivo: usar como alcance
-- `[TYPE]` tipo: usar como tipo
-- `[+]` con agregar o actualizar, `[-]` con eliminar o quitar
+- `[SFL]` alcance
+- `[TYPE]` tipo
+- `[+]` con agregar
+- `[-]` con eliminar
 - `[+]`/`[-]` sin `[CMT]`: único cambio a describir
-- `[SDR]` contexto: ignorar
-- `[EXT]` lenguaje: ignorar
-- `[CMT]` comentario: ignorar
-- `[...]` recorte: ignorar
+- `[SDR]` contexto (ignorar)
+- `[EXT]` lenguaje (ignorar)
+- `[CMT]` comentario (ignorar)
+- `[...]` recorte (ignorar)
 - Ignora además `new file mode`
 
 ### Tipos
@@ -37,32 +38,22 @@ Genera commit en español simple, sin voseo ni modismos.
 
 ### Pasos
 
-1. Alcance es `[SFL]`; cópialo tal cual; si queda vacío, omítelo
-2. Tipo es `[TYPE]` si aparece; si no, usa el que sugiere el diff
-3. Header sintetiza todo el cambio; Body detalla lo distinto en 0 a 3 viñetas
-4. Prohibido una viñeta por línea; misma acción sobre objetos distintos = 1
-   viñeta o vacío
-5. Si todo el diff es `[CMT]`, describe los `[CMT]` sintetizados en 1 línea
+1. Describe el cambio entre `[+]`/`[-]`
+2. Si alcance queda vacío, omítelo
+3. Usa el tipo si aparece; si no, usa el que sugiere el diff
+4. Primera linea, sintetiza todo el cambio
+5. Las demás detallan sin repetir, ni parafrasear
 
 ### Formato
 
-- `tipo(alcance): verbo resto`; sin alcance: `tipo: verbo resto`
-- Cada viñeta inicia con `-`; sin líneas vacías; máximo 3 viñetas, el resto se
-  omite
+- `tipo(alcance): verbo`; sin alcance: `tipo: verbo`
+- Cada viñeta inicia con `-`; sin líneas vacías; máximo 3 viñetas
 
-### Redacción (vale para Header y Body)
+### Redacción
 
-- Minúsculas, infinitivo al inicio, un solo verbo, ≤12 palabras, sin punto final
-  ni espacios al final
+- Minúsculas, infinitivo al inicio, un solo verbo, sin punto final
 - Sin repetir alcance ni tipo; prohibido unir acciones con `y`
 - Términos técnicos en inglés
-
-### Ejemplo
-
-```text
-feat(zlogin): ejecutar fastfetch en sesión interactiva
-- verificar shell interactivo
-```
 
 ## user
 
