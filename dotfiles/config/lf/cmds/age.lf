@@ -1,39 +1,49 @@
 # vim: filetype=config
-# Cifrar con los archivos públicos de $XDG_CONFIG_HOME/age y descifrar con la
+# Cifrar con los públicos de confianza en /etc/age y descifrar con la
 # identidad del custodio sahaquiel, en /var/lib/sahaquiel/age/sahaquiel.key.
-# ge lee solo públicos; gd pide la contraseña de sahaquiel por tty.
+# ge no lee la privada; gd pide la contraseña de sahaquiel por tty.
+#
+# Modelo de amenazas: un agente con el usuario que invoca puede leer su
+# configuración, pero no la privada ni /etc/age, que pertenecen a sahaquiel
+# y a root respectivamente. Por eso se ignoran las copias de los públicos
+# que haya en el directorio age del invocante.
+#
+# Los temporales se crean con mktemp junto al destino: nombre imprevisible,
+# permisos 600 y publicación con rename atómico. La carrera sobre el destino
+# no cruza un límite de privilegio: quien podría crearlo es el invocante.
 
 cmd age_encrypt %{{
-  agedir="${XDG_CONFIG_HOME:-$HOME/.config}/age"
-  pubkey="$agedir/sahaquiel.pub"
-  recipients="$agedir/recipients.txt"
-  if [ ! -r "$pubkey" ]; then
-    lf -remote "send $id echoerr No se encuentra el público de age: $pubkey"
+  # root:root, directorio 755 y archivos 644: solo lectura para el invocante.
+  trusted=/etc/age
+  recipients="$trusted/recipients.txt"
+  pubkey="$trusted/sahaquiel.pub"
+  if [ ! -r "$recipients" ] || [ ! -r "$pubkey" ]; then
+    lf -remote "send $id echoerr Faltan los públicos de confianza en $trusted"
     exit 1
   fi
-
-  if [ -s "$recipients" ]; then
-    # Sin el destinatario propio nadie aquí podría descifrar.
-    if ! grep -qFx -f "$pubkey" "$recipients"; then
-      lf -remote "send $id echoerr Falta el destinatario propio en $recipients"
-      exit 1
-    fi
-    target=(-R "$recipients")
-  else
-    target=(-r "$(<"$pubkey")")
+  # Coincidencia exacta de línea: un pub distinto no debe pasar el filtro.
+  if ! grep -qFx -f "$pubkey" "$recipients"; then
+    lf -remote "send $id echoerr Falta el destinatario propio en $recipients"
+    exit 1
   fi
 
   encrypted=0 omitted=0 failed=0
   for file in ${(f)fx}; do
+    tmp=''
     out="$file.age"
     if [ ! -f "$file" ]; then
       failed=$((failed + 1))
-    # age sobrescribe la salida sin avisar; se comprueba antes.
     elif [ -e "$out" ]; then
       omitted=$((omitted + 1))
-    elif age -e "${target[@]}" -o "$out" "$file"; then
+    # Mismo directorio que el destino: mktemp fija 600 y mv es atómico.
+    elif tmp=$(mktemp "${out}.tmp.XXXXXX" 2>/dev/null) &&
+      age -e -R "$recipients" -o "$tmp" "$file" &&
+      mv -- "$tmp" "$out"; then
       encrypted=$((encrypted + 1))
     else
+      if [ -n "$tmp" ]; then
+        rm -f -- "$tmp"
+      fi
       failed=$((failed + 1))
     fi
   done
@@ -48,9 +58,11 @@ cmd age_encrypt %{{
 
 cmd age_decrypt ${{
   # $ pausa la interfaz: su necesita una tty para pedir la contraseña.
-  # El primer argumento tras -c ocupa $0 en el shell de sahaquiel.
+  # Refuerzo para el archivo que se abre por redirección; mktemp ya fija 600.
+  umask 077
   decrypted=0 omitted=0 failed=0
   for file in ${(f)fx}; do
+    tmp=''
     case "$file" in
       *.age) out="${file%.age}" ;;
       *) failed=$((failed + 1)); continue ;;
@@ -59,11 +71,10 @@ cmd age_decrypt ${{
       failed=$((failed + 1))
     elif [ -e "$out" ]; then
       omitted=$((omitted + 1))
-    else
+    elif tmp=$(mktemp "${out}.tmp.XXXXXX" 2>/dev/null); then
       # El custodio no puede acceder a los archivos de quien invoca. El
-      # descriptor 3 abre la entrada como el invocante; stdin queda libre
-      # para que su pida la contraseña y age lee desde <&3.
-      tmp="${out}.tmp.$$"
+      # descriptor 3 los abre como invocante y deja stdin para la contraseña;
+      # age lee desde ese descriptor y escribe en el temporal, no en el destino.
       if su -s /bin/sh sahaquiel -c \
         '/usr/sbin/age -d -i /var/lib/sahaquiel/age/sahaquiel.key <&3' \
         sahaquiel-age 3< "$file" > "$tmp" && mv -- "$tmp" "$out"; then
@@ -72,6 +83,8 @@ cmd age_decrypt ${{
         rm -f -- "$tmp"
         failed=$((failed + 1))
       fi
+    else
+      failed=$((failed + 1))
     fi
   done
 
