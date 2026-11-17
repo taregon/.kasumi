@@ -52,12 +52,15 @@ lfpreview_create_cache_path() {
 }
 
 # NOTE: ImageMagick procesa opciones en orden secuencial. El orden afecta el resultado:
-# 1. Settings (-define, -quality, -filter, -intent) persisten hasta que se resetean
+# 1. Settings (-define, -quality, -filter) persisten hasta que se resetean
 # 2. Operators (-auto-orient, -strip, -colorspace, -thumbnail, -profile) se aplican
-#    inmediatamente a la imagen actual
-# 3. Para conversión de color correcta: colorspace → resize → colorspace → profile
-# 4. -intent debe ir ANTES de -thumbnail para afectar la conversión durante resize
-# 5. -strip antes de -colorspace elimina perfiles, pero -colorspace RGB no los necesita
+#    inmediatamente en el punto donde aparecen
+# 3. -profile antes de -strip: convierte con el perfil de origen (AdobeRGB/P3 →
+#    sRGB); si la imagen no trae perfil, solo asigna sRGB sin tocar los píxeles
+# 4. -strip después de esa conversión descarta EXIF e ICC; el -profile final los
+#    vuelve a incrustar
+# 5. -colorspace RGB antes del resize procesa en luz lineal y sRGB lo revierte
+# 6. Sin -intent: solo afecta conversiones vía lcms y aquí no queda ninguna
 # Ref: https://imagemagick.org/command-line-processing/
 
 lfpreview_create_thumb() {
@@ -68,10 +71,10 @@ lfpreview_create_thumb() {
         -quality 90 \
         "$FILE_PATH" \
         -auto-orient \
+        -profile "${ICC_PROFILE}" \
         -strip \
         -sampling-factor 4:2:0 \
         -colorspace RGB \
-        -intent Relative \
         -filter Triangle \
         -thumbnail "${THUMB_SIZE}x${THUMB_SIZE}>" \
         -colorspace sRGB \
