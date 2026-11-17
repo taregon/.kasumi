@@ -81,9 +81,9 @@ un nivel de 8-bit equivale a 257):
 | Imagen AdobeRGB con `-strip` antes de `-profile`                 | RMSE 3216 (0.0491 ≈ 12.5 niveles) |
 | Imagen AdobeRGB con `-profile` antes de `-strip`                 | RMSE 225 (0.0034 ≈ 0.9 niveles)   |
 
-magic y micro son pixel-idénticos a 8-bit: la diferencia TRC (182 vs 42 puntos)
-no impacta la salida. La primera fila muestra que `-profile` sobre una imagen ya
-en sRGB solo asigna el perfil, por lo que una comparación entre ambos perfiles
+magic y micro son idénticos píxel a píxel a 8-bit: la diferencia TRC (182 vs 42
+puntos) no impacta la salida. La primera fila muestra que `-profile` sobre una
+imagen ya en sRGB solo asigna el perfil: la comparación entre ambos perfiles
 dentro de este pipeline no prueba nada; hay que usarlos como perfil de origen.
 
 El orden de `-profile` y `-strip` sí importa: descartar el perfil original antes
