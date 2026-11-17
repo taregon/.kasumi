@@ -50,6 +50,7 @@ x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/ton=org.telegram.desktop.desktop
 x-scheme-handler/tonsite=org.telegram.desktop.desktop
+inode/directory=org.gnome.Nautilus.desktop
 
 [Added Associations]
 application/json=org.xfce.mousepad.desktop;
