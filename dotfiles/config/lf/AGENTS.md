@@ -71,8 +71,8 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   del usuario que invoca; `gd` entrega el archivo por el descriptor 3, deja
   stdin para la contraseña de `su` y crea el temporal con `mktemp`, que da
   nombre imprevisible, `600` y `mv` atómico
-- Argumentos: `su -c` recibe el nombre ficticio `sahaquiel-age` como `$0`; el
-  archivo entra por el descriptor 3 y ninguna ruta seleccionada se interpola
+- Argumentos: `su -c` recibe el nombre ficticio `sahaquiel-age` como `$0`;
+  ninguna ruta seleccionada se interpola en el comando
 - Salida: `age` sobrescribe sin aviso; comprobar la existencia antes de
   invocarlo
 - Contraseñas: no leerlas en la statline, porque lf muestra lo tecleado; el
@@ -84,6 +84,5 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Aislamiento: `LF_DATA_HOME` temporal con `lf/files` preparado
 - Diagnóstico: un `zsh` en `PATH` que registre `-c` revela el texto que lf
   entrega al intérprete
-- Cifrado: `gd` se prueba con un shim de `su` en `PATH` que sustituya la ruta de
-  la llave por una de prueba, porque la contraseña del custodio no está
-  disponible para el agente
+- Cifrado: sin contraseña del custodio, `gd` se prueba con un shim de `su` en
+  `PATH` que sustituya la ruta de la llave por una de prueba
