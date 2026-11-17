@@ -1,28 +1,26 @@
 # vim: filetype=config
-# Cifrar y descifrar archivos con age y la llave dedicada en
-# $XDG_CONFIG_HOME/age/kasumi.key (por defecto ~/.config/age/kasumi.key).
-# Si existe $XDG_CONFIG_HOME/age/recipients.txt, cifra para todos sus
-# destinatarios y debe incluir la clave pública propia.
+# Cifrar con los archivos públicos de $XDG_CONFIG_HOME/age y descifrar con la
+# identidad del custodio sahaquiel, en /var/lib/sahaquiel/age/sahaquiel.key.
+# ge lee solo públicos; gd pide la contraseña de sahaquiel por tty.
 
 cmd age_encrypt %{{
   agedir="${XDG_CONFIG_HOME:-$HOME/.config}/age"
-  keyfile="$agedir/kasumi.key"
+  pubkey="$agedir/sahaquiel.pub"
   recipients="$agedir/recipients.txt"
-  if [ ! -r "$keyfile" ]; then
-    lf -remote "send $id echoerr No se encuentra la llave de age: $keyfile"
+  if [ ! -r "$pubkey" ]; then
+    lf -remote "send $id echoerr No se encuentra el público de age: $pubkey"
     exit 1
   fi
 
   if [ -s "$recipients" ]; then
-    # Sin la clave propia en el archivo nadie aquí podría descifrar.
-    own="$(age-keygen -y "$keyfile")"
-    if ! grep -qF -- "$own" "$recipients"; then
-      lf -remote "send $id echoerr $recipients no incluye la clave propia"
+    # Sin el destinatario propio nadie aquí podría descifrar.
+    if ! grep -qFx -f "$pubkey" "$recipients"; then
+      lf -remote "send $id echoerr Falta el destinatario propio en $recipients"
       exit 1
     fi
     target=(-R "$recipients")
   else
-    target=(-i "$keyfile")
+    target=(-r "$(<"$pubkey")")
   fi
 
   encrypted=0 omitted=0 failed=0
@@ -40,20 +38,17 @@ cmd age_encrypt %{{
     fi
   done
 
+  msg="Cifrado: $encrypted, omitidos: $omitted, fallidos: $failed"
   if [ "$failed" -gt 0 ]; then
-    lf -remote "send $id echoerr Cifrado: $encrypted, omitidos: $omitted, fallidos: $failed"
+    lf -remote "send $id echoerr $msg"
   else
     lf -remote "send $id echo Cifrado: $encrypted, omitidos: $omitted"
   fi
 }}
 
-cmd age_decrypt %{{
-  keyfile="${XDG_CONFIG_HOME:-$HOME/.config}/age/kasumi.key"
-  if [ ! -r "$keyfile" ]; then
-    lf -remote "send $id echoerr No se encuentra la llave de age: $keyfile"
-    exit 1
-  fi
-
+cmd age_decrypt ${{
+  # $ pausa la interfaz: su necesita una tty para pedir la contraseña.
+  # El primer argumento tras -c ocupa $0 en el shell de sahaquiel.
   decrypted=0 omitted=0 failed=0
   for file in ${(f)fx}; do
     case "$file" in
@@ -64,15 +59,25 @@ cmd age_decrypt %{{
       failed=$((failed + 1))
     elif [ -e "$out" ]; then
       omitted=$((omitted + 1))
-    elif age -d -i "$keyfile" -o "$out" "$file"; then
-      decrypted=$((decrypted + 1))
     else
-      failed=$((failed + 1))
+      # El custodio no puede acceder a los archivos de quien invoca. El
+      # descriptor 3 abre la entrada como el invocante; stdin queda libre
+      # para que su pida la contraseña y age lee desde <&3.
+      tmp="${out}.tmp.$$"
+      if su -s /bin/sh sahaquiel -c \
+        '/usr/sbin/age -d -i /var/lib/sahaquiel/age/sahaquiel.key <&3' \
+        sahaquiel-age 3< "$file" > "$tmp" && mv -- "$tmp" "$out"; then
+        decrypted=$((decrypted + 1))
+      else
+        rm -f -- "$tmp"
+        failed=$((failed + 1))
+      fi
     fi
   done
 
+  msg="Descifrado: $decrypted, omitidos: $omitted, fallidos: $failed"
   if [ "$failed" -gt 0 ]; then
-    lf -remote "send $id echoerr Descifrado: $decrypted, omitidos: $omitted, fallidos: $failed"
+    lf -remote "send $id echoerr $msg"
   else
     lf -remote "send $id echo Descifrado: $decrypted, omitidos: $omitted"
   fi

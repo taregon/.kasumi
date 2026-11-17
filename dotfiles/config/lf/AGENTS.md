@@ -56,8 +56,21 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 
 ## Cifrado
 
-- Llave: `$XDG_CONFIG_HOME/age/kasumi.key`, fuera del repositorio; sin ella no
-  se descifra y no debe copiarse a dotfiles
+- Privada: `/var/lib/sahaquiel/age/sahaquiel.key`, `600`, propiedad del
+  usuario custodio `sahaquiel`; no se copia a dotfiles ni se lee desde lf
+- Públicos: `$XDG_CONFIG_HOME/age/sahaquiel.pub` y `recipients.txt`, propiedad
+  del usuario que invoca
+- Cifrar: `ge` usa `-R recipients.txt` y exige que incluya el público propio;
+  sin ese archivo cae a `-r` con `sahaquiel.pub`, sin tocar la privada
+- Descifrar: `gd` usa prefijo `$` e invoca `su -s /bin/sh sahaquiel`, porque
+  `%` no da tty y `su` no cachea la contraseña
+- Intérprete: el custodio necesita `/bin/sh` en `passwd`; con `nologin`, `su`
+  ignora `-s` desde un usuario sin privilegios y rechaza el cambio
+- Cruce de usuarios: el custodio no puede leer ni escribir en directorios del
+  usuario que invoca; lf abre la entrada en el descriptor 3, deja stdin para
+  la contraseña de `su` y redirige la salida a un temporal que luego renombra
+- Argumentos: el `$0` ficticio de `su -c` solo se usa en la generación de la
+  llave; `gd` no pasa rutas al custodio
 - Salida: `age` sobrescribe sin aviso; comprobar la existencia antes de
   invocarlo
 - Contraseñas: no leerlas en la statline, porque lf muestra lo tecleado; dejar
@@ -69,3 +82,6 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Aislamiento: `LF_DATA_HOME` temporal con `lf/files` preparado
 - Diagnóstico: un `zsh` en `PATH` que registre `-c` revela el texto que lf
   entrega al intérprete
+- Cifrado: `gd` se prueba con un shim de `su` en `PATH` que sustituya la ruta
+  de la llave por una de prueba, porque la contraseña del custodio no está
+  disponible para el agente
