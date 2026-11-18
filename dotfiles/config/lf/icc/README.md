@@ -19,14 +19,14 @@ las miniaturas y los JPEG redimensionados que sirve desde 2012.
 ## Solución
 
 sRGB-v2-magic ofrece una precisión cercana a la curva de 1024 puntos del perfil
-de referencia de [ArgyllCMS][2] con tamaño mínimo. Técnicas de optimización
-aplicadas en [PhotoSauce][3]:
+de referencia de ArgyllCMS, según la comparación de [Elle Stone][2], con tamaño
+mínimo. Técnicas de optimización aplicadas en [PhotoSauce][3]:
 
-| Técnica                | Ahorro   | Detalle                                  |
-| ---------------------- | -------- | ---------------------------------------- |
-| Eliminar `bkpt` tag    | 32 bytes | Punto negro redundante (0,0,0 implícito) |
-| Mover TRC a ScriptCode | 64 bytes | ScriptCode es obsoleto (Mac OS clásico)  |
-| Corregir alineación    | 4 bytes  | Padding innecesario en TinyRGB           |
+| Técnica                               | Ahorro   | Detalle                                                                                                                      |
+| ------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Eliminar `bkpt` tag                   | 32 bytes | Punto negro redundante (0,0,0 implícito)                                                                                     |
+| Superponer tags en el área ScriptCode | 64 bytes | `cprt`, `wtpt` y los colorantes ocupan los 67 bytes reservados; el TRC (376 B en magic, 96 B en micro) no cabe y va al final |
+| Corregir alineación                   | 4 bytes  | Padding innecesario en TinyRGB                                                                                               |
 
 ## Pipeline de procesamiento
 
@@ -65,21 +65,22 @@ magick \
 - `-colorspace sRGB` después del resize: volver al espacio de visualización
 - `-profile` al final: incrusta el perfil [ICC][4] después de todas las
   transformaciones
-- Sin `-intent`: solo afecta conversiones vía lcms y en esta secuencia no queda
-  ninguna que lo consuma (medido: `Perceptual` y `Relative` dan RMSE 0). Si se
-  agrega una conversión real, debe ir antes de ese `-profile`
+- Sin `-intent`: los perfiles implicados son matriz + curva, sin tablas A2B/B2A;
+  perceptual, relativo y saturación comparten la matriz y absoluto solo ajusta
+  por punto blanco, que coincide (D65). Medido con la conversión AdobeRGB → sRGB
+  del primer `-profile`: los cuatro intent dan RMSE 0 frente a `Relative`
 
 ## Resultados de verificación
 
 Medido con `magick compare` (Q16: el valor normalizado divide por 65535, donde
 un nivel de 8-bit equivale a 257):
 
-| Prueba                                                           | Resultado                         |
-| ---------------------------------------------------------------- | --------------------------------- |
-| `-profile` sobre imagen sin perfil (magic, micro y sin perfil)   | RMSE 0                            |
-| magic vs micro como perfil de **origen** (conversión a AdobeRGB) | PAE 25 ≈ 0.1 nivel                |
-| Imagen AdobeRGB con `-strip` antes de `-profile`                 | RMSE 3216 (0.0491 ≈ 12.5 niveles) |
-| Imagen AdobeRGB con `-profile` antes de `-strip`                 | RMSE 225 (0.0034 ≈ 0.9 niveles)   |
+| Prueba                                                           | Resultado                                          |
+| ---------------------------------------------------------------- | -------------------------------------------------- |
+| `-profile` sobre imagen sin perfil (magic, micro y sin perfil)   | RMSE 0                                             |
+| magic vs micro como perfil de **origen** (conversión a AdobeRGB) | PAE 25 ≈ 0.1 de un nivel, bajo el redondeo a 8-bit |
+| Imagen AdobeRGB con `-strip` antes de `-profile`                 | RMSE 3216 (0.0491 ≈ 12.5 niveles)                  |
+| Imagen AdobeRGB con `-profile` antes de `-strip`                 | RMSE 225 (0.0034 ≈ 0.9 niveles)                    |
 
 magic y micro son idénticos píxel a píxel a 8-bit: la diferencia TRC (182 vs 42
 puntos) no impacta la salida. La primera fila muestra que `-profile` sobre una
