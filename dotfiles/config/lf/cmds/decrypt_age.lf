@@ -1,6 +1,6 @@
 # vim: filetype=config
 # Descifrar la selección con la identidad del custodio sahaquiel, en
-# /var/lib/sahaquiel/age/sahaquiel.key; gd pide su contraseña por tty.
+# /var/lib/sahaquiel/age/sahaquiel.key; el comando pide su contraseña por tty.
 #
 # Cruce de usuarios: el custodio no puede leer los archivos de quien invoca,
 # así que se entregan por el descriptor 3. Así stdin queda para la contraseña

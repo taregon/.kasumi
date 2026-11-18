@@ -50,6 +50,9 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   `tag-toggle` y bloquea cualquier atajo que empiece por `t`
 - Registro: todo atajo personalizado se anota en `shortcuts.txt` con su tecla y
   la columna alineada a las vecinas
+- Grupos: prefijo por dominio; `a` archivos, `A` cifrado
+- Matriz: `a` usa dos o tres teclas, acción y motor opcional, porque compiten
+  varios motores; `A` usa dos, acción y ningún motor, porque age es el único
 
 ## Mensajes
 
@@ -89,15 +92,16 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   `sahaquiel`; no se copia a dotfiles y no la lee el proceso de lf
 - Públicos de confianza: `/etc/age/sahaquiel.pub` y `recipients.txt`, `644`
   propiedad de root; las copias del directorio age del invocante no se usan
-- Cifrar: `ge` exige que el recipiente propio figure en `recipients.txt`, cifra
-  con `-R` y sin fallback que acepte un público modificable
-- Descifrar: `gd` usa prefijo `$` e invoca `su -s /bin/sh sahaquiel`, porque `%`
-  no da tty y `su` no cachea la contraseña
+- Cifrar: `encrypt_age` exige que el recipiente propio figure en
+  `recipients.txt`, cifra con `-R` y sin fallback que acepte un público
+  modificable
+- Descifrar: `decrypt_age` usa prefijo `$` e invoca `su -s /bin/sh sahaquiel`,
+  porque `%` no da tty y `su` no cachea la contraseña
 - Intérprete: el custodio necesita `/bin/sh` en `passwd`; con `nologin`, `su`
   ignora `-s` desde un usuario sin privilegios y rechaza el cambio
 - Cruce de usuarios: el custodio no puede leer ni escribir en los directorios
-  del usuario que invoca; `gd` entrega el archivo por el descriptor 3, deja
-  stdin para la contraseña de `su` y crea el temporal con `mktemp`, que da
+  del usuario que invoca; `decrypt_age` entrega el archivo por el descriptor 3,
+  deja stdin para la contraseña de `su` y crea el temporal con `mktemp`, que da
   nombre imprevisible, `600` y `mv` atómico
 - Argumentos: `su -c` recibe el nombre ficticio `sahaquiel-age` como `$0`;
   ninguna ruta seleccionada se interpola en el comando
@@ -115,5 +119,5 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Color: con `a98.icc` de ghostscript, `magick compare -metric RMSE` entre el
   pipeline y la conversión con el orden invertido da ~0.05; el caso correcto
   mide 0.0034 en `icc/README.md`
-- Cifrado: sin contraseña del custodio, `gd` se prueba con un shim de `su` en
-  `PATH` que sustituya la ruta de la llave por una de prueba
+- Cifrado: sin contraseña del custodio, `decrypt_age` se prueba con un shim de
+  `su` en `PATH` que sustituya la ruta de la llave por una de prueba

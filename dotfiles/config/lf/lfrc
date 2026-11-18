@@ -60,14 +60,13 @@
   map gll follow_link
   map glp paste_link
   map gxx purge_old_trash
-  map ge encrypt_age
-  map gd decrypt_age
   map aza pack_any
   map azz pack_zip_win
   map azs pack_zstd
   map axa unpack_any
-  map axz unpack_any
   map axs unpack_zstd
+  map Ae encrypt_age
+  map Ad decrypt_age
 
 # ──「 DEFINICIONES DE COMANDOS 」────────────────────────────
   source ~/.config/lf/cmds/on-select.lf

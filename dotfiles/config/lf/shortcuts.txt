@@ -13,8 +13,7 @@ X       Enviar a papelera      Ctrl+g     Buscar contenido
 gN      Ir a notas             gll        Seguir enlace
 yy      Copiar selección       yp         Copiar rutas
 glp     Enlazar portapapeles   gxx        Vaciar papelera antigua
-ge      Cifrar con age         gd         Descifrar con age
 aa      Crear carpeta          aza        Comprimir (tar.*)
 azz     Comprimir (.zip)       azs        Comprimir (.tar.zst)
-axa     Extraer (cualquiera)   axz        Extraer (.zip)
-axs     Extraer (.tar.zst)
+axa     Extraer (cualquiera)   axs        Extraer (.tar.zst)
+Ae      Cifrar (age)           Ad         Descifrar (age)
