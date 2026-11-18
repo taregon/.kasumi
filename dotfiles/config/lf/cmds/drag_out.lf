@@ -1,0 +1,24 @@
+# vim: filetype=config
+# Abrir la ventana de arrastre con la selección, para soltarla en otro
+# programa. Sigue siendo ripdrag y no dragon-drop: ripdrag fija el tamaño de
+# la ventana y evita que un clic abra el archivo; dragon solo aporta -T.
+# La altura se calcula por archivo, porque una ventana fija de 200 px con
+# miniaturas de 195 deja un solo elemento a la vista y parece que no cargó el
+# resto. Cada fila mide aproximadamente el tamaño de la miniatura (-s), así que
+# la altura es la suma de las filas más un margen, con tope de 600 px.
+# `%` deja lf usable mientras la ventana existe; el proceso termina al cerrarla.
+cmd drag_out %{{
+  names=(${(f)fs})
+  count=${#names}
+  width=400
+  icon=120
+  height=$((count * icon + 24))
+  if (( height > 600 )); then
+    height=600
+  fi
+
+  # Los nombres base se resuelven contra el directorio actual; ripdrag los
+  # muestra con -b y los recibe por stdin con -I.
+  lf-basenames <<< "$fs" |
+    ripdrag -W "$width" -H "$height" -s "$icon" -b -I
+}}

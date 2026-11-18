@@ -53,9 +53,7 @@
   map yy copy
   map yp %printf '%s\n' ${(f)fx} | wl-copy
   map yn copy_stem
-  # ripdrag y no dragon-drop: ripdrag fija el tamaño de la ventana y evita
-  # que un clic abra el archivo; dragon solo aporta -T (siempre encima).
-  map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
+  map o drag_out
 
 # ──「 COMANDOS PERSONALIZADOS 」─────────────────────────────
   map <c-f> :find_files
@@ -82,6 +80,7 @@
   source ~/.config/lf/cmds/unpack_zstd.lf
   source ~/.config/lf/cmds/pack_zip_win.lf
   source ~/.config/lf/cmds/copy_stem.lf
+  source ~/.config/lf/cmds/drag_out.lf
   source ~/.config/lf/cmds/paste_link.lf
   source ~/.config/lf/cmds/purge_old_trash.lf
   source ~/.config/lf/cmds/encrypt_age.lf
