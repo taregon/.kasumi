@@ -1,0 +1,30 @@
+# vim: filetype=config
+# Copiar al portapapeles el nombre sin extensión de la selección, para
+# renombrar, buscar o citar el archivo sin la ruta. Se quita solo la última
+# extensión: a.tar.gz queda a.tar. El portapapeles es el del sistema, igual
+# que yp; el de lf (yy) guarda rutas completas.
+cmd copy_stem %{{
+  names=()
+  # La variable no se llama path: en zsh path está ligada a PATH y el bucle
+  # dejaría el intérprete sin comandos.
+  for file in ${(f)fx}; do
+    base="${file##*/}"
+    # Un punto que abre el nombre no es extensión: ${.bashrc%.*} quedaría
+    # vacío, así que solo se recorta cuando el punto no es el primero.
+    if [[ "$base" == ?*.* ]]; then
+      base="${base%.*}"
+    fi
+    names+=("$base")
+  done
+
+  # wl-copy va en la condición: `set -e` abortaría antes de poder avisar.
+  if printf '%s\n' "${names[@]}" | wl-copy; then
+    if (( ${#names} > 1 )); then
+      lf -remote "send $id echo Nombres copiados: ${#names}"
+    else
+      lf -remote "send $id echo Nombre copiado: ${names[1]}"
+    fi
+  else
+    lf -remote "send $id echoerr No se pudo copiar al portapapeles"
+  fi
+}}

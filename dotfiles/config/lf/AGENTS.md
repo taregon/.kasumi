@@ -26,6 +26,8 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - `nounset`: `shellopts '-eu'` aborta el comando ante una variable sin definir
 - Aritmética: usar `x=$((x + 1))`; `((x++))` devuelve estado 1 con resultado 0 y
   el bloque termina
+- Variables reservadas: `path` está ligada a `PATH`; usarla como variable de
+  bucle sobrescribe el PATH y deja el intérprete sin comandos
 - Contadores: leer la lista con `exec 3< archivo` y `<&3`; en zsh el pipe no
   pierde los contadores, pero un `read` interno consumiría la lista
 - Selección: partir `$fx` con `${(f)fx}`, porque zsh no divide parámetros sin

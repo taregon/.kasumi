@@ -12,6 +12,7 @@ Supr    Eliminar               o          Abrir ventana de arrastre
 X       Enviar a papelera      Ctrl+g     Buscar contenido
 gN      Ir a notas             gll        Seguir enlace
 yy      Copiar selección       yp         Copiar rutas
+yn      Copiar nombre sin ext.
 glp     Enlazar portapapeles   gxx        Vaciar papelera antigua
 aa      Crear carpeta          aza        Comprimir (tar.*)
 azz     Comprimir (.zip)       azs        Comprimir (.tar.zst)

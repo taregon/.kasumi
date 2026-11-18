@@ -52,6 +52,7 @@
   map y
   map yy copy
   map yp %printf '%s\n' ${(f)fx} | wl-copy
+  map yn copy_stem
   map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 
 # ──「 COMANDOS PERSONALIZADOS 」─────────────────────────────
@@ -78,6 +79,7 @@
   source ~/.config/lf/cmds/pack_zstd.lf
   source ~/.config/lf/cmds/unpack_zstd.lf
   source ~/.config/lf/cmds/pack_zip_win.lf
+  source ~/.config/lf/cmds/copy_stem.lf
   source ~/.config/lf/cmds/paste_link.lf
   source ~/.config/lf/cmds/purge_old_trash.lf
   source ~/.config/lf/cmds/encrypt_age.lf
