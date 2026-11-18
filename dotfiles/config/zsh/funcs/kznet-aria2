@@ -1,14 +1,87 @@
 # vim: filetype=zsh
-# Puedes revisar sitios activos en:
-# https://newtrackon.com/
+# Descarga con aria2c usando la configuración compartida de KASUMI.
+# Acepta URLs y torrents; las listas .txt requieren -i de forma explícita.
+# Requiere KASUMI_USER_AGENT, exportado en zsh/.zprofile.
 
-ARIA2_CONFIG_PATH="$HOME/.config/aria2" \
+# El trap local retira la ayuda al salir, sin fugarla ni tocar traps ajenos.
+# shfmt no entiende el bloque `always` de zsh, por eso se usa trap sobre EXIT.
+setopt localoptions localtraps
+trap 'unfunction kznet_aria2_usage' EXIT
+
+if [[ -t 1 ]]; then
+    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+else
+    local -r C_BLU='' C_RED='' C_RST=''
+fi
+
+kznet_aria2_usage() {
+    printf '%s>>HELP Uso: kznet-aria2 [<opciones>] <URL>...%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Opciones\n'
+    printf '      -i, --input-file <archivo>  Descarga las URIs listadas en el archivo\n'
+    printf '      -h, --help                  Muestra esta ayuda\n'
+    printf '  :: Notas\n'
+    printf '      Los archivos .txt requieren -i <archivo>\n'
+}
+
+{
+    if (($# == 0)); then
+        printf '%s>>FAIL Faltan argumentos para aria2c.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   kznet-aria2 -i <archivo>\n' >&2
+        kznet_aria2_usage >&2
+        return 2
+    fi
+
+    case $1 in
+        -h | --help)
+            kznet_aria2_usage
+            return 0
+            ;;
+    esac
+
+    # aria2c solo lee un .txt como lista de URIs con -i; exigir la opción.
+    local kznet_aria2_expect_input=0
+    local kznet_aria2_arg
+    for kznet_aria2_arg in "$@"; do
+        if ((kznet_aria2_expect_input)); then
+            kznet_aria2_expect_input=0
+            continue
+        fi
+        case $kznet_aria2_arg in
+            -i | --input-file)
+                kznet_aria2_expect_input=1
+                ;;
+            -i=*.txt | --input-file=*.txt)
+                # Ya explicitó la opción.
+                ;;
+            *.txt)
+                if [[ $kznet_aria2_arg != *://* ]]; then
+                    printf '%s>>FAIL Los archivos .txt requieren -i.%s\n' "$C_RED" "$C_RST" >&2
+                    printf '   kznet-aria2 -i %s\n' "$kznet_aria2_arg" >&2
+                    return 2
+                fi
+                ;;
+        esac
+    done
+
+    if ! command -v aria2c > /dev/null 2>&1; then
+        printf '%s>>FAIL aria2c no está disponible en PATH.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   Instala el paquete aria2.\n' >&2
+        return 1
+    fi
+
+    local -r ARIA2_CONFIG_PATH="$HOME/.config/aria2"
+    if [[ ! -f $ARIA2_CONFIG_PATH/aria2.conf ]]; then
+        printf '%s>>FAIL No existe la configuración de aria2.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   %s/aria2.conf\n' "$ARIA2_CONFIG_PATH" >&2
+        return 1
+    fi
 
     aria2c \
-    --conf-path="$ARIA2_CONFIG_PATH/aria2.conf" \
-    --dht-file-path="$ARIA2_CONFIG_PATH/dht.dat" \
-    --dht-file-path6="$ARIA2_CONFIG_PATH/dht6.dat" \
-    --user-agent="$IXOS_USER_AGENT" \
-    --dir=. \
-    --log=aria2.log \
-    "$@"
+        --conf-path="$ARIA2_CONFIG_PATH/aria2.conf" \
+        --dht-file-path="$ARIA2_CONFIG_PATH/dht.dat" \
+        --dht-file-path6="$ARIA2_CONFIG_PATH/dht6.dat" \
+        --user-agent="$KASUMI_USER_AGENT" \
+        --dir=. \
+        --log=aria2.log \
+        "$@"
+}
