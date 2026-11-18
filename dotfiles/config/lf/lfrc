@@ -54,6 +54,7 @@
   map yp %printf '%s\n' ${(f)fx} | wl-copy
   map yn copy_stem
   map o drag_out
+  map O drag_all
 
 # ──「 COMANDOS PERSONALIZADOS 」─────────────────────────────
   map <c-f> :find_files
@@ -81,6 +82,7 @@
   source ~/.config/lf/cmds/pack_zip_win.lf
   source ~/.config/lf/cmds/copy_stem.lf
   source ~/.config/lf/cmds/drag_out.lf
+  source ~/.config/lf/cmds/drag_all.lf
   source ~/.config/lf/cmds/paste_link.lf
   source ~/.config/lf/cmds/purge_old_trash.lf
   source ~/.config/lf/cmds/encrypt_age.lf
