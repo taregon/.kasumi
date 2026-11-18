@@ -2,19 +2,39 @@
 # Abrir la ventana de arrastre con la selección, para soltarla en otro
 # programa. Sigue siendo ripdrag y no dragon-drop: ripdrag fija el tamaño de
 # la ventana y evita que un clic abra el archivo; dragon solo aporta -T.
-# La altura se calcula por archivo, porque una ventana fija de 200 px con
-# miniaturas de 195 deja un solo elemento a la vista y parece que no cargó el
-# resto. Cada fila mide aproximadamente el tamaño de la miniatura (-s), así que
-# la altura es la suma de las filas más un margen, con tope de 600 px.
+# La ventana se dimensiona según la selección. La altura suma una fila por
+# archivo, porque una ventana fija de 200 px con miniaturas de 195 dejaba un
+# solo elemento a la vista y parecía que no cargó el resto. El ancho parte de
+# la miniatura más el nombre más largo, porque los 400 px fijos dejaban un
+# lienzo vacío a la derecha. Ambos tienen tope para no desbordar la pantalla.
 # `%` deja lf usable mientras la ventana existe; el proceso termina al cerrarla.
 cmd drag_out %{{
   names=(${(f)fs})
   count=${#names}
-  width=400
   icon=120
-  height=$((count * icon + 24))
+
+  # Nombre más largo, sin la ruta: el ancho depende de la etiqueta, no del
+  # directorio. La variable no se llama path porque en zsh está ligada a PATH.
+  longest=0
+  for name in ${names}; do
+    base="${name##*/}"
+    if (( ${#base} > longest )); then
+      longest=${#base}
+    fi
+  done
+
+  # Ancho aproximado: 8 px por carácter con la fuente por defecto, más la
+  # miniatura y el relleno de la fila.
+  height=$(( count * icon + 24 ))
+  width=$(( icon + longest * 8 + 48 ))
   if (( height > 600 )); then
     height=600
+  fi
+  if (( width < 260 )); then
+    width=260
+  fi
+  if (( width > 560 )); then
+    width=560
   fi
 
   # Los nombres base se resuelven contra el directorio actual; ripdrag los
