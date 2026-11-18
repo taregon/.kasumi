@@ -1,7 +1,7 @@
 # vim: filetype=config
 # Extraer los archivos comprimidos seleccionados con atool.
 
-cmd extract ${{
+cmd unpack_any ${{
   clear
   tput sgr0
   tput cup $(($(tput lines)/3))

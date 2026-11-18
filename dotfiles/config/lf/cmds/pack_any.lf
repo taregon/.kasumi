@@ -1,0 +1,40 @@
+# vim: filetype=config
+# Empaquetar los elementos seleccionados en un archivo comprimido.
+# El formato se deduce de la extensión; si falta, usa .tar.gz.
+
+cmd pack_any ${{
+  clear
+  tput sgr0
+  tput cup $(($(tput lines)/3))
+  tput bold
+  set -f
+
+  printf '%s\n' $fx
+  printf "\t¿Empaquetar? [s/N] "
+  read -r reply
+  clear
+  case "$reply" in
+    [yYsS])
+      printf 'Nombre del archivo: '
+      read -r name
+      clear
+      [ -z "$name" ] && exit 0
+      # ?*.* exige al menos un carácter antes del punto: un nombre como
+      # .copia no es una extensión válida para atool.
+      case "$name" in
+        ?*.*) ;;
+        *) name="$name.tar.gz" ;;
+      esac
+      # stdin desde /dev/null evita un prompt de sobrescritura invisible.
+      if output="$(apack "$name" ${${(f)fx}##*/} </dev/null 2>&1)"; then
+        lf -remote "send $id echo Empaquetado completado"
+      else
+        # Los avisos de locale de atool no describen el fallo.
+        message="$(printf '%s\n' "$output" |
+          sed '/^Wide character in setenv/d;/^[[:space:]]*$/d' |
+          head -n 2 | tr -d '"' | paste -sd ' ' -)"
+        lf -remote "send $id echoerr Falló el empaquetado: $message"
+      fi
+      ;;
+  esac
+}}

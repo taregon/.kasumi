@@ -1,0 +1,56 @@
+# vim: filetype=config
+# Extraer archivos zstd, que atool no reconoce; el resto va con unpack_any.
+
+cmd unpack_zstd ${{
+  clear
+  tput sgr0
+  tput cup $(($(tput lines)/3))
+  tput bold
+  set -f
+
+  # Sin selección no hay nada que extraer y el bucle diría "completado".
+  if [ -z "$fx" ]; then
+    lf -remote "send $id echoerr Nada seleccionado"
+    exit 0
+  fi
+
+  printf '%s\n' $fx
+  printf "\t¿Extraer zstd? [s/N] "
+  read -r reply
+  clear
+  case "$reply" in
+    [yYsS])
+      error=0
+      message=""
+      # here-string: el bucle corre en este shell y los contadores sobreviven.
+      while IFS= read -r f; do
+        case "$f" in
+          *.tar.zst|*.tzst)
+            if tar --zstd -xf "$f" 2>&1; then :; else
+              error=$((error+1)); message="${message:+$message }${f##*/}"
+            fi ;;
+          *.zst)
+            # .zst suelto o tarball zstd: el probe pasa por stdin porque GNU
+            # tar trata como vacío un archivo en disco de menos de 512 bytes.
+            if unzstd -c "$f" 2>/dev/null | tar -tf - >/dev/null 2>&1; then
+              if tar --zstd -xf "$f" 2>&1; then :; else
+                error=$((error+1)); message="${message:+$message }${f##*/}"
+              fi
+            else
+              if zstd -d -f "$f" >/dev/null 2>&1; then :; else
+                error=$((error+1)); message="${message:+$message }${f##*/}"
+              fi
+            fi ;;
+          *)
+            # Nada que hacer con extensiones que no son zstd: se informa.
+            error=$((error+1)); message="${message:+$message }${f##*/}" ;;
+        esac
+      done <<<"${(F)fx}"
+      if [ "$error" -eq 0 ]; then
+        lf -remote "send $id echo Extracción completada"
+      else
+        lf -remote "send $id echoerr Falló la extracción:$message"
+      fi
+      ;;
+  esac
+}}

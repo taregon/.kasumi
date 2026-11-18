@@ -1,0 +1,50 @@
+# vim: filetype=config
+# Descifrar la selección con la identidad del custodio sahaquiel, en
+# /var/lib/sahaquiel/age/sahaquiel.key; gd pide su contraseña por tty.
+#
+# Cruce de usuarios: el custodio no puede leer los archivos de quien invoca,
+# así que se entregan por el descriptor 3. Así stdin queda para la contraseña
+# y age escribe en el temporal, no en el destino.
+#
+# Temporales: se crean con mktemp junto al destino, que da nombre
+# imprevisible y permisos 600, y se publican con rename atómico.
+
+cmd decrypt_age ${{
+  # $ pausa la interfaz: su necesita una tty para pedir la contraseña.
+  # Refuerzo para el archivo que se abre por redirección; mktemp ya fija 600.
+  umask 077
+  decrypted=0 omitted=0 failed=0
+  for file in ${(f)fx}; do
+    tmp=''
+    case "$file" in
+      *.age) out="${file%.age}" ;;
+      *) failed=$((failed + 1)); continue ;;
+    esac
+    if [ ! -f "$file" ]; then
+      failed=$((failed + 1))
+    elif [ -e "$out" ]; then
+      omitted=$((omitted + 1))
+    elif tmp=$(mktemp "${out}.tmp.XXXXXX" 2>/dev/null); then
+      # El custodio no puede acceder a los archivos de quien invoca. El
+      # descriptor 3 los abre como invocante y deja stdin para la contraseña;
+      # age lee desde ese descriptor y escribe en el temporal, no en el destino.
+      if su -s /bin/sh sahaquiel -c \
+        '/usr/sbin/age -d -i /var/lib/sahaquiel/age/sahaquiel.key <&3' \
+        sahaquiel-age 3< "$file" > "$tmp" && mv -- "$tmp" "$out"; then
+        decrypted=$((decrypted + 1))
+      else
+        rm -f -- "$tmp"
+        failed=$((failed + 1))
+      fi
+    else
+      failed=$((failed + 1))
+    fi
+  done
+
+  msg="Descifrado: $decrypted, omitidos: $omitted, fallidos: $failed"
+  if [ "$failed" -gt 0 ]; then
+    lf -remote "send $id echoerr $msg"
+  else
+    lf -remote "send $id echo Descifrado: $decrypted, omitidos: $omitted"
+  fi
+}}

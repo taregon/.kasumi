@@ -1,0 +1,39 @@
+# vim: filetype=config
+# Crear un zip para compartir con Windows. Se usa el programa 7-Zip con
+# -tzip: el resultado es un ZIP normal, pero con los nombres en UTF-8 y la
+# marca Unicode que Windows Explorer necesita (Info-ZIP de Arch no la pone).
+
+cmd pack_zip_win ${{
+  clear
+  tput sgr0
+  tput cup $(($(tput lines)/3))
+  tput bold
+  set -f
+
+  printf '%s\n' $fx
+  printf "\t¿Crear zip para Windows? [s/N] "
+  read -r reply
+  clear
+  case "$reply" in
+    [yYsS])
+      printf 'Nombre del archivo: '
+      read -r name
+      clear
+      [ -z "$name" ] && exit 0
+      # Este comando solo produce zip: cualquier otra extensión se corrige.
+      case "$name" in
+        *.zip) ;;
+        *) name="$name.zip" ;;
+      esac
+      # stdin desde /dev/null evita un prompt de sobrescritura invisible.
+      if output="$(7z a -tzip "$name" ${${(f)fx}##*/} </dev/null 2>&1)"; then
+        lf -remote "send $id echo Empaquetado completado"
+      else
+        message="$(printf '%s\n' "$output" |
+          sed '/^[[:space:]]*$/d' |
+          head -n 2 | tr -d '"' | paste -sd ' ' -)"
+        lf -remote "send $id echoerr Falló el empaquetado: $message"
+      fi
+      ;;
+  esac
+}}

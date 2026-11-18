@@ -1,7 +1,7 @@
 # vim: filetype=config
 # Vaciar de la papelera solo lo que lleva más de 30 días, con confirmación.
 
-cmd trash_old %{{
+cmd purge_old_trash %{{
   # --dry-run cuenta sin borrar; cada elemento imprime su archivo y su
   # .trashinfo, por eso solo se cuentan las rutas de Trash/files.
   if ! listing="$(trash-empty --dry-run 30 2>&1)"; then

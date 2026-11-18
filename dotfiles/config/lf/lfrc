@@ -46,7 +46,7 @@
 # ──「 ARCHIVOS Y DIRECTORIOS 」──────────────────────────────
   map . set hidden!
   map X $lf-basenames-null <<< "$fx" | xargs -0 trash-put
-  map a push $mkdir<space>
+  map aa push $mkdir<space>
 
 # ──「 COPIAR Y ARRASTRAR 」──────────────────────────────────
   map y
@@ -55,23 +55,31 @@
   map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 
 # ──「 COMANDOS PERSONALIZADOS 」─────────────────────────────
-  map <c-f> :fzf_find
+  map <c-f> :find_files
   map <c-g> :search_content
   map gll follow_link
   map glp paste_link
-  map gxx trash_old
-  map ge age_encrypt
-  map gd age_decrypt
-  map E extract
-  map A create_archive
+  map gxx purge_old_trash
+  map ge encrypt_age
+  map gd decrypt_age
+  map aza pack_any
+  map azz pack_zip_win
+  map azs pack_zstd
+  map axa unpack_any
+  map axz unpack_any
+  map axs unpack_zstd
 
 # ──「 DEFINICIONES DE COMANDOS 」────────────────────────────
   source ~/.config/lf/cmds/on-select.lf
-  source ~/.config/lf/cmds/fzf_find.lf
+  source ~/.config/lf/cmds/find_files.lf
   source ~/.config/lf/cmds/search_content.lf
   source ~/.config/lf/cmds/follow_link.lf
-  source ~/.config/lf/cmds/extract.lf
-  source ~/.config/lf/cmds/create_archive.lf
+  source ~/.config/lf/cmds/unpack_any.lf
+  source ~/.config/lf/cmds/pack_any.lf
+  source ~/.config/lf/cmds/pack_zstd.lf
+  source ~/.config/lf/cmds/unpack_zstd.lf
+  source ~/.config/lf/cmds/pack_zip_win.lf
   source ~/.config/lf/cmds/paste_link.lf
-  source ~/.config/lf/cmds/trash_old.lf
-  source ~/.config/lf/cmds/age.lf
+  source ~/.config/lf/cmds/purge_old_trash.lf
+  source ~/.config/lf/cmds/encrypt_age.lf
+  source ~/.config/lf/cmds/decrypt_age.lf

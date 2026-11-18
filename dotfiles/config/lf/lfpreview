@@ -60,7 +60,8 @@ lfpreview_create_cache_path() {
 # 4. -strip después de esa conversión descarta EXIF e ICC; el -profile final los
 #    vuelve a incrustar
 # 5. -colorspace RGB antes del resize procesa en luz lineal y sRGB lo revierte
-# 6. Sin -intent: solo afecta conversiones vía lcms y aquí no queda ninguna
+# 6. Sin -intent: los perfiles son matriz + curva (sin tablas A2B/B2A) y el punto
+#    blanco coincide, así que los cuatro intent dan el mismo resultado
 # Ref: https://imagemagick.org/command-line-processing/
 
 lfpreview_create_thumb() {

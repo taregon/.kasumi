@@ -7,6 +7,18 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Alta: crear `cmds/<nombre>.lf` y agregar su `source` en `lfrc`; probar en un
   cliente nuevo, porque lf lee la configuración al arrancar
 
+## Nombres
+
+- Archivo: un comando por archivo, `cmds/<comando>.lf`, con el mismo nombre del
+  comando que define (`pack_any.lf` → `pack_any`)
+- Orden: verbo primero y objeto o método después; `pack_any`, `unpack_zstd`,
+  `encrypt_age`, `find_files`, `purge_old_trash`
+- Herramienta: no se nombra la herramienta, salvo que sea el método (`zstd`,
+  `age`); preferir la acción que muestra `maps`, por eso `find_files` y no
+  `fzf_find`
+- Hook: el nombre coincide con el evento de lf (`on-select`)
+- Teclas: no forman parte del nombre del comando
+
 ## Shell de los comandos
 
 - `errexit`: un comando que puede fallar va en condición de `if` o con `||`; de
@@ -55,6 +67,22 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
   `XDG_DATA_HOME` y `~/.local/share`
 - Formato: primera línea `copy` o `move`, luego una ruta absoluta por línea
 
+## Vista previa
+
+- Orden: `-profile` antes de `-strip` convierte con el perfil de origen; el
+  `-profile` final solo etiqueta, porque `-strip` y `-thumbnail` ya quitaron el
+  ICC. Invertirlo reinterpreta una imagen AdobeRGB/P3 como sRGB
+- Settings: `-define jpeg:size` va antes de la entrada y `-filter` antes del
+  resize; `-quality`, `-sampling-factor` y `-define jpeg:optimize-coding` solo
+  preceden al archivo de salida
+- Operadores: `-auto-orient`, `-strip`, `-colorspace`, `-thumbnail` y `-profile`
+  se aplican donde aparecen
+- `-intent`: no agregarlo; los perfiles de `icc/` son matriz + curva sin tablas
+  A2B/B2A y el punto blanco coincide, así que los cuatro intent dan lo mismo
+- Duplicación: el orden canónico vive en el `NOTE` de `lfpreview`;
+  `icc/README.md` repite el pipeline con el porqué y las mediciones, así que
+  cambiar uno obliga al otro
+
 ## Cifrado
 
 - Privada: `/var/lib/sahaquiel/age/sahaquiel.key`, `600`, propiedad del custodio
@@ -84,5 +112,8 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 - Aislamiento: `LF_DATA_HOME` temporal con `lf/files` preparado
 - Diagnóstico: un `zsh` en `PATH` que registre `-c` revela el texto que lf
   entrega al intérprete
+- Color: con `a98.icc` de ghostscript, `magick compare -metric RMSE` entre el
+  pipeline y la conversión con el orden invertido da ~0.05; el caso correcto
+  mide 0.0034 en `icc/README.md`
 - Cifrado: sin contraseña del custodio, `gd` se prueba con un shim de `su` en
   `PATH` que sustituya la ruta de la llave por una de prueba

@@ -1,0 +1,54 @@
+# vim: filetype=config
+# Cifrar la selección con los públicos de confianza en /etc/age, que
+# pertenecen a root y son de solo lectura para el invocante.
+#
+# Modelo de amenazas: un agente con el usuario que invoca puede leer su
+# configuración, pero no la privada ni /etc/age. Por eso se ignoran las
+# copias de los públicos que haya en el directorio age del invocante.
+#
+# Temporales: se crean con mktemp junto al destino, que da nombre
+# imprevisible y permisos 600, y se publican con rename atómico.
+
+cmd encrypt_age %{{
+  # root:root, directorio 755 y archivos 644: solo lectura para el invocante.
+  trusted=/etc/age
+  recipients="$trusted/recipients.txt"
+  pubkey="$trusted/sahaquiel.pub"
+  if [ ! -r "$recipients" ] || [ ! -r "$pubkey" ]; then
+    lf -remote "send $id echoerr Faltan los públicos de confianza en $trusted"
+    exit 1
+  fi
+  # Coincidencia exacta de línea: un pub distinto no debe pasar el filtro.
+  if ! grep -qFx -f "$pubkey" "$recipients"; then
+    lf -remote "send $id echoerr Falta el destinatario propio en $recipients"
+    exit 1
+  fi
+
+  encrypted=0 omitted=0 failed=0
+  for file in ${(f)fx}; do
+    tmp=''
+    out="$file.age"
+    if [ ! -f "$file" ]; then
+      failed=$((failed + 1))
+    elif [ -e "$out" ]; then
+      omitted=$((omitted + 1))
+    # Mismo directorio que el destino: mktemp fija 600 y mv es atómico.
+    elif tmp=$(mktemp "${out}.tmp.XXXXXX" 2>/dev/null) &&
+      age -e -R "$recipients" -o "$tmp" "$file" &&
+      mv -- "$tmp" "$out"; then
+      encrypted=$((encrypted + 1))
+    else
+      if [ -n "$tmp" ]; then
+        rm -f -- "$tmp"
+      fi
+      failed=$((failed + 1))
+    fi
+  done
+
+  msg="Cifrado: $encrypted, omitidos: $omitted, fallidos: $failed"
+  if [ "$failed" -gt 0 ]; then
+    lf -remote "send $id echoerr $msg"
+  else
+    lf -remote "send $id echo Cifrado: $encrypted, omitidos: $omitted"
+  fi
+}}
