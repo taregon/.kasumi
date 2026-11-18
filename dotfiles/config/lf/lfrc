@@ -53,6 +53,8 @@
   map yy copy
   map yp %printf '%s\n' ${(f)fx} | wl-copy
   map yn copy_stem
+  # ripdrag y no dragon-drop: ripdrag fija el tamaño de la ventana y evita
+  # que un clic abra el archivo; dragon solo aporta -T (siempre encima).
   map o $lf-basenames <<< "$fs" | ripdrag -W 400 -H 200 -s 195 -b -I
 
 # ──「 COMANDOS PERSONALIZADOS 」─────────────────────────────
