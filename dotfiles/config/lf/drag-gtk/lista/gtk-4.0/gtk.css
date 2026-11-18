@@ -1,0 +1,22 @@
+/* Fuente propia para la ventana de arrastre con lista (atajo o).
+   drag_out.lf lanza ripdrag con XDG_CONFIG_HOME apuntando a este directorio,
+   así estos cambios no tocan al resto de aplicaciones GTK4. La fuente por
+   defecto de GTK deja las etiquetas en ~14 px, pequeñas al lado de una
+   miniatura de 128 px; con 18 px el texto pesa lo mismo que la miniatura.
+   El factor de ancho de drag_out.lf (9,4 px por carácter) está medido con
+   Pango para este tamaño: si cambia la fuente hay que volver a medirlo. */
+window label {
+  font-size: 18px;
+}
+
+/* Aire alrededor de la lista: sin esto las filas tocan el borde superior e
+   inferior de la ventana. drag_out.lf suma 2 x 12 px a la altura por lo mismo.
+   El margen vertical de cada fila las separa en bandas; drag_out.lf suma 2 x 4
+   px por fila, que es el equivalente aquí. */
+window listview {
+  padding: 12px;
+}
+
+window listview > row {
+  margin: 4px 0;
+}

@@ -11,7 +11,18 @@
 cmd drag_out %{{
   names=(${(f)fs})
   count=${#names}
-  icon=120
+  # ripdrag no acepta tamaño de letra: se lanza con un XDG_CONFIG_HOME propio
+  # (drag-gtk/lista) que sube la etiqueta a 18 px, para que no quede diminuta
+  # al lado de la miniatura. Ese CSS no alcanza al resto de apps GTK4.
+  gtk_home="$HOME/.config/lf/drag-gtk/lista"
+  # Fila = miniatura + 10 px de relleno. Con 195 px por fila solo cabía un
+  # archivo en una ventana de 200; ahora las filas aprietan el contenido.
+  icon=128
+  row_padding=10
+  # Separación vertical entre filas, igual que el margin del CSS de drag-gtk/lista.
+  row_margin=8
+  # Aire alrededor de la lista, igual que el padding del CSS de drag-gtk/lista.
+  margin=12
 
   # Nombre más largo, sin la ruta: el ancho depende de la etiqueta, no del
   # directorio. La variable no se llama path porque en zsh está ligada a PATH.
@@ -31,25 +42,29 @@ cmd drag_out %{{
     fi
   done
 
-  # Ancho medido con Pango: ~7,3 px por carácter con la fuente por defecto
-  # (6,3 en nombres de mayúsculas y 7,8 en los que llevan acentos o signos
-  # anchos), más la miniatura y un margen mínimo. El margen se mantiene corto
-  # porque ripdrag centra la etiqueta: cuanto más ancha la ventana, más se
-  # desvía el texto del margen izquierdo.
-  height=$(( count * icon + 24 ))
-  width=$(( icon + longest * 73 / 10 + 12 ))
-  if (( height > 600 )); then
-    height=600
+  # Ancho medido con Pango a 18 px: ~9,4 px por carácter (9,15 de promedio,
+  # con 8 en nombres de mayúsculas y 10 en los acentuados), más la miniatura
+  # y un margen corto. El margen se mantiene corto porque ripdrag centra la
+  # etiqueta: cuanto más ancha la ventana, más se desvía el texto del margen.
+  height=$(( count * (icon + row_padding + row_margin) + margin * 2 ))
+  width=$(( icon + longest * 94 / 10 + 16 + margin * 2 ))
+  if (( height > 760 )); then
+    height=760
   fi
-  if (( width < 240 )); then
-    width=240
+  # Piso bajo para que una selección de nombres cortos no deje una ventana
+  # más ancha que su texto, que ripdrag centraría.
+  if (( width < 220 )); then
+    width=220
   fi
-  if (( width > 700 )); then
-    width=700
+  # Tope moderado: con nombres muy largos la ventana llegaba a 900 px y aun
+  # así recortaba la etiqueta, así que crecía sin ganar legibilidad. Se corta
+  # antes y el nombre completo queda en el tooltip de la fila.
+  if (( width > 620 )); then
+    width=620
   fi
 
   # Los nombres base se resuelven contra el directorio actual; ripdrag los
   # muestra con -b y los recibe por stdin con -I.
   lf-basenames <<< "$fs" |
-    ripdrag -W "$width" -H "$height" -s "$icon" -b -I
+    XDG_CONFIG_HOME="$gtk_home" ripdrag -W "$width" -H "$height" -s "$icon" -b -I
 }}

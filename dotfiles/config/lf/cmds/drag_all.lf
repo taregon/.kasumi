@@ -8,8 +8,8 @@
 # por defecto el rótulo quedaba diminuto y costaba agarrarlo con el ratón.
 # Conviven ambas teclas para comparar: o = lista con vistas, O = compacto.
 cmd drag_all %{{
-  gtk_home="$HOME/.config/lf/drag-gtk"
+  gtk_home="$HOME/.config/lf/drag-gtk/compacta"
 
   lf-basenames <<< "$fs" |
-    XDG_CONFIG_HOME="$gtk_home" ripdrag -A -W 300 -H 112 -I
+    XDG_CONFIG_HOME="$gtk_home" ripdrag -A -W 340 -H 128 -I
 }}
