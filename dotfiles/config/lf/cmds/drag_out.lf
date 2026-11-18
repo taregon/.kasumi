@@ -15,26 +15,37 @@ cmd drag_out %{{
 
   # Nombre más largo, sin la ruta: el ancho depende de la etiqueta, no del
   # directorio. La variable no se llama path porque en zsh está ligada a PATH.
+  # Los caracteres anchos (CJK, signos de ancho completo) ocupan unas dos
+  # celdas: como en UTF-8 usan el doble de bytes que uno ASCII, el promedio
+  # entre caracteres y bytes da la medida en celdas sin analizar cada rango.
   longest=0
   for name in ${names}; do
     base="${name##*/}"
-    if (( ${#base} > longest )); then
-      longest=${#base}
+    cells=${#base}
+    if [[ $base == *[^[:ascii:]]* ]]; then
+      bytes=$(print -rn -- "$base" | wc -c)
+      cells=$(( (cells + bytes) / 2 ))
+    fi
+    if (( cells > longest )); then
+      longest=$cells
     fi
   done
 
-  # Ancho aproximado: 8 px por carácter con la fuente por defecto, más la
-  # miniatura y el relleno de la fila.
+  # Ancho medido con Pango: ~7,3 px por carácter con la fuente por defecto
+  # (6,3 en nombres de mayúsculas y 7,8 en los que llevan acentos o signos
+  # anchos), más la miniatura y un margen mínimo. El margen se mantiene corto
+  # porque ripdrag centra la etiqueta: cuanto más ancha la ventana, más se
+  # desvía el texto del margen izquierdo.
   height=$(( count * icon + 24 ))
-  width=$(( icon + longest * 8 + 48 ))
+  width=$(( icon + longest * 73 / 10 + 12 ))
   if (( height > 600 )); then
     height=600
   fi
-  if (( width < 260 )); then
-    width=260
+  if (( width < 240 )); then
+    width=240
   fi
-  if (( width > 560 )); then
-    width=560
+  if (( width > 700 )); then
+    width=700
   fi
 
   # Los nombres base se resuelven contra el directorio actual; ripdrag los
