@@ -3,8 +3,13 @@
 # muestra cuántos van ("N elements") y se arrastran todos juntos en un solo
 # gesto. Sirve para selecciones grandes, donde la lista obligaría a hacer
 # scroll, pero pierde las miniaturas: no sirve para reconocer imágenes.
+# ripdrag no acepta tamaño de letra, así que se lanza con un XDG_CONFIG_HOME
+# propio (drag-gtk/) que solo cambia la fuente de esta ventana: con la fuente
+# por defecto el rótulo quedaba diminuto y costaba agarrarlo con el ratón.
 # Conviven ambas teclas para comparar: o = lista con vistas, O = compacto.
 cmd drag_all %{{
+  gtk_home="$HOME/.config/lf/drag-gtk"
+
   lf-basenames <<< "$fs" |
-    ripdrag -A -W 200 -H 46 -I
+    XDG_CONFIG_HOME="$gtk_home" ripdrag -A -W 300 -H 112 -I
 }}

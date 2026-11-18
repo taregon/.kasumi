@@ -1,0 +1,9 @@
+/* Fuente propia para la ventana compacta de ripdrag (atajo O).
+   drag_all.lf lanza ripdrag con XDG_CONFIG_HOME apuntando a este directorio,
+   así el aumento de fuente no toca al resto de aplicaciones GTK4. ripdrag no
+   tiene opción de tamaño de letra y su ventana compacta solo muestra una
+   etiqueta centrada, que con la fuente por defecto se veía diminuta. */
+window label {
+  font-size: 20px;
+  font-weight: bold;
+}

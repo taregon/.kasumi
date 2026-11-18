@@ -6,6 +6,9 @@ Fuente: `dotfiles/config/lf/`, enlazado en `~/.config/lf`.
 
 - Alta: crear `cmds/<nombre>.lf` y agregar su `source` en `lfrc`; probar en un
   cliente nuevo, porque lf lee la configuración al arrancar
+- GTK propio: `drag-gtk/gtk-4.0/gtk.css` se pasa como `XDG_CONFIG_HOME` a
+  ripdrag para subir la fuente de su ventana compacta sin tocar al resto de
+  aplicaciones GTK4
 
 ## Nombres
 
