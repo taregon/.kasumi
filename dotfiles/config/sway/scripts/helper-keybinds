@@ -21,7 +21,7 @@ entries=(
     "  Abrir terminal|${mod}+Return|exec kitty"
     "  Lanzador de aplicaciones|${mod}+n|exec rofi -show drun"
     "󰎆  Obsidian|${mod}+o|exec obsidian"
-    "  Nautilus|${mod}+t|exec nautilus"
+    "  Nautilus|${mod}+t|exec nautilus --new-window"
     "󰑂  Music (rmpc)|${mod}+m|exec kitty -e rmpc"
     "  KeePassXC|${mod}+x|exec keepassxc"
     "  Color picker|${mod}+p|exec hyprpicker --autocopy"
