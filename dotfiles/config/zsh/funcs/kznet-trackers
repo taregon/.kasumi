@@ -1,0 +1,112 @@
+# vim: filetype=zsh
+# Actualiza la lista de trackers vivos usada por kznet-aria2.
+# Fuente: API de newTrackon, que filtra trackers con estado operativo.
+# Requiere curl en PATH.
+
+setopt localoptions localtraps
+
+local -r trackers_source='https://newtrackon.com/api/stable'
+local -r trackers_file="$HOME/.cache/aria2/trackers.txt"
+# La API suele devolver unas 50 entradas; 10 detecta respuestas truncadas.
+local -r min_trackers=10
+local trackers_tmp=''
+
+if [[ -t 1 ]]; then
+    local -r C_BLU=$'\033[0;34m' C_GRN=$'\033[0;32m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+else
+    local -r C_BLU='' C_GRN='' C_RED='' C_RST=''
+fi
+
+kznet_trackers_usage() {
+    printf '%s>>HELP Uso: kznet-trackers [-h|--help]%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Opciones\n'
+    printf '      -h, --help  Muestra esta ayuda\n'
+    printf '  :: Notas\n'
+    printf '      Escribe %s\n' "$trackers_file"
+}
+
+trap 'unfunction kznet_trackers_usage; if [[ -n $trackers_tmp ]]; then rm -f -- "$trackers_tmp"; fi' EXIT
+
+{
+    if (($# > 0)); then
+        case $1 in
+            -h | --help)
+                kznet_trackers_usage
+                return 0
+                ;;
+            *)
+                printf '%s>>FAIL Opción no reconocida: %s.%s\n' "$C_RED" "$1" "$C_RST" >&2
+                kznet_trackers_usage >&2
+                return 2
+                ;;
+        esac
+    fi
+
+    if ! command -v curl > /dev/null 2>&1; then
+        printf '%s>>FAIL curl no está disponible en PATH.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   Instala el paquete curl.\n' >&2
+        return 1
+    fi
+
+    local -r trackers_dir="${trackers_file:h}"
+    if ! mkdir -p -- "$trackers_dir"; then
+        printf '%s>>FAIL No se pudo crear %s.%s\n' "$C_RED" "$trackers_dir" "$C_RST" >&2
+        return 1
+    fi
+
+    local raw
+    raw=$(curl -fsSL --max-time 20 -- "$trackers_source" 2> /dev/null)
+    if (($? != 0)) || [[ -z $raw ]]; then
+        printf '%s>>FAIL No se pudo obtener la lista de newTrackon.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   Revisa la conexión o la URL %s\n' "$trackers_source" >&2
+        return 1
+    fi
+
+    local -a lines trackers
+    local tracker_line
+    lines=(${(@f)raw})
+    for tracker_line in "${lines[@]}"; do
+        tracker_line=${tracker_line//[[:space:]]/}
+        [[ -n $tracker_line ]] && trackers+=("$tracker_line")
+    done
+    trackers=(${(u)trackers})
+
+    local -i tracker_count=${#trackers}
+    if ((tracker_count < min_trackers)); then
+        printf '%s>>FAIL La lista obtenida es demasiado corta: %d trackers.%s\n' "$C_RED" "$tracker_count" "$C_RST" >&2
+        printf '   Se esperaban al menos %d\n' "$min_trackers" >&2
+        return 1
+    fi
+
+    local new_line
+    new_line=${(j:,:)trackers}
+    local current=''
+    if [[ -f $trackers_file ]]; then
+        IFS= read -r current < "$trackers_file"
+    fi
+    if [[ $current == $new_line ]]; then
+        printf '%s>>SKIP sin cambios: %d trackers.%s\n' "$C_BLU" "$tracker_count" "$C_RST"
+        return 0
+    fi
+
+    trackers_tmp=$(mktemp "${trackers_dir}/.trackers.XXXXXX")
+    if (($? != 0)); then
+        printf '%s>>FAIL No se pudo crear el archivo temporal.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
+    if ! printf '%s\n' "$new_line" > "$trackers_tmp"; then
+        printf '%s>>FAIL No se pudo escribir la lista.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
+    if ! mv -f -- "$trackers_tmp" "$trackers_file"; then
+        printf '%s>>FAIL No se pudo instalar la lista.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
+    trackers_tmp=''
+
+    if [[ ! -s $trackers_file ]]; then
+        printf '%s>>FAIL El archivo destino quedó vacío.%s\n' "$C_RED" "$C_RST" >&2
+        return 1
+    fi
+    printf '%s>>PASS actualizado: %d trackers.%s\n' "$C_GRN" "$tracker_count" "$C_RST"
+}

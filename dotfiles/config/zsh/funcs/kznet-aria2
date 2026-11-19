@@ -69,9 +69,20 @@ kznet_aria2_usage() {
         return 1
     fi
 
+    local kznet_aria2_trackers_file="$HOME/.cache/aria2/trackers.txt"
+    local -a kznet_aria2_tracker_args
+    local kznet_aria2_tracker_line=''
+    if [[ -s $kznet_aria2_trackers_file ]]; then
+        IFS= read -r kznet_aria2_tracker_line < "$kznet_aria2_trackers_file"
+        if [[ -n $kznet_aria2_tracker_line ]]; then
+            kznet_aria2_tracker_args=("--bt-tracker=$kznet_aria2_tracker_line")
+        fi
+    fi
+
     aria2c \
         --user-agent="$KASUMI_USER_AGENT" \
         --dir=. \
         --log=aria2.log \
+        "${kznet_aria2_tracker_args[@]}" \
         "$@"
 }
