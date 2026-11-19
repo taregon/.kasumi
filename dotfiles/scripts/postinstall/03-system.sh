@@ -329,6 +329,7 @@ install_app_general() {
         obs-studio obs-v4l2sink
         transmission-cli # Cliente BitTorrent en línea de comandos
         upscayl-bin      # Mejora y reescalado de imágenes con IA
+        shotcut
         # Libre Office
         hyphen-es            # Reglas de separación silábica en español
         libreoffice-fresh    # Suite ofimática con nuevas funciones
