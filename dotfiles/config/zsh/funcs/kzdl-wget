@@ -70,12 +70,12 @@ kzdl_wget_usage() {
     fi
 
     # Content-Length se conserva: con el tamaño conocido, wget muestra
-    # porcentaje, velocidad y ETA en cada fila de puntos.
+    # porcentaje, velocidad y ETA en una sola línea. Para registros con
+    # historial legible, --progress=dot:giga es una buena opción.
     wget \
         --content-disposition \
         --no-check-certificate \
         --no-verbose \
-        --progress=dot:giga \
         --random-wait \
         --retry-connrefused \
         --show-progress \
