@@ -14,3 +14,7 @@ dotfiles/scripts/orbit-ws
 *.zcompdump*
 *.zwc
 .zshrc.zwc
+
+# aria2 DHT — estado volátil regenerado en cada ejecución
+dotfiles/config/aria2/dht.dat
+dotfiles/config/aria2/dht6.dat
