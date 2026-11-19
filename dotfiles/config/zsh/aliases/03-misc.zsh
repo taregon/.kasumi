@@ -42,7 +42,7 @@ alias suminet-wget="wget \
     --timeout=30 \
     --tries=5 \
     --trust-server-names \
-    --user-agent="$IXOS_USER_AGENT" \
+    --user-agent="$KASUMI_USER_AGENT" \
     --waitretry=5 \
     -c \
     -w 8 \
