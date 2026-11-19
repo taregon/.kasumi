@@ -6,7 +6,7 @@
 # El trap local retira la ayuda al salir, sin fugarla ni tocar traps ajenos.
 # shfmt no entiende el bloque `always` de zsh, por eso se usa trap sobre EXIT.
 setopt localoptions localtraps
-trap 'unfunction kznet_aria2_usage' EXIT
+trap 'unfunction kzdl_aria2_usage' EXIT
 
 if [[ -t 1 ]]; then
     local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
@@ -14,8 +14,8 @@ else
     local -r C_BLU='' C_RED='' C_RST=''
 fi
 
-kznet_aria2_usage() {
-    printf '%s>>HELP Uso: kznet-aria2 [<opciones>] <URL>...%s\n' "$C_BLU" "$C_RST"
+kzdl_aria2_usage() {
+    printf '%s>>HELP Uso: kzdl-aria2 [<opciones>] <URL>...%s\n' "$C_BLU" "$C_RST"
     printf '  :: Opciones\n'
     printf '      -i, --input-file <archivo>  Descarga las URIs listadas en el archivo\n'
     printf '      -h, --help                  Muestra esta ayuda\n'
@@ -26,37 +26,37 @@ kznet_aria2_usage() {
 {
     if (($# == 0)); then
         printf '%s>>FAIL Faltan argumentos para aria2c.%s\n' "$C_RED" "$C_RST" >&2
-        printf '   kznet-aria2 -i <archivo>\n' >&2
-        kznet_aria2_usage >&2
+        printf '   kzdl-aria2 -i <archivo>\n' >&2
+        kzdl_aria2_usage >&2
         return 2
     fi
 
     case $1 in
         -h | --help)
-            kznet_aria2_usage
+            kzdl_aria2_usage
             return 0
             ;;
     esac
 
     # aria2c solo lee un .txt como lista de URIs con -i; exigir la opción.
-    local kznet_aria2_expect_input=0
-    local kznet_aria2_arg
-    for kznet_aria2_arg in "$@"; do
-        if ((kznet_aria2_expect_input)); then
-            kznet_aria2_expect_input=0
+    local kzdl_aria2_expect_input=0
+    local kzdl_aria2_arg
+    for kzdl_aria2_arg in "$@"; do
+        if ((kzdl_aria2_expect_input)); then
+            kzdl_aria2_expect_input=0
             continue
         fi
-        case $kznet_aria2_arg in
+        case $kzdl_aria2_arg in
             -i | --input-file)
-                kznet_aria2_expect_input=1
+                kzdl_aria2_expect_input=1
                 ;;
             -i=*.txt | --input-file=*.txt)
                 # Ya explicitó la opción.
                 ;;
             *.txt)
-                if [[ $kznet_aria2_arg != *://* ]]; then
+                if [[ $kzdl_aria2_arg != *://* ]]; then
                     printf '%s>>FAIL Los archivos .txt requieren -i.%s\n' "$C_RED" "$C_RST" >&2
-                    printf '   kznet-aria2 -i %s\n' "$kznet_aria2_arg" >&2
+                    printf '   kzdl-aria2 -i %s\n' "$kzdl_aria2_arg" >&2
                     return 2
                 fi
                 ;;
@@ -69,13 +69,13 @@ kznet_aria2_usage() {
         return 1
     fi
 
-    local kznet_aria2_trackers_file="$HOME/.cache/aria2/trackers.txt"
-    local -a kznet_aria2_tracker_args
-    local kznet_aria2_tracker_line=''
-    if [[ -s $kznet_aria2_trackers_file ]]; then
-        IFS= read -r kznet_aria2_tracker_line < "$kznet_aria2_trackers_file"
-        if [[ -n $kznet_aria2_tracker_line ]]; then
-            kznet_aria2_tracker_args=("--bt-tracker=$kznet_aria2_tracker_line")
+    local kzdl_aria2_trackers_file="$HOME/.cache/aria2/trackers.txt"
+    local -a kzdl_aria2_tracker_args
+    local kzdl_aria2_tracker_line=''
+    if [[ -s $kzdl_aria2_trackers_file ]]; then
+        IFS= read -r kzdl_aria2_tracker_line < "$kzdl_aria2_trackers_file"
+        if [[ -n $kzdl_aria2_tracker_line ]]; then
+            kzdl_aria2_tracker_args=("--bt-tracker=$kzdl_aria2_tracker_line")
         fi
     fi
 
@@ -83,6 +83,6 @@ kznet_aria2_usage() {
         --user-agent="$KASUMI_USER_AGENT" \
         --dir=. \
         --log=aria2.log \
-        "${kznet_aria2_tracker_args[@]}" \
+        "${kzdl_aria2_tracker_args[@]}" \
         "$@"
 }

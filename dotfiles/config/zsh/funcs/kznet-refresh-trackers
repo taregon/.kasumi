@@ -1,5 +1,5 @@
 # vim: filetype=zsh
-# Actualiza la lista de trackers vivos usada por kznet-aria2.
+# Actualiza la lista de trackers vivos usada por kzdl-aria2.
 # Fuente: API de newTrackon, que filtra trackers con estado operativo.
 # Requiere curl en PATH.
 
@@ -17,26 +17,26 @@ else
     local -r C_BLU='' C_GRN='' C_RED='' C_RST=''
 fi
 
-kznet_trackers_usage() {
-    printf '%s>>HELP Uso: kznet-trackers [-h|--help]%s\n' "$C_BLU" "$C_RST"
+kznet_refresh_trackers_usage() {
+    printf '%s>>HELP Uso: kznet-refresh-trackers [-h|--help]%s\n' "$C_BLU" "$C_RST"
     printf '  :: Opciones\n'
     printf '      -h, --help  Muestra esta ayuda\n'
     printf '  :: Notas\n'
     printf '      Escribe %s\n' "$trackers_file"
 }
 
-trap 'unfunction kznet_trackers_usage; if [[ -n $trackers_tmp ]]; then rm -f -- "$trackers_tmp"; fi' EXIT
+trap 'unfunction kznet_refresh_trackers_usage; if [[ -n $trackers_tmp ]]; then rm -f -- "$trackers_tmp"; fi' EXIT
 
 {
     if (($# > 0)); then
         case $1 in
             -h | --help)
-                kznet_trackers_usage
+                kznet_refresh_trackers_usage
                 return 0
                 ;;
             *)
                 printf '%s>>FAIL Opción no reconocida: %s.%s\n' "$C_RED" "$1" "$C_RST" >&2
-                kznet_trackers_usage >&2
+                kznet_refresh_trackers_usage >&2
                 return 2
                 ;;
         esac

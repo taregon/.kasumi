@@ -2,7 +2,7 @@
 
 # Verifica que se pase al menos una URL
 if [ $# -eq 0 ]; then
-    echo "Uso: wg3t <URL> [más URLs...]"
+    echo "Uso: kzdl-wget <URL> [más URLs...]"
     return 1
 fi
 

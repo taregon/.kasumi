@@ -3,7 +3,7 @@
 # Escanea redes WiFi cercanas y muestra SSID con nivel de señal,
 # ordenadas por potencia (mejor señal primero) y coloreadas por rango.
 
-local iface="${1:?Uso: wifisignal <adaptador>}"
+local iface="${1:?Uso: kznet-scan-wifi <adaptador>}"
 
 sudo iw "$iface" scan 2>/dev/null \
 | awk '
