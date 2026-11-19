@@ -69,14 +69,15 @@ kzdl_wget_usage() {
         return 1
     fi
 
+    # Content-Length se conserva: con el tamaño conocido, wget dibuja la
+    # barra con porcentaje en lugar de un marcador de actividad sin medida.
     wget \
         --content-disposition \
-        --ignore-length \
         --no-check-certificate \
         --no-verbose \
-        --progress=bar:force:noscroll \
         --random-wait \
         --retry-connrefused \
+        --show-progress \
         --timeout=30 \
         --timestamping \
         --tries=5 \
