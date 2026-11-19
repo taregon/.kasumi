@@ -1,15 +1,74 @@
 # vim: filetype=zsh
+# Descarga con wget usando las opciones compartidas de KASUMI.
+# Acepta URLs y listas .txt; las listas requieren -i de forma explícita.
+# Requiere KASUMI_USER_AGENT, exportado en zsh/.zprofile.
 
-# Verifica que se pase al menos una URL
-if [ $# -eq 0 ]; then
-    echo "Uso: kzdl-wget <URL> [más URLs...]"
-    return 1
+# El trap local retira la ayuda al salir, sin fugarla ni tocar traps ajenos.
+# shfmt no entiende el bloque `always` de zsh, por eso se usa trap sobre EXIT.
+setopt localoptions localtraps
+trap 'unfunction kzdl_wget_usage' EXIT
+
+if [[ -t 1 ]]; then
+    local -r C_BLU=$'\033[0;34m' C_RED=$'\033[0;31m' C_RST=$'\033[0m'
+else
+    local -r C_BLU='' C_RED='' C_RST=''
 fi
 
-for url in "$@"; do
-    echo "Iniciando descarga: $url"
+kzdl_wget_usage() {
+    printf '%s>>HELP Uso: kzdl-wget [<opciones>] <URL>...%s\n' "$C_BLU" "$C_RST"
+    printf '  :: Opciones\n'
+    printf '      -i, --input-file <archivo>  Descarga las URLs listadas en el archivo\n'
+    printf '      -h, --help                  Muestra esta ayuda\n'
+    printf '  :: Notas\n'
+    printf '      Los archivos .txt requieren -i <archivo>\n'
+}
 
-    # Ejecuta wget normalmente, barra de progreso limpia
+{
+    if (($# == 0)); then
+        printf '%s>>FAIL Faltan argumentos para wget.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   kzdl-wget -i <archivo>\n' >&2
+        kzdl_wget_usage >&2
+        return 2
+    fi
+
+    case $1 in
+        -h | --help)
+            kzdl_wget_usage
+            return 0
+            ;;
+    esac
+
+    # wget solo lee un .txt como lista de URLs con -i; exigir la opción.
+    local kzdl_wget_expect_input=0
+    local kzdl_wget_arg
+    for kzdl_wget_arg in "$@"; do
+        if ((kzdl_wget_expect_input)); then
+            kzdl_wget_expect_input=0
+            continue
+        fi
+        case $kzdl_wget_arg in
+            -i | --input-file)
+                kzdl_wget_expect_input=1
+                ;;
+            -i=*.txt | --input-file=*.txt)
+                # Ya explicitó la opción.
+                ;;
+            *.txt)
+                if [[ $kzdl_wget_arg != *://* ]]; then
+                    printf '%s>>FAIL Los archivos .txt requieren -i.%s\n' "$C_RED" "$C_RST" >&2
+                    printf '   kzdl-wget -i %s\n' "$kzdl_wget_arg" >&2
+                    return 2
+                fi
+                ;;
+        esac
+    done
+
+    if ! command -v wget > /dev/null 2>&1; then
+        printf '%s>>FAIL wget no está disponible en PATH.%s\n' "$C_RED" "$C_RST" >&2
+        printf '   Instala el paquete wget.\n' >&2
+        return 1
+    fi
+
     wget \
         --content-disposition \
         --ignore-length \
@@ -26,21 +85,5 @@ for url in "$@"; do
         --waitretry=5 \
         -c \
         -w 8 \
-        "$url"
-
-    # Comprobar si wget terminó correctamente
-    if [ $? -eq 0 ]; then
-        # Intentar extraer el nombre de archivo final
-        file=$(basename "${url%%\?*}")  # usa nombre de URL sin parámetros
-        if [ -f "$file" ]; then
-            echo "✅ Descarga completada: $file"
-        else
-            echo "✅ Descarga completada."
-        fi
-    else
-        echo "❌ La descarga falló: $url"
-    fi
-    echo "-----------------------------------------"
-done
-
-echo "Todas las descargas han finalizado."
+        "$@"
+}
