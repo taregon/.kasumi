@@ -69,17 +69,7 @@ kznet_aria2_usage() {
         return 1
     fi
 
-    local -r ARIA2_CONFIG_PATH="$HOME/.config/aria2"
-    if [[ ! -f $ARIA2_CONFIG_PATH/aria2.conf ]]; then
-        printf '%s>>FAIL No existe la configuración de aria2.%s\n' "$C_RED" "$C_RST" >&2
-        printf '   %s/aria2.conf\n' "$ARIA2_CONFIG_PATH" >&2
-        return 1
-    fi
-
     aria2c \
-        --conf-path="$ARIA2_CONFIG_PATH/aria2.conf" \
-        --dht-file-path="$ARIA2_CONFIG_PATH/dht.dat" \
-        --dht-file-path6="$ARIA2_CONFIG_PATH/dht6.dat" \
         --user-agent="$KASUMI_USER_AGENT" \
         --dir=. \
         --log=aria2.log \
