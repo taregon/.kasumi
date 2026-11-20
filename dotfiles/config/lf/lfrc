@@ -27,6 +27,12 @@
   set cleaner ~/.config/lf/lfclean
   set ratios 1:2:2
 
+# ──「 COLUMNAS SEGÚN EL ANCHO 」─────────────────────────────
+# Ajuste, no atajo: el módulo define `resize` y su hook on-redraw, que ya lo
+# aplica al arrancar y en cada cambio de tamaño. Los ratios de arriba son solo
+# el punto de partida.
+  source ~/.config/lf/cmds/resize.lf
+
 # ──「 INFORMACIÓN Y ORDEN 」─────────────────────────────────
   set info ctime:size
   set infotimefmtnew "Jan _2 2006"
@@ -71,7 +77,8 @@
   map Ad decrypt_age
 
 # ──「 DEFINICIONES DE COMANDOS 」────────────────────────────
-  source ~/.config/lf/cmds/on-select.lf
+  # INACTIVO: sin efecto visible medido; ver cmds/resize.lf (on-redraw ya cubre el ancho).
+  # source ~/.config/lf/cmds/on-select.lf
   source ~/.config/lf/cmds/find_files.lf
   source ~/.config/lf/cmds/search_content.lf
   source ~/.config/lf/cmds/follow_link.lf

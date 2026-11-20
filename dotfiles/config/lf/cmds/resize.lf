@@ -1,0 +1,42 @@
+# vim: filetype=config
+# Reparte las columnas según el ancho real de la terminal. En un panel estrecho
+# la previsualización se queda con el espacio que necesita el listado, así que
+# por debajo de 62 columnas se apaga y se le da casi todo al directorio.
+# Hasta 95 columnas el listado pesa más que el preview (2:4:3): con 1:2:3 el
+# preview terminaba más ancho que el propio listado.
+# Se ejecuta al arrancar y a mano con `:resize` tras cambiar el tamaño del panel.
+
+cmd resize %{{
+  width="$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2)"
+  width=${width:-0}
+  if (( width <= 62 )); then
+    lf -remote "send $id set ratios 1:4"
+    lf -remote "send $id set nopreview"
+  elif (( width <= 95 )); then
+    lf -remote "send $id set ratios 2:4:3"
+    lf -remote "send $id set preview"
+  elif (( width <= 140 )); then
+    lf -remote "send $id set ratios 2:4:4"
+    lf -remote "send $id set preview"
+  else
+    lf -remote "send $id set ratios 2:4:5"
+    lf -remote "send $id set preview"
+  fi
+  # Aviso informativo desactivado: ocupa la misma línea donde caen los echo y
+  # los errores de los demás comandos. Reactivar solo para probar qué decidió.
+  # lf -remote "send $id echo \"ratios ajustados a $width columnas\""
+}}
+
+# Rearma los ratios cuando el ancho de la ventana cambia: lf dispara
+# on-redraw en cada redibujo, así que el último ancho se guarda en un archivo
+# por instancia y solo se actúa cuando hay diferencia.
+cmd on-redraw &{{
+  width="$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2)"
+  width=${width:-0}
+  guard="${XDG_RUNTIME_DIR:-/tmp}/lf-ancho-$id"
+  # Si stty no pudo medir (width 0) no se toca nada: aplicaría la rama estrecha.
+  if (( width > 0 )) && { [[ ! -f $guard ]] || [[ "$(<$guard)" != "$width" ]]; }; then
+    print -r -- "$width" > "$guard"
+    lf -remote "send $id resize"
+  fi
+}}
