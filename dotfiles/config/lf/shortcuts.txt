@@ -15,7 +15,8 @@ gN      Ir a notas             gll        Seguir enlace
 yy      Copiar selección       yp         Copiar rutas
 yn      Copiar nombre sin ext.
 glp     Enlazar portapapeles   gxx        Vaciar papelera antigua
-aa      Crear carpeta          aza        Comprimir (tar.*)
+aa      Crear carpeta (1 nom.)  aza        Comprimir (tar.*)
+as      Crear archivo (.txt)
 azz     Comprimir (.zip)       azs        Comprimir (.tar.zst)
 axa     Extraer (cualquiera)   axs        Extraer (.tar.zst)
 Ae      Cifrar (age)           Ad         Descifrar (age)

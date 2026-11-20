@@ -1,0 +1,20 @@
+# vim: filetype=config
+# Crea una carpeta con el nombre escrito, espacios incluidos y sin necesidad de
+# comillas. El `mkdir` de lf parte la entrada por espacios y crea una carpeta
+# por palabra; aquí todo lo escrito es un solo nombre. Para lotes, mkdir desde
+# la terminal.
+
+cmd create_folder %{{
+  setopt extendedglob
+  name="${(j: :)@}"
+  name="${name##[[:space:]]#}"
+  name="${name%%[[:space:]]#}"
+  if [[ -z $name ]]; then
+    lf -remote "send $id echo 'Falta el nombre de la carpeta'"
+  elif mkdir -p -- "$name"; then
+    lf -remote "send $id load"
+    lf -remote "send $id echo \"Carpeta creada: $name\""
+  else
+    lf -remote "send $id echo \"No se pudo crear: $name\""
+  fi
+}}

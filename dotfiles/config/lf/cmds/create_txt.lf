@@ -1,0 +1,23 @@
+# vim: filetype=config
+# Crea un archivo vacío con el nombre escrito, espacios incluidos y sin
+# comillas, siempre terminado en .txt. Misma lógica que create_folder: todo lo
+# escrito es un solo nombre, no una palabra por archivo.
+
+cmd create_txt %{{
+  setopt extendedglob
+  name="${(j: :)@}"
+  name="${name##[[:space:]]#}"
+  name="${name%%[[:space:]]#}"
+  if [[ -z $name ]]; then
+    lf -remote "send $id echo 'Falta el nombre del archivo'"
+  else
+    # Si ya lo escribieron con .txt no se duplica la extensión.
+    [[ ${name:l} == *.txt ]] || name="$name.txt"
+    if touch -- "$name"; then
+      lf -remote "send $id load"
+      lf -remote "send $id echo \"Archivo creado: $name\""
+    else
+      lf -remote "send $id echo \"No se pudo crear: $name\""
+    fi
+  fi
+}}

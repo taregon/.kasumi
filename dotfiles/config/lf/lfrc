@@ -52,7 +52,8 @@
 # ──「 ARCHIVOS Y DIRECTORIOS 」──────────────────────────────
   map . set hidden!
   map X $lf-basenames-null <<< "$fx" | xargs -0 trash-put
-  map aa push $mkdir<space>
+  map aa push :create_folder<space>
+  map as push :create_txt<space>
 
 # ──「 COPIAR Y ARRASTRAR 」──────────────────────────────────
   map y
@@ -87,6 +88,8 @@
   source ~/.config/lf/cmds/pack_zstd.lf
   source ~/.config/lf/cmds/unpack_zstd.lf
   source ~/.config/lf/cmds/pack_zip_win.lf
+  source ~/.config/lf/cmds/create_folder.lf
+  source ~/.config/lf/cmds/create_txt.lf
   source ~/.config/lf/cmds/copy_stem.lf
   source ~/.config/lf/cmds/drag_out.lf
   source ~/.config/lf/cmds/drag_all.lf
